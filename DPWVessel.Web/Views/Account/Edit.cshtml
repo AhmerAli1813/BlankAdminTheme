@@ -1,0 +1,94 @@
+﻿@{
+    ViewBag.Title = "Register User";
+}
+
+
+<div class="page-header border-bottom-0">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4><i class="icon-user mr-2 mr-2"></i> <span class="font-weight-semibold">Edit Use</span></h4>
+            <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+</div>
+<hr />
+<div ng-controller="AccountCtr" ng-init="init()" class="col-lg-8" style="margin:0 auto; float:none">
+    <div class="card">
+
+        <div>
+            @*<div class="form-group">
+                    <select ng-model="Register.UserType" ng-change="Change()" class="form-control">
+                        <option value="" selected>Please select User Type</option>
+                        <option ng-repeat="r in roles" value="{{r.Id}}">{{r.Text}}</option>
+                    </select>
+                </div>*@
+
+            <div class="form-group" @*ng-if="open=='true'"*@>
+                <label class="">Email</label>
+                <input type="text" class="form-control" ng-model={{Register.Email}} name="Email" />
+            </div>
+            <div class="form-group" @*ng-if="open=='true'"*@>
+                <label>Username</label>
+                <input type="text" class="form-control" ng-model={{Register.FullName}} name="Email" />
+            </div>
+            <div class="form-group" @*ng-if="open=='true'"*@>
+                <label>Username Ar</label>
+                <input type="text" class="form-control" ng-model={{Register.FullNameAr}} name="Email" />
+            </div>
+            <div class="form-group" @*ng-if="open=='true'"*@>
+                <label>Password</label>
+                <input type="password" class="form-control" ng-model={{Register.Password}} name="Password" />
+                <small>Mininum 6 Characters Password Is Required</small>
+            </div>
+            <div class="form-group" @*ng-if="open=='true'"*@>
+                <label>Confirm Password</label>
+                <input type="password" class="form-control" ng-model={{Register.ConfirmPassword}} name="Password" />
+            </div>
+            <div class="form-group" @*ng-if="open=='true'"*@>
+                <label>Phone</label>
+                <input type="number" class="form-control" ng-model={{Register.Phone}} name="Phone" />
+            </div>
+            <div class="form-group">
+                <label>Organization Name</label>
+                <input type="text" class="form-control" ng-model={{r.OrganizationName}} name="Organization" />
+                @*<select ng-if="organization" ng-model="Register.OrganizationId" ng-change="Enable()" class="form-control">
+                        <option value="" selected>Please select Organization</option>
+                        <option ng-repeat="r in organization" value="{{r.Id}}">
+                            {{r.OrganizationName}}
+                        </option>
+                    </select>*@
+            </div>
+            <div class="form-group">
+                <label>Supplier Name</label>
+                <input type="text" class="form-control" ng-model={{r.SupplierName}} name="Supplier" />
+                @*<select ng-if="suppliers" ng-model="Register.SupplierId" class="form-control">
+                        <option value="" selected>Please select Supplier</option>
+                        <option ng-repeat="r in suppliers" value="{{r.Id}}">
+                            {{r.SupplierName}}
+                        </option>
+                    </select>*@
+            </div>
+            <div class="form-group">
+                <label>Location Name</label>
+                <input type="text" class="form-control" ng-model={{r.LocationName}} name="Location" />
+                @*<select ng-if="locations" ng-model="Register.LocationId" class="form-control">
+                        <option value="" selected>Please select Location</option>
+                        <option ng-repeat="r in locations" value="{{r.Id}}">
+                            {{r.LocationName}}
+                        </option>
+                    </select>*@
+            </div>
+            <div class="form-group">
+                <label>Department Name</label>
+                <input type="text" class="form-control" ng-model={{r.DepartmentName}} name="Location" />
+                @*<select ng-if="departments" ng-model="Register.DepartmentId" class="form-control">
+                        <option value="" selected>Please select Department</option>
+                        <option ng-repeat="r in departments" value="{{r.Id}}">
+                            {{r.DepartmentName}}
+                        </option>
+                    </select>*@
+            </div>
+        </div>
+        <button ng-if="open=='true'" type="button" ng-click="RegisterUser(Register)" class="btn btn-primary btn-flat p-t-10 p-b-10 col-lg-3" style="display:block; margin:0 auto">Register</button>
+    </div>
+</div>

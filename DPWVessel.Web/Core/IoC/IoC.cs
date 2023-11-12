@@ -1,0 +1,119 @@
+﻿using Autofac;
+using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
+using DE.Infrastructure.Concept;
+using DE.Infrastructure.ConceptImplementation;
+using DE.Infrastructure.Jobs;
+using DE.Infrastructure.Logging;
+using DE.Infrastructure.Memory;
+using DE.Infrastructure.MemoryImplementation;
+using DPWVessel.Model.Core;
+using DPWVessel.Model.EntityModel;
+using DPWVessel.Model.Features.Grid;
+using DPWVessel.Web.Core.Attributes;
+using DPWVessel.Web.Core.Jobs;
+using DPWVessel.Web.Core.Logs;
+using DPWVessel.Web.Core.Session;
+using FluentValidation;
+using System.Data.Entity;
+using System.Linq;
+using System.Reflection;
+using System.Web.Mvc;
+
+namespace DPWVessel.Web.Core.IoC
+{
+    public class IoC
+    {
+        private readonly static string AssemblyName = "DPWVessel.Model";
+        private readonly static string AssemblyNameWeb = "DPWVessel.Web";
+        public static ContainerBuilder InitializeAutoFac(ContainerBuilder builder)
+        {
+            // STANDARD MVC SETUP:
+
+            // Register your MVC controllers.
+            builder.RegisterControllers(typeof(MvcApplication).Assembly);
+            builder.RegisterApiControllers(typeof(MvcApplication).Assembly)
+                .PropertiesAutowired();
+
+            //register mvc pipeline filters 
+            builder.Register(c => new GlobalPropertiesActionFilter()).PropertiesAutowired().AsActionFilterFor<Controller>();
+            builder.Register(c => new TransactionFilter()).PropertiesAutowired().AsResultFilterFor<Controller>();
+
+            //register our custom dependencies
+            RegisterIocDependencies(builder);
+
+            // Run other optional steps, like registering model binders,
+            // web abstractions, etc., then set the dependency resolver
+            // to be Autofac.
+            builder.RegisterFilterProvider();
+            //builder.RegisterWebApiFilterProvider(config); //webapi filters are directly added in app_start/webapi
+            return builder;
+        }
+
+        private static void RegisterIocDependencies(ContainerBuilder builder)
+        {
+            var modelAssembly = Assembly.Load(AssemblyName);
+            var modelAssemblyWeb = Assembly.Load(AssemblyNameWeb);
+            var moduleNamespace = AssemblyName + ".Modules";
+            var webNamespace = AssemblyNameWeb + ".Modules";
+            //db context binders
+            builder.RegisterType<dpw_VesselEntities>().AsSelf().As<DbContext>().InstancePerRequest();
+
+
+            builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
+            builder.RegisterType<SessionManager>().As<ISessionManager>().InstancePerRequest();
+            builder.RegisterType<Auditor>().As<IAuditor>();
+
+            builder.RegisterType<MemoryCacher>().As<IMemoryCacher>();
+
+            builder.RegisterType<NLogger>().As<ILogger>().InstancePerRequest();
+
+            //request/response binders
+            builder.RegisterType<RequestExecutor>().As<IRequestExecutor>();
+
+            builder.RegisterAssemblyTypes(modelAssembly)
+                .Where(x => x.IsInNamespace(moduleNamespace))
+                .AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(modelAssemblyWeb)
+                .Where(x => x.IsInNamespace(webNamespace))
+                .AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(modelAssembly)
+                .Where(x => x.GetInterfaces()
+                    .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>)))
+                .AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(modelAssembly)
+                .Where(x => x.GetInterfaces()
+                    .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestHandlerAsync<,>)))
+                .AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(modelAssembly)
+                .Where(x => x.GetInterfaces()
+                    .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IValidator<>)))
+                .AsImplementedInterfaces();
+
+            builder.RegisterGeneric(typeof(DefaultValidator<>)).As(typeof(IValidator<>)); //default validator if none is specified
+            builder.RegisterGeneric(typeof(GridAddRequestHandler<>)).As(typeof(IRequestHandler<,>));
+            builder.RegisterGeneric(typeof(GridAddRequestValidator<>)).As(typeof(IValidator<>));
+            builder.RegisterGeneric(typeof(GridUpdateRequestHandler<>)).As(typeof(IRequestHandler<,>));
+            builder.RegisterGeneric(typeof(GridUpdateRequestValidator<>)).As(typeof(IValidator<>));
+
+            //background jobs
+            builder.RegisterType<BGJobExecutor>();
+            builder.RegisterAssemblyTypes(modelAssembly)
+               .Where(x => x.GetInterfaces()
+                   .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBackgroundJob<>)))
+               .AsSelf();
+
+            builder.RegisterAssemblyTypes(modelAssemblyWeb)
+              .Where(x => x.GetInterfaces()
+                  .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBackgroundJob<>)))
+              .AsSelf();
+
+            builder.RegisterGeneric(typeof(JobExecutor<>)).As(typeof(JobExecutor<>));
+
+        }
+    }
+}

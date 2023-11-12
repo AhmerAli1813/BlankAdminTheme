@@ -1,0 +1,355 @@
+﻿@using DPWVessel.Model.Resources
+@using DPWVessel.Model.EntityModel.Enums
+@{
+    ViewBag.Title = "Register User";
+}
+<link href="~/Scripts/SlimSelect/SlimSelectCustomStyle.css" rel="stylesheet" />
+<link href="~/Scripts/SlimSelect/slimselect.min.css" rel="stylesheet" />
+<script src="~/Scripts/SlimSelect/slimselect.min.js"></script>
+<style>
+    .bg-indigo-400 {
+    background-color: #013765 !important;
+}
+
+    .Headingtable {
+        padding: 20px 0px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+   
+    .ss-main .ss-multi-selected 
+{
+    min-height:38px!important;
+
+}
+.ss-add {
+    /*margin: auto !important;*/
+    padding-right: 12px;
+    font:bold;
+}
+
+element.style {
+}
+Label, btn, table td, table th, span {
+    font-weight: 500;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+.ss-main .ss-multi-selected .ss-values .ss-value
+{
+    background-color:#455a64;
+}
+</style>
+<div class="page-header border-bottom-0">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4><i class="icon-user mr-2 mr-2"></i> <span class="font-weight-semibold">Edit User</span></h4>
+
+        </div>
+    </div>
+</div>
+<hr />
+<div ng-controller="AccountCtr" ng-init="initEdit()">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item"><a href="#basic-tab1" class="nav-link active" data-toggle="tab"><b>General</b></a></li>
+                       
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="basic-tab1">
+                            <div class="row">
+                                <div class="col-md-4">
+
+                                    <div class="card">
+                                        <div class="card-body bg-indigo-400 text-center card-img-top" style="background-image: url(~/Content/images/profile.jpg); background-size: contain;height:293px;">
+                                            <div class="card-img-actions d-inline-block mb-3 " style="margin-top:12px;">
+                                                <img class="img-fluid rounded-circle" src="~/Content/images/profile.jpg" width="170" height="170" alt="">
+                                                <div class="card-img-actions-overlay rounded-circle">
+                                                    <a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+                                                        <i class="icon-plus3"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <h6 class="font-weight-semibold mb-0">{{User.FullName}}</h6>
+                                            <span class="d-block opacity-75">Availability ( ON DUTY )</span>
+                                        </div>
+
+                                        <div class="card-body p-0">
+                                            <ul class="nav nav-sidebar mb-2">
+                                                <li class="nav-item">
+                                                    <a href="#inbox" class="nav-link custom-padding" style="position:relative;top:6px;">
+                                                        <i class="icon-stats-bars"></i>
+                                                        Status
+                                                        <span ng-if="User.Status==true" class="badge badge-success badge-pill ml-auto">Active</span>
+                                                        <span ng-if="User.Status!=true" class="badge badge-warning badge-pill ml-auto">Not Active</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card">
+                                        <div class="card-body" @*style="height:400px  !important"*@>
+                                            <form>
+                                            
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-4 form-group">
+                                                            <label>Email</label><span class="required-starig">*</span>
+                                                            <input type="text" id="Email" class="form-control" placeholder="" ng-model="User.Email" readonly>
+                                                        </div>
+                                                        <div class="col-md-4 form-group">
+                                                            <label class="control-label">Login Id</label><span class="required-starig">*</span>
+                                                            <input type="text" id="Name" class="form-control" placeholder="" ng-model="User.Username" readonly>
+                                                        </div>
+                                                        <div class="col-md-4 form-group">
+                                                            <label class="control-label">FullName</label><span class="required-starig">*</span>
+                                                            <input type="text" id="FullName" class="form-control" placeholder="" ng-model="User.FullName">
+                                                        </div>
+                                                        <div class="col-md-4 form-group">
+                                                            <label class="control-label">Phone</label><span class="required-starig">*</span>
+                                                            <input type="text" id="phone" class="form-control" placeholder="" ng-model="User.Phone">
+                                                        </div>
+                                                        <div class="col-md-4">
+
+                                                            <label>Application Access</label><span class="required-starig">*</span>
+                                                            <select multiple id="UserAppId"  ng-model="User.UsersApplication" ng-change="CheckAccessEdit(User.UsersApplication)" >
+                                                                <option ng-repeat="App in AppList" ng-if="App.Id==2" ng-selected="User.UsersApplication=='2'" value="{{App.Id}}">Vessel</option>
+                                                                <option ng-repeat="App in AppList" ng-if="App.Id==1" ng-selected="User.UsersApplication=='1'" value="{{App.Id}}">JIP</option>
+                                                                <option ng-repeat="App in AppList" ng-if="App.Id==3" ng-selected="User.UsersApplication=='3'" value="{{App.Id}}">{{App.Name}}</option>
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="col-md-4 form-group">
+                                                            <label>Role</label><span class="required-starig">*</span>
+                                                            @*<select data-placeholder="Please select User Type" id="Role" class="form-control select-clear" ng-model="User.UserTypeId" data-fouc>
+                                                                <option disabled selected>Select User Role</option>
+                                                                <option ng-repeat="R in Roles" value="{{R.Id}}" ng-selected="User.UserType == R.Text">{{R.Text}}</option>
+                                                            </select>*@
+                                                            <select multiple  id="UserRoleId" ng-model="User.UserType" ng-change="RoleCountEdit(User.UserType)">
+
+                                                                <optgroup label="Common Role">
+
+                                                                    <option ng-selected="User.UserType =='1'" ng-repeat="r in Roles" ng-if="r.Id==1"  value="{{r.Id}}">{{r.Text}}</option>
+                                                                    <option ng-selected="User.UserType == '2'" ng-repeat="r in Roles" ng-if="r.Id==2"  value="{{r.Id}}">{{r.Text}}</option>
+                                                                   
+                                                                </optgroup>
+                                                                <optgroup label="VESSEL Roles" ng-if="RolesDiv.includes('2')">
+                                                                    <option ng-selected="User.UserType =='3'" ng-repeat="r in Roles" ng-if="r.Id==3"  value="{{r.Id}}">{{r.Text}}</option>
+                                                                </optgroup>
+                                                                <optgroup label="JIP Roles" ng-if="RolesDiv.includes('1')">
+                                                                    <option ng-selected="User.UserType == '4'" ng-repeat="r in Roles" ng-if="r.Id==4"  value="{{r.Id}}">{{r.Text}}</option>
+                                                                    @*<option ng-selected="User.UserType == '5'" ng-repeat="r in Roles" ng-if="r.Id==5"  value="{{r.Id}}">{{r.Text}}</option>*@
+                                                                   
+                                                                    <option ng-selected="User.UserType == '7'" ng-repeat="r in Roles" ng-if="r.Id==7"  value="{{r.Id}}">{{r.Text}}</option>
+                                                                    <option ng-selected="User.UserType == '8'" ng-repeat="r in Roles" ng-if="r.Id==8"  value="{{r.Id}}">{{r.Text}}</option>
+                                                                    <option ng-selected="User.UserType == '9'" ng-repeat="r in Roles" ng-if="r.Id==9"  value="{{r.Id}}">{{r.Text}}</option>
+                                                                    <option ng-selected="User.UserType == '6'" ng-repeat="r in Roles" ng-if="r.Id==6" value="{{r.Id}}">{{r.Text}}</option>
+                                                                </optgroup>
+                                                                <optgroup label="DWH Roles" ng-if="RolesDiv.includes('3')">
+                                                                    <option ng-selected="User.UserType =='10'" ng-repeat="r in Roles" ng-if="r.Id==10" value="{{r.Id}}">{{r.Text}}</option>
+                                                                </optgroup>
+                                                           
+
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-4 form-group">
+                                                            <label>Status</label><span class="required-starig">*</span>
+                                                            <select data-placeholder="Status" class="form-control select-clear" ng-model="User.Status" data-fouc>
+                                                                <option disabled selected>Select Status </option>
+                                                                <option  ng-selected="User.Status ==true " ng-value="true">Active</option>
+                                                                <option ng-selected="User.Status == false" ng-value="false">Not Active</option>
+                                                            </select>
+                                                        </div>
+                                                      
+                                                       
+                                                        <div class="col-md-4 form-group">
+                                                            <label>SHIFT & WORK HOURS</label>
+                                                            <input type="text" value="Shift A - 10Hrs 08:00am - 06:00pm" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-4 form-group">
+                                                            <label>Department</label>
+                                                            <input type="text" value="Department" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-4 form-group">
+                                                            <label>Sub Department</label>
+                                                            <input type="text" value="Sub Department" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-4 form-group">
+                                                            <label>Nationality</label>
+                                                            <input type="text" value="Nationality" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-4 form-group">
+                                                            <label>Religion</label>
+                                                            <input type="text" value="Religion" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-4 form-group">
+                                                            <label>DOJ</label>
+                                                            <input type="text" value="DOJ" class="form-control">
+                                                        </div>
+
+                                                        @*<div class="col-md-4 form-group">
+                                                            <label>User Can Access</label>
+                                                            <select multiple="multiple" id="AppId" class="form-control select" ng-model="User.UsersApplication">
+                                                             
+                                                                <option value="{{item.Id}}" ng-repeat="item in AppList">{{item.Name}}</option>
+                                                                
+                                                            </select>
+                                                        </div>*@
+                                                      
+
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" ng-click="SaveUser(User)" class="btn btn-primary pull-right"><i class="fa fa-check" tabindex="3"></i>Update</button>
+                                <a href="Index" class="btn btn-theme-gray pull-right mr-2" tabindex="4">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="col-lg-12">
+        <div>
+            <div class="row p-t-20">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Email</label><span class="required-starig">*</span>
+                        <input type="text" id="Email" class="form-control" placeholder="" ng-model="User.Email" readonly>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Login Id</label><span class="required-starig">*</span>
+                        <input type="text" id="Name" class="form-control" placeholder="" ng-model="User.Username" readonly>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">FullName</label><span class="required-starig">*</span>
+                        <input type="text" id="FullName" class="form-control" placeholder="" ng-model="User.FullName">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Phone</label><span class="required-starig">*</span>
+                        <input type="text" id="phone" class="form-control" placeholder="" ng-model="User.Phone">
+                    </div>
+                </div>
+
+
+                <div class="form-group col-md-3">
+                    <label>Role</label><span class="required-starig">*</span>
+                    <select data-placeholder="Please select User Type" id="Role" class="form-control select-clear" ng-model="User.UserTypeId" required data-fouc>
+                        <option disabled selected>Select User Role</option>
+                        <option ng-repeat="R in Roles" value="{{R.Id}}" ng-selected="User.UserType == R.Text">{{R.Text}}</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="form-group m-t-27">
+                        <input type="checkbox" ng-model="User.Status" />
+                        <label class="control-label">ACITIVE / INACTIVE</label><span class="required-starig">*</span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12" ng-show="User.UserTypeId=='6'" id="EqType">
+                    <label><b style="font-size:20px" class="ml-2">Engineer Can Work</b></label><span ng-if="User.UserTypeId=='6'" class="required-starig">*</span>
+                   
+                    <div class="col-md-12">
+                        <div ng-repeat="item in User.UserEqType" style="width: 15%;display: inline-block;margin-bottom:10px;">
+                            <input type="checkbox" ng-value="item.IsChecked" id="checkboxid" ng-model="item.IsChecked" class="custome-checkbox ">
+                            <span class="ml-2">{{item.EquipmentTypeName}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        @*<div>
+                <div class="row p-t-20">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">@Content.UploadImage</label>
+                            <div>
+                                <input type="file" id="filePicker" name="pic" accept="image/*" onchange="angular.element(this).scope().ImageUpload('filePicker', 'UserImage')">
+                                <input type="hidden" ng-model="User.UserImage" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 image-view">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@Content.Image</label>
+                            <img ng-src="{{User.UserImage}}" data-target="#imgEnlarge" data-toggle="modal" class="ticketdetail-imgs">
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        <div class="col-md-12">
+            <button type="button" ng-click="SaveUser(User)" class="btn btn-primary pull-right"><i class="fa fa-check" tabindex="3"></i>Save</button>
+            <a href="Index" class="btn btn-theme-gray pull-right mr-2" tabindex="4">Cancel</a>
+        </div>
+    </div>*@
+
+    @*<div id="imgEnlarge" class="modal" role="dialog">
+            <div class="modal-dialog">
+                 Modal content
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn btn-default closeModal" data-dismiss="modal"><i class="fa fa-close"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <img ng-src="{{User.UserImage}}" style="width:100%" class="viewLarge" />
+                    </div>
+                </div>
+            </div>
+        </div>*@
+</div>
+
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+<script src="~/Scripts/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+
+    // Start phone Number Validation
+    function phoneFormatter() {
+        $('#phone').on('input', function () {
+            var number = $(this).val().replace(/[^+\d]/g, '')
+
+            $(this).val(number);
+            if (number.length == 17) {
+                $(this).val(null);
+                toastr.error('max limit 17 digit only');
+                return false;
+            }
+
+        });
+    };
+    $(phoneFormatter());
+
+    // End phone Number Validation
+
+</script>

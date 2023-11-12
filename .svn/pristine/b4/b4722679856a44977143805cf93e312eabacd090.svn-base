@@ -1,0 +1,453 @@
+﻿
+@model DPWVessel.Model.Features.DWH.GetVesselsSailedDetailsResponse
+@{
+    ViewBag.Title = "DWHVesselPrint";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <title>DWH Vessel Print</title>
+    <link href="@Url.Content("~/Content/css/icons/icomoon/styles.min.css")" rel="stylesheet" type="text/css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
+    <script src="~/Scripts/js/main/jquery.min.js"></script>
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet" ) />
+    <link rel="icon" type="~/Content/images/favicon.ico" sizes="16x16" href="~/Content/images/favicon.ico">
+    <style>
+                 @@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
+        .heading-print {
+            color: black;
+            font-weight: bold;
+        }
+
+        .table td, .table th {
+            padding: 10px !important;
+                border: 1px solid #191919;
+        }
+           .tableAlign th
+        {
+            text-align:left;
+            background-color:#f3f3f3;
+        }
+          .tableAlign td 
+        {
+            text-align:center;
+            background-color:white;
+        }
+        .badge {
+              width: auto !important;
+                display: inline-block;
+    padding: .3125rem .375rem;
+    color:white!important;
+    font-size: larger ;/*75%*/
+    font-weight: bolder;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .125rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+
+        }
+
+        .badge-size {
+            width: 70px;
+            padding: 8px 6px 5px 7px;
+        }
+
+        .badge-xs {
+            font-size: 9px;
+            -webkit-transform: translate(0, -2px);
+            -ms-transform: translate(0, -2px);
+            -o-transform: translate(0, -2px);
+            transform: translate(0, -2px);
+        }
+
+        .badge-sm {
+            -webkit-transform: translate(0, -2px);
+            -ms-transform: translate(0, -2px);
+            -o-transform: translate(0, -2px);
+            transform: translate(0, -2px);
+        }
+        /*All Table Badges*/
+
+        .badge-Completed {
+            /*background-color: #2cb97c!important;*/
+            background-color: #6c757d !important;
+            text-transform: uppercase;
+        }
+
+        .badge-InProgress {
+            background-color: #65becc !important;
+            text-transform: uppercase;
+        }
+     .badge-success {
+    color: #fff;
+    background-color: #28a745;
+}
+.badge-danger {
+    color: #fff;
+   background-color: #c51f41!important;
+}
+.badge-warning {
+    color: #212529;
+    background-color: #ff7043;
+}
+.badge-info {
+    color: #fff;
+        background-color: #013765!important;
+}
+        .badge-OverDue {
+            background-color: red !important;
+            text-transform: uppercase;
+        }
+
+        .badge-News {
+            background-color: #c776aa !important;
+            text-transform: uppercase;
+        }
+
+        .badge-Closed {
+            background-color: #463d32 !important;
+            text-transform: uppercase;
+        }
+
+        .badge-standby {
+            background-color: rgba(59, 85, 96, 0.7);
+            color: white;
+        }
+
+        .badge-Rejected {
+            background-color: #dc3545 !important;
+            text-transform: uppercase;
+        }
+
+      
+
+        img {
+            height: 80px;
+            border: none;
+        }
+
+        .truncate {
+            width: fit-content;
+            word-break: break-all;
+        }
+ 
+        /*@@font-face {
+            font-family: 'AvenirLTStd-Book';
+            src: url('../../fonts/AvenirLTStd-Book.otf') format('opentype');
+        }*/
+
+        /*@@font-face {
+            font-family: 'AvenirLTStd-Medium';
+            src: url('../../fonts/AvenirLTStd-Medium.otf') format('opentype');
+        }*/
+   
+        /*@@font-face {
+            font-family: 'AvenirLTStd-Roman';
+            src: url('../../fonts/AvenirLTStd-Roman.otf') format('opentype');
+        }*/
+
+        /*h2 {
+            font-family: AvenirLTStd-Medium !important;
+        }*/
+    </style>
+</head>
+
+<body>
+    <div >
+        <div class="row page-titles" style="padding:30px">
+            <table class="table-bordered table" style="border: 1px solid black;">
+                <tr style="border: 1px solid black;">
+                    <td class="text-center">
+                        <img src="~/Content/images/dpworldlogo.png" />
+                    </td>
+                    <td align="center" style="vertical-align:inherit">
+                        <h1 class="" style="font-size:40px">
+                            <b>DWH Vessel</b>
+                            <b>
+                                @if (Model.Print == true)
+                                {<span>Report</span>}
+                                else
+                                { <span> Details</span>}
+                            </b>
+
+                        </h1>
+
+
+                        </td>
+                        <td style="width:25%">
+                            <table style="width:100%">
+                                <tr>
+                                    <th>
+                                        @if (Model.Print == true)
+                                        { <span>Print</span>} Date
+                                    </th>
+                                    <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        @if (Model.Print == true)
+                                        { <span>Print</span>} Time
+                                    </th>
+                                    <td>@DateTime.Now.ToString("HH:mm")</td>
+                                </tr>
+                            </table>
+                        </td>
+
+                        </tr>
+
+
+                    </table>
+
+
+</div>
+
+
+<div class="container-fluid general">  
+
+
+
+        @foreach (var item in Model.VesselSailedDetailsList)
+        {
+
+            <table class="table table_heading table-bordered tableAlign table-striped mt-3">
+                <tr style="text-align:center;">
+                    <th>Refrence NO</th>
+                    <td> @item.RefNo</td>
+
+
+                    <th>Vessel Name</th>
+                    <td> @item.VesselsName</td>
+
+                    <th>Status</th>
+                    <td>
+                        @if (item.StatusCode == "invalid")
+                        {
+                            <span class="badge badge-danger"> @item.Status</span>
+
+                        }
+                        @if (item.StatusCode == "valid")
+                        {
+                            <span class="badge badge-success"> @item.Status </span>
+                        }
+                        @if (item.StatusCode == "cntrO")
+                        {
+                            <span class="badge badge-warning"> @item.Status </span>
+                        }
+                        @if (item.StatusCode == "cntrF")
+                        {
+                            <span class="badge badge-info"> @item.Status </span>
+                        }
+
+
+                    </td>
+
+
+                </tr>
+                <tr style="text-align:center;">
+                    <th>Agent Name</th>
+                    <td> @item.Agent</td>
+
+
+                    <th>Hatch Cover</th>
+                    <td>@item.HatchCover</td>
+
+                    <th>Total Cranes</th>
+                    <td>@item.TotalCranes</td>
+             
+                </tr>
+
+                <tr style="text-align:center;">
+
+                    <th>In Schedule</th>
+                    <td>@item.CUSTDFF_VSLINSCHEDULE</td>
+
+                    <th>Sail Direction</th>
+                    <td> @item.SailDirection</td>
+
+                    <th>VS Class Name	</th>
+                    <td>@item.VS_Class_Name</td>
+
+                </tr>
+
+                <tr style="text-align:center;">
+                    <th>Srv Name</th>
+                    <td>@item.SrvName</td>
+
+                    <th>Line Operator</th>
+                    <td>@item.LineOperatorName</td>
+
+                    <th>Line Operator Code</th>
+                    <td>@item.LineOperatorCode</td>
+
+
+                </tr>
+
+                <tr style="text-align:center;">
+                    <th>Sail Direction</th>
+                    <td>@item.SailDirection</td>
+
+                    <th>Berth No</th>
+                    <td>@item.pos_slot</td>
+
+                    <th>Vessel Berthings ETD</th>
+                    <td>@item.Vessel_Berthings_ETD</td>
+
+                </tr>
+
+                <tr style="text-align:center;">
+                    <th>Vessel Length</th>
+                    <td>@item.Vessel_Length</td>
+
+                    <th>Vessel Berthings PosName</th>
+                    <td>@item.Vessel_Berthings_PosName</td>
+
+                    <th>Ib Vyg</th>
+                    <td>@item.ib_vyg</td>
+
+                </tr>
+                <tr style="text-align:center;">
+                    <th>Ob Vyg</th>
+                    <td>@item.ob_vyg</td>
+
+                    <th>Carrier Mode</th>
+                    <td>@item.carrier_mode</td>
+
+                    <th>VS Class ID</th>
+                    <td>@item.VS_Class_ID</td>
+
+                </tr>
+
+                <tr style="text-align:center;">
+                    <th>VS Class Name</th>
+                    <td>@item.VS_Class_Name</td>
+
+                    <th>Vsl Ops Hrs</th>
+                    <td>@item.VslOpsHrs</td>
+
+                    <th>Loa</th>
+                    <td>@item.Loa</td>
+                </tr>
+
+                <tr style="text-align:center;">
+                    <th>Off Port Arr</th>
+                    
+                    <td>
+                        @if (item.off_port_arr.HasValue)
+                        {@item.off_port_arr.Value.ToString("dd-MM-yyyy HH:mm")}
+                    </td>
+                    <th>Start Work</th>
+                    <td>
+                        @if (item.start_work.HasValue)
+                        {@item.start_work.Value.ToString("dd-MM-yyyy HH:mm")}
+                    </td>
+                    
+
+                    <th>End Work</th>
+                    <td>
+                        @if (item.end_work.HasValue)
+                        {@item.end_work.Value.ToString("dd-MM-yyyy HH:mm")}
+                    </td>
+
+                    
+
+                </tr>
+                <tr style="text-align:center;">
+                    <th>Vsl Classification</th>
+                    <td>@item.VslClassification</td>
+
+                    <th>Vsl Vist Remarks</th>
+                    <td>@item.VslVistRemarks</td>
+
+                    <th> ATA </th>
+                    <td>
+                        @if (item.ata.HasValue)
+                        {@item.ata.Value.ToString("dd-MM-yyyy HH:mm")}
+                    </td>
+                    
+
+                </tr>
+                <tr style="text-align:center;">
+                    <th>ATD  </th>
+                    <td>
+                        @if (item.atd.HasValue)
+                        {@item.atd.Value.ToString("dd-MM-yyyy HH:mm")}
+                    </td>
+       
+
+                    <th>Pilot On Board</th>
+                    <td>
+                        @if (item.PilotOnBoard.HasValue)
+                        {@item.PilotOnBoard.Value.ToString("dd-MM-yyyy HH:mm")}
+                    </td>
+                    
+
+                    <th>Pilot Off Board </th>
+                    <td>
+                        @if (item.PilotOffBoard.HasValue)
+                        {@item.PilotOffBoard.Value.ToString("dd-MM-yyyy HH:mm")}
+                   </td>
+
+                </tr>
+                <tr style="text-align:center;">
+                    <th>Port Rotation No</th>
+                    <td>@item.PortRotationNo</td>
+
+                    <th>Berth Hrs</th>
+                    <td>@item.BerthHrs</td>
+
+                    <th> Previous Port </th>
+                    <td>@item.PreviousPort</td>
+
+                </tr>
+                <tr style="text-align:center;">
+                    <th>Next Port</th>
+                    <td>@item.NextPort</td>
+
+                    <th>Srv Code</th>
+                    <td>@item.SrvCode</td>
+
+                    <th> Srv Name </th>
+                    <td>@item.SrvName</td>
+
+                </tr>
+                <tr style="text-align:center;">
+                    <th>Custom Roration No</th>
+                    <td>@item.CustomRorationNo</td>
+
+
+                    <th> Time Discharge Complete </th>
+                    <td>
+                @if (item.time_discharge_complete.HasValue)
+                       {@item.time_discharge_complete.Value.ToString("dd-MM-yyyy HH:mm")}
+                    </td>
+  
+            </table>
+            <br />
+
+        }
+
+
+
+
+</div>
+</div>
+</body>
+</html>
+
+
+@*@if (Model.Print == true)
+{*@
+    <script>
+        window.print();
+    </script>
+@*}*@
+
+
+

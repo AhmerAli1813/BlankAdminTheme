@@ -1,0 +1,196 @@
+﻿using DE.Infrastructure.Helpers;
+using LINQExtensions;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+
+namespace DE.Infrastructure.CodeContracts
+{
+    public static class ParameterExtension
+    {
+        /// <summary>
+        /// Applying different parameters to the given queryable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="queryable"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static QueryableModel ApplyParameters<T>(this IQueryable<T> queryable, ListingParams parameters)
+            where T : class
+        {
+            return ApplyParametersWithOuDPWVessel(queryable, parameters, x => x);
+        }
+
+        /// <summary>
+        /// Applying different parameters to the given queryable and have ability to reselect the result using a select expression
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="queryable"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static QueryableModel ApplyParametersWithOuDPWVessel<T, R>(this IQueryable<T> queryable, ListingParams parameters,
+            Func<T, R> selector = null)
+            where T : class
+            where R : class
+        {
+            IQueryable<T> results = queryable;
+            if (parameters.QueryFilters.Count > 0)
+            {
+                var table = typeof(T).Name;
+                ParameterExpression pe = Expression.Parameter(typeof(T), table);
+                Expression whereExpression = null;
+
+                foreach (var filter in parameters.QueryFilters)
+                {
+                    //ignore null filters
+                    if (filter.Value == null)
+                        continue;
+
+                    Expression expression = null;
+                    Expression property = Expression.Property(pe, typeof(T).GetProperty(filter.Field));
+                    //Expression constant = CreateConstantExpression(filter.Value, property.Type);
+
+                    Expression constant = null;
+                    if (filter.Type == FilterType.WhereIn)
+                    {
+                        if (filter.Value is System.Collections.IList &&
+                              filter.Value.GetType().IsGenericType &&
+                              filter.Value.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>)) &&
+                              filter.Value.GetType().GenericTypeArguments[0] == typeof(int))
+                            constant = CreateConstantExpression(filter.Value, typeof(List<int>));
+                        else
+                            throw new ApplicationException("Parameter Value must be of type List<int> for WhereIn filter");
+                    }
+                    else
+                        constant = CreateConstantExpression(filter.Value, property.Type);
+
+
+
+                    //like filter is only for string types, for other types use the Equal filter
+                    if (property.Type != typeof(string) && (filter.Type == FilterType.StartsWith || filter.Type == FilterType.Like || filter.Type == FilterType.Contains || filter.Type == FilterType.EndsWith))
+                        filter.Type = FilterType.Equal;
+
+                    switch (filter.Type)
+                    {
+                        case FilterType.Like:
+                        case FilterType.StartsWith:
+                            MethodInfo methodInfoStartsWith = typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) });
+                            expression = Expression.Call(property, methodInfoStartsWith, constant);
+                            break;
+                        case FilterType.Contains:
+                            MethodInfo methodInfoContains = typeof(string).GetMethod("Contains", new Type[] { typeof(string) });
+                            expression = Expression.Call(property, methodInfoContains, constant);
+                            break;
+                        case FilterType.EndsWith:
+                            MethodInfo methodInfoEndsWith = typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) });
+                            expression = Expression.Call(property, methodInfoEndsWith, constant);
+                            break;
+                        case FilterType.WhereIn:
+                            var empty = new List<int>();
+                            MethodInfo methodInfoContainsList = empty.GetType().GetMethod("Contains");
+                            expression = Expression.Call(constant, methodInfoContainsList, property);
+                            break;
+                        case FilterType.Equal:
+                        case FilterType.NotEqual:
+                        case FilterType.LessThan:
+                        case FilterType.LessThanOrEqual:
+                        case FilterType.GreaterThan:
+                        case FilterType.GreaterThanOrEqual:
+                            ExpressionType expType = GetExpressionType(filter.Type);
+                            expression = Expression.MakeBinary(expType, property, constant);
+                            break;
+                    }
+
+                    if (whereExpression == null)
+                        whereExpression = expression;
+                    else
+                        whereExpression = Expression.AndAlso(whereExpression, expression);
+
+                }
+
+                if (whereExpression != null)
+                {
+                    MethodCallExpression whereCallExpression = Expression.Call(
+                       typeof(Queryable),
+                       "Where",
+                       new Type[] { typeof(T) },
+                       queryable.Expression,
+                       Expression.Lambda<Func<T, bool>>(whereExpression, new ParameterExpression[] { pe }));
+
+                    results = queryable.Provider.CreateQuery<T>(whereCallExpression);
+                }
+            }
+
+            int queryCount = results.Count();
+
+            if (!string.IsNullOrEmpty(parameters.SortField) && !string.IsNullOrEmpty(parameters.SortDirection))
+                results = results.OrderUsingSortExpression(string.Format("{0} {1}", parameters.SortField, parameters.SortDirection));
+            else
+                results = results.OrderBy("Id");
+
+            if (parameters.PageNumber > 0 && parameters.PageSize > 0)
+            {
+                int skipRows = (parameters.PageNumber - 1) * parameters.PageSize;
+                results = results.Skip(skipRows).Take(parameters.PageSize);
+            }
+
+            return new QueryableModel { Results = results.Select(selector), Count = queryCount };
+        }
+
+        private static ExpressionType GetExpressionType(FilterType filterType)
+        {
+            switch (filterType)
+            {
+                case FilterType.Equal:
+                    return ExpressionType.Equal;
+
+                case FilterType.NotEqual:
+                    return ExpressionType.Equal;
+
+                case FilterType.LessThan:
+                    return ExpressionType.LessThan;
+
+                case FilterType.LessThanOrEqual:
+                    return ExpressionType.LessThanOrEqual;
+
+                case FilterType.GreaterThan:
+                    return ExpressionType.GreaterThan;
+
+                case FilterType.GreaterThanOrEqual:
+                    return ExpressionType.GreaterThanOrEqual;
+
+                default:
+                    return ExpressionType.Default;
+            }
+        }
+
+        private static Expression CreateConstantExpression(object filterValue, Type propertyType)
+        {
+            if (propertyType == typeof(string))
+                return Expression.Constant(filterValue, propertyType);
+            else if (!IsNullableType(propertyType))
+                return Expression.Constant(Convert.ChangeType(filterValue, propertyType));
+            else
+            {
+                filterValue = ToNullable(filterValue, propertyType);
+                return Expression.Constant(filterValue, propertyType);
+            }
+        }
+
+        static object ToNullable(object s, Type type)
+        {
+            TypeConverter conv = TypeDescriptor.GetConverter(type);
+            return conv.ConvertFrom(s);
+        }
+
+        static bool IsNullableType(Type theType)
+        {
+            return (theType.IsGenericType &&
+            theType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)));
+        }
+
+    }
+}

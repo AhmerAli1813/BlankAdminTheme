@@ -1,0 +1,23 @@
+﻿using System.Web;
+using System.Web.Optimization;
+
+namespace DPWVessel.Web
+{
+    public class BundleConfig
+    {
+        // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
+        public static void RegisterBundles(BundleCollection bundles)
+        {
+            //Angularjs Bundle            
+            const string ANGULAR_APP_ROOT = "~/Scripts/angularApp/";
+            const string VIRTUAL_BUNDLE_PATH = ANGULAR_APP_ROOT + "main";
+
+            var scriptBundle = new ScriptBundle(VIRTUAL_BUNDLE_PATH)
+                .IncludeDirectory(ANGULAR_APP_ROOT, "*.js", searchSubdirectories: true);
+
+            bundles.Add(scriptBundle);
+            
+
+        }
+    }
+}

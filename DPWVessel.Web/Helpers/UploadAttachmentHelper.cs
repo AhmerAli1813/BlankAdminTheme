@@ -1,0 +1,18 @@
+﻿using System;
+using System.Web;
+
+namespace DPWVessel.Web.Helpers
+{
+    public class UploadAttachmentHelper
+    {
+        public static string GetAttachmentUrl(HttpPostedFileBase file, HttpServerUtilityBase server)
+        {
+            string newFile = Guid.NewGuid().ToString() + "_" + System.IO.Path.GetFileName(file.FileName);
+            string path = System.IO.Path.Combine(
+                server.MapPath("~/Content/attachments"), newFile);
+            // file is uploaded
+            file.SaveAs(path);
+            return path;
+        }
+    }
+}

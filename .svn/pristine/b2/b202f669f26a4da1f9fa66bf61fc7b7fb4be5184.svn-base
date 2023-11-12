@@ -1,0 +1,21 @@
+'use strict';
+
+var app = angular.module('DPWVesselApp', ['ui.grid', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.pagination', 'ui.grid.edit', 'ui.grid.rowEdit', 'ui.grid.cellNav', 'ui.grid.resizeColumns']);
+
+
+toastr.options.positionClass = "toast-bottom-right";
+
+var utcDateTemplate = '<div class="ui-grid-cell-contents ng-binding ng-scope">{{ grid.appScope.showDate(row.entity.Date) }}</div>';
+var utcDateTimeTemplate = '<div class="ui-grid-cell-contents ng-binding ng-scope">{{ grid.appScope.showUTCDateTime(row.entity.Date) }}</div>';
+Array.prototype.sum = function (prop) {
+    var total = 0
+    for ( var i = 0, _len = this.length; i < _len; i++ ) {
+        total += this[i][prop]
+    }
+    return total
+}
+
+//Adding X-Request-With for Glimpse Ajax Calls
+app.config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.defaults.headers.common = { 'X-Requested-With': 'XMLHttpRequest' };
+}]);

@@ -1,0 +1,69 @@
+﻿using DE.Infrastructure.Concept;
+using DPWVessel.Model.EntityModel;
+using FluentValidation;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DPWVessel.Model.Features.Users
+{
+    public class GetStudentsListRequest : IRequest<GetUsersListResponse>
+    {
+        public int? UserType { get; set; }
+    }
+    public class GetUsersListResponse : Response
+    {
+        public List<UsersList> UsersList { get; set; }
+
+    }
+
+    public class UsersList
+    {
+        public int Id { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string LoginId { get; set; }
+        public List<string> UserType { get; set; }
+        public bool Status { get; set; }
+        public List<string> UsersApplication { get; set; }
+
+    }
+
+
+    public class GetUsersListRequestValidator : AbstractValidator<GetStudentsListRequest>
+    {
+        public GetUsersListRequestValidator()
+        {
+
+        }
+    }
+
+    public class GetUsersListRequestHandler : IRequestHandler<GetStudentsListRequest, GetUsersListResponse>
+    {
+        private dpw_VesselEntities _dbcontext;
+        public GetUsersListRequestHandler(dpw_VesselEntities _context)
+        {
+            _dbcontext = _context;
+        }
+        public GetUsersListResponse Execute(GetStudentsListRequest request)
+        {
+            var row = _dbcontext.SiteUsers.Where(x => !x.AspNetUser.AspNetRoles.Select(c => c.Id).Contains("5")).ToList();
+
+            GetUsersListResponse resp = new GetUsersListResponse();
+            resp.UsersList = row.Select(x => new UsersList
+            {
+                Id = x.Id,
+                FullName = x.FullName,
+                LoginId = x.AspNetUser.UserName,
+                Email = x.AspNetUser.Email,
+                UserType = x.AspNetUser.AspNetRoles.Select(c => c.Name).ToList(),
+                Status = x.Status,
+                UsersApplication = x.UsersApplications.Select(z => z.Application.Name).ToList(),
+
+            }).OrderByDescending(c => c.Id).ToList();
+
+            return resp;
+        }
+
+    }
+
+}

@@ -1,0 +1,381 @@
+﻿@model DPWVessel.Model.Features.JIPReports.JIPTrackingExceptionByIdResponse
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <title> Status || JIP Exception</title>
+    <link href="@Url.Content("~/Content/css/icons/icomoon/styles.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet" ) />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
+    <script src="~/Scripts/js/main/jquery.min.js"></script>
+    <link rel="icon" type="~/Content/images/favicon.ico" sizes="16x16" href="~/Content/images/favicon.ico">
+    <style>
+        .heading-print {
+            color: black;
+            font-weight: bold;
+        }
+
+        .row {
+            margin: 0px !important;
+        }
+
+        .badge {
+            font-size: 15px;
+            width: 90px;
+        }
+
+        body {
+            background-color: white !important;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: white !important;
+        }
+
+        .table thead th {
+            background: #e7e7e7 !important;
+        }
+
+        .badge-size {
+            width: 70px;
+            padding: 8px 6px 5px 7px;
+        }
+
+        .table-bordered td, .table-bordered th {
+            border: 1px solid #979797 !important;
+        }
+
+        .badge-xs {
+            font-size: 9px;
+            -webkit-transform: translate(0, -2px);
+            -ms-transform: translate(0, -2px);
+            -o-transform: translate(0, -2px);
+            transform: translate(0, -2px);
+        }
+
+        .badge-sm {
+            -webkit-transform: translate(0, -2px);
+            -ms-transform: translate(0, -2px);
+            -o-transform: translate(0, -2px);
+            transform: translate(0, -2px);
+        }
+        /*All Table Badges*/
+
+        .badge-Completed {
+            /*background-color: #2cb97c!important;*/
+            background-color: #6c757d !important;
+            text-transform: uppercase;
+        }
+
+        .badge-InProgress {
+            background-color: #65becc !important;
+            text-transform: uppercase;
+        }
+
+        .badge-OverDue {
+            background-color: red !important;
+            text-transform: uppercase;
+        }
+
+        .badge-News {
+            background-color: #c776aa !important;
+            text-transform: uppercase;
+        }
+
+        .badge-Closed {
+            background-color: #463d32 !important;
+            text-transform: uppercase;
+        }
+
+        .badge-Rejected {
+            background-color: #dc3545 !important;
+            text-transform: uppercase;
+        }
+
+        img {
+            height: 80px;
+            border: none;
+        }
+
+        @@font-face {
+            font-family: 'AvenirLTStd-Book';
+            src: url('../../fonts/AvenirLTStd-Book.otf') format('opentype');
+        }
+
+        @@font-face {
+            font-family: 'AvenirLTStd-Medium';
+            src: url('../../fonts/AvenirLTStd-Medium.otf') format('opentype');
+        }
+
+        @@font-face {
+            font-family: 'AvenirLTStd-Roman';
+            src: url('../../fonts/AvenirLTStd-Roman.otf') format('opentype');
+        }
+
+        h2 {
+            font-family: AvenirLTStd-Medium !important;
+        }
+
+        .testRotate {
+            transform: rotate(180deg);
+            writing-mode: vertical-rl;
+        }
+
+        #StudyHeading {
+            margin-left: 20px;
+            margin-top: 156px;
+        }
+
+        #otherheading {
+            margin-left: 20px;
+        }
+
+        .truncate {
+            width: fit-content;
+            word-break: break-all;
+        }
+
+        .headingbgColor {
+            background: #e7e7e7;
+        }
+        .btn-success,.badge-success,button.btn.btn-success
+{
+    background-color:#00a172!important;
+}
+
+.badge-danger,btn-danger,button.btn.btn-danger
+{
+      background-color:#c51f41!important;
+}
+.badge-warning, badge-warning,button.btn.btn-warrning
+{
+    background-color:#ff7043!important;
+}
+.badge-info, btn-info,button.btn.btn-info
+{
+    background-color:#013765!important;
+}
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row page-titles" style="padding:10px">
+            <table class="table-bordered table" style="border: 1px solid black;">
+                <tr style="text-align:center">
+                    <td class="text-center" style="width:25%;text-align:center">
+                        <img src="~/Content/images/saudiport-logo.png" style="width:186.109px;height:148px" />
+                    </td>
+                    <td align="center" style="vertical-align:inherit;padding:0px!important" width="50%">
+                        <table style="border:0;width:100%;" class="font-weight-bold">
+                            <tr><td colspan="2"><h1 class="text-center" style="font-size:30px"><b>@Model.VesselName &nbsp; @Model.RefNo</b></h1></td></tr>
+                            <tr><th>Service : @Model.Service</th><th>Duration :  @Model.Duration</th></tr>
+                            <tr><td>PilotOnBoard :@if (Model.PilotOnBoard.HasValue) { @Model.PilotOnBoard.Value.ToString("dd/MM/yyyy HH:mm")}</td><td>PilotStation :@if (Model.PilotStation.HasValue) { @Model.PilotStation.Value.ToString("dd/MM/yyyy HH:mm")}</td></tr>
+                            <tr><td>Date : @DateTime.Now.ToString("dd/MM/yyyy")</td><td>Time : @DateTime.Now.ToString("HH:mm")</td></tr>
+                        </table>
+                    </td>
+                    <td style="width:25%;text-align:center">
+                        @*<table style="width:100%">
+                                <tr>
+                                    <th>Print Date</th>
+                                    <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <th>Print Time</th>
+                                    <td>@DateTime.Now.ToString("hh:mm tt")</td>
+                                </tr>
+                            </table>*@
+                        <img src="~/Content/images/dpworldlogo.png" style="height:96px; margin: 17px;" />
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+        <div class="container-fluid general">
+            <table class="table table_heading table-bordered table-striped">
+                
+                    <tr class="text-center">
+                        <th  style="font-size:large" class="headingbgColor">Current Status</th>
+                        <td>
+                            @if (Model.statuscode == "Approve")
+                            {
+                                <span class="badge badge-success">Approve</span>
+                            }
+                            @if (Model.statuscode == "Deny")
+                            {
+                                <span class="badge badge-danger">Deny</span>
+                            }
+                            @if (Model.statuscode == "Required More")
+                            {
+                                <span class="badge badge-warning" style="width:auto;font-size:smaller">Required More Information</span>
+                            }
+                            @if (Model.statuscode == "Pending")
+                            {
+                               
+                                <span class="badge badge-info">Pending</span>
+
+                            }
+                            @if (Model.statuscode == "Submit")
+                            {
+                                <span class="badge badge-info text-capitalize">Submit</span>
+                            }
+                        </td>
+                        <th  style="font-size:large" class="headingbgColor">Stage</th>
+                        <td>@Model.stage</td>
+                    </tr>
+     @if (Model.statuscode == "Deny" || Model.statuscode == "Required More" )
+     {
+        <tr>
+            <th class="headingbgColor text-center" style="font-size:large">Updated By</th>
+            <td class="text-center">@Model.LastUpdatedBy</td>
+            <th  class="headingbgColor text-center" style="font-size:large">Remarks</th>
+            <td class="text-center">@Model.Remarks</td>
+        </tr>
+     }
+
+            </table>
+        </div>
+        <div class="container-fluid general">
+            <table class="table table_heading table-bordered table-striped">
+                @foreach (var item in Model.ExceptionListForTracking.OrderByDescending(x => x.UpdatedAt))
+                {
+
+
+
+
+
+
+
+
+                    <tbody>
+                        @if (item.Justifications != "" && item.Justifications != null)
+                {
+                            <tr style="text-align:center;">
+                                <th style="font-size:large" class="headingbgColor">Updated By</th>
+                                <td class="text-capitalize" style="font-size:large">@item.UpdatedBy</td>
+                                <th class="headingbgColor">Exception Type : @item.EType</th>
+                                <td class="text-capitalize">Updated At : @item.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                            <tr>
+                                <th class="headingbgColor">Justifications</th>
+                                <td colspan="3">@item.Justifications</td>
+                            </tr>
+                        }
+                        @if (item.Explanation != "" && item.Explanation != null)
+                {
+                    if (item.Justifications == "" || item.Justifications == null)
+                    {
+                                <tr style="text-align:center;">
+                                    <th style="font-size:large" class="headingbgColor">Updated By</th>
+                                    <td class="text-capitalize" style="font-size:large">@item.UpdatedBy</td>
+                                    <th class="headingbgColor">Exception Type : @item.EType</th>
+                                    <td class="text-capitalize">Updated At : @item.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm")</td>
+                                </tr>
+                            }
+
+                            <tr>
+                                <th class="headingbgColor">Explanation</th>
+                                <td colspan="3">@item.Explanation</td>
+                            </tr>
+                            if (item.Attachment != "" && item.Attachment != null)
+                            {
+                                <tr>
+                                    <th class="headingbgColor">Attachment</th>
+                                    <td colspan="3">@item.Attachment</td>
+                                </tr>
+                            }
+                        }
+
+                        @if (item.Opinion != "" && item.Opinion != null)
+                     {
+                            <tr style="text-align:center;">
+                                <th style="font-size:large" class="headingbgColor">Updated By</th>
+                                <td class="text-capitalize" style="font-size:large">@item.UpdatedBy</td>
+                                <th class="headingbgColor">Exception Type : @item.EType</th>
+                                <td class="text-capitalize">Updated At : @item.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                            <tr>
+                                <th class="headingbgColor">Opinion</th>
+                                <td colspan="3">@item.Opinion</td>
+                            </tr>
+                        }
+                        @if (item.Recommendations != "" && item.Recommendations != null)
+                    {
+                    if (item.Opinion == "" || item.Opinion == null)
+                    {
+                                <tr style="text-align:center;">
+                                    <th style="font-size:large" class="headingbgColor">Updated By</th>
+                                    <td class="text-capitalize" style="font-size:large">@item.UpdatedBy</td>
+                                    <th class="headingbgColor">Exception Type : @item.EType</th>
+                                    <td class="text-capitalize">Updated At : @item.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm")</td>
+                                </tr>
+                            }
+                            <tr>
+                                <th class="headingbgColor">Recomandation</th>
+                                <td colspan="3">@item.Recommendations</td>
+                            </tr>
+                        }
+                        @if (item.StudyAttachment != "" && item.StudyAttachment != null)
+                        {
+                          
+                            <tr>
+                                <th class="headingbgColor">Study Attachment</th>
+                                <td colspan="3">@item.StudyAttachment</td>
+                            </tr>
+                        }
+                        @if (item.Decision != "" && item.Decision != null)
+                          {
+                            <tr style="text-align:center;">
+                                <th style="font-size:large" class="headingbgColor">Updated By</th>
+                                <td class="text-capitalize" style="font-size:large">@item.UpdatedBy</td>
+                                <th class="headingbgColor">Exception Type : @item.EType</th>
+                                <td class="text-capitalize">Updated At : @item.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                            <tr>
+                                <th class="headingbgColor"> Decision</th>
+                                <td colspan="3">@item.Decision</td>
+                            </tr>
+                        }
+                        @if (item.SteringAttachment != "" && item.SteringAttachment != null)
+                      {
+                          if (item.Decision == "" || item.Decision == null)
+                             {
+                                <tr style="text-align:center;">
+                                    <th style="font-size:large" class="headingbgColor">Updated By</th>
+                                    <td class="text-capitalize" style="font-size:large">@item.UpdatedBy</td>
+                                    <th class="headingbgColor">Exception Type : @item.EType</th>
+                                    <td class="text-capitalize">Updated At : @item.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm")</td>
+                                </tr>
+                            }
+                            <tr>
+                                <th class="headingbgColor">Stering Attachment</th>
+                                <td colspan="3">@item.SteringAttachment</td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+
+
+
+                }
+            </table>
+</div>
+
+    </div>
+</body>
+</html>
+
+@if (Model.Print)
+{
+    <script>
+
+window.print();
+    </script>
+}

@@ -1,0 +1,377 @@
+﻿@using DPWVessel.Model.Resources
+@using DPWVessel.Model.EntityModel.Enums
+
+<!DOCTYPE html>
+<html lang="en" ng-app="DPWVesselApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Vessel System will help to reduce paper work!.">
+    <meta name="author" content="DpWorld">
+    <!-- Favicon icon -->
+    <link rel="icon" type="~/Content/images/favicon.ico" sizes="16x16" href="~/Content/images/favicon.ico">
+    <title>DpWorld Jeddah OPS</title>
+  
+    <!-- Global stylesheets -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/icons/icomoon/styles.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/icons/material/styles.min.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/layout.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/components.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/colors.min.css" rel="stylesheet" type="text/css">
+
+    <link href="~/Content/popup/jquery-confirm.min.css" rel="stylesheet" />
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="~/Content/css/Style.css" rel="stylesheet" />
+    <!-- /global stylesheets -->
+    
+</head>
+<body  ng-controller="baseCtrl" ng-init="initializeBase()" id="minisidebar">
+    
+    <div ng-if="activeService > 0" class="preloader activeServices">
+        <img src="~/Content/images/ajax-loader.gif" alt="Alternate Text" style="position: absolute;
+    /* margin: 0px auto; */
+    top: 50%;
+    left: 50%;width:100px;"/>
+    </div>
+    <!-- Main navbar -->
+
+    <div class="navbar navbar-expand-md navbar-light navbar-static">
+        <div class="navbar-brand" style="padding:0px!important">
+            <a href="#" class="d-inline-block">
+                <img src="~/Content/images/dpworld-logo.png" style="height:60px!important" />
+
+            </a>
+            
+        </div>
+        <div class="d-md-none">
+         
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
+                <i class="icon-tree5" style="color:white"></i>
+            </button>
+            <button class="navbar-toggler sidebar-mobile-main-toggle" type="button">
+                <i class="icon-paragraph-justify3" style="color:white"></i>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-mobile">
+            <ul class="navbar-nav" style="margin-right:auto">
+                <li class="nav-item">
+                    <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
+                        <i class="icon-paragraph-justify3"></i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item"></li>
+
+                @{Html.RenderPartial("_LoginPartial"); }
+
+            </ul>
+        </div>
+    </div>
+    <!-- /main navbar -->
+    <!-- Page content -->
+    <div class="page-content">
+        <!-- Main sidebar -->
+        <div class="sidebar sidebar-light sidebar-main sidebar-expand-md">
+            <!-- Sidebar mobile toggler -->
+            <div class="sidebar-mobile-toggler text-center">
+                <a href="#" class="sidebar-mobile-main-toggle">
+                    <i class="icon-arrow-left8"></i>
+                </a>
+                Navigation
+                <a href="#" class="sidebar-mobile-expand">
+                    <i class="icon-screen-full"></i>
+                    <i class="icon-screen-normal"></i>
+                </a>
+            </div>
+            <!-- /sidebar mobile toggler -->
+            <!-- Sidebar content -->
+            <div class="sidebar-content">
+                
+                <div class="card card-sidebar-mobile">
+                    <ul class="nav nav-sidebar" data-nav-type="accordion">
+                        <!--OPS Start-->
+                        <li class="nav-item nav-item-submenu" ng-show="_currentUser.UsersApplication.includes('DPW_OPS')">
+                            <a href="#" class="nav-link">
+                                <i class="icon-stack-text"></i>
+                             
+                                <span>
+                                    Vessel Compliance
+                                </span>
+                            </a>
+                            <ul class="nav nav-group-sub collapse" data-submenu-title="OPS">
+                               
+                                <li class="nav-item">
+
+                                    <a href="@Url.Action("VesselArrivalForm", "VesselFormOps")" class="nav-link">
+                                        <i class="icon-paste"></i>
+                                        <span>
+                                            Vessel Arrival Form
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index", "VesselFormOps")" class="nav-link">
+                                        <i class="icon-copy"></i>
+                                        <sup><span class="badge badge-pill heartbit bg-warning-400  mr-2" ng-if="OPSForm!=0" style="width: auto;margin-left: -16px;font-size: inherit;">{{OPSForm}}</span></sup>
+                                        <span>
+                                            Doc Scanner
+                                        </span>
+                                    </a>
+                                </li>
+                                 @if (!User.IsInRole("Operations"))
+                                    {   
+                                <li class="nav-item">
+                                    <a href="@Url.Action("StagingData", "VesselFormOps")" class="nav-link">
+                                        <i class="icon-copy"></i>
+                                        <sup><span class="badge badge-pill heartbit bg-warning-400  mr-2" ng-if="OPSStaging!=0" style="width: auto;margin-left: -16px;font-size: inherit;">{{OPSStaging}}</span></sup>
+                                        <span>
+                                            Approve Data
+                                        </span>
+                                    </a>
+                                </li>
+                                    }
+                                </ul>
+                            </li>
+                        <!--OPS End-->
+                      <!--JIP Exception Start-->
+                        <li class="nav-item nav-item-submenu" ng-show="_currentUser.UsersApplication.includes('DPW_JIP')">
+                            <a href="#" class="nav-link">
+                                <i class="icon-stack-text"></i>
+                                <span>
+                                    JIP Exception 
+                                </span>
+                            </a>
+                            <ul class="nav nav-group-sub collapse" data-submenu-title="JIP">
+                                @if (User.IsInRole("Admin") || User.IsInRole("SteeringCommittee"))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Index", "Home")" class="nav-link">
+                                            <i class="icon-home4"></i>
+                                            <span>
+                                                Dashboard
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                                <li class="nav-item">
+                                    <a href="@Url.Action("VistIndex","JIP")" class="nav-link">
+                                        <i class="icon-task"></i>
+                                        @if (User.IsInRole("Operations"))
+                                        {
+                                            <sup><span class="badge badge-pill heartbit bg-warning-400  mr-2" ng-if="OUser!=0" style="width: auto;margin-left: -16px;font-size: inherit;">{{OUser}}</span></sup>
+                                        }
+                                        @if (User.IsInRole("OperationApprover"))
+                                        {
+                                            <sup><span class="badge badge-pill heartbit bg-warning-400  mr-2" ng-if="OApprover!=0" style="width: auto;margin-left: -16px;font-size: inherit;">{{OApprover}}</span></sup>
+                                        }
+                                        @if (User.IsInRole("StudyCommittee"))
+                                        {
+                                            <sup><span class="badge badge-pill heartbit bg-warning-400  mr-2" ng-if="Study!=0" style="width: auto;margin-left: -16px;font-size: inherit;">{{Study}}</span></sup>
+                                        }
+                                        @if (User.IsInRole("StudyCommittee_GMPH_WGMPH"))
+                                        {
+                                            <sup><span class="badge badge-pill heartbit bg-warning-400  mr-2" ng-if="StudyGMPHWPGMPH!=0" style="width: auto;margin-left: -16px;font-size: inherit;">{{StudyGMPHWPGMPH}}</span></sup>
+                                        }
+                                        @if (User.IsInRole("StudyCommittee_BERTH"))
+                                        {
+                                            <sup><span class="badge badge-pill heartbit bg-warning-400  mr-2" ng-if="StudyBERTH!=0" style="width: auto;margin-left: -16px;font-size: inherit;">{{StudyBERTH}}</span></sup>
+                                        }
+                                        @if (User.IsInRole("DecisionCommittee"))
+                                        {
+                                            <sup><span class="badge badge-pill heartbit bg-warning-400  mr-2" ng-if="Decision!=0" style="width: auto;margin-left: -16px;font-size: inherit;">{{Decision}}</span></sup>
+                                        }
+                                        @if (User.IsInRole("SteeringCommittee"))
+                                        {
+                                            <sup><span class="badge badge-pill heartbit bg-warning-400  mr-2" ng-if="Stering!=0" style="width: auto;margin-left: -16px;font-size: inherit;">{{Stering}}</span></sup>
+                                        }
+
+                                        <span>
+                                            Awaiting Actions
+                                        </span>
+                                        <!--Notification Code Start-->
+                                        @*<span class="badge badge-pill bg-warning-400 ml-1" ng-if="Pending!=0" style="font-size: 11px;width: 23px;">{{Pending}}</span>*@
+                                        <!--Notification Code End-->
+                                    </a>
+                                </li>
+                                @if (User.IsInRole("Operations") || User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("AddOperationUser","JIP")" class="nav-link">
+                                            <i class="icon-diff-added"></i>
+                                            <span>
+                                                Add JIP Exception
+                                            </span>
+                                        </a>
+                                    </li>
+                                   
+                                }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("RemarksIndex","Remarks")" class="nav-link">
+                                            <i class="icon-stack-check"></i>
+                                            <span>
+                                                Exception Justification
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+
+
+                                @*<li class="nav-item">
+                    <a href="@Url.Action("Index","JIP")" class="nav-link">
+                        <i class="icon-task"></i>
+                        <span>
+                            Rejected JIP Exception
+                        </span>
+                    </a>
+                </li>*@
+                                @*<li class="nav-item">
+                                    <a href="@Url.Action("DIndex","JIP")" class="nav-link">
+                                        <i class="icon-stats-growth"></i>
+                                        <span>
+                                            JIP Exception Status
+                                        </span>
+                                    </a>
+                                </li>*@
+                                @if (User.IsInRole("OperationApprover") || User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("TrackingIndex","JIP")" class="nav-link">
+                                            <i class="icon-file-eye"></i>
+                                            <span>
+                                                JIP Tracking Exception
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                              
+                            </ul>
+                        </li>
+                        <!--JIP Exception End-->
+                        <!--DWH Start-->
+                        <li class="nav-item nav-item-submenu" ng-show="_currentUser.UsersApplication.includes('DPW_DWH')">
+                            <a href="#" class="nav-link">
+                                <i class="icon-stack-text"></i>
+
+                                <span>
+                                    Data Warehouse
+                                </span>
+                            </a>
+                            <ul class="nav nav-group-sub collapse" data-submenu-title="Data Warehouse">
+
+                                <li class="nav-item">
+
+                                    <a href="@Url.Action("Index", "DWH")" class="nav-link">
+                                        <i class="icon-task"></i>
+                                        <span>
+                                            Awating Actions
+                                        </span>
+                                    </a>
+                                </li>
+                               
+                               
+                            </ul>
+                        </li>
+
+                        <!--DWH End-->
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index","Users")" class="nav-link">
+                                        <i class="icon-users"></i>
+                                        <span>
+                                            Users
+                                        </span>
+                                    </a>
+                                </li>
+                               
+                            }
+
+                            <!-- /page kits -->
+                        </ul>
+                    </div>
+                    <!-- /main navigation -->
+                </div>
+                <!-- /sidebar content -->
+
+            </div>
+            <!-- /main sidebar -->
+            <!-- End Page wrapper  -->
+            <!-- Main content -->
+            <div class="content-wrapper">
+                <!-- Content area -->
+                <div class="content pt-0">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+
+
+        <!-- End Wrapper -->
+        <!-- All Jquery -->
+
+
+
+        <script type="text/javascript">
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <text>
+            var _currentUser = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.CurrentUser))');
+            </text>
+            }
+      
+
+
+        </script>
+
+
+        <!-- Core JS files -->
+        <script src="~/Scripts/jquery.min.js"></script>
+        @*<script src="~/Scripts/js/main/jquery.min.js"></script>*@
+        <script src="~/Scripts/js/main/bootstrap.bundle.min.js"></script>
+        <script src="~/Scripts/js/plugins/blockui.min.js"></script>
+        <!-- Theme JS files -->
+        <script src="~/Scripts/js/plugins/uniform.min.js"></script>
+        <script src="~/Scripts/js/plugins/echarts.min.js"></script>
+        <script src="~/Scripts/js/plugins/d3.min.js"></script>
+        <script src="~/Scripts/js/plugins/d3_tooltip.js"></script>
+        <script src="~/Scripts/js/plugins/switchery.min.js"></script>
+        <script src="~/Scripts/js/plugins/moment/moment.min.js"></script>
+        <script src="~/Scripts/js/plugins/daterangepicker.js"></script>
+        <script src="~/Scripts/js/app.js"></script>
+
+        <script src="~/Scripts/js/plugins/interactions.min.js"></script>
+        <script src="~/Scripts/js/plugins/selects/select2.min.js"></script>
+        <script src="~/Scripts/js/plugins/selects/form_select2.js"></script>
+        <script src="~/Scripts/js/plugins/datatables.min.js"></script>
+        <script src="~/Scripts/js/plugins/datatables_basic.js"></script>
+        <script src="~/Scripts/plugin/angular.js"></script>
+        <script src="~/Scripts/toastr.js"></script>
+    <script src="~/Content/popup/jquery-confirm.min.js"></script>
+        <script src="~/Scripts/plugin/pdfmake.js"></script>
+        <script src="~/Scripts/plugin/vfs_fonts.js"></script>
+        <script src="~/Scripts/plugin/ui-grid.js"></script>
+        <script src="~/Scripts/select.js"></script>
+        <script src="~/Scripts/ui-grid.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
+
+        <!-- /theme JS files -->
+        @Scripts.Render("~/Scripts/angularApp/main")
+        @*@RenderSection("scripts", required: false)*@
+
+
+
+
+</body>
+
+
+</html>

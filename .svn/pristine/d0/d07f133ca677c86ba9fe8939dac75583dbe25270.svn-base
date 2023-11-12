@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DE.Infrastructure.Concept
+{
+    public class InstantResponse<T> : Response
+    {
+        public T Payload { get; set; }
+
+        public InstantResponse(T payload)
+        {
+            this.Payload = payload;
+        }
+    }
+}

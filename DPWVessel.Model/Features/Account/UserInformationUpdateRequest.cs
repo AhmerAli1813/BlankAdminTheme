@@ -1,0 +1,123 @@
+﻿using DE.Infrastructure.Concept;
+using DPWVessel.Model.EntityModel;
+using FluentValidation;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DPWVessel.Model.Features.Account
+{
+    public class UserInformationUpdateRequest : IRequest<UserInformationUpdateResponse>
+    {
+        public Userdata data { get; set; }
+        public string UserType { get; set; }
+
+
+    }
+    public class Userdata
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public string FullName { get; set; }
+        public bool Status { get; set; }
+        public string Phone { get; set; }
+        public List<int> UserType { get; set; }
+        public List<int> UsersApplication { get; set; }
+        //public List<UsersApplicationEditReq> UsersApplicationEditReq { get; set; }
+    }
+    //public class UsersApplicationEditReq
+    //{
+    //    public int AppId { get; set; }
+    //    public string AppName { get; set; }
+    //    public bool IsChecked { get; set; }
+    //}
+
+    public class UserInformationUpdateResponse : Response
+    {
+
+    }
+
+
+    public class UserInformationUpdateRequestValidator : AbstractValidator<UserInformationUpdateRequest>
+    {
+        private dpw_VesselEntities _dbContext;
+        public UserInformationUpdateRequestValidator(dpw_VesselEntities dbContext)
+        {
+            _dbContext = dbContext;
+
+            RuleFor(x => x.data.Phone).NotEmpty().WithMessage("Please enter Phone Number!");
+            RuleFor(x => x.data.FullName).NotEmpty().WithMessage("Please enter Full Name!");
+            RuleFor(x => x.data.UserType).NotEmpty().WithMessage("Please Select UserRole!");
+            RuleFor(x => x.data.UsersApplication).NotEmpty().WithMessage("Please Select Application Access!");
+
+            //RuleFor(x => x).Must(IsCheckedNull).WithMessage("Please Select Allowed Application!");
+        }
+
+
+    }
+
+
+
+    public class UserInformationUpdateRequestHandler : IRequestHandler<UserInformationUpdateRequest, UserInformationUpdateResponse>
+    {
+        private dpw_VesselEntities _dbcontext;
+
+        public UserInformationUpdateRequestHandler(dpw_VesselEntities _context)
+        {
+            _dbcontext = _context;
+        }
+
+        public UserInformationUpdateResponse Execute(UserInformationUpdateRequest request)
+        {
+
+            var siteuser = _dbcontext.SiteUsers.FirstOrDefault(x => x.Id == request.data.Id);
+            siteuser.FullName = request.data.FullName;
+            siteuser.Phone = request.data.Phone;
+
+            siteuser.Status = request.data.Status;
+
+            //  siteuser.UserType = request.data.UserType;
+
+            _dbcontext.UsersApplications.RemoveRange(_dbcontext.UsersApplications.Where(x => x.UserId == request.data.UserId));
+            _dbcontext.SaveChanges();
+            if (request.data.UsersApplication != null && request.data.UsersApplication.Count() > 0)
+            {
+                _dbcontext.UsersApplications.RemoveRange(_dbcontext.UsersApplications.Where(x => x.UserId == request.data.Id));
+                _dbcontext.SaveChanges();
+
+                foreach (var item in request.data.UsersApplication)
+                {
+                    siteuser.UsersApplications.Add(new EntityModel.UsersApplication
+                    {
+                        AppId = item,
+                    });
+                }
+            }
+            else
+            {
+                _dbcontext.UsersApplications.RemoveRange(_dbcontext.UsersApplications.Where(x => x.UserId == request.data.Id));
+                _dbcontext.SaveChanges();
+            }
+
+
+            //foreach (var item in request.data.UsersApplicationEditReq)
+            //{
+            //    if (item.IsChecked == true)
+            //    {
+            //        siteuser.UsersApplications.Add(new EntityModel.UsersApplication
+            //        {
+            //            AppId = item.AppId,
+            //        });
+            //    }
+
+            //    _dbcontext.SaveChanges();
+            //}
+
+
+
+
+
+            return new UserInformationUpdateResponse();
+        }
+
+    }
+}

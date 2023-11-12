@@ -1,0 +1,18 @@
+﻿using DE.Infrastructure.ConceptImplementation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DE.Infrastructure.Concept
+{
+    public interface IRequest
+    {
+    }
+
+    public interface IRequest<TResponse> : IRequest
+        where TResponse : Response, new()
+    {
+    }
+}

@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DE.Infrastructure.CodeContracts
+{
+    public static class CodeContractExtension
+    {
+        public static void RequireNotNull(this object parameter, string parameterName)
+        {
+            if (parameter == null)
+            {
+                throw new ArgumentNullException(parameterName, string.Format("Argument {0} passed to {1} cannot be null.", parameterName, new StackFrame(1, true).GetMethod().Name));
+            }
+        }
+
+        public static void RequireNotNullOrEmpty(this string parameter, string parameterName)
+        {
+            if (parameter == null)
+            {
+                throw new ArgumentNullException(parameterName, string.Format("Argument {0} passed to {1} cannot be null.", parameterName, new StackFrame(1, true).GetMethod().Name));
+            }
+        }
+
+        public static void RequireGreaterThanZero(this int parameter, string parameterName)
+        {
+            if (parameter < 1)
+            {
+                throw new ArgumentNullException(parameterName, string.Format("Argument {0} passed to {1} has to be greater than zero", parameterName, new StackFrame(1, true).GetMethod().Name));
+            }
+        }
+
+        public static void EnsureNotNull(this object parameter, string exceptionMessage)
+        {
+            if (parameter == null)
+            {
+                throw new Exception(exceptionMessage);
+            }
+        }
+    }
+}

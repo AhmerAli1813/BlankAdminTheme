@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DE.Infrastructure.Memory
+{
+    public interface IMemoryCacher
+    {
+        object GetValue(string key);
+        T GetValue<T>(string key);
+        bool Add(string key, object value, int durationInMinutes);
+        void Remove(string key);
+    }
+}

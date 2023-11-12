@@ -1,0 +1,234 @@
+﻿
+@{
+    ViewBag.Title = "AddNewDoc";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <link href="~/Content/popup/jquery-confirm.min.css" rel="stylesheet" />
+    
+    <style>
+
+        label {
+            font-weight: bold;
+        }
+
+        td {
+            text-align: center;
+            vertical-align: middle;
+            font-size: 15px;
+        }
+
+        tr td:nth-child(2) {
+            text-align: left;
+        }
+
+        .image-upload > input {
+            display: none;
+        }
+
+
+
+        .image-upload-submit {
+            background: none;
+            padding: 13px;
+            color: black;
+            /* width: 60px; */
+            position: relative;
+            left: 0;
+            width: 0px;
+            border: none;
+        }
+
+            .image-upload-submit i {
+                font-size: 24px;
+                padding-left: 21px;
+                margin: 0px !important;
+            }
+
+        .timeHeader {
+            background: #00946b;
+            padding: 15px;
+            color: white;
+            font-size: 17px;
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+            width: max-content;
+            margin-top: -36px;
+        }
+    </style>
+</head>
+
+
+
+<div ng-controller="VesselOpsCtr" ng-init="init()">
+    <div class="page-header border-bottom-0">
+        <div class="page-header-content header-elements-md-inline">
+            <div class="page-title d-flex">
+                <h4><i class="icon-details mr-2"></i> <span class="font-weight-semibold"><i class="icon-files-empty"></i>&nbsp; ADD NEW DOC</span></h4>
+
+            </div>
+        </div>
+        <div class="text-center timeHeader pull-right">
+            <span>@DateTime.Now.ToString("dd/MM/yyyy") {{theTime}}</span>
+        </div>
+    </div>
+    
+
+
+    @*<div class="col-md-4 form-group">
+        <label>Select Vessel Number </label><span class="required-starig">*</span>
+        <select data-placeholder="Please Select Vessel Number" id="Vessel" class="form-control select-clear" ng-model="RefNoVesName" ng-change="GetVesselDetails(RefNoVesName)" ng-init="RefNoVesName" required data-fouc>
+            <option></option>
+            <option ng-repeat="R in VesselList" ng-selected="RefNoVesName==R.RefNoVesName" value="{{R.RefNoVesName}}">{{R.RefNoVesName}}</option>
+        </select>
+    </div>*@
+   
+    <hr />
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span>Visit Id</span>
+                    <input type="text" class="form-control" placeholder="Visit Id"   ng-model="VesselDetail.VisitId" readonly />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span> Vessel Name</span>
+                    <input type="text" class="form-control" placeholder="Vessel Name" ng-model="VesselDetail.VesselName" readonly />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span>Line</span>
+                    <input type="text" class="form-control" placeholder="Line" ng-model="VesselDetail.Line" readonly />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span>Classification</span>
+                    <input type="text" class="form-control" placeholder="Classification" ng-model="VesselDetail.Classification" readonly />
+                </div>
+            </div>
+
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span>Service</span>
+                    <input type="text" class="form-control" placeholder="Service" ng-model="VesselDetail.Service" readonly />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span>Phase</span>
+                    <input type="text" class="form-control" placeholder="Phase" ng-model="VesselDetail.Phase" readonly />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span>ATB</span>
+                    <input type="datetime-local" class="form-control" placeholder="ATB" ng-model="VesselDetail.ATB " disabled />
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="card table-card scrollbar ">
+            <table class="table datatable-show-all">
+                <thead>
+                    <tr class="table-card-head " style="text-align:center;height:45px;">
+                        <th>S.no</th>
+                        <th style="width: 80%!important;">Form Name</th>
+                        <th>Add Image</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="i in VesselDetail.FormData">
+                        <td >{{$index+1}}</td>
+                        <td style="width: 80%!important;">{{i.FormName}} <span ng-if="i.FormCode=='VAF' || i.FormCode=='GC' ||i.FormCode=='LA' ||i.FormCode=='LC' ||i.FormCode=='VCA_One' ||i.FormCode=='VCA_Two' ||i.FormCode=='VCA_Final' ||i.FormCode=='VSC' || i.FormCode=='VCC' " class= "badge-flat  text-danger-600"><i class="icon-star-empty3" style="font-size:10px!important;font-weight:bold;"></i></span></td>
+
+                        <td >
+                            <div ng-if="i.Image==null" class="image-upload image-upload-submit " style="text-align:center;display:flex">
+                                <label for="{{i.Id}}">
+                                    <i class="icon-upload" title="Upload Photo" style="color:#011c33"></i>
+                                </label>
+                                <i class="icon-camera" ng-click="OpenCam($index+1,i.FormCode)" title="Take Photo From Camera" style="color: #00695C;top:0px;"></i>
+                                <input type="file" id="{{$index+1}}" name="pic" accept="image/*" onchange="angular.element(this).scope().ImageUpload( this.id,angular.element(this).scope().i.FormCode)" ng-required="i.IsMandantory">
+                               
+
+                            </div>
+
+                            <div ng-if="i.Image!=null" class="image-upload image-upload-submit " style="text-align:center;display:flex">
+                                <label for="Image">
+
+                                    <a href="{{i.Image}}" class="list-icons-item text-success"  target="_blank"><i class="icon-checkmark-circle2" title="View Image"></i></a>
+                                </label>
+                                <i class="icon-trash" ng-click="Spliceimage();i.Image=null" title="Re-Upload Image" style="color: #F44336;"></i>
+                               
+                            </div>
+
+                        </td>
+
+
+                    </tr>
+
+
+
+                
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group col-md-8" style="display:flex;">
+            <label>Comment/Remarks</label>
+            <div class="col-lg-10">
+                <textarea rows="3" cols="3" class="form-control" placeholder="Enter Remarks" ng-model="VesselDetail.Remarks"></textarea>
+            </div>
+        </div>
+        <div class="col-md-4 float-right m-t-10">
+            <div class="form-group">
+                <button  type="button" class="btn btn-primary m-t-19 pull-right" ng-click="SubmitFormOPS(VesselDetail)">Submit Doc Scanner <i class="icon-paperplane ml-2"></i></button>
+
+              </div>
+        </div>
+    </div>
+    <div id="CamModel_small" data-backdrop="static" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="font-weight:bolder"><i style="font-size: 18px;" class="icon-inbox"></i> Take Form Photo</h5>
+                </div>
+                <form action="#">
+                    <div class="modal-body" style="text-align:center">
+                        <div id="my_camera"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href=""><i class="icon-cross2 btn btn-secondary" title="Close" ng-click="cameClose()"></i></a>
+                        <a href=""><i class="icon-camera btn btn-danger" title="Re-Open Camera" ng-click="reOpenCam()"></i></a>
+                        <a href=""><i class="icon-shutter btn btn-dark" title="Take Photo" ng-click="take_snapshot()"></i></a>
+                        <a href=""><i class="icon-floppy-disk btn btn-success" title="Save Photo" ng-click="saveImage()"></i></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+<script src="~/Scripts/js/main/jquery.min.js"></script>
+<script src="~/Content/popup/jquery-confirm.min.js"></script>
+
+<script src="~/Scripts/webcam.min.js"></script>
+<script>
+
+</script>

@@ -1,0 +1,108 @@
+﻿using DE.Infrastructure.Helpers;
+using DPWVessel.Model.Features.Grid;
+using DPWVessel.Web.Core.Model;
+using System.Web.Http;
+using System.Web.Http.ModelBinding;
+
+namespace DPWVessel.Web.Controllers.Api
+{
+    public class BaseApiCrudController<T> : BaseApiController
+        where T : class
+    {
+        /// <summary>
+        /// Get Dynamic List with Optional Parameters.
+        /// Incase of overriding implement each parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public virtual object List([ModelBinder(typeof(ListingParamModelBinder))] ListingParams parameters)
+        {
+            var resultModel = GetResults(parameters);
+            var data = new { Data = resultModel.Results, TotalItems = resultModel.Count };
+            return AjaxResponse.ToResult(data);
+        }
+
+        /// <summary>
+        /// Generic Result with Filtered Paramters (Clauses, Filters, Fields, Pagination). 
+        /// Overridable Listing Logic as per user requirement.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        protected virtual QueryableModel GetResults(ListingParams parameters)
+        {
+            var request = new GridListRequest { Params = parameters, EntityName = typeof(T).Name };
+            var response = _requestExecutor.Execute(request);
+            return response.Model;
+        }
+
+        /// <summary>
+        /// Get Dropdown Options
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public virtual object GetAll([ModelBinder(typeof(ListingParamModelBinder))] ListingParams parameters)
+        {
+            parameters.Fields = GetDropdownFields();
+            return List(parameters);
+        }
+
+        /// <summary>
+        /// Overrider Dropdownfields in case of Change in fields
+        /// </summary>
+        /// <returns></returns>
+        public virtual string[] GetDropdownFields()
+        {
+            return new string[] { "Id", "Name" };
+        }
+
+        /// <summary>
+        /// Update Model with database
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual object Update(T obj)
+        {
+            if (obj == null)
+            {
+                var response = new GridUpdateResponse<T>();
+                response.AddValidationError(new FluentValidation.Results.ValidationFailure("None", "No data"));
+                return response;
+            }
+            var request = new GridUpdateRequest<T> { Entity = obj };
+            return _requestExecutor.Execute(request);
+        }
+
+        /// <summary>
+        /// Add new model in database
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual object Add(T obj)
+        {
+            if (obj == null)
+            {
+                var response = new GridAddResponse<T>();
+                response.AddValidationError(new FluentValidation.Results.ValidationFailure("None", "No data"));
+                return response;
+            }
+            var request = new GridAddRequest<T> { Entity = obj };
+            return _requestExecutor.Execute(request);
+        }
+
+        /// <summary>
+        /// Remove Model From Database
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public virtual object Remove(T obj)
+        {
+            var request = new GridRemoveRequest { Entity = obj };
+            return _requestExecutor.Execute(request);
+        }
+    }
+}

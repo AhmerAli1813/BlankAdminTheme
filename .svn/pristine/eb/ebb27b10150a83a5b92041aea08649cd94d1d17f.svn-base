@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Hangfire.Dashboard;
+using Microsoft.Owin;
+
+namespace DPWVessel.Web.Core.Attributes
+{
+    public class HangfireAuthorizationFilter : IAuthorizationFilter
+    {
+        public bool Authorize(IDictionary<string, object> owinEnvironment)
+        {
+            // Allow all authenticated users to see the Dashboard (potentially dangerous).
+            return HttpContext.Current.User != null 
+                && HttpContext.Current.User.Identity.IsAuthenticated
+                && HttpContext.Current.User.IsInRole("Admin");
+        }
+    }
+}

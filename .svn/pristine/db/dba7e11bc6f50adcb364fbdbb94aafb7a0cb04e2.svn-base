@@ -1,0 +1,408 @@
+﻿'use strict';
+app.controller('JIPSubCtrl',
+    [
+        "$scope",
+        "$rootScope",
+        "$timeout",
+        "$q",
+        "urlService",
+        "newGridService",
+        "$window",
+        "$filter",
+        function($scope, $rootScope, $timeout, $q, urlService, newGridService, $window,$filter) {
+
+            var url = urlService.getUrlPrams();
+            $scope.TaskRefNo = "";
+            $scope.LoadMore = function (PageName) {
+
+                if (PageName == "VistIndex") {
+                    $scope.init(10);
+                }
+                if (PageName == "TrackingIndex") {
+                    $scope.init(10);
+                }
+            }
+            //Default Value
+       
+            $scope.floatButton = true;
+            $('.float').attr('disabled', 'disabled');
+            var Recordsinit = 30;
+            $scope.init = function (data)
+            {
+             $('.float').attr('disabled', 'disabled');
+               
+                if (data != null) {
+                    Recordsinit = Recordsinit + data;
+                }
+                //Onload Value
+             
+                $scope.floatButton = true;
+
+                if (_currentUser.UsersApplication.includes('DPW_JIP'))
+                {
+                   
+                }
+                else
+                {
+                    if (_currentUser.UsersApplication.includes('DPW_DWH')) 
+                    {
+                        toastr.error("You Dont Have Access of JIP!");
+                        $window.location.href = '/DWH';
+                    }
+                    else
+                    {
+                     toastr.error("You Dont Have Access of JIP!");
+                    $window.location.href = '/VesselFormOps/Index';
+                    }
+                   
+                }
+                var data = { Pending: true, UserValidation: true, Records: Recordsinit, Limit: true };
+                $scope.ajaxGetBackground('api/JIPApi/GetExceptionVisitIndexRequest',data, function (resp) {
+
+                    console.log(resp);
+                    console.log('Response Up');
+                    if (resp.Success) {
+
+                        //After Loading Value
+                        if (resp.Limit == true)
+                        {
+                            if (resp.Records == false) {
+                                toastr.info('No more records found!');
+                                $scope.floatButton = false;
+
+                            }
+                            else {
+                                $scope.floatButton = true;
+                                $(".float").removeAttr("disabled");
+                            }
+                        }
+
+
+                        $scope.Exception = resp.ExceptionVisitIndexList;
+                        $scope.VistindexSearchList = resp.ExceptionVisitIndexList;
+                    }
+                }); // End request
+                $scope.GetStatus();
+            }//Int End
+            var RecordsTrackinginit = 30;
+            $scope.Trackinginit = function (data) {
+                $('.float').attr('disabled', 'disabled');
+               
+                if (data != null) {
+                    RecordsTrackinginit = RecordsTrackinginit + data;
+                }
+                //Onload Value
+  
+               
+                $scope.floatButton = true;
+                var data = { Pending: false, UserValidation: false, Records: RecordsTrackinginit, Limit: true };
+                console.log(data);
+                $scope.ajaxGet('api/JIPApi/GetExceptionVisitIndexRequest', data, function (resp) {
+
+                    console.log(resp);
+                    console.log('Response Up');
+                    if (resp.Success) {
+                        //After Loading Value
+                        if (resp.Limit == true)
+                        {
+                            if (resp.Records == false) {
+                                toastr.info('No more records found!');
+                                $scope.floatButton = false;
+
+                            }
+                            else {
+                                $scope.floatButton = true;
+                                $(".float").removeAttr("disabled");
+                            }
+                       }
+                        //After LOad End
+                        $scope.Exception = resp.ExceptionVisitIndexList;
+                        $scope.VistindexSearchList = resp.ExceptionVisitIndexList;
+                    }
+                }); // End request
+                $scope.GetStatus();
+            }//TrackingInt End
+
+            $scope.TrackingDIndexinit = function () {
+                var RefN = urlService.getUrlPrams();
+
+                if (RefN.RefNo == undefined) {
+                    $window.open('/JIP/TrackingIndex', '_self');
+                }
+                var data = { Pending: false, UserValidation: false, RefNo: RefN.RefNo, };
+                console.log(data);
+                $scope.ajaxGet('api/JIPApi/GetExceptionIndexDetailsRequest', { Pending: false, UserValidation: false, TempId: RefN.RefNo + "==", RefNoExist: 1 }, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success) {
+                        $scope.ExceptionListOperationUser = resp.ExceptionList;
+                        $scope.IndexSearchList = resp.ExceptionList;
+                        if (resp.ExceptionList.length == 0) {
+                            $window.open('/JIP/TrackingIndexndex', '_self');
+                        }
+                    }
+                }); // End request
+                $scope.GetStatus();
+            }
+
+
+         $scope.GetStatus = function ()
+         {
+             $scope.ajaxGet('api/JIPApi/GetStatusList', null, function (resp) {
+
+                 console.log(resp);
+                 if (resp.Success)
+                 {
+                     $scope.ExceptionStatus = resp.StatusList;
+                 }
+             }); // End request
+         }//GetStatus End
+
+
+         $scope.UpdateStage = function (data2) {
+             console.log();
+             console.log(data2);
+             if (data2 == 2 || data2 == 3)
+             {
+                 if ($('#Remarks').val().toString() == "")
+                 {
+                     toastr.error('Remarks is Required!');
+                     return false;
+                 }
+             }
+           
+             if(data2==4)
+             {
+                 $window.open('/JIP/VistIndex', '_self');
+             }
+             //data.status = data2;
+             var dat = moment(new Date()).format('YYYY-MM-DD');
+             var time = new Date().toLocaleTimeString();
+
+             //data.CreatedAt = dat + " " + time;
+             //data.UpdatedAt = dat + " " + time;
+             var UpdateData = {
+                 RefNo: $scope.TaskRefNo,
+                 UpdatedAt: dat + " " + time,
+                 Remarks:$('#Remarks').val().toString(),
+                 status: data2,
+             };
+             console.log(UpdateData);
+
+             $scope.ajaxPost('api/JIPApi/JIPExtenctionUpdateStageRequest', UpdateData, function (resp) {
+
+                 console.log(resp);
+                 if (resp.Success) {
+                     if (_currentUser.UserType == 'Operations') {
+                         toastr.success('Exception Successfully Submited to Operation Approver!');
+                     }
+                     else {
+                         toastr.success('Exception Successfully Updated!');
+                     }
+                     console.log('Email Request Excuting...');
+                     $scope.ajaxPost('Reports/SendEmailMultiException', resp, function (response) {
+                         if (response.Success) {
+                             console.log(response);
+                         }
+                         else {
+                             console.log(response);
+                         }
+                     });
+                     console.log('Email Request Excuted');
+
+                     $window.open('/JIP/VistIndex', '_self');
+
+                 } // resp success end
+                 else {
+                     toastr.error('Faild to submit!');
+                 }
+             });
+
+         }// JIP STAGE UPdate End
+            
+         $scope.GetTask=function (data)
+         {
+             $scope.ajaxGet('api/UsersApi/Encrypt', { Id: data }, function (resp) {
+                    console.log(resp);
+                   $window.open('/JIP/Index?RefNo='+resp, '_self');
+                });
+             
+         } //GetTask End 
+         $scope.GetTaskTracking=function(data)
+         {
+             $scope.ajaxGet('api/UsersApi/Encrypt', { Id: data }, function (resp) {
+                 console.log(resp);
+                 $window.open('/JIP/TrackingDIndex?RefNo=' + resp, '_self');
+             });
+           
+         }
+         $scope.TrackingIndexSearch = function () {
+             $scope.ExceptionListOperationUser = $scope.IndexSearchList;
+             var fromDate2 = moment(stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+             var toDate2 = moment(stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT23:59:59');
+             console.log(fromDate2 + " " + toDate2);
+             $scope.ExceptionListOperationUser = $scope.ExceptionListOperationUser.filter(x=>x.PilotStation <= toDate2 && x.PilotStation >= fromDate2);
+
+         }
+            //VisitIndex Search start
+         $scope.VistIndexSearch = function (data) {
+             $scope.Exception = $scope.VistindexSearchList;
+            var fromDate = moment(stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+             var toDate = moment(stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT23:59:59');
+             console.log(fromDate + " " + toDate);
+             
+             $scope.Exception = $scope.Exception.filter(x=>x.PilotStation <= toDate && x.PilotStation >= fromDate);
+      
+         }
+            //VisitIndex SearchEnd
+         function stringToDate(_date, format, delimiter) {
+             var formatLowerCase = format.toLowerCase();
+             var formatItems = formatLowerCase.split(delimiter);
+             var dateItems = _date.split(delimiter);
+             var monthIndex = formatItems.indexOf("mm");
+             var dayIndex = formatItems.indexOf("dd");
+             var yearIndex = formatItems.indexOf("yyyy");
+             var month = parseInt(dateItems[monthIndex]);
+             month -= 1;
+             var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+             return formatedDate;
+         }
+            //TrackingDetailsIndex Search 
+         $scope.IndexSearch = function () {
+             $scope.ExceptionListOperationUser = $scope.IndexSearchList;
+             var fromDate = moment(stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+             var toDate = moment(stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT23:59:59');
+             console.log(fromDate + " " + toDate);
+             $scope.ExceptionListOperationUser = $scope.ExceptionListOperationUser.filter(x=>x.PilotStation <= toDate && x.PilotStation >= fromDate);
+
+         }
+            //Tracking DetailsIndex SearchEnd
+
+            //Index Search 
+         $scope.DIndexSearch = function () {
+             $scope.VistindexSearchList = $scope.VistindexSearchList;
+              var fromDate = moment(stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+             var toDate = moment(stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT23:59:59');
+
+             $scope.VistindexSearchList = $scope.VistindexSearchList.filter(x=>x.PilotStation <= toDate && x.PilotStation >= fromDate);
+
+         }
+            //Index SearchEnd
+            // Add Button 
+              $scope.AddException =function ()
+            {
+                $window.open('/JIP/AddOperationUser', '_self');
+                console.log('test');
+              }
+
+              //Show Modal
+              $scope.showmodal = function (modelid, TaskRefNo)
+              {
+                  $scope.TaskRefNo = TaskRefNo;
+                  console.log(modelid +"  _  "+TaskRefNo)
+                  $(modelid).modal('show');
+              }
+            //End Show Modal
+            //LoadRecords
+              $scope.LoadDataForModal =function()
+              {
+                 
+                 
+              }
+            //LoadRecords
+            //Href For Secure Links 
+              $scope.ViewHref = function (RefNO) {
+                  $scope.ajaxGet('api/UsersApi/Encrypt', { Id: RefNO }, function (resp) {
+                      console.log(resp);
+                      $window.open('/Reports/ExceptionListPrint?RefNo=' + resp, '_blank');
+                  });
+
+              }
+            //Href For Secure Links 
+              //Href For Secure Links 
+              $scope.ViewTrackHref = function (RefNO) {
+                  $scope.ajaxGet('api/UsersApi/Encrypt', { Id: RefNO }, function (resp) {
+                      console.log(resp);
+                      $window.open('/Reports/ExceptionTracking?RefNo=' + resp, '_blank');
+                  });
+
+              }
+            //Href For Secure Links 
+              $scope.PrintHref = function (RefNO) {
+                  $scope.ajaxGet('api/UsersApi/Encrypt', { Id: RefNO }, function (resp) {
+                      console.log(resp);
+                      $window.open('/Reports/ExceptionListPrint?RefNo=' + resp+'&Print=true', '_blank');
+                  });
+
+              }
+            //Href For Secure Links 
+              $scope.PdfHref = function (RefNO) {
+                  $scope.ajaxGet('api/UsersApi/Encrypt', { Id: RefNO }, function (resp) {
+                      console.log(resp);
+                      $window.open('/Reports/PdfExceptionListPrint?RefNo=' + resp, '_blank');
+                  });
+
+              }
+            //Href For Secure Links 
+              $scope.ExcelHref = function (RefNO) 
+              {
+                  $scope.ajaxGet('api/UsersApi/Encrypt', { Id: RefNO }, function (resp) {
+                      console.log(resp);
+                      $window.open('/Reports/DownloadJIPExcel?TempId=' + resp + '&&IdExist=0', '_blank');
+                  });
+               }
+               ////End RefNoHref...
+
+               //Start Id Href
+                //Href For Secure Links 
+            $scope.ViewHref2 = function (Id) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: Id }, function (resp) {
+                    console.log(resp);
+                    $window.open('/Reports/ExceptionPrint?TempId=' + resp, '_blank');
+                });
+
+            }
+            //Href For Secure Links 
+            $scope.PrintHref2 = function (Id) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: Id }, function (resp) {
+                    console.log(resp);
+                    $window.open('/Reports/ExceptionPrint?TempId=' + resp + '&Print=true', '_blank');
+                });
+
+            }
+            //Href For Secure Links 
+            $scope.PdfHref2 = function (Id) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: Id }, function (resp) {
+                    console.log(resp);
+                    $window.open('/Reports/PdfExceptionPrint?TempId=' + resp, '_blank');
+                });
+
+            }
+            //Href For Secure Links 
+            $scope.ExcelHref2 = function (Id) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: Id }, function (resp) {
+                    console.log(resp);
+                    $window.open('/Reports/DownloadJIPExcel?TempId=' + resp + '&IdExist=1', '_blank');
+                });
+            }
+                //Href For Secure Links 
+                $scope.StatusTrackHref2 = function (RefNO) {
+                    $scope.ajaxGet('api/UsersApi/Encrypt', { Id: RefNO }, function (resp) {
+                        console.log(resp);
+                        $window.open('/Reports/JIPStatusTracking?TempId=' + resp, '_blank');
+                    });
+                }
+
+            $scope.Reset = function () {
+                document.getElementById("Tab1ToDate").value = null;
+                document.getElementById("Tab1FromDate").value = null;
+                document.getElementById("Tab1Service").value = null;
+                document.getElementById("Tab1RefNo").value = null;
+                document.getElementById("Tab1VesselName").value = null;
+                document.getElementById("Tab1SelectExc").selectedIndex = 0;
+                document.getElementById("Tab1SelectAct").selectedIndex = 0;
+                document.getElementById("Tab1SelectStatus").selectedIndex = 0;
+                document.getElementById("Tab1SelectStage").selectedIndex = 0;
+            }
+
+        }]); // Main Controler Bracket End

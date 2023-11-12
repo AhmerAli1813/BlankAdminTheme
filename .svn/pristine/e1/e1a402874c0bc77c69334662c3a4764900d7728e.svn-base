@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DE.Infrastructure.Security
+{
+    public static class Encryption
+    {
+        private static readonly byte[] Salt = Encoding.UTF8.GetBytes("saltBytesAreNeededToMakeThisWork!");
+        private const string DefaultPassword = "th!5Is0urDef@ultP@55w0rd!";
+
+        //caution. This key is included in the javacript files of mobile version
+        private const string MobileClientKey = "(-/S@SM0bileDef@ultP@55w0rd!-)";
+
+        public static string HashWithSalt(string password, string salt)
+        {
+            if (password == null)
+                return string.Empty;
+            return Hash(string.Format("{0}--{1}", salt, password));
+        }
+
+        public static string Hash(string stringToHash)
+        {
+            var bytes = SHA1.Create().ComputeHash(Encoding.Default.GetBytes(stringToHash));
+            return BitConverter.ToString(bytes).Replace("-", "");
+        }
+
+        public static string Encrypt(string stringToEncrypt, string password = null)
+        {
+            var bytesToEncrypt = Encoding.UTF8.GetBytes(stringToEncrypt);
+            var aes = new AesManaged();
+
+            SetAesManagedSettings(aes, new Rfc2898DeriveBytes(password ?? DefaultPassword, Salt));
+
+            using (var encryptStream = new MemoryStream())
+            using (var encryptor = new CryptoStream(encryptStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
+            {
+                encryptor.Write(bytesToEncrypt, 0, bytesToEncrypt.Length);
+                encryptor.Flush();
+                encryptor.Close();
+                return Convert.ToBase64String(encryptStream.ToArray());
+            }
+        }
+
+        public static string Decrypt(string encryptedValue, string password = null)
+        {
+           
+            var encryptBytes = Convert.FromBase64String(encryptedValue);
+            var aes = new AesManaged();
+
+            SetAesManagedSettings(aes, new Rfc2898DeriveBytes(password ?? DefaultPassword, Salt));
+
+            using (var decryptStream = new MemoryStream())
+            using (var decryptor = new CryptoStream(decryptStream, aes.CreateDecryptor(), CryptoStreamMode.Write))
+            {
+                decryptor.Write(encryptBytes, 0, encryptBytes.Length);
+                decryptor.Flush();
+                decryptor.Close();
+
+                var decryptedBytes = decryptStream.ToArray();
+                return Encoding.UTF8.GetString(decryptedBytes, 0, decryptedBytes.Length);
+            }
+        }
+
+        private static void SetAesManagedSettings(SymmetricAlgorithm aes, DeriveBytes saltBytes)
+        {
+            aes.BlockSize = aes.LegalBlockSizes[0].MaxSize;
+            aes.KeySize = aes.LegalKeySizes[0].MaxSize;
+            aes.Key = saltBytes.GetBytes(aes.KeySize / 8);
+            aes.IV = saltBytes.GetBytes(aes.BlockSize / 8);
+        }
+
+
+        public static string GetHmacHash(string input, string key = null)
+        {
+            if (string.IsNullOrEmpty(key))
+                key = MobileClientKey;
+
+            byte[] keyBytes = Encoding.ASCII.GetBytes(key);
+            var myhmac = new HMACMD5(keyBytes);
+            byte[] byteArray = Encoding.ASCII.GetBytes(input);
+            MemoryStream stream = new MemoryStream(byteArray);
+            byte[] hashValue = myhmac.ComputeHash(stream);
+
+            return hashValue.Aggregate("", (s, e) => s + String.Format("{0:x2}", e), s => s);
+        }
+    }
+}

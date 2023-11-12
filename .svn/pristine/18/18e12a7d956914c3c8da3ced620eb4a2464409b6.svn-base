@@ -1,0 +1,571 @@
+﻿@model DPWVessel.Model.Features.DWH.GetContainerListByRefNoResponse
+@{
+    ViewBag.Title = "DWHVesselPrint";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <title>DWH Vessel Print</title>
+    <link rel="icon" type="~/Content/images/favicon.ico" sizes="16x16" href="~/Content/images/favicon.ico">
+    <style>
+        @@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
+
+        .heading-print {
+            color: black;
+            font-weight: bold;
+            margin: 0px;
+        }
+
+        * {
+            font-family: 'Lato', sans-serif;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        table {
+            width: 100%;
+            box-sizing: border-box;
+            border-collapse: collapse;
+            margin: 15px 0px;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        td, th {
+            padding: 10px !important;
+            border: 1px solid #191919;
+        }
+
+        .badge-Completed {
+            /*background-color: #2cb97c!important;*/
+            background-color: #6c757d !important;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+    color: #fff;
+    background-color: #28a745;
+}
+.badge-danger {
+    color: #fff;
+   background-color: #c51f41!important;
+}
+.badge-warning {
+    color:  #fff;
+    background-color: #ff7043;
+}
+.badge-secondary
+{
+    color:  #fff;
+    background-color:#6c757d;
+}
+.badge-info {
+    color: #fff;
+      background-color: #013765!important;
+}
+ 
+
+        .badge-OverDue {
+            background-color: red !important;
+            text-transform: uppercase;
+        }
+
+        .badge-News {
+            background-color: #c776aa !important;
+            text-transform: uppercase;
+        }
+
+        .badge-Closed {
+            background-color: #463d32 !important;
+            text-transform: uppercase;
+        }
+
+        .badge-standby {
+            background-color: rgba(59, 85, 96, 0.7);
+            color: white;
+        }
+
+        .badge-Rejected {
+            background-color: #dc3545 !important;
+            text-transform: uppercase;
+        }
+
+     
+
+        img {
+            height: 70px;
+            border: none;
+        }
+
+        .badge {
+           
+               width: auto !important;
+                display: inline-block;
+    padding: .3125rem .375rem;
+    color:white;
+    font-size: auto ;/*75%*/
+    font-weight: bolder;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .125rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+
+        }
+               .tableAlign th
+        {
+            text-align:left;
+            background-color:#f3f3f3;
+        }
+          .tableAlign td 
+        {
+            text-align:center;
+            background-color:white;
+        }
+
+        .HeaderTr {
+            background: #f3f3f3;
+        }
+
+        @@media print {
+            table {
+                width: 100%;
+                box-sizing: border-box;
+                border-collapse: collapse;
+                margin: 15px 0px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <table>
+        <tr class="HeaderTr">
+            <td class="text-center">
+                <img src="~/Content/images/dpworldlogo.png" />
+            </td>
+            <td colspan="3">
+                <h1 class="text-center heading-print">
+                    DWH Container Details
+                </h1>
+            </td>
+            <td colspan="3">
+                <table>
+                    <tr>
+                        <th> Date</th>
+                        <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th>
+                         Time
+                        </th>
+                        <td>@DateTime.Now.ToString("HH:mm")</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr class="HeaderTr">
+            <th>Reference No</th>
+            <td style="text-align:center">@Model.RefNo</td>
+            <th>Vessel Name</th>
+            <td style="text-align:center">
+                @if (Model.VesselName != null)
+                {
+                    @Model.VesselName
+                }
+                else
+                {
+                    <span>-</span>
+                }
+            </td>
+            <th>Status</th>
+            <td colspan="2">
+                @if (Model.VesselStatusCode == "invalid")
+                {
+                    <span class="badge badge-danger"> @Model.VesselStatus</span>
+
+                }
+                @if (Model.VesselStatusCode == "valid")
+                {
+                    <span class="badge badge-success"> @Model.VesselStatus </span>
+                }
+                @if (Model.VesselStatusCode == "cntrO")
+                {
+                    <span class="badge badge-warning"> @Model.VesselStatus </span>
+                }
+                @if (Model.VesselStatusCode == "cntrF")
+                {
+                    <span class="badge badge-info"> @Model.VesselStatus </span>
+                }
+            </td>
+        </tr>
+
+    </table>
+
+        @foreach (var item in Model.ContainerDetailsList)
+            {
+
+            <table class="tableAlign">
+                <tr>
+                    <th>
+                        Cntr
+                    </th>
+                    <td>
+                        @item.Cntr
+                    </td>
+                    <th>Status</th>
+                    <td>
+                        @if (item.StatusCode == "invalid")
+                        {
+                            <span class="badge badge-danger"> @item.Status</span>
+
+                        }
+                        else if (item.StatusCode == "cntrClosed")
+                        { 
+                            <span class="badge badge-secondary"> @item.Status</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-success"> @item.Status </span>
+                        }
+
+
+                    </td>
+                </tr>
+                <tr style="text-align:center;">
+                    <th>Goods & Ctr wt(kg)</th>
+                    <td>@item.goods_and_ctr_wt_kg</td>
+
+                    <th>Opr Name</th>
+                    <td>@item.oprname</td>
+
+
+                    <th>Line Operator </th>
+                    <td>@item.LineOprName</td>
+
+
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Commodity</th>
+                    <td>@item.commodity</td>
+
+                    <th>Destination</th>
+                    <td>@item.destination</td>
+
+                    <th>BL Nbr</th>
+                    <td>@item.bl_nbr</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Origin</th>
+                    <td>@item.Origin</td>
+
+                    <th>InspStages</th>
+                    <td>@item.InspStages</td>
+
+                    <th>Xray Status</th>
+                    <td>@item.XrayStatus</td>
+                </tr>
+                <tr style="text-align:center;">
+
+
+                    <th>Category</th>
+                    <td>@item.category</td>
+
+                    <th>Time In</th>
+                    <td>
+                        @if (item.time_in.HasValue)
+                        {
+                            @item.time_in.Value.ToString("dd-MM-yyyy HH:mm")
+                        }
+                    </td>
+                    <th>Time Out</th>
+                    <td>
+                        @if (item.time_out.HasValue)
+                        {
+                            @item.time_out.Value.ToString("dd-MM-yyyy HH:mm")
+                        }
+                    </td>
+                    @*<th>Gkey</th>
+                        <td>@item.gkey</td>
+
+                        <th>CV Gkey</th>
+                        <td>@item.cv_gkey</td>*@
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Declrd Ib Cv</th>
+                    <td>@item.declrd_ib_cv</td>
+
+                    <th>Restow Typ</th>
+                    <td>@item.restow_typ</td>
+
+                    <th>Hndlg Rsn</th>
+                    <td>@item.hndlg_rsn</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Tare Kg</th>
+                    <td>@item.tare_kg</td>
+
+                    <th>Goods Ctr Wt Kg Vgm</th>
+                    <td>@item.goods_ctr_wt_kg_vgm</td>
+
+                    <th>Move Kind</th>
+                    <td>@item.move_kind</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Nominal Length</th>
+                    <td>@item.nominal_length</td>
+
+                    <th>Fetch Time</th>
+                    <td>
+                        @if (item.fetchTime.HasValue)
+                        {
+                            @item.fetchTime.Value.ToString("dd-MM-yyyy HH:mm");
+                        }
+                    </td>
+
+                    <th>Put Time</th>
+                    <td>
+                        @if (item.PutTime.HasValue)
+                        {
+                            @item.PutTime.Value.ToString("dd-MM-yyyy HH:mm");
+                        }
+                    </td>
+
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Transit State</th>
+                    <td>@item.transit_state</td>
+
+                    <th>Last Pos Slot</th>
+                    <td>@item.last_pos_slot</td>
+
+                    <th>Opr</th>
+                    <td>@item.opr</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Requires Power</th>
+                    <td>@item.requires_power</td>
+
+                    <th>Freight Kind</th>
+                    <td>@item.freight_kind</td>
+
+                    <th>Opr Name</th>
+                    <td>@item.oprname</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Line Opr</th>
+                    <td>@item.LineOpr</td>
+
+                    <th>Is Oog</th>
+                    <td>@item.is_oog</td>
+
+                    <th>Is Bundle</th>
+                    <td>@item.is_bundle</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Relationship Role</th>
+                    <td>@item.relationship_role</td>
+
+                    <th>Nominal Height</th>
+                    <td>@item.nominal_height</td>
+
+                    <th>Paid Thru Day</th>
+                    <td>@item.paid_thru_day</td>
+
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>CUSTDFF EMPTY RETURN DAYS</th>
+                    <td>@item.CUSTDFF_EMPTY_RETURN_DAYS</td>
+
+                    <th>CUSTDFF IMPORT DLVRY DAYS</th>
+                    <td>@item.CUSTDFF_IMPORT_DLVRY_DAYS</td>
+
+                    <th>CUSTDFF MT RETURN LOC</th>
+                    <td>@item.CUSTDFF_MT_RETURN_LOC</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>CUSTDFF VALIDITY DT IMPR DLVRY</th>
+                    <td>@item.CUSTDFF_VALIDITY_DT_IMPR_DLVRY</td>
+
+                    <th>CUSTDFF VALIDTITY MT RETURN</th>
+                    <td>@item.CUSTDFF_VALIDTITY_MT_RETURN</td>
+
+                    <th>CUSTDFF BROKERNAME</th>
+                    <td>@item.CUSTDFF_BROKERNAME</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>CUSTDFF BROKERNO</th>
+                    <td>@item.CUSTDFF_BROKERNO</td>
+
+                    <th>CUSTDFF DECLARATIONTYPE</th>
+                    <td>@item.CUSTDFF_DECLARATIONTYPE</td>
+
+                    <th>CUSTDFF DLVRYORDERNO</th>
+                    <td>@item.CUSTDFF_DLVRYORDERNO</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Oog Back Cm</th>
+                    <td>@item.oog_back_cm</td>
+
+                    <th>Oog Front Cm</th>
+                    <td>@item.oog_front_cm</td>
+
+                    <th>Oog Left Cm</th>
+                    <td>@item.oog_left_cm</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Oog Right Cm</th>
+                    <td>@item.oog_right_cm</td>
+
+                    <th>Oog Top Cm</th>
+                    <td>@item.oog_top_cm</td>
+
+                    <th>Damage</th>
+                    <td>@item.damage</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Hazardous</th>
+                    <td>@item.hazardous</td>
+
+                    <th>Imdg Types</th>
+                    <td>@item.imdg_types</td>
+
+                    <th>Hazard Un Nums</th>
+                    <td>@item.hazard_un_nums</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>bl Nbr</th>
+                    <td>@item.bl_nbr</td>
+
+                    <th>Temp Max C</th>
+                    <td>@item.temp_max_C</td>
+
+                    <th>Temp Min C</th>
+                    <td>@item.temp_min_C</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Temp Reqd C</th>
+                    <td>@item.temp_reqd_C</td>
+
+                    <th>CUSTDFF COMMODITYGRP</th>
+                    <td>@item.CUSTDFF_COMMODITYGRP</td>
+
+                    <th>ISO</th>
+                    <td>@item.ISO</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Origin</th>
+                    <td>@item.Origin</td>
+
+                    <th>Shipper</th>
+                    <td>@item.Shipper</td>
+
+                    <th>Consignee</th>
+                    <td>@item.Consignee</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Is Transit</th>
+                    <td>@item.IsTransit</td>
+
+                    <th>Load Broker</th>
+                    <td>@item.LoadBroker</td>
+
+                    <th>Custom Status</th>
+                    <td>@item.CustomStatus</td>
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>ITT To </th>
+                    <td> @item.ITTTo</td>
+
+                    <th>Is Free Zone </th>
+                    <td> @item.IsFreeZone</td>
+
+                    <th>Reinsp Reason</th>
+                    <td>@item.ReinspReason </td>
+
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>Load Permit No </th>
+                    <td>@item.LoadPermitNo </td>
+
+                    <th>ITT From </th>
+                    <td>@item.ITTFrom </td>
+
+                    <th>Custom Insp Type </th>
+                    <td>@item.CustomInspType </td>
+
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>ISN </th>
+                    <td>@item.ISN </td>
+
+                    <th> Bayan No</th>
+                    <td>@item.BayanNo </td>
+
+                    <th>Doc Ref No </th>
+                    <td>@item.DocRefNo </td>
+
+                </tr>
+                <tr style="text-align:center;">
+
+                    <th>AEO </th>
+                    <td>@item.AEO </td>
+
+                    <th> App Shift</th>
+                    <td>@item.AppShift </td>
+
+                    <th>Transported To </th>
+                    <td>@item.TransportedTo </td>
+
+                </tr>
+
+
+
+            </table>
+                <br />
+
+        }
+</body>
+</html>
+
+
+
+
+<script>
+    window.print();
+</script>
+
+
+
+

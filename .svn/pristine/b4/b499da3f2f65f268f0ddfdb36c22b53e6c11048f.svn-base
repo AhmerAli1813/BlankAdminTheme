@@ -1,0 +1,692 @@
+﻿@using DPWVessel.Web.Core.Session
+@{
+    ViewBag.Title = "VistIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .floatBottom
+    {
+        margin-top: 10px;
+    }
+ .timeHeader {
+        background: #00946b;
+    padding: 15px;
+    color: white;
+    font-size: 17px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    }
+
+    .tab {
+        overflow: hidden;
+        /*border: 1px solid #ccc;
+        background-color: #f1f1f1;*/
+    }
+
+    .tabheading {
+        padding: 10px;
+        background: #00946b;
+        color: white;
+    }
+    /* Style the buttons inside the tab */
+    .tab button {
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        background: #e9e9e9;
+        padding: 15px;
+        /*float: left;*/
+        border: none;
+        outline: none;
+        cursor: pointer;
+        /*padding: 14px 16px;*/
+        transition: 0.3s;
+        font-size: 17px;
+    }
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #00946b;
+            color: white;
+            font-size: 17px;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #00946b;
+            color: white;
+            font-size: 17px;
+        }
+
+    .tab button {
+        width: 100%;
+    }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 0px 10px;
+        /*border: 1px solid #ccc;*/
+        border-top: none;
+    }
+
+    .badgeRequired {
+        /*position: fixed!important;*/
+    }
+
+    .truncate {
+        width: 99px;
+        word-break: break-all;
+    }
+
+    label, tbody, .btn {
+        font-weight: 500 !important;
+    }
+</style>
+<script src="~/Scripts/DatePicker/jquery.min.js"></script>
+<link href="~/Scripts/DatePicker/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/Scripts/DatePicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/DatePicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/css/PaganationStyleSheetCustom.css" rel="stylesheet" />
+
+<div class="row" style="margin-top: 13px;"> 
+    <div class="col-md-12">
+        <!--Tab Code Start -->
+        <div class="tab" >
+            <div class="row">
+                <div class="col-md-3 text-center ">
+                    <button class="tablinks active" onclick="openCity(event, 'tab1')"><i class="icon-task mr-2"></i> Awaiting Actions</button>
+                </div>
+                <div class="col-md-3 text-center ">
+                    <button class="tablinks" onclick="openCity(event, 'tab2');"><i class="icon-stats-growth mr-2"></i> JIP Exception Status</button>
+                </div>
+
+
+                <div class="col-md-6 text-center">
+                    <div class="text-center timeHeader pull-right">
+                        <span>
+                            @DateTime.Now.ToString("dd-MMM-yyyy")
+                        </span>
+                        <span ng-controller="JIPCtrl">
+                            {{theTime}}
+                        </span>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!--Tab Code End -->
+    </div>
+</div>
+<div class="card">
+    <div class="card-body" style="padding:0px!important">
+
+        <!--Awating Action Tab Content Tab 1 start -->
+        <div id="tab1" class="tabcontent" style="display:block">
+            <!--NG-controller Class Awating Action Start-->
+            <div ng-controller="JIPSubCtrl" ng-init="init()">
+                <div class="page-header border-bottom-0">
+                    <div class="page-header-content header-elements-md-inline">
+                        <div class="page-title d-flex">
+                            <h4>
+                                <i class="icon-task mr-2"></i>
+                                <span class="font-weight-semibold">Awaiting Actions</span>
+                            </h4>
+
+                        </div>
+
+                        <div class="mt-3">
+                            <input type="button" class="btn btn-secondary  pull-right" value="Filters" data-toggle="collapse" data-target="#demo" />
+                            <input type="button" class="btn btn-primary mr-2 pull-right" ng-show="_currentUser.UserType=='Operations' ||_currentUser.UserType=='Admin' " ng-click="AddException()" value="Add JIP Exception" />
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <!-- /page header -->
+                <!--Search Filter Code Start-->
+                <div class="col-md-12 collapse" id="demo">
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Reference No</label>
+                                <input type="text" id="Tab1RefNo" class="form-control" placeholder="Reference No" ng-model="search.RefNo" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Vessel Name</label>
+                                <input type="text" id="Tab1VesselName" class="form-control" placeholder="Vessel Name" ng-model="search.VesselName" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Select Exception Type</label>
+                                <select data-placeholder="Select Type" id="Tab1SelectExc" class="form-control select-clear" ng-model="search.EType" >
+                                    <option></option>
+                                    <option value="BERTH">Berth Exception</option>
+                                    <option value="GMPH">GMPH Exception</option>
+                                    <option value="WGMPH">WGMPH Exception</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Action</label>
+                                <select data-placeholder="Select Action" id="Tab1SelectAct" class="form-control select-clear" ng-model="search.Status">
+                                    <option></option>
+                                    <option value="4">Pending</option>
+                                    <option value="2">Deny</option>
+                                    <option value="3">Required More Info</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Service</label>
+                                <input type="text" class="form-control" id="Tab1Service" placeholder="Service" ng-model="search.Service" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>From</label>
+                                @*<input type="date" class="form-control" placeholder="From" ng-model="data.FromDate" />*@
+                                <div id="sandbox-container">
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" id="Tab1FromDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>To</label>
+                                @*<input type="date" class="form-control" placeholder="To" ng-model="data.ToDate" />*@
+                                <div id="sandbox-container">
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" id="Tab1ToDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <input type="button" class="btn btn-theme-gray pull-right mt-3" value="Reset" ng-click="Reset()" />
+                                <input type="button" class="btn btn-primary pull-right  mr-2 mt-3" value="Search" ng-click="VistIndexSearch(data)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Search Filter Code End-->
+
+                <div class="row">
+
+                    <div id="tblrep" class="card table-card scrollbar">
+                        <table class="table datatable-show-all text-center" id="table-id">
+                            <thead>
+                                <tr class="table-card-head">
+                                    <th>SR#</th>
+                                    <th>Reference No</th>
+                                    <th>Vessel Name</th>
+                                    <th>Exception Type</th>
+                                    <th>Action</th>
+                                    <th>Service</th>
+                                    <th>PilotOnBoard</th>
+                                    <th>PilotStation</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="clickable-style" ng-repeat="item in Exception | filter:search">
+                                    <td ng-click="GetTask(item.RefNo)">{{$index+1}}</td>
+                                    <td ng-click="GetTask(item.RefNo)">{{item.RefNo}}</td>
+                                    <td ng-click="GetTask(item.RefNo)">{{item.VesselName}}</td>
+                                    <td ng-click="GetTask(item.RefNo)">{{item.EType}}</td>
+
+                                    <td class="text-center">
+
+                                        <!-- Example split danger button -->
+                                        <div class="btn-group dropright" ng-click="showmodal('#UpdateVisitIndexModal',item.RefNo)">
+
+                                            <button type="button" ng-if="item.Status.includes('4') && item.Status !='3'" class="btn btn-info">
+                                                <!--Pending-->
+                                                Pending
+                                            </button>
+
+                                            @*<button type="button" ng-if="item.Status == 'Approve'" class="btn btn-success">
+                                           Approve
+                                        </button>*@
+                                            <button type="button" ng-if="item.Status.includes('2')" class="btn btn-danger">
+                                                <!--Deny-->
+                                                Deny
+                                            </button>
+                                            <button type="button" ng-if="item.Status.includes('3')" class="btn btn-warning badgeRequired">Required More Info</button><!--required more-->
+                                            <button type="button" ng-click="showmodal('#UpdateVisitIndexModal',item.RefNo)" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            @*<div class="dropdown-menu p4">
+                                            <h6 class="dropdown-header">Update Approval</h6>
+                                            <div class="dropdown-divider"> </div>
+
+                                                                <div ng-repeat="status in ExceptionStatus">
+                                                <a class="dropdown-item" ng-if="_currentUser.UserType!='Operations' && item.Status.includes(status.Id)!=status.Id" href="" ng-click="UpdateStage(item,status.Id)">{{status.StatusName}}</a>
+                                            </div>
+                                            <div>
+                                                <a class="dropdown-item" ng-if="_currentUser.UserType=='Operations'" ng-click="UpdateStage(item,'0')">Submit</a>
+                                            </div>
+
+                                        </div>*@
+                                        </div>&nbsp;
+
+                                        <div class="list-icons">
+                                            <a class="list-icons-item cursor-pointer " ng-click="ViewHref(item.RefNo)" @*href="/Reports/ExceptionListPrint?RefNo={{item.RefNo}}"*@>
+                                                <i class="icon-eye" title="View"></i>
+                                            </a>
+                                            <a @*href="/Reports/ExceptionListPrint?RefNo={{item.RefNo}}&Print={{true}}"*@ ng-click="PrintHref(item.RefNo)" class="list-icons-item "><i class="icon-printer" title="Print"></i></a>
+                                            <a @*href="/Reports/PdfExceptionListPrint?RefNo={{item.RefNo}}"*@ ng-click="PdfHref(item.RefNo)" class="list-icons-item "><i class="icon-file-pdf" title="PDF"></i></a>
+                                            <a @*href="/Reports/DownloadJIPExcel?RefNo={{item.RefNo}}"*@ ng-click="ExcelHref(item.RefNo)" class="list-icons-item "><i class="icon-file-excel" title="Excel"></i></a>
+                                        </div>
+
+                                    </td>
+
+
+                                    <td ng-click="GetTask(item.RefNo)">{{item.Service}}</td>
+                                    <td ng-click="GetTask(item.RefNo)">{{item.PilotOnBoard |date:'dd-MMM-yyyy HH:mm:ss'}}</td>
+                                    <td ng-click="GetTask(item.RefNo)">{{item.PilotStation |date:'dd-MMM-yyyy HH:mm:ss'}}</td>
+                                    <td ng-click="GetTask(item.RefNo)">{{item.Duration}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <button ng-click="LoadMore('VistIndex')" ng-show="floatButton" class="floatBottom btn btn-primary pull-right">Load More</button>
+                    </div>
+
+                </div>
+                <!--pagination Code Start-->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Select Rows</label>
+                            <select data-placeholder="Select Rows" name="state" id="maxRows" class="form-control select-clear" data-fouc>
+                                <option></option>
+                                <option value="5000">All Rows</option>
+                                <option value="4">4</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="70">70</option>
+                                <option value="100">100</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class='pagination-container' style="position: absolute;
+    right: 25px;">
+                        <nav>
+                            <ul class="pagination">
+
+                                <li data-page="prev">
+                                    <span> < <span class="sr-only">(current)</span></span>
+                                </li>
+                                <!--	Here the JS Function Will Add the Rows -->
+                                <li data-page="next" id="prev">
+                                    <span> > <span class="sr-only">(current)</span></span>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!--pagination Code End-->
+                <!--Modal Code Start-->
+                <div class="modal fade" id="UpdateVisitIndexModal" data-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="width: 60%;">
+                        <div class="modal-content">
+                            <div class="header-card">
+                                Update Approvals
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <form class="col-md-12">
+
+                                            <!--Cooment Start-->
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Remarks</label><span class="required" ng-if="_currentUser.UserType != 'Operations'">*</span>
+                                                        <textarea class="form-control" id="Remarks" placeholder="Enter Your Remarks" ng-model="JIPStatusDetails.Remarks" required></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--Comment End-->
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="text-center">
+                                    <div class="form-group pull-right" ng-if="_currentUser.UserType == 'Operations'">
+                                        <button type="button" class="btn btn-primary" ng-click="UpdateStage('0')">Submit</button>
+                                        <button type="button" class="btn btn-theme-gray" data-dismiss="modal" onclick="location.reload()">Close</button>
+                                    </div>
+                                    <div class="form-group " ng-if="_currentUser.UserType!='Operations'">
+                                        @if (User.IsInRole("SteeringCommittee") || User.IsInRole("OperationApprover") || User.IsInRole("Admin"))
+                                        {
+                                            <button type="button" class="btn btn-success" ng-click="UpdateStage('1')">Approve</button>
+                                        }
+
+                                        <button type="button" class="btn btn-success" ng-show="_currentUser.UserType == 'StudyCommittee' || _currentUser.UserType == 'StudyCommittee_BERTH' ||_currentUser.UserType == 'StudyCommittee_GMPH_WGMPH' || _currentUser.UserType == 'Admin'" ng-click="UpdateStage('1')">Submit to Decision Committee</button>
+                                        <button type="button" ng-show="_currentUser.UserType == 'DecisionCommittee' || _currentUser.UserType == 'Admin'" class="btn btn-secondary badgeRequired " ng-click="UpdateStage('1')">Submit to Steering Committee</button>
+                                        @*<button type="button" class="btn btn-success" ng-click="UpdateStage('1')">Approve</button>*@
+                                        <button type="button" class="btn btn-danger" ng-click="UpdateStage('2')">Deny</button>
+                                        <button type="button" class="btn btn-warning badgeRequired" ng-click="UpdateStage('3')">Required More Info</button>
+
+                                        <button type="button" class="btn btn-theme-gray" data-dismiss="modal" onclick="location.reload()">Close</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--Modal Code End-->
+            </div>
+            <!--Ng-Controller Awating Action  Div End-->
+            </div>
+        <!--Awating Action Tab Content Tab 1 End -->
+
+        <!--JIP Exception Status Tab Content Tab 2 start -->
+        <div id="tab2" class="tabcontent">
+            <!--JIP Exception Status Controller Div Start -->
+            <div ng-controller="JIPCtrl" ng-init="Dinit()">
+                <div class="page-header border-bottom-0">
+                    <div class="page-header-content header-elements-md-inline">
+                        <div class="page-title d-flex">
+                            <h4>
+                                <i class="icon-stats-growth mr-2"></i>
+                                <span class="font-weight-semibold">JIP Exception Status</span>
+
+                            </h4>
+                        </div>
+                        <input type="button" class="btn btn-secondary mt-3 pull-right" value="Filters" data-toggle="collapse" data-target="#demo1" />
+                    </div>
+                </div>
+                <hr />
+                <!-- /page header -->
+                <!--Search Filter Code Start-->
+                <div class="col-md-12 collapse" id="demo1">
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Reference No</label>
+                                <input type="text" class="form-control" id="RefNo2" placeholder="Reference No" ng-model="search.RefNo" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Vessel Name</label>
+                                <input type="text" class="form-control" id="VesselName2" placeholder="Vessel Name" ng-model="search.VesselName" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Select Exception Type</label>
+                                <select data-placeholder="Select Type" id="SelectExc2" class="form-control select-clear" ng-model="search.EType">
+                                    <option></option>
+                                    <option value="BERTH">Berth Exception</option>
+                                    <option value="GMPH">GMPH Exception</option>
+                                    <option value="WGMPH">WGMPH Exception</option>
+                                </select>
+                            </div>
+                        </div>
+                        @if (User.IsInRole("Operations") || User.IsInRole("OperationApprover") || User.IsInRole("Admin"))
+            {
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Stage</label>
+                                    <select data-placeholder="Select Stage" id="SelectStatus2" class="form-control select-clear" ng-model="search.stage">
+                                        <option></option>
+                                        <option ng-repeat="Stages in ExceptionStages" value="{{Stages.StageName}}">{{Stages.StageName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Stage</label>
+                                    <select data-placeholder="Select Stage" id="SelectStage2" class="form-control select-clear" ng-model="search.stage" data-fouc>
+                                        <option></option>
+                                        <option ng-repeat="Stages in ExceptionStages" ng-if="Stages.Id=='3'" value="{{Stages.StageName}}">{{Stages.StageName}}</option>
+                                        <option ng-repeat="Stages in ExceptionStages" ng-if="Stages.Id=='4'" value="{{Stages.StageName}}">{{Stages.StageName}}</option>
+                                        <option ng-repeat="Stages in ExceptionStages" ng-if="Stages.Id=='5'" value="{{Stages.StageName}}">{{Stages.StageName}}</option>
+                                        @*<option value="Study Committee">Study Committee</option>
+                                    <option value="Decision Committee">Decision Committee</option>
+                                    <option value="Steering Committee">Steering Committee</option>*@
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select data-placeholder="Select Status" id="SelectTab2Status2" class="form-control select-clear" ng-model="search.status" data-fouc>
+                                    <option></option>
+                                    <option value="Approve">Approve</option>
+                                    <option value="Required More Info">Required More</option>
+                                    <option value="Deny">Deny</option>
+                                    <option value="Pending">Pending</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Service</label>
+                                <input type="text" class="form-control" id="Service2" placeholder="Service" ng-model="search.Service" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>From</label>
+                                @*<input type="date" class="form-control" placeholder="From" ng-model="data.FromDate" />*@
+                                <div id="sandbox-container">
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" id="FromDate2" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>To</label>
+                                @*<input type="date" class="form-control" placeholder="To" ng-model="data.ToDate" />*@
+                                <div id="sandbox-container">
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" id="ToDate2" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <input type="button" class="btn btn-theme-gray pull-right  mt-3" value="Reset" ng-click="Reset()" />
+                                <input type="button" class="btn btn-primary mr-2 pull-right mt-3" value="Search" ng-click="DIndexSearch()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Search Filter Code End-->
+
+                <div class="row">
+                    <div id="tblrep" class="card table-card scrollbar">
+                        <table class="table datatable-show-all text-center" id="table-id1">
+                            <thead>
+                                <tr class="table-card-head">
+                                    <th>SR#</th>
+                                    <th>Reference No</th>
+                                    <th>Sequence</th>
+                                    <th>Vessel Name</th>
+                                    <th>Exception Type</th>
+                                    <th>Stage</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                    @*<th>Explanation</th>
+                                <th>Justifications</th>*@
+                                    <th>Service</th>
+                                    <th>Created By</th>
+                                    <th>Updated By</th>
+                                    <th>Created At</th>
+                                    <th>Updated At</th>
+                                    <th>PilotOnBoard</th>
+                                    <th>PilotStation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in ExceptionListOperationUser | filter:search">
+                                    <td>{{$index+1}}</td>
+
+                                    <td>{{item.RefNo}}</td>
+                                    <td>{{item.Sequence}}</td>
+                                    <td>{{item.VesselName}}</td>
+                                    <td>{{item.EType}}</td>
+                                    <td>{{item.stage}}</td>
+                                    <td>
+                                        <span ng-if="item.statuscode == 'Pending'" class="badge badge-info">{{item.status}}</span>
+                                        <span ng-if="item.statuscode == 'Approve'" class="badge badge-success">{{item.status}}</span>
+                                        <span ng-if="item.statuscode == 'Deny'" class="badge badge-danger">{{item.status}}</span>
+                                        <div class="btn-group" ng-if="item.statuscode == 'Required More'">
+                                            <span class="badge badge-warning badgeFontSm">{{item.status}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="list-icons">
+                                            <a class="list-icons-item  cursor-pointer" ng-click="ViewHref(item.Id)" @*href="/Reports/ExceptionPrint?Id={{item.Id}}"*@>
+                                                <i class="icon-eye" title="View"></i>
+                                            </a>
+                                            <a ng-click="PrintHref(item.Id)" @*href="/Reports/ExceptionPrint?Id={{item.Id}}&Print={{true}}"*@ class="list-icons-item"><i class="icon-printer" title="Print"></i></a>
+                                            <a ng-click="PdfHref(item.Id)" @*href="/Reports/PdfExceptionPrint?Id={{item.Id}}"*@ class="list-icons-"><i class="icon-file-pdf" title="PDF"></i></a>
+                                            <a class="icon-stats-growth cursor-pointer " title="Exception Status Tracking" ng-click="StatusTrackHref(item.Id)" @*href="/Reports/JIPStatusTracking?Id={{item.Id}}"*@>
+
+                                            </a>
+                                            <a ng-click="ExcelHref(item.Id)" @*href="/Reports/DownloadJIPExcel?id={{item.id}}"*@ class="list-icons-item "><i class="icon-file-excel" title="Excel"></i></a>
+                                        </div>
+                                    </td>
+                                    @*<td><div class="truncate">
+                                    {{item.Explanation}}</div></td>
+                                <td><div class="truncate">{{item.Justifications}}</div></td>*@
+                                    <td>{{item.Service}}</td>
+                                    <td>{{item.CreatedBy}}</td>
+                                    <td>{{item.UpdatedBy}}</td>
+                                    <td>{{item.CreatedAt |date:'dd-MMM-yyyy h:mm:ss a'}}</td>
+                                    <td>{{item.UpdatedAt |date:'dd-MMM-yyyy h:mm:ss a'}}</td>
+                                    <td>{{item.PilotOnBoard |date:'dd-MMM-yyyy HH:mm:ss'}}</td>
+                                    <td>{{item.PilotStation |date:'dd-MMM-yyyy HH:mm:ss'}}</td>
+                                    @*<td>
+                                    <span ng-if="item.Status == true" class="badge badge-success">Active</span>
+                                    <span ng-if="item.Status != true" class="badge badge-danger">NotActive</span>
+                                </td>*@
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                        @*<i class="list-icons icon-spinner11 my-float"></i>*@
+
+                        <button ng-click="LoadMore('DIndex')" ng-show="floatButton" class="floatBottom btn btn-primary pull-right">Load More</button>
+
+                    </div>
+
+                </div>
+                <!--pagination Code Start-->
+             <div class="row">
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Select Rows</label>
+                            <select data-placeholder="Select Rows" name="state" id="maxRows1" class="form-control select-clear" data-fouc>
+                                <option></option>
+                                <option value="5000">All Rows</option>
+                                <option value="4">4</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="70">70</option>
+                                <option value="100">100</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class='pagination-container' style="position: absolute;
+    right: 25px;">
+                        <nav>
+                            <ul class="pagination1">
+
+                                <li data-page="prev">
+                                    <span> < <span class="sr-only">(current)</span></span>
+                                </li>
+                                <!--	Here the JS Function Will Add the Rows -->
+                                <li data-page="next" id="prev">
+                                    <span> > <span class="sr-only">(current)</span></span>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!--pagination Code End-->
+            </div> 
+            <!--JIP Exception Status Ng-Controller Div End-->
+        </div>
+        <!--JIP Exception Status Tab Content Tab 2 End -->
+        </div>
+    </div>
+          
+
+
+
+            <script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+            <script src="~/Scripts/DatePicker/CustomIntilizeJS.js"></script>
+
+            <script src="~/Scripts/jquery.min.js"></script>
+            <script src="~/Scripts/PaganationScriptCustom.js"></script>
+            <script>
+                //Pagination Code
+                $(document).ready(function () {
+                    getPagination('#table-id');
+                    getPaginationJIPStatusAwating('#table-id1');
+                });
+           
+
+                //Hide Side Menu
+                window.onload = function () {
+                    document.getElementById('minisidebar').className = 'sidebar-xs';
+                };
+
+                // Tab menu Code
+                function openCity(evt, cityName) {
+                    var i, tabcontent, tablinks;
+                    tabcontent = document.getElementsByClassName("tabcontent");
+                    for (i = 0; i < tabcontent.length; i++) {
+                        tabcontent[i].style.display = "none";
+                    }
+                    tablinks = document.getElementsByClassName("tablinks");
+
+                    for (i = 0; i < tablinks.length; i++) {
+                        tablinks[i].className = tablinks[i].className.replace(" active", "");
+
+
+                    }
+                    document.getElementById(cityName).style.display = "block";
+                    evt.currentTarget.className += " active";
+
+                }
+                // Tab Menu Code End
+            </script>
+

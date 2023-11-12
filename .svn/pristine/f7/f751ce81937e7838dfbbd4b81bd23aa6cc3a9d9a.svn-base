@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DE.Infrastructure.CodeContracts;
+using DE.Infrastructure.ConceptImplementation;
+
+namespace DE.Infrastructure.Concept
+{
+    public interface IRequestExecutor
+    {
+        TResponse Execute<TResponse>(IRequest<TResponse> request)
+            where TResponse : Response, new();
+
+        Task<TResponse> ExecuteAsync<TResponse>(IRequest<TResponse> request)
+            where TResponse : Response, new();
+
+    }
+
+}

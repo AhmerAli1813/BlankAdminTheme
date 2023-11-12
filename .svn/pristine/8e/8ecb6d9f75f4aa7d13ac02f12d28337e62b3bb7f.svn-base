@@ -1,0 +1,132 @@
+﻿using DE.Infrastructure.Concept;
+using DE.Infrastructure.Logging;
+using DE.Infrastructure.Helpers;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DPWVessel.Model.EntityModel;
+
+namespace DPWVessel.Model.Core
+{
+    public class UnitOfWork : IUnitOfWork
+    {
+        private readonly IAuditor _auditor;
+        private readonly dpw_VesselEntities _context;
+        private bool _disposed;
+        private ILogger _logger;
+
+        public UnitOfWork(dpw_VesselEntities context, IAuditor auditor, ILogger logger)
+        {
+            _auditor = auditor;
+            _context = context;
+            _logger = logger;
+        }
+
+        public virtual void Commit()
+        {
+            if (!_context.ChangeTracker.Entries().Any(HasChanged))
+            {
+                if (_context.IsTransactionStarted)
+                    _context.CommitTransaction();
+                return;
+            }
+            foreach (var entity in _context.ChangeTracker.Entries().Where(HasChanged))
+            {
+                ApplyAudit(entity);
+            }
+            try
+            {
+                _context.SaveChanges();
+
+                if (_context.IsTransactionStarted)
+                    _context.CommitTransaction();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                if (_context.IsTransactionStarted)
+                    _context.RollBackTransaction();
+
+                _logger.Error(ex);
+
+                //Dumping ValidationError manually
+                var errorBuilder = new StringBuilder();
+                errorBuilder.Append("Entity Validation Errors: ");
+                foreach (var entityValidationError in ex.EntityValidationErrors)
+                {
+                    var serializedObject = JsonConvert.SerializeObject(entityValidationError.Entry.Entity, Formatting.None, new JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore });
+                    errorBuilder.AppendLine();
+                    errorBuilder.AppendFormat("{0}({1}) =>",
+                        entityValidationError.Entry.Entity.GetType().Name,
+                        serializedObject
+                        );
+                    foreach (var error in entityValidationError.ValidationErrors)
+                        errorBuilder.AppendFormat("[{0}:{1}],", error.PropertyName, error.ErrorMessage);
+                }
+                string errorMessage = errorBuilder.ToString();
+                _logger.Error(errorMessage);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                if (_context.IsTransactionStarted)
+                    _context.RollBackTransaction();
+
+                _logger.Error(ex);
+                throw;
+            }
+        }
+
+        private void ApplyAudit(DbEntityEntry entity)
+        {
+            var domainModel = entity.Entity as DomainModel;
+
+            if (domainModel == null)
+                return;
+
+            if (entity.State == EntityState.Added)
+            {
+                domainModel.CreatedAt = DateTime.Now;
+                domainModel.CreatedBy = _auditor.AuditToken;
+            }
+
+            domainModel.UpdatedAt = DateTime.Now;
+            domainModel.UpdatedBy = _auditor.AuditToken;
+        }
+
+        private static bool HasChanged(DbEntityEntry entity)
+        {
+            return IsState(entity, EntityState.Added) ||
+                   IsState(entity, EntityState.Deleted) ||
+                   IsState(entity, EntityState.Modified);
+        }
+
+        private static bool IsState(DbEntityEntry entity, EntityState state)
+        {
+            return entity.State == state;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+    }
+}

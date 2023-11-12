@@ -1,0 +1,233 @@
+﻿@model DPWVessel.Model.Features.JIPVisitIndex.EmailDataMultiExtension
+
+@{
+    ViewBag.Title = "JIP Update Email";
+    Layout = "~/Views/Shared/_EmailLayout.cshtml";
+}
+
+<style>
+    .btn-secondary {
+        color: #fff;
+        background-color: #00be5e;
+    }
+
+    .btn {
+        text-decoration: none;
+        position: relative;
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: 3px .875rem;
+        font-size: .8125rem;
+        line-height: 1.5385;
+        border-radius: 14px;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    .badge-danger2 {
+        background: #c51f41;
+        color: white;
+    }
+
+    .badge-warning {
+        background-color: #ff7043;
+    }
+
+    .badge-secondary {
+        background-color: #777;
+    }
+
+    .badge-danger {
+        background-color: #f44336;
+    }
+
+    .badge-success {
+        background-color: #4caf50;
+    }
+
+    .badge-primary {
+        background-color: #2196f3;
+    }
+
+    .badge-standby {
+        background-color: rgba(59, 85, 96, 0.7);
+        color: white;
+    }
+
+    .badge {
+        color: #fff;
+        font-size: 15px !important;
+        width: 90px;
+        display: inline-block;
+        padding: .3125rem .375rem;
+        font-weight: bolder;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .125rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    .table1 tr th {
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .table1 tr td {
+        font-size: 12px;
+    }
+
+    .table1 tr {
+        margin-top: 5px;
+    }
+
+    .table1 {
+        width: 100%;
+    }
+      .text-capitalize
+    {
+       text-transform: capitalize;
+    }
+        .badge-info
+    {
+        color: #fff;
+    background-color: #00bcd4;
+    }
+</style>
+
+<h3 style="background-color: #00be5e;color: #fff;padding: 5px;"> JIP Exception ALERT !!!</h3>
+<div style="border:1px solid;padding:5px;margin-bottom:10px">
+    <table class="table1">
+        <tbody>
+            <tr>
+                <td colspan="4" style="padding-bottom: 10px"><span style="font-size:18px;font-weight:bolder;text-decoration:underline">Exception Details:</span></td>
+            </tr>
+            <tr>
+                <th>
+                    Vessel Name:
+                </th>
+                <td>
+                    @Model.VesselName
+                </td>
+                <th>
+                    Reference No:
+                </th>
+                <td>
+                    @Model.RefNo
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    Action:
+                </th>
+                <td>
+                    @{ string Status = "Approve"; }
+                    @if (Model.Status == 1)
+                      {  
+                        <span class="badge badge-success">Approve</span>
+                      }
+                    @if (Model.Status == 2)
+                    { Status = "Deny and Exception back to Operation User";
+                        <span class="badge badge-danger">Deny</span>
+                    }
+                    @if (Model.Status == 3)
+                    {
+                        Status = "Required More Information and Exception back to Operation User";
+                        <span class="badge badge-warning" style="width:auto;font-size:smaller">Required More Info</span>
+                    }
+                    @if (Model.Status == 4)
+                    {
+                        Status = "Pending";
+                        <span class="badge badge-info" style="width:auto;font-size:smaller">Pending</span>
+                    }
+                    @if (Model.Status == 0)
+                    {
+                        Status = "Submit to Operation Approver";
+                        <span class="badge badge-info text-capitalize">Submit</span>
+                    }
+
+                </td>
+                <th>
+                    Date:
+                </th>
+                <td>
+                    @Model.UpdateAt.Value.ToString("dd-MM-yyyy hh:mm tt")
+                </td>
+            </tr>
+            <tr>
+                @if (Model.Status == 1)
+                {
+                    Status = Model.Stage == 1 ? "Submit to Operation Approver" : Model.Stage == 2 ? "Submit to Study Committee" : Model.Stage == 3 ? "Submit to Decision Committee" : Model.Stage == 4 ? "Submit to Steering Committee" : "Completed Review";
+                }
+                <th>Details:</th>
+               
+                <td colspan="4" class="text-capitalize">
+                @foreach (var i in Model.UserRole)
+                {
+                    <span>@i</span>
+            
+                  }
+                
+                 User @Status.ToString() </td>
+            </tr>
+            <tr>
+                <th>Exception Type's:</th>
+                <td colspan="4">
+                    @{ 
+                        int c = Model.EType.Count();
+                    }
+                @foreach (var item in Model.EType)
+                {
+                    
+                    c = c - 1;
+                    <span>@item</span>
+                    if (c != 0)
+                    { <span>,</span>}
+
+                }
+                </td>
+
+</tr>
+
+<tr>
+
+<th>Service:</th>
+
+<td>@Model.Service</td>
+@if (Model.UpdatedBy != null)
+                {
+                    <th>Update By:</th>
+                    <td>@Model.UpdatedBy</td>
+                }
+            </tr>
+            @*<tr>
+                    <th>
+                        Remarks:
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        @Model.Remarks
+                    </td>
+                </tr>*@
+        </tbody>
+    </table>
+</div>
+
+
+@*<p>
+        <small>To review click: </small><a href="https://fueltrack.dpworld.sa/MeterReading" style="font-weight:bolder;color:red" target="_blank">here</a>
+    </p>*@
+
+@*<p style="color:blue">
+        If would like to know more about this action, please contact your administrator.
+    </p>*@
+

@@ -1,0 +1,735 @@
+D:\DPWOPPS\server\DPWVessel.Web\bin\NLog.config
+D:\DPWOPPS\server\DPWVessel.Web\bin\DPWVessel.Web.dll.config
+D:\DPWOPPS\server\DPWVessel.Web\bin\DPWVessel.Web.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\DPWVessel.Web.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\Antlr3.Runtime.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Autofac.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Autofac.Integration.Mvc.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Autofac.Integration.Owin.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Autofac.Integration.WebApi.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\AutoMapper.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\ClosedXML.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\DE.Infrastructure.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\DocumentFormat.OpenXml.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\DPWVessel.Model.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Elmah.Contrib.WebApi.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Elmah.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\EntityFramework.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\EntityFramework.SqlServer.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\EPPlus.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\ExcelNumberFormat.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\FluentScheduler.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\FluentValidation.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Hangfire.Core.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Hangfire.SqlServer.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Core.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.Cookies.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.Facebook.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.Google.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.OAuth.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.OpenIdConnect.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.Twitter.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Web.Infrastructure.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Newtonsoft.Json.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\NLog.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Owin.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\Rotativa.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Net.Http.Formatting.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Cors.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Helpers.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Http.Cors.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Http.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Http.Owin.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Http.WebHost.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Mvc.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Optimization.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Razor.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.WebPages.Deployment.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.WebPages.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.WebPages.Razor.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\WebGrease.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\DE.Infrastructure.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\DPWVessel.Model.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\Antlr3.Runtime.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\Autofac.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Autofac.Integration.Mvc.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Autofac.Integration.Owin.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Autofac.Integration.WebApi.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\AutoMapper.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\ClosedXML.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\ClosedXML.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\DocumentFormat.OpenXml.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Elmah.Contrib.WebApi.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\EntityFramework.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\EntityFramework.SqlServer.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\EPPlus.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\ExcelNumberFormat.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\FluentScheduler.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\FluentScheduler.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\FluentValidation.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\FluentValidation.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Hangfire.Core.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Hangfire.SqlServer.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Core.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.Cookies.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.Facebook.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.Google.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.OAuth.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.OpenIdConnect.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Microsoft.Owin.Security.Twitter.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\Newtonsoft.Json.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\NLog.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.pdb
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Net.Http.Formatting.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Helpers.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Http.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Http.Cors.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Http.Owin.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Http.WebHost.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Mvc.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Optimization.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.Razor.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.WebPages.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.WebPages.Deployment.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\System.Web.WebPages.Razor.xml
+D:\DPWOPPS\server\DPWVessel.Web\bin\ar\DPWVessel.Model.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\cs\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\da\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\de\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\es\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\fa\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\fi\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\fr\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\it\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\ko\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\mk\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\nl\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\pl\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\pt\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\ru\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\sv\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\tr\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\zh-CN\FluentValidation.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\es\Hangfire.Core.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\zh\Hangfire.Core.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\bin\zh-TW\Hangfire.Core.resources.dll
+D:\DPWOPPS\server\DPWVessel.Web\obj\Debug\DPWVessel.Web.csprojResolveAssemblyReference.cache
+D:\DPWOPPS\server\DPWVessel.Web\obj\Debug\DPWVessel.Web.dll
+D:\DPWOPPS\server\DPWVessel.Web\obj\Debug\DPWVessel.Web.pdb
+D:\TestTemplate\DPWVessel.Web\bin\NLog.config
+D:\TestTemplate\DPWVessel.Web\bin\DPWVessel.Web.dll.config
+D:\TestTemplate\DPWVessel.Web\bin\DPWVessel.Web.dll
+D:\TestTemplate\DPWVessel.Web\bin\DPWVessel.Web.pdb
+D:\TestTemplate\DPWVessel.Web\bin\Antlr3.Runtime.dll
+D:\TestTemplate\DPWVessel.Web\bin\Autofac.dll
+D:\TestTemplate\DPWVessel.Web\bin\Autofac.Integration.Mvc.dll
+D:\TestTemplate\DPWVessel.Web\bin\Autofac.Integration.Owin.dll
+D:\TestTemplate\DPWVessel.Web\bin\Autofac.Integration.WebApi.dll
+D:\TestTemplate\DPWVessel.Web\bin\AutoMapper.dll
+D:\TestTemplate\DPWVessel.Web\bin\ClosedXML.dll
+D:\TestTemplate\DPWVessel.Web\bin\DE.Infrastructure.dll
+D:\TestTemplate\DPWVessel.Web\bin\DocumentFormat.OpenXml.dll
+D:\TestTemplate\DPWVessel.Web\bin\DPWVessel.Model.dll
+D:\TestTemplate\DPWVessel.Web\bin\Elmah.Contrib.WebApi.dll
+D:\TestTemplate\DPWVessel.Web\bin\Elmah.dll
+D:\TestTemplate\DPWVessel.Web\bin\EntityFramework.dll
+D:\TestTemplate\DPWVessel.Web\bin\EntityFramework.SqlServer.dll
+D:\TestTemplate\DPWVessel.Web\bin\EPPlus.dll
+D:\TestTemplate\DPWVessel.Web\bin\ExcelNumberFormat.dll
+D:\TestTemplate\DPWVessel.Web\bin\FluentScheduler.dll
+D:\TestTemplate\DPWVessel.Web\bin\FluentValidation.dll
+D:\TestTemplate\DPWVessel.Web\bin\Hangfire.Core.dll
+D:\TestTemplate\DPWVessel.Web\bin\Hangfire.SqlServer.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Core.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.Cookies.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.Facebook.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.Google.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.OAuth.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.OpenIdConnect.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.Twitter.dll
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Web.Infrastructure.dll
+D:\TestTemplate\DPWVessel.Web\bin\Newtonsoft.Json.dll
+D:\TestTemplate\DPWVessel.Web\bin\NLog.dll
+D:\TestTemplate\DPWVessel.Web\bin\Owin.dll
+D:\TestTemplate\DPWVessel.Web\bin\Rotativa.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Net.Http.Formatting.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Cors.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Helpers.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Http.Cors.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Http.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Http.Owin.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Http.WebHost.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Mvc.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Optimization.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Razor.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.WebPages.Deployment.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.WebPages.dll
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.WebPages.Razor.dll
+D:\TestTemplate\DPWVessel.Web\bin\WebGrease.dll
+D:\TestTemplate\DPWVessel.Web\bin\DE.Infrastructure.pdb
+D:\TestTemplate\DPWVessel.Web\bin\DPWVessel.Model.pdb
+D:\TestTemplate\DPWVessel.Web\bin\Antlr3.Runtime.pdb
+D:\TestTemplate\DPWVessel.Web\bin\Autofac.xml
+D:\TestTemplate\DPWVessel.Web\bin\Autofac.Integration.Mvc.xml
+D:\TestTemplate\DPWVessel.Web\bin\Autofac.Integration.Owin.xml
+D:\TestTemplate\DPWVessel.Web\bin\Autofac.Integration.WebApi.xml
+D:\TestTemplate\DPWVessel.Web\bin\AutoMapper.xml
+D:\TestTemplate\DPWVessel.Web\bin\ClosedXML.pdb
+D:\TestTemplate\DPWVessel.Web\bin\ClosedXML.xml
+D:\TestTemplate\DPWVessel.Web\bin\DocumentFormat.OpenXml.xml
+D:\TestTemplate\DPWVessel.Web\bin\Elmah.Contrib.WebApi.xml
+D:\TestTemplate\DPWVessel.Web\bin\EntityFramework.xml
+D:\TestTemplate\DPWVessel.Web\bin\EntityFramework.SqlServer.xml
+D:\TestTemplate\DPWVessel.Web\bin\EPPlus.xml
+D:\TestTemplate\DPWVessel.Web\bin\ExcelNumberFormat.xml
+D:\TestTemplate\DPWVessel.Web\bin\FluentScheduler.pdb
+D:\TestTemplate\DPWVessel.Web\bin\FluentScheduler.xml
+D:\TestTemplate\DPWVessel.Web\bin\FluentValidation.pdb
+D:\TestTemplate\DPWVessel.Web\bin\FluentValidation.xml
+D:\TestTemplate\DPWVessel.Web\bin\Hangfire.Core.xml
+D:\TestTemplate\DPWVessel.Web\bin\Hangfire.SqlServer.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Core.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.pdb
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.pdb
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.pdb
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.pdb
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.Cookies.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.Facebook.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.Google.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.OAuth.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.OpenIdConnect.xml
+D:\TestTemplate\DPWVessel.Web\bin\Microsoft.Owin.Security.Twitter.xml
+D:\TestTemplate\DPWVessel.Web\bin\Newtonsoft.Json.xml
+D:\TestTemplate\DPWVessel.Web\bin\NLog.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.pdb
+D:\TestTemplate\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Net.Http.Formatting.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Helpers.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Http.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Http.Cors.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Http.Owin.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Http.WebHost.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Mvc.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Optimization.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.Razor.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.WebPages.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.WebPages.Deployment.xml
+D:\TestTemplate\DPWVessel.Web\bin\System.Web.WebPages.Razor.xml
+D:\TestTemplate\DPWVessel.Web\bin\ar\DPWVessel.Model.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\cs\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\da\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\de\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\es\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\fa\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\fi\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\fr\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\it\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\ko\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\mk\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\nl\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\pl\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\pt\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\ru\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\sv\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\tr\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\zh-CN\FluentValidation.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\es\Hangfire.Core.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\zh\Hangfire.Core.resources.dll
+D:\TestTemplate\DPWVessel.Web\bin\zh-TW\Hangfire.Core.resources.dll
+D:\TestTemplate\DPWVessel.Web\obj\Debug\DPWVessel.Web.csprojResolveAssemblyReference.cache
+D:\TestTemplate\DPWVessel.Web\obj\Debug\DPWVessel.Web.dll
+D:\TestTemplate\DPWVessel.Web\obj\Debug\DPWVessel.Web.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\NLog.config
+D:\BlankAdmin theme\DPWVessel.Web\bin\DPWVessel.Web.dll.config
+D:\BlankAdmin theme\DPWVessel.Web\bin\DPWVessel.Web.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\DPWVessel.Web.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\Antlr3.Runtime.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Autofac.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Autofac.Integration.Mvc.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Autofac.Integration.Owin.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Autofac.Integration.WebApi.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\AutoMapper.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\ClosedXML.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\DE.Infrastructure.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\DocumentFormat.OpenXml.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\DPWVessel.Model.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Elmah.Contrib.WebApi.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Elmah.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\EntityFramework.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\EntityFramework.SqlServer.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\EPPlus.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\ExcelNumberFormat.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\FluentScheduler.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\FluentValidation.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Hangfire.Core.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Hangfire.SqlServer.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Core.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.Cookies.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.Facebook.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.Google.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.OAuth.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.OpenIdConnect.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.Twitter.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Web.Infrastructure.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Newtonsoft.Json.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\NLog.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Owin.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\Rotativa.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Net.Http.Formatting.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Cors.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Helpers.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Http.Cors.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Http.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Http.Owin.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Http.WebHost.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Mvc.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Optimization.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Razor.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.WebPages.Deployment.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.WebPages.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.WebPages.Razor.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\WebGrease.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\DE.Infrastructure.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\DPWVessel.Model.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\Antlr3.Runtime.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\Autofac.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Autofac.Integration.Mvc.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Autofac.Integration.Owin.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Autofac.Integration.WebApi.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\AutoMapper.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\ClosedXML.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\ClosedXML.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\DocumentFormat.OpenXml.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Elmah.Contrib.WebApi.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\EntityFramework.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\EntityFramework.SqlServer.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\EPPlus.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\ExcelNumberFormat.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\FluentScheduler.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\FluentScheduler.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\FluentValidation.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\FluentValidation.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Hangfire.Core.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Hangfire.SqlServer.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Core.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.Cookies.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.Facebook.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.Google.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.OAuth.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.OpenIdConnect.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Microsoft.Owin.Security.Twitter.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\Newtonsoft.Json.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\NLog.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.pdb
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Net.Http.Formatting.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Helpers.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Http.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Http.Cors.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Http.Owin.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Http.WebHost.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Mvc.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Optimization.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.Razor.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.WebPages.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.WebPages.Deployment.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\System.Web.WebPages.Razor.xml
+D:\BlankAdmin theme\DPWVessel.Web\bin\ar\DPWVessel.Model.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\cs\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\da\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\de\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\es\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\fa\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\fi\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\fr\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\it\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\ko\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\mk\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\nl\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\pl\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\pt\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\ru\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\sv\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\tr\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\zh-CN\FluentValidation.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\es\Hangfire.Core.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\zh\Hangfire.Core.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\bin\zh-TW\Hangfire.Core.resources.dll
+D:\BlankAdmin theme\DPWVessel.Web\obj\Debug\DPWVessel.Web.csprojResolveAssemblyReference.cache
+D:\BlankAdmin theme\DPWVessel.Web\obj\Debug\DPWVessel.Web.dll
+D:\BlankAdmin theme\DPWVessel.Web\obj\Debug\DPWVessel.Web.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\NLog.config
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\DPWVessel.Web.dll.config
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\DPWVessel.Web.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\DPWVessel.Web.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Antlr3.Runtime.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Autofac.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Autofac.Integration.Mvc.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Autofac.Integration.Owin.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Autofac.Integration.WebApi.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\AutoMapper.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\ClosedXML.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\DE.Infrastructure.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\DocumentFormat.OpenXml.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\DPWVessel.Model.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Elmah.Contrib.WebApi.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Elmah.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\EntityFramework.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\EntityFramework.SqlServer.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\EPPlus.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\ExcelNumberFormat.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\FluentScheduler.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\FluentValidation.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Hangfire.Core.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Hangfire.SqlServer.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Core.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Cookies.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Facebook.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Google.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.OAuth.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.OpenIdConnect.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Twitter.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Web.Infrastructure.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Newtonsoft.Json.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\NLog.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Owin.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Rotativa.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Net.Http.Formatting.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Cors.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Helpers.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Http.Cors.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Http.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Http.Owin.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Http.WebHost.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Mvc.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Optimization.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Razor.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.WebPages.Deployment.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.WebPages.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.WebPages.Razor.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\WebGrease.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\DE.Infrastructure.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\DPWVessel.Model.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Antlr3.Runtime.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Autofac.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Autofac.Integration.Mvc.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Autofac.Integration.Owin.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Autofac.Integration.WebApi.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\AutoMapper.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\ClosedXML.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\ClosedXML.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\DocumentFormat.OpenXml.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Elmah.Contrib.WebApi.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\EntityFramework.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\EntityFramework.SqlServer.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\EPPlus.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\ExcelNumberFormat.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\FluentScheduler.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\FluentScheduler.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\FluentValidation.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\FluentValidation.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Hangfire.Core.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Hangfire.SqlServer.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Core.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Cookies.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Facebook.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Google.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.OAuth.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.OpenIdConnect.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Twitter.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\Newtonsoft.Json.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\NLog.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.pdb
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Net.Http.Formatting.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Helpers.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Http.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Http.Cors.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Http.Owin.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Http.WebHost.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Mvc.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Optimization.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.Razor.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.WebPages.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.WebPages.Deployment.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\System.Web.WebPages.Razor.xml
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\ar\DPWVessel.Model.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\cs\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\da\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\de\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\es\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\fa\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\fi\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\fr\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\it\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\ko\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\mk\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\nl\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\pl\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\pt\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\ru\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\sv\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\tr\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\zh-CN\FluentValidation.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\es\Hangfire.Core.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\zh\Hangfire.Core.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\bin\zh-TW\Hangfire.Core.resources.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\obj\Debug\DPWVessel.Web.csprojResolveAssemblyReference.cache
+D:\svn Projects\Blank Template\DPWVessel.Web\obj\Debug\DPWVessel.Web.dll
+D:\svn Projects\Blank Template\DPWVessel.Web\obj\Debug\DPWVessel.Web.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\NLog.config
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\DPWVessel.Web.dll.config
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\DPWVessel.Web.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\DPWVessel.Web.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Antlr3.Runtime.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Autofac.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Autofac.Integration.Mvc.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Autofac.Integration.Owin.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Autofac.Integration.WebApi.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\AutoMapper.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\ClosedXML.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\DE.Infrastructure.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\DocumentFormat.OpenXml.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\DPWVessel.Model.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Elmah.Contrib.WebApi.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Elmah.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\EntityFramework.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\EntityFramework.SqlServer.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\EPPlus.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\ExcelNumberFormat.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\FluentScheduler.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\FluentValidation.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Hangfire.Core.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Hangfire.SqlServer.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Core.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Owin.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Cookies.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Facebook.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Google.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.OAuth.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.OpenIdConnect.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Twitter.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Web.Infrastructure.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Newtonsoft.Json.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\NLog.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Owin.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Rotativa.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Net.Http.Formatting.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Cors.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Helpers.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Http.Cors.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Http.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Http.Owin.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Http.WebHost.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Mvc.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Optimization.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Razor.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.WebPages.Deployment.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.WebPages.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.WebPages.Razor.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\WebGrease.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\DE.Infrastructure.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\DPWVessel.Model.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Antlr3.Runtime.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Autofac.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Autofac.Integration.Mvc.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Autofac.Integration.Owin.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Autofac.Integration.WebApi.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\AutoMapper.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\ClosedXML.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\ClosedXML.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\DocumentFormat.OpenXml.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Elmah.Contrib.WebApi.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\EntityFramework.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\EntityFramework.SqlServer.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\EPPlus.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\ExcelNumberFormat.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\FluentScheduler.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\FluentScheduler.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\FluentValidation.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\FluentValidation.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Hangfire.Core.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Hangfire.SqlServer.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Core.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.AspNet.Identity.Owin.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Logging.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.IdentityModel.Tokens.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Cookies.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Facebook.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Google.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.OAuth.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.OpenIdConnect.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Microsoft.Owin.Security.Twitter.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\Newtonsoft.Json.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\NLog.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.pdb
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Net.Http.Formatting.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Helpers.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Http.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Http.Cors.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Http.Owin.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Http.WebHost.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Mvc.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Optimization.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.Razor.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.WebPages.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.WebPages.Deployment.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\System.Web.WebPages.Razor.xml
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\ar\DPWVessel.Model.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\cs\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\da\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\de\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\es\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\fa\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\fi\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\fr\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\it\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\ko\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\mk\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\nl\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\pl\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\pt\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\ru\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\sv\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\tr\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\zh-CN\FluentValidation.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\es\Hangfire.Core.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\zh\Hangfire.Core.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\bin\zh-TW\Hangfire.Core.resources.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\obj\Debug\DPWVessel.Web.csprojResolveAssemblyReference.cache
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\obj\Debug\DPWVessel.Web.dll
+D:\svn Projects\Blank Admin Template\DPWVessel.Web\obj\Debug\DPWVessel.Web.pdb

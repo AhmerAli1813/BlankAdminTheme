@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "RemarksEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="RemarksCtrl" ng-init="Editinit()">
+    <div class="page-header border-bottom-0">
+        <div class="page-header-content header-elements-md-inline">
+            <div class="page-title d-flex">
+                <h4>
+                    <i class="icon-task mr-2"></i>
+                    <span class="font-weight-semibold">Edit Exception Justification</span>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <!-- /page header -->
+    @*<div class="row">
+        <div class="form-group col-md-6">
+            <label>Remarks Type</label><span class="required">*</span>
+            <select data-placeholder="Remarks Type" class="form-control select-clear" name="state" ng-model="Remarks.RemarksTypeId" data-fouc>
+                <option></option>
+                <option ng-repeat="item in RemarksType"  value="{{item.Id}}" ng-selected="Remarks.RemarksTypeId==item.Id" >{{item.NameEng}}</option>
+            </select>
+        </div>
+    </div>*@
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label>Remarks Eng</label><span class="required">*</span>
+            <textarea class="form-control" required ng-model="Remarks.RemarksEng" style="height:150px;"></textarea>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Remarks Ar</label><span class="required">*</span>
+            <textarea class="form-control" required ng-model="Remarks.RemarksAr" style="height:150px;"></textarea>
+        </div>
+        <div class="col-md-12 pull-right">
+            <input type="button" class="btn btn-primary pull-right mt-10" ng-click="Update(Remarks)" value="Save" />
+        </div>
+    </div>
+</div> <!--Ng-Controller Div End-->
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+

@@ -1,0 +1,47 @@
+﻿using DE.Infrastructure.Concept;
+using DPWVessel.Model.EntityModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DPWVessel.Model.Features.UsersApplications
+{
+   public class UsersApplicationsListRequest :IRequest<UsersApplicationsListResponse>
+    {
+
+    }
+
+    public class UsersApplicationsListResponse : Response
+    {
+        public List<UsersApplicationList> UsersApplicationList { get; set; }
+    }
+    public class UsersApplicationList
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string AppCode { get; set; }
+    }
+    public class UsersApplicationsListRequestHandler : IRequestHandler<UsersApplicationsListRequest, UsersApplicationsListResponse>
+    {
+        private dpw_VesselEntities _dbcontext;
+        public UsersApplicationsListRequestHandler(dpw_VesselEntities _context)
+        {
+            _dbcontext = _context;
+        }
+
+        public UsersApplicationsListResponse Execute(UsersApplicationsListRequest request)
+        {
+            var response = new UsersApplicationsListResponse();
+            var row = _dbcontext.Applications.AsQueryable();
+            response.UsersApplicationList = row.Select(x => new UsersApplicationList
+            {
+                Id=x.Id,
+                Name=x.Name,
+                AppCode=x.AppCode,
+            }).ToList();
+            return response;
+        }
+    }
+}

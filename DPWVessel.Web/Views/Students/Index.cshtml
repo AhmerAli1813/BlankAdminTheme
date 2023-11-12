@@ -1,0 +1,137 @@
+﻿@using DPWVessel.Model.Resources
+@{
+    ViewBag.Title = "Index";
+}
+
+<div ng-controller="StudentsCtr" ng-init="init()">
+    <!--for Page Title-->
+    <div class="page-title">
+            <div class="flex">
+                <div class="Flex-coumn"><h4><i class="fas fa-file-alt"></i>  Students</h4></div>
+                <div class="Flex-coumn">
+                    <button type="button" class="Customebtn btnSuccess pull-right mr-10"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#Filters"
+                           aria-expanded="false"
+                           aria-controls="Filters"><span>Filters</span>
+                    </button>
+                    <a type="button" href="@Url.Action("Add","Students")" class="Customebtn btnPrimary mr-10 pull-right"><span>Add</span></a>
+                </div>
+            </div>
+            <hr />
+        </div>
+    <!--End-->
+    <!--Filter Collapse-->
+    <div class="card collapse" id="Filters">
+        <div class="card-header">
+            Filters
+        </div>
+        <div class="card-body">
+            <form id="SerachForm">
+                <div class="row">
+                    <div class="col-md-3">
+
+                        <div class="form-group">
+                            <label>Student Id</label>
+                            <input type="text" class="form-control" placeholder="Id" ng-model="search.Id" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" placeholder="Name" ng-model="search.Name" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Roll No</label>
+                            <input type="text" class="form-control" placeholder="Roll No" ng-model="search.RollNo" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input type="text" class="form-control" placeholder="Age" ng-model="search.Age" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 float-right">
+                        <div class="form-group">
+                            <button type="button"  onclick="reload()" class="Customebtn btnSecondary mr-10 pull-right mt-20"><span>Reset</span></button>
+                            <button type="button" ng-click="FilterStudent(search)" class="Customebtn btnPrimary  mr-10 pull-right mt-20"><span>Serach</span></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+    <!--Filter Collapse End-->
+    <!--  table Start -->
+    <div class="card">
+        <div class="card-header">
+            Details
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>S no</th>
+                        <th> Id</th>
+                        <th> Name</th>
+                        <th>RollNo</th>
+                        <th>Age</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr ng-repeat="user in StdList  | filter :search">
+                        <td>{{$index + 1}}</td>
+                        <td>{{user.Id}}</td>
+                        <td>{{user.Name}}</td>
+                        <td>{{user.RollNo}}</td>
+                        <td>{{user.Age}}</td>
+
+
+                        <td>
+                            <div class="list-icons">
+                                <a ng-click="EditHref(user.Id)" class="list-icons-item color-gray"><i class="icon-pencil7" title="Edit"></i></a>
+                                <!--<a ng-click="ResetHref(user.Id)" class="list-icons-item text-default"><i class="icon-key" title="Change Password"></i></a> -->
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr ng-if="!StdList || (StdList | filter :search).length === 0">
+                        <td colspan="{{ 5 }}" class="text-center">No data found</td>
+                    </tr>
+                </tbody>
+            </table>
+            @*<nav aria-label="..." class="pull-right">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item " aria-current="page">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>*@
+        </div>
+    </div>
+    <!--Table End-->
+</div>
+
+<script>
+        function reload() {
+            console.log('SerachForm Clear')
+            location.reload();
+           
+        }
+   
+</script>

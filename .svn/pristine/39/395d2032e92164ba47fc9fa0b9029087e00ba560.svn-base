@@ -1,0 +1,137 @@
+﻿@using DPWVessel.Model.Resources
+@using DPWVessel.Model.EntityModel.Enums
+@{
+    ViewBag.Title = "Register User";
+}
+<style>
+    .required-starig {
+        color: red;
+    }
+</style>
+<script src="~/Scripts/jquery.min.js"></script>
+
+<div class="page-header border-bottom-0">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4><i class="icon-user mr-2"></i> <span class="font-weight-semibold">Add User</span></h4>
+            <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+</div>
+<hr />
+<div ng-controller="AccountCtr" ng-init="init()">
+
+
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label class="">Email</label><span class="required-starig">*</span>
+            <input type="text" class="form-control" placeholder="Enter Email" ng-model="Register.Email" name="Email" required/>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label>Login Id</label><span class="required-starig">*</span>
+            <input type="text" class="form-control"  placeholder="Enter Username" ng-model="Register.Username" name="Username"  required/>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Full Name</label><span class="required-starig">*</span>
+            <input type="text" class="form-control" placeholder="Enter FullName" ng-model="Register.FullName" name="FullName" required />
+        </div>
+        <div class="form-group col-md-3">
+            <label>Phone</label><span class="required-starig">*</span>
+            <input type="text" class="form-control" id="phone"  placeholder="Enter Number" ng-model="Register.Phone" name="Phone"  required/>
+            
+        </div>
+        <div class="form-group col-md-2">
+            <label>Password</label><span class="required-starig">*</span>
+            <input type="password" class="form-control" placeholder="Enter Password" ng-model="Register.Password" name="Password"  required/>
+            <small>Mininum 6 Characters Password Is Required</small>
+        </div>
+        <div class="form-group col-md-2">
+            <label>Confirm Password</label><span class="required-starig">*</span>
+            <input type="password" class="form-control" placeholder="Confrim Password"  ng-model="Register.ConfirmPassword" name="Password" />
+        </div>
+
+        <div class="col-md-2 form-group">
+            <label>Status</label><span class="required-starig">*</span>
+            <select data-placeholder="Status" class="form-control select-clear" ng-model="Register.Status" data-fouc>
+                <option  ng-value="true">Active</option>
+                <option  ng-value="false">Not Active</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-3" >
+            <label>Application Access</label><span class="required-starig">*</span>
+            <select multiple="multiple" id="EqType" data-placeholder="Please Select Application" ng-model="Register.UsersApplication" class="form-control select" ng-change="CheckAccess(Register.UsersApplication)"  data-fouc>
+                <option ng-repeat="App in AppList" value="{{App.Id}}">{{App.Name}}</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Role</label><span class="required-starig">*</span>
+            @*<select data-placeholder="Please select User Type" ng-model="Register.UserType" class="form-control select-clear"  ng-change="checkrole(Register.UserType)" data-fouc>
+                <option></option>
+                <option ng-repeat="r in Roles" value="{{r.Id}}">{{r.Text}}</option>
+            </select>*@
+            <select data-placeholder="User Role" multiple="multiple" ng-model="Register.UserType" class="form-control select" ng-change="RoleCount(Register.UserType)" required data-fouc>
+
+                <optgroup label="Common Role">
+
+                    <option disabled ng-repeat="r in Roles" ng-if="r.Id==0" value="{{r.Text}}">Select Role</option>
+                    <option ng-repeat="r in Roles" ng-if="r.Id==1"  value="{{r.Id}}">{{r.Text}}</option>
+                    <option ng-repeat="r in Roles" ng-if="r.Id==2"  value="{{r.Id}}">{{r.Text}}</option>
+                
+                </optgroup>
+                <optgroup label="JIP Roles" ng-if="RolesDiv.includes('1')">
+                    <option ng-repeat="r in Roles" ng-if="r.Id==0" value="{{r.Id}}">Select Role</option>
+                    <option ng-repeat="r in Roles" ng-if="r.Id!='1' && r.Id!='2' && r.Id!='3' && r.Id!='5' && r.Id!='10'" value="{{r.Id}}">{{r.Text}}</option>
+                </optgroup>
+                <optgroup label="VESSEL Roles" ng-if="RolesDiv.includes('2')">
+                    <option ng-repeat="r in Roles" ng-if="r.Id==0" value="{{r.Id}}">Select Role</option>
+                    <option ng-repeat="r in Roles" ng-if="r.Id==3" value="{{r.Id}}">{{r.Text}}</option>
+                </optgroup>
+                <optgroup label="DWH Roles" ng-if="RolesDiv.includes('3')">
+                    <option ng-repeat="r in Roles" ng-if="r.Id==0" value="{{r.Id}}">Select Role</option>
+                    <option ng-repeat="r in Roles" ng-if="r.Id=='10'" value="{{r.Id}}">{{r.Text}}</option>
+                </optgroup>
+            </select>
+        </div>
+
+    </div>
+    <div class="col-md-12 float-right" style="margin-top:5px;">
+        <div class="form-group">
+            <button class="btn btn-primary  m-t-19 pull-right" ng-click="RegisterUser(Register)">Register</button>
+            <a href="/Users" class="btn btn-theme-gray m-t-19 pull-right">Cancel</a>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")">
+</script>
+
+
+<script type="text/javascript">
+
+    // Start phone Number Validation 
+    function phoneFormatter()
+    {
+        $('#phone').on('input', function () {
+            var number = $(this).val().replace(/[^+\d]/g, '')
+          
+            $(this).val(number);
+            if(number.length == 17)
+            {
+                $(this).val(null);
+                toastr.error('max limit 17 digit only');
+                return false;
+            }
+
+        });
+    };
+    $(phoneFormatter());
+
+    // End phone Number Validation 
+</script>
+
+
+
+
+

@@ -1,0 +1,912 @@
+﻿@{
+    ViewBag.Title = "VAForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+
+    <link href="~/Content/BootsrapDatetime/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <link href="~/Content/BootsrapDatetime/css.css" rel="stylesheet" />
+    <link href="~/Content/BootsrapDatetime/icon.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Content/BootsrapDatetime/ripples.min.js"></script>
+    <script src="~/Content/BootsrapDatetime/material.min.js"></script>
+  
+    <script src="~/Scripts/js/plugins/moment/moment_locales.min.js"></script>
+    <script src="~/Content/BootsrapDatetime/bootstrap-material-datetimepicker.js"></script>
+    <link href="~/Scripts/SlimSelect/SlimSelectCustomStyle.css" rel="stylesheet" />
+    <link href="~/Scripts/SlimSelect/slimselect.min.css" rel="stylesheet" />
+    <script src="~/Scripts/SlimSelect/slimselect.min.js"></script>
+</head>
+
+
+<style>
+
+        .ss-main .ss-multi-selected 
+{
+    min-height:38px!important;
+
+}
+.ss-add {
+    /*margin: auto !important;*/
+    padding-right: 12px;
+    font:bold;
+}
+
+.ss-main .ss-single-selected {
+    display: flex;
+    cursor: pointer;
+    width: 100%;
+    height: 36px;
+    background: #fafafa !important;
+    padding: 6px;
+    border: 1px solid #dcdee2;
+    border-radius: 4px;
+    background-color: #fff;
+    outline: 0;
+    box-sizing: border-box;
+    transition: background-color .3s;
+}
+
+.ss-main ..ss-single-selected .ss-value
+{
+    background-color:#455a64;
+}
+
+    span.input-group-text {
+        color:white;
+}
+    .dtp div.dtp-date, .dtp div.dtp-time {
+        background: #01213d !important;
+    }
+    .dtp .p10 > a {
+        color: #ffffff !important;
+    }
+    .dtp table.dtp-picker-days tr > td > a.selected {
+    background: #01213d !important;
+    color: #fff;
+}
+    .dtp > .dtp-content > .dtp-date-view > header.dtp-header {
+        background: #083358 !important;
+    }
+    .image-upload-submit {
+        background: none;
+        padding: 8px;
+        width: 116px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    .label {
+        text-align: center;
+        display: flex;
+        margin: 0px auto;
+        display: inherit;
+        background-color: #00946b;
+        color: white;
+    }
+
+    .score {
+        border: 1px solid;
+        padding: 7px 19px;
+        text-align: center;
+        background-color: #00be5e;
+        color: white;
+        font-weight: bolder;
+    }
+
+    .section-header-card {
+        text-decoration: underline;
+        font-weight: bolder;
+    }
+
+    #showmodal {
+        display: none;
+    }
+
+    .sig-canvas {
+        border: 2px dotted #CCCCCC;
+        border-radius: 15px;
+        cursor: crosshair;
+    }
+
+    .Sign-Pad {
+        width: 90%;
+        height: 200px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+
+    .panel-heading {
+        padding: 0;
+        border: 0;
+    }
+
+    .panel-title > a, .panel-title > a:active {
+        display: block;
+        padding: 15px;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        word-spacing: 3px;
+        text-decoration: none;
+        background: #304a52;
+    }
+
+    .panel-heading a:before {
+        font-family: 'Glyphicons Halflings';
+        content: "\e114";
+        float: right;
+        transition: all 0.5s;
+    }
+
+    .panel-heading.active a:before {
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+
+    .timeHeader {
+        background: #00946b;
+        padding: 15px;
+        color: white;
+        font-size: 17px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        margin-top: -36px;
+    }
+
+    label {
+        font-weight: 400;
+    }
+
+    legend {
+        font-size: 18px;
+    }
+    
+</style>
+
+<div ng-controller="VesselOpsCtr" ng-init="VAfinit()">
+    <div class="page-header border-bottom-0">
+        <div class="page-header-content header-elements-md-inline">
+            <div class="page-title d-flex">
+                <h4><i class="icon-details mr-2"></i> <span class="font-weight-semibold"><i class="icon-stack-text"></i>&nbsp;Vessel Arrival Form</span></h4>
+
+            </div>
+
+        </div>
+        <div class="text-center timeHeader pull-right">
+            <span>@DateTime.Now.ToString("dd/MM/yyyy") {{theTime}}</span>
+        </div>
+    </div>
+    <hr />
+
+
+    <div class="col-md-4 form-group">
+        <label>Select Vessel </label><span class="required-starig">*</span>
+        <select data-placeholder="Please Select Vessel" id="Vessel" class="form-control select-clear" ng-model="VAF.dbVAF.Vessel_RefernceNo" ng-change="GetVesselArrivalformDetails(VAF.dbVAF.Vessel_RefernceNo)"  required data-fouc>
+            <option></option>
+            <option ng-repeat="R in VAFVesselList" value="{{R.Visit_RefNo}}-{{R.vsl_vessels_Name}}">{{R.Visit_RefNo}}-{{R.vsl_vessels_Name}}</option>
+        </select>
+    </div>
+
+    <hr />
+    <div class="card">
+
+
+        <div class="card-body">
+            <form ng-submit="SubmitVAF(VAF)">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <fieldset>
+                            <legend class="font-weight-semibold"><i class="icon-ship mr-2"></i> Vessel Details</legend>
+
+                            <div class="row"> 
+                            
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Visit Id-Vessel name</label><span class="required-starig">*</span>
+                                        <input type="text" placeholder="Visit Id-Vessel name" class="form-control" ng-model="VAF.dbVAF.Vessel_RefernceNo" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                       
+                                        <label>Arrival at pilot station</label><span class="required-starig">*</span>
+                                        @*<input type="datetime-local" class="form-control"  ng-click="getdate('eta')" ng-change="validaetdate('eta')" id="eta"  placeholder="Arrival at pilot station" ng-model="VAF.eta" required>*@
+                                       
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date"  id="eta"  ng-model="VAF.eta" placeholder="DD/MM/YYYY HH:mm" required readonly>
+                                        
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar" ></i></span>
+                                            </span>
+                                            
+                                        </div>
+                                      
+                                     </div>
+                                   
+                                </div>
+
+
+                                </div>
+                          
+                            <div class="row">
+                          
+
+                                <div class="col-lg-6">
+                                   
+                                        <div class="form-group">
+                                            <label>Berth number</label><span class="required-starig">*</span>
+                                            @*<input type="text" placeholder="Berth number" class="form-control" ng-model="VAF.pos_slot" required>*@
+                                            @*<select data-placeholder="Please Select Berth number" class="form-control select-clear" ng-model="VAF.pos_slot" data-fouc>
+                                                <option></option>
+                                                <option ng-repeat="R in BerthNumbers" value="{{R.BERTH_NO}}">{{R.BERTH_NO}}</option>
+                                            </select>*@
+                                            <select id="Berth" ng-model="VAF.pos_slot" required>
+                                                <option data-placeholder="true"></option>       
+                                                                                  
+                                                <option ng-repeat="R in BerthNumbers" value="{{R.BERTH_NO}}">{{R.BERTH_NO}}</option>
+                                            </select>
+                                    </div>
+                                 
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Berthed at DPW-JED</label><span class="required-starig">*</span>
+                                        @*<input type="datetime-local" class="form-control" placeholder="" ng-click="getdate('ata')" ng-change="validaetdate('ata')" id="ata" ng-model="VAF.ata" required>*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="ata" ng-model="VAF.ata"  placeholder="DD/MM/YYYY HH:mm" required readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                      </div>
+                                </div>
+
+                            </div>
+
+                            <hr />
+
+                            <div class="row">
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+                                        <label>Pilot boarded</label>
+                                        @*<input type="datetime-local" placeholder="Pilot boarded" class="form-control" ng-click="getdate('pilot_on_board')" ng-change="validaetdate('pilot_on_board')" id="pilot_on_board" ng-model="VAF.pilot_on_board" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date"  id="pilot_on_board" ng-model="VAF.pilot_on_board"   placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Quarantine arrived at PORT</label>
+                                        @*<input type="datetime-local" placeholder="" class="form-control" ng-click="getdate('Quarentine_arrived_AP','db')" ng-change="validaetdate('Quarentine_arrived_AP','db')" id="Quarentine_arrived_AP" ng-model="VAF.dbVAF.Quarentine_arrived_AP">*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date"  id="Quarentine_arrived_AP" ng-model="VAF.dbVAF.Quarentine_arrived_AP" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Quarantine boarded on Vessel</label>
+                                        @*<input type="datetime-local" class="form-control" placeholder="" ng-click="getdate('Quarentine_boarded_OV','db')" ng-change="validaetdate('Quarentine_boarded_OV','db')" id="Quarentine_boarded_OV" ng-model="VAF.dbVAF.Quarentine_boarded_OV" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="Quarentine_boarded_OV" ng-model="VAF.dbVAF.Quarentine_boarded_OV" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Quarantine disembark from Vessel </label>
+                                        @*<input type="datetime-local" placeholder="" class="form-control" ng-click="getdate('Quarentine_disembark_FV','db')" ng-change="validaetdate('Quarentine_disembark_FV','db')" id="Quarentine_disembark_FV" ng-model="VAF.dbVAF.Quarentine_disembark_FV" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="Quarentine_disembark_FV" ng-model="VAF.dbVAF.Quarentine_disembark_FV" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Custom arrived at PORT </label>
+                                        @*<input type="datetime-local" class="form-control" placeholder="" ng-click="getdate('Custom_arrived_port','db')" ng-change="validaetdate('Custom_arrived_port','db')" id="Custom_arrived_port" ng-model="VAF.dbVAF.Custom_arrived_port" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="Custom_arrived_port" ng-model="VAF.dbVAF.Custom_arrived_port" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Custom boarded on Vessel  </label>
+                                        @*<input type="datetime-local" placeholder="" class="form-control" ng-click="getdate('Custom_borded_Vessel','db')" ng-change="validaetdate('Custom_borded_Vessel','db')" id="Custom_borded_Vessel" ng-model="VAF.dbVAF.Custom_borded_Vessel" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="Custom_borded_Vessel" ng-model="VAF.dbVAF.Custom_borded_Vessel" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Custom disembark from Vessel </label>
+                                        @*<input type="datetime-local" class="form-control" placeholder="" ng-click="getdate('Custom_disembark_FV','db')" ng-change="validaetdate('Custom_disembark_FV','db')" id="Custom_disembark_FV" ng-model="VAF.dbVAF.Custom_disembark_FV" >*@
+                                 
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="Custom_disembark_FV" ng-model="VAF.dbVAF.Custom_disembark_FV" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                       </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Coastguard arrived at PORT  </label>
+                                        @*<input type="datetime-local" class="form-control" placeholder="" ng-click="getdate('Coastguard_arrived_AP','db')" ng-change="validaetdate('Coastguard_arrived_AP','db')" id="Coastguard_arrived_AP" ng-model="VAF.dbVAF.Coastguard_arrived_AP" >*@
+                                    
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="Coastguard_arrived_AP" ng-model="VAF.dbVAF.Coastguard_arrived_AP" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Coastguard boarded on Vessel </label>
+                                        @*<input type="datetime-local" placeholder="" class="form-control" ng-click="getdate('Coastguard_boarded_OV','db')" ng-change="validaetdate('Coastguard_disembark_FV','db')" id="Coastguard_boarded_OV" ng-model="VAF.dbVAF.Coastguard_boarded_OV" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="Coastguard_boarded_OV" ng-model="VAF.dbVAF.Coastguard_boarded_OV" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Coastguard disembark from Vessel</label>
+                                        @*<input type="datetime-local" class="form-control" placeholder="" ng-click="getdate('Coastguard_disembark_FV','db')" ng-change="validaetdate('Coastguard_disembark_FV','db')" id="Coastguard_disembark_FV" ng-model="VAF.dbVAF.Coastguard_disembark_FV" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="Coastguard_disembark_FV" ng-model="VAF.dbVAF.Coastguard_disembark_FV" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    
+                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Next port arrival </label>
+                                        <input type="text" placeholder="Next port arrival" class="form-control" ng-model="VAF.flex_string08" >
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Last port departed </label>
+                                        <input type="text" placeholder="Last port departed" class="form-control"  ng-model="VAF.flex_string07" >
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            @*<div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Master/Chief officer: </label><span class="required-starig">*</span>
+                                        <input type="text" placeholder="Master/Chief officer" class="form-control" ng-model="VAF.dbVAF.Master_officer" required>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <br />*@
+                            @*<div class="row">
+
+                                <div class="col-lg-6" style="text-align:center;border:1px solid;border-color:lightgray;">
+                                    <h4>Signature<span class="required-starig">*</span></h4>
+                                    <img ng-if="VAF.dbVAF.Signature!=null" src="{{VAF.dbVAF.Signature}}" class="Sign-Pad" /><br />
+                                    <button type="button" ng-if="VAF.dbVAF.Signature==null" ng-click="SectionSignature()" class="btn btn-secondary" id="sig-submitBtn">Manager Sign</button>
+                                </div>
+                                <div class="col-lg-6" style="text-align:center;border:1px solid;border-color:lightgray;">
+                                    <h4>Vessel Stamp:<span class="required-starig">*</span></h4>
+                                    <img ng-if="VAF.dbVAF.Stamp!=null" src="{{VAF.dbVAF.Stamp}}" class="Sign-Pad" /><br />
+
+                                    <div ng-if="VAF.dbVAF.Stamp==null" class="image-upload image-upload-submit label ">
+                                        <label for="Stamp" style="font-size:13px;">
+                                            Upload Stamp
+                                        </label>
+
+                                        <input type="file" id="Stamp" name="pic" accept="image/*" onchange="angular.element(this).scope().Stampupload('Stamp', angular.element(this).scope())">
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <br />
+                            <br />*@
+
+                        </fieldset>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <fieldset>
+                            <legend class="font-weight-semibold"><i class="icon-paste2 mr-2"></i> DP World Representative to Fill</legend>
+
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Operation Lead Name</label>
+                                        <input type="text" placeholder="Operation Lead Name" class="form-control" ng-model="VAF.dbVAF.Operation_LeadName" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Employee ID</label>
+                                        <input type="text" placeholder="Employee ID" class="form-control" ng-model="VAF.dbVAF.Employee_Id" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>First Rope Secured Time</label>
+                                        @*<input type="datetime-local" placeholder="" class="form-control" ng-click="getdate('flex_date04')" ng-change="validaetdate('flex_date04')" id="flex_date04" ng-model="VAF.flex_date04" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="flex_date04" ng-model="VAF.flex_date04" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    
+                                       </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Last Rope Secured Time</label>
+                                        @*<input type="datetime-local" placeholder="" class="form-control" ng-click="getdate('flex_date05')" ng-change="validaetdate('flex_date05')" id="flex_date05" ng-model="VAF.flex_date05" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="flex_date05" ng-model="VAF.flex_date05" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    
+                                     </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Vessel secure at alongside</label>
+                                        @*<input type="text" placeholder="Vessel secure at alongside" class="form-control" ng-model="VAF.dbVAF.Vessel_Secure_alongside" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="Vessel_Secure_alongside" ng-model="VAF.dbVAF.Vessel_Secure_alongside" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Gangway Secured</label>
+                                        @*<input type="datetime-local" placeholder="Gangway Secured" class="form-control" ng-click="getdate('flex_date02')" ng-change="validaetdate('flex_date02')" id="flex_date02" ng-model="VAF.flex_date02" >*@
+                                    
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="flex_date02" ng-model="VAF.flex_date02" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>PILOT Disembark</label>
+                                        @*<input type="datetime-local" placeholder="PILOT Disembark" class="form-control" ng-click="getdate('pilot_off_board')" ng-change="validaetdate('pilot_off_board')" id="pilot_off_board" ng-model="VAF.pilot_off_board" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="pilot_off_board" ng-model="VAF.pilot_off_board" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Lashing Gang Onboard </label>
+                                        @*<input type="text" placeholder="Lashing Gang Onboard" class="form-control" ng-model="VAF.dbVAF.Lashing_Gang_on_board" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="Lashing_Gang_on_board" ng-model="VAF.dbVAF.Lashing_Gang_on_board" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="d-block">Gang boarded on vessel prior authority clearance</label>
+
+                                        <label class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" class="custom-control-input" name="yes" value="true" ng-model="VAF.dbVAF.Gang_on_board_PAC" >
+                                            <span class="custom-control-label">Yes</span>
+                                        </label>
+
+                                        <label class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" class="custom-control-input" name="yes" value="false" ng-model="VAF.dbVAF.Gang_on_board_PAC">
+                                            <span class="custom-control-label">No</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>First lift on Vessel</label>
+                                        @*<input type="datetime-local" placeholder="First lift on Vesse" class="form-control" ng-click="getdate('start_work')" ng-change="validaetdate('start_work')" id="start_work" ng-model="VAF.start_work" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="start_work" ng-model="VAF.start_work" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Operation Commenced</label>
+                                        @*<input type="datetime-local" placeholder="Operation Commenced" class="form-control" ng-click="getdate('end_work')" ng-change="validaetdate('end_work')" id="end_work" ng-model="VAF.end_work" >*@
+                                        <div class="input-group">
+                                            <input type="text" class="form-control date" id="end_work" ng-model="VAF.end_work" placeholder="DD/MM/YYYY HH:mm" readonly>
+
+                                            <span class="input-group-append">
+                                                <span class="input-group-text"><i class="icon-calendar"></i></span>
+                                            </span>
+
+                                        </div>
+                                    
+                                      </div>
+                                </div>
+
+
+                            </div>
+
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">Submit Vessel Arrival Form <i class="icon-paperplane ml-2"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="modal_small_Signagure" data-backdrop="static" class="modal fade">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="font-weight:bolder">Signature</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12" style="text-align:center">
+                            <canvas id="sig-canvas" class="sig-canvas" title="Signature" width="500" height="200"></canvas><br />
+                            <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button class="btn btn-primary" ng-click="SaveSectionSignature()" id="sig-submitBtn">Save</button>
+                            <button class="btn btn-warning" id="sig-clearBtn">Clear Signature</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+@*<script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/js/plugins/moment/moment.min.js"></script>*@
+
+
+
+
+<script>
+    $(document).ready(function () {
+
+        var o = new SlimSelect({
+            select: '#Berth',
+            placeholder: 'Select Berth Number',
+
+            //allowDeselectOption: true,
+            //hideSelectedOption: true
+            //deselectLabel: '<span class="red">✖</span>',
+        });
+
+
+
+
+    });
+    var Scopevalue = null;
+ 
+ 
+        function getScope(ctrlName) {
+            var sel = 'div[ng-controller="' + ctrlName + '"]';
+            return angular.element(sel).scope();
+        }
+
+        
+    var mintime = new Date();
+    var max = new Date();
+    console.log(mintime.setHours(mintime.getHours() - 2));
+    $('.date').bootstrapMaterialDatePicker({
+        format: 'DD/MM/YYYY HH:mm',
+            minDate: mintime,
+
+           // nowButton: true,
+           //currentDate: moment(),
+    }).on('change', function (e, date) {
+
+            var selecteddate = new Date(date);
+            var currendate = new Date();
+            if (selecteddate > currendate) {
+                toastr.error("Selected Date should not be greater than Current date");
+                var convertdate = moment(new Date()).format('DD/MM/YYYY HH:mm');
+                $(this).val(convertdate);
+            }
+        });
+    
+ 
+ 
+    
+
+    (function () {
+        window.requestAnimFrame = (function (callback) {
+            return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimaitonFrame ||
+                function (callback) {
+                    window.setTimeout(callback, 1000 / 60);
+                };
+        })();
+
+        var canvas = document.getElementById("sig-canvas");
+        var ctx = canvas.getContext("2d");
+        ctx.strokeStyle = "#222222";
+        ctx.lineWidth = 1;
+
+        var drawing = false;
+        var mousePos = {
+            x: 0,
+            y: 0
+        };
+        var lastPos = mousePos;
+
+        canvas.addEventListener("mousedown", function (e) {
+            drawing = true;
+            lastPos = getMousePos(canvas, e);
+        }, false);
+
+        canvas.addEventListener("mouseup", function (e) {
+            drawing = false;
+        }, false);
+
+        canvas.addEventListener("mousemove", function (e) {
+            mousePos = getMousePos(canvas, e);
+        }, false);
+
+        // Add touch event support for mobile
+        canvas.addEventListener("touchstart", function (e) {
+
+        }, false);
+
+        canvas.addEventListener("touchmove", function (e) {
+            var touch = e.touches[0];
+            var me = new MouseEvent("mousemove", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(me);
+        }, false);
+
+        canvas.addEventListener("touchstart", function (e) {
+            mousePos = getTouchPos(canvas, e);
+            var touch = e.touches[0];
+            var me = new MouseEvent("mousedown", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(me);
+        }, false);
+
+        canvas.addEventListener("touchend", function (e) {
+            var me = new MouseEvent("mouseup", {});
+            canvas.dispatchEvent(me);
+        }, false);
+
+        function getMousePos(canvasDom, mouseEvent) {
+            var rect = canvasDom.getBoundingClientRect();
+            return {
+                x: mouseEvent.clientX - rect.left,
+                y: mouseEvent.clientY - rect.top
+            }
+        }
+
+        function getTouchPos(canvasDom, touchEvent) {
+            var rect = canvasDom.getBoundingClientRect();
+            return {
+                x: touchEvent.touches[0].clientX - rect.left,
+                y: touchEvent.touches[0].clientY - rect.top
+            }
+        }
+
+        function renderCanvas() {
+            if (drawing) {
+                ctx.moveTo(lastPos.x, lastPos.y);
+                ctx.lineTo(mousePos.x, mousePos.y);
+                ctx.stroke();
+                lastPos = mousePos;
+            }
+        }
+
+        // Prevent scrolling when touching the canvas
+        document.body.addEventListener("touchstart", function (e) {
+            if (e.target == canvas) {
+                e.preventDefault();
+            }
+        }, false);
+        document.body.addEventListener("touchend", function (e) {
+            if (e.target == canvas) {
+                e.preventDefault();
+            }
+        }, false);
+        document.body.addEventListener("touchmove", function (e) {
+            if (e.target == canvas) {
+                e.preventDefault();
+            }
+        }, false);
+
+        (function drawLoop() {
+            requestAnimFrame(drawLoop);
+            renderCanvas();
+        })();
+
+        function clearCanvas() {
+            canvas.width = canvas.width;
+        }
+
+        // Set up the UI
+        var clearBtn = document.getElementById("sig-clearBtn");
+        var submitBtn = document.getElementById("sig-submitBtn");
+        clearBtn.addEventListener("click", function (e) {
+            clearCanvas();
+        }, false);
+        submitBtn.addEventListener("click", function (e) {
+            var dataUrl = canvas.toDataURL();
+            //sigText.innerHTML = dataUrl;
+            //sigImage.setAttribute("src", dataUrl);
+        }, false);
+
+    })();
+
+
+</script>
+   
+
+    @*//function getdate(id) {
+    //    console.log(id);
+    //    var time = moment().format('YYYY-MM-DDThh:mm:ss');
+    //    var ID = '#' + id;
+    //    var d = new Date();
+    //    var dateString = moment(d).format('YYYY-MM-DDTHH:mm');
+
+
+    //    console.log(dateString);
+    //    $('' + ID + '').val(dateString);
+    //}*@
+
+
+

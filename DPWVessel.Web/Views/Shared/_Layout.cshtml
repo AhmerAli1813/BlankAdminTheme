@@ -1,0 +1,258 @@
+﻿@using DPWVessel.Model.Resources
+@using DPWVessel.Model.EntityModel.Enums
+
+<!DOCTYPE html>
+<html lang="en" ng-app="DPWVesselApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Out2sol">
+    <!-- Favicon icon -->
+    <link rel="icon" type="~/Content/images/favicon.ico" sizes="16x16" href="~/Content/images/favicon.ico">
+    <title>Out2sol</title>
+
+    <link href="~/Content/css/fontawesome .css" rel="stylesheet" />
+    <link href="~/Content/css/layout.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/icons/icomoon/styles.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/css/slimselect.css" rel="stylesheet" />
+    <link href="~/Content/css/dataTables.bootstrap5.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/Style.css" rel="stylesheet" />
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    
+    
+</head>
+<body ng-controller="baseCtrl" ng-init="initializeBase()" id="minisidebar" >
+
+    <div ng-if="activeService > 0" class="preloader activeServices">
+        <img src="~/Content/images/ajax-loader.gif" alt="Alternate Text"  />
+    </div>
+    <!-- Main navbar -->
+
+    <div class="navbar navbar-expand-md navbar-light navbar-static">
+        <div class="navbar-brand" >
+            <a href="#" class="d-inline-block">
+                <img src="~/Content/images/dpworld-logo.png" />
+            </a>
+
+        </div>
+        <div class="d-md-none">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
+                <i class="icon-tree5" style="color:white"></i>
+            </button>
+            <button class="navbar-toggler sidebar-mobile-main-toggle" type="button">
+                <i class="fas fa-bars" style="color:white"></i>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-mobile">
+            <ul class="navbar-nav" style="margin-right:auto">
+                <li class="nav-item">
+                    <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item"></li>
+
+                @{Html.RenderPartial("_LoginPartial"); }
+
+            </ul>
+        </div>
+    </div>
+    <!-- /main navbar -->
+    <!-- Page content -->
+    <div class="page-content">
+        <!-- Main sidebar -->
+        <div class="sidebar sidebar-light sidebar-main sidebar-expand-md">
+            <!-- Sidebar mobile toggler -->
+            <div class="sidebar-mobile-toggler text-center">
+                <a href="#" class="sidebar-mobile-main-toggle">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                Navigation
+                <a href="#" class="sidebar-mobile-expand">
+                    <i class="fas fa-compress"></i>
+                </a>
+            </div>
+            <!-- /sidebar mobile toggler -->
+            <!-- Sidebar content -->
+            <div class="sidebar-content">
+
+                <div class="card card-sidebar-mobile">
+                    <ul class="nav nav-sidebar" data-nav-type="accordion">
+
+                        <!--DWH Start-->
+                        <li class="nav-item nav-item-submenu">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-user"></i>
+                                <span>
+                                    Data Warehouse
+                                </span>
+                            </a>
+                            <ul class="nav nav-group-sub collapse" data-submenu-title="Data Warehouse">
+
+                                <li class="nav-item">
+
+                                    <a href="@Url.Action("Index", "DWH")" class="nav-link">
+                                        <i class="fas fa-user"></i>
+                                        <span>
+                                            Awating Actions
+                                        </span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <!--DWH End-->
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index","Users")" class="nav-link">
+                                    <i class="fas fa-user"></i>
+                                    <span>
+                                        Users
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index","Students")" class="nav-link">
+                                    <i class="fas fa-user"></i>
+                                    <span>
+                                        Students
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index","EquipmentTypes")" class="nav-link">
+                                    <i class="fas fa-user"></i>
+                                    <span>
+                                        EquipmentTypes
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index","Equipments")" class="nav-link">
+                                    <i class="fas fa-user"></i>
+                                    <span>
+                                        Equipments
+                                    </span>
+                                </a>
+                            </li>
+
+                        }
+
+                        <!-- /page kits -->
+                    </ul>
+                </div>
+                <!-- /main navigation -->
+            </div>
+            <!-- /sidebar content -->
+
+        </div>
+        <!-- /main sidebar -->
+        <!-- End Page wrapper  -->
+        <!-- Main content -->
+        <div class="content-wrapper">
+            <!-- Content area -->
+            <div class="content pt-0">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+
+    <!-- End Wrapper -->
+    <!-- All Jquery -->
+
+
+
+    <script type="text/javascript">
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <text>
+            var _currentUser = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.CurrentUser))');
+            </text>
+            }
+
+
+
+    </script>
+
+
+    <!-- Core JS files -->
+    <script src="~/Scripts/js/main/jquery.min.js"></script>
+    <script src="~/Content/css/fontawesome.js"></script>
+    <script src="~/Scripts/js/plugins/moment/moment.min.js"></script>
+    <script src="~/Scripts/js/app.js"></script>
+    <script src="~/Scripts/plugin/angular.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
+    <script src="~/Scripts/js/slimselect.js"></script>
+    <script src="~/Scripts/js/select2.js"></script>
+    <script src="~/Scripts/js/jquery.dataTables.js"></script>
+    <script src="~/Scripts/js/dataTables.bootstrap5.js"></script>
+    <script src="~/Scripts/js/sweetalert2.all.js"></script>
+    <script src="~/Scripts/js/main/bootstrap.bundle.min.js"></script>
+
+    <!-- /theme JS files -->
+    @Scripts.Render("~/Scripts/angularApp/main")
+
+
+
+    <script>
+$(document).ready(function() {
+    $('.select2-single').select2({
+        width:'100%'
+        });
+          $('.select2-multi').select2({
+        width:'100%'
+        });
+
+});
+        new SlimSelect({
+  select: '.slims'
+});
+
+        function ShowAlert(){
+        Swal.fire({
+  title: 'Do you want to save the changes?',
+  showDenyButton: true,  showCancelButton: true,
+  confirmButtonText: `Save`,
+  denyButtonText: `Don't save`,
+}).then((result) => {
+	/* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+    	Swal.fire('Saved!', '', 'success')
+    } else if (result.isDenied) {
+    	Swal.fire('Changes are not saved', '', 'info')
+ 	}
+});
+        }
+
+        $(document).ready(function() {
+         responsive: true
+    $('#DataTable').DataTable();
+
+} );
+
+            document.querySelector("#basicToastBtn").onclick = function () {
+  new bootstrap.Toast(document.querySelector("#basicToast")).show();
+};
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
+    </script>
+
+</body>
+
+
+</html>

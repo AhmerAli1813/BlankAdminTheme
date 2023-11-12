@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DPWVessel.Model.EntityModel.Enums
+{
+    public enum Status
+    {
+        NotActive,Active,InProgress,Done
+    }
+}

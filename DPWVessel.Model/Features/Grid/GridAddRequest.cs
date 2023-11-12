@@ -1,0 +1,45 @@
+﻿using DE.Infrastructure.Concept;
+using DPWVessel.Model.EntityModel;
+using FluentValidation;
+using FluentValidation.Results;
+
+namespace DPWVessel.Model.Features.Grid
+{
+    public class GridAddRequest<T> : IRequest<GridAddResponse<T>>
+    {
+        public T Entity { get; set; }
+    }
+
+    public class GridAddResponse<T> : Response
+    {
+        public T Entity { get; set; }
+    }
+
+    public class GridAddRequestValidator<T> : AbstractValidator<GridAddRequest<T>>
+    {
+        private IValidator<T> _entityValidator;
+        public GridAddRequestValidator(IValidator<T> entityValidator)
+        {
+            _entityValidator = entityValidator;
+        }
+        public override ValidationResult Validate(GridAddRequest<T> instance)
+        {
+            return _entityValidator.Validate(instance.Entity);
+        }
+    }
+
+    public class GridAddRequestHandler<T> : IRequestHandler<GridAddRequest<T>, GridAddResponse<T>> where T : class
+    {
+        private dpw_VesselEntities _dbContext;
+        public GridAddRequestHandler(dpw_VesselEntities dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public GridAddResponse<T> Execute(GridAddRequest<T> request)
+        {
+            _dbContext.Entry(request.Entity).State = System.Data.Entity.EntityState.Added;
+            return new GridAddResponse<T> { Entity = request.Entity };
+        }
+    }
+}

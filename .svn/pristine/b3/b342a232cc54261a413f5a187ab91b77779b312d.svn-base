@@ -1,0 +1,754 @@
+﻿'use strict';
+app.controller('JIPCtrl',
+    [
+        "$scope",
+        "$rootScope",
+        "$timeout",
+        "$q",
+        "urlService",
+        "newGridService",
+        "$window",
+        "$interval",
+        function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window,$interval) {
+            $scope.theTime = new Date().toLocaleTimeString();
+            $interval(function () {
+                $scope.theTime = new Date().toLocaleTimeString();
+            }, 1000);
+            var url = urlService.getUrlPrams();
+            $scope.UniversalAttachment;
+         $scope.DetailsDiv = false;
+         $scope.init = function ()
+         {
+             var RefN = urlService.getUrlPrams();
+             console.log(RefN);
+             if (RefN.RefNo == undefined)
+             {
+                 $window.open('/JIP/VistIndex', '_self');
+             }
+            
+             //var data = { Pending: true, UserValidation: true, TempId:RefN.RefNo+"==", };
+             //console.log(data);
+
+             $scope.ajaxGet('api/JIPApi/GetExceptionIndexDetailsRequest', { Pending: true, UserValidation: true,Limit:false, TempId: RefN.RefNo + "==", RefNoExist: 1 }, function (resp) {
+
+                 console.log(resp);
+                 if (resp.Success) {
+                     $scope.ExceptionListOperationUser = resp.ExceptionList;
+                     $scope.IndexSearchList = resp.ExceptionList;
+                     if (resp.ExceptionList.length == 0)
+                     {
+                         $window.open('/JIP/VistIndex', '_self');
+                     }
+                 }
+             }); // End request
+             $scope.GetStatus();
+         }
+
+         $scope.GetStatus = function ()
+         {
+             $scope.ajaxGet('api/JIPApi/GetStatusList', null, function (resp) {
+
+                 console.log(resp);
+                 if (resp.Success)
+                 {
+                     $scope.ExceptionStatus = resp.StatusList;
+                 }
+             }); // End request
+         }//GetStatus End
+      //GetStages List Start
+      
+       $scope.GetStages = function ()
+         {
+             $scope.ajaxGet('api/JIPApi/GetStageListRequest', null, function (resp) {
+
+                 console.log(resp);
+                 if (resp.Success)
+                 {
+                     $scope.ExceptionStages = resp.StagesList;
+                 }
+             }); // End request
+         }
+      //GetStages List End
+      $scope.CheckException =function (data)
+      {
+          console.log(data);
+          var x={RefNo:data};
+          $scope.ajaxGet('api/JIPApi/CheckStatus', x, function (resp) {
+
+              console.log(resp);
+              if (resp.Success)
+              {
+                  $scope.ExceptionType = resp.ExceptionTypeListForAdd;
+              }
+          }); // End request
+      }//Check Status on chage End
+      
+            $scope.initADD = function()
+            {
+                $scope.DetailsDiv = false;
+                $scope.GetRefNo();
+                if (_currentUser.UserType != 'Operations' && _currentUser.UserType != 'Admin')
+                {
+                    $window.open('/JIP/VistIndex', '_self');
+                    
+                }
+            }
+            $scope.GetRefNo = function () {
+                $scope.ajaxGet('api/JIPApi/GetRefNoFromQueryRequest', null, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success) {
+                        $scope.VisitRefno = resp.RefNoList;
+                    }
+                }); // End request
+            }//GetRefNo End
+
+            $scope.GetVistDetails = function (data)
+            {
+                console.log(data);
+                if (data != undefined) {
+                    if (data.RefNo == "" || data.RefNo == undefined) {
+                        toastr.error("Enter Refrence No!");
+                        return false;
+                    }
+                    if (data.EType == "" || data.EType == undefined) {
+                        toastr.error("Select Exception Type!");
+                        return false;
+                    }
+
+                    $scope.ajaxGet('api/JIPApi/GetVistDetailsByRNo', data, function (resp) {
+
+                        console.log(resp);
+                        if (resp.Success) {
+                            if (resp.records == true) {
+                                $scope.JIPExDetails = resp;
+                                $scope.DetailsDiv = true;
+                             //   $('#Etype').attr('disabled', 'disabled');
+                                $('#RefNo').attr('disabled', 'disabled');
+                                //$('#searchbtn').attr('disabled', 'disabled');
+                               // $('#searchbtn').hide();
+                                $scope.GetRemarksList();//GetRemarks List
+
+                                if($scope.JIPExDetails.Attachment ==null)
+                                {
+                                    $('#download').hide();
+                                }
+                            }
+                            else {
+                                toastr.error('Vist not found of this Reference No!');
+                                $('#Etype').removeAttr('disabled');
+                            }
+
+                        }
+                    }); // End request
+                }
+                else {
+                    toastr.error("Enter Required Infromation!");
+                    return false;
+                }
+
+               
+            }// Getvistdetails End
+
+            // ETypeVale Set Value Of Exception
+            $scope.ETypeVale = function (data)
+            {
+                console.log(data);
+                if (data == 'FD-2500-A')
+                {
+                    if($scope.JIP.EType=='WGMPH')
+                    {
+                        $scope.JIPExDetails.Value = '64';
+                      
+                    }
+                    if ($scope.JIP.EType == 'GMPH') {
+                        $scope.JIPExDetails.Value = '22';
+                      
+                    }
+               
+                }
+                if (data == 'FD-2500-B') {
+                    if ($scope.JIP.EType == 'WGMPH') {
+                        $scope.JIPExDetails.Value = '44';
+                        console.log($scope.JIPExDetails.Value);
+                       
+                    }
+                    if ($scope.JIP.EType == 'GMPH') {
+                        $scope.JIPExDetails.Value = '22';
+                      
+                    }
+
+                }
+                if (data == 'ML-2500-A') {
+                    if ($scope.JIP.EType == 'WGMPH') {
+                        $scope.JIPExDetails.Value = '93';
+                       
+                    }
+                    if ($scope.JIP.EType == 'GMPH') {
+                        $scope.JIPExDetails.Value = '28';
+                      
+                    }
+
+                }
+                if (data == 'ML-2500-B') {
+                    if ($scope.JIP.EType == 'WGMPH') {
+                        $scope.JIPExDetails.Value = '76';
+                      
+                    }
+                    if ($scope.JIP.EType == 'GMPH') {
+                        $scope.JIPExDetails.Value = '28';
+                     
+                    }
+
+                }
+            }
+            //ETypeVale Set Value End 
+
+            $scope.EditHref =function (data)
+            {
+                var RefN = urlService.getUrlPrams();
+                console.log(RefN);
+                $window.open('/JIP/EditException?Id=' + data + '&RefNo=' + RefN.RefNo, '_self');
+            }
+            //End Edit Href This method is made for redirect to edit page contaning RefNo and and Exception Id
+            $scope.JIPSave =function (data)
+            {
+                console.log(data);
+                //data.Justifications = $('#Justifications').val().toString();
+                //data.Explanation = $('#Explanation').val().toString();
+               
+     
+                 var dat = moment(new Date()).format('YYYY-MM-DD');
+                 var time = new Date().toLocaleTimeString();
+
+                 data.CreatedAt = dat + " " + time;
+                 data.UpdatedAt = dat + " " + time;
+                 data.Attachment = $scope.JIPExDetails.Attachment;
+                 console.log(data);
+               
+                $scope.ajaxPost('api/JIPApi/AddExceptionOperationUser', data, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success)
+                    {
+                       
+                        toastr.success('Exception Successfully Instered!');
+                        $window.open('/JIP/VistIndex', '_self');
+                       
+                    } // resp success end
+                    else
+                    {
+                        toastr.error('Faild to add!');
+                    }
+                });
+              
+            }// JIPSAVE END
+
+            $scope.UpdateStage = function (data,data2)
+            {
+                var RefN = urlService.getUrlPrams();
+             
+                console.log(data);
+                console.log(data2);
+                //data.status = data2;
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                //data.CreatedAt = dat + " " + time;
+                //data.UpdatedAt = dat + " " + time;
+                var UpdateData = {
+                    Id: data.Id,
+                    UpdatedAt: dat + " " + time,
+                    status:data2,
+                };
+                console.log(UpdateData);
+          
+                $scope.ajaxPost('api/JIPApi/UpdateException', UpdateData, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success) {
+                        if (_currentUser.UserType == 'Operations')
+                        {
+                            toastr.success('Exception Successfully Submited to Operation Approver!');
+                        }
+                        else
+                        {
+                            toastr.success('Exception Successfully Updated!');
+                        }
+                        console.log('Email Request Excuting...');
+                        $scope.ajaxPost('Reports/SendEmailSingleException', resp, function (response) {
+                            if (response.Success) {
+                             console.log(response);
+                            }
+                            else {
+                                console.log(response);
+                            }
+                        });
+                        console.log('Email Request Excuted');
+                        $window.open('/JIP/Index?RefNo=' + RefN.RefNo, '_self');
+
+                    } // resp success end
+                    else {
+                        toastr.error('Faild to Update!');
+                    }
+                });
+
+            }// JIP STAGE UPdate End
+
+            $scope.EditInit =function ()
+            {
+                if (_currentUser.UserType == 'OperationApprover')
+                {
+                    $window.open('/JIP/VistIndex','_self');
+                }
+                var Ids = urlService.getUrlPrams();
+               
+                $scope.ajaxGet('api/JIPApi/GetExceptionEditDetailsRequest', Ids, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success)
+                    {
+                    
+                        $scope.JIPEditDetails = resp;
+                        
+                    
+                    }
+                }); // End request
+            }
+            $scope.showmodal = function (data)
+            {
+                $('#UpdateModal').modal('show');
+            
+                $scope.UpdateInit(data);
+            }
+            $scope.JIPUpdate = function (data) {
+                console.log(data);
+                
+              
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+                data.UpdatedAt = dat + " " + time;
+              
+                if (_currentUser.UserType == 'Operations') {
+                    
+                  
+                    var Udata =
+             {
+                 Id: data.Id,
+                 Justifications: $('#Justifications').val().toString(),
+                 Explanation: $('#Explanation').val().toString(),
+                 Attachment: $scope.UniversalAttachment,
+                 UpdatedAt:dat + " " + time,
+                    };
+
+                }
+                if (_currentUser.UserType == 'StudyCommittee') {
+                    
+                   
+                    var Udata =
+             {
+                 Id: data.Id,
+                 Opinion: $('#Opinion').val().toString(),
+                 Recommendations:$('#Recommendations').val().toString(),
+                 StudyAttachment:$scope.UniversalAttachment,
+                 UpdatedAt:dat + " " + time,
+                    };
+
+                }
+                if (_currentUser.UserType == 'SteeringCommittee') {
+                 
+                    
+
+                    var Udata =
+             {
+                    Id: data.Id,
+                   Decision:$('#Decision').val().toString(),
+                   SteringAttachment: $scope.UniversalAttachment,
+                    UpdatedAt:dat + " " + time,
+                    };
+
+                }
+
+               
+             
+                console.log(Udata);
+                $scope.ajaxPost('api/JIPApi/UpdateExceptionDeatils', Udata, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success) {
+                        var RefN = urlService.getUrlPrams();
+                        console.log(RefN);
+                        toastr.success('Exception Successfully Updated!');
+                        $window.open('/JIP/Index?RefNo='+RefN.RefNo, '_self');
+
+                    } // resp success end
+                    else {
+                        toastr.error('Faild to submit!');
+                    }
+                });
+
+            }
+            // JIP Details Update End
+            $scope.LoadMore = function (PageName)
+            {
+                
+                if(PageName=="DIndex")
+                {
+                    $scope.Dinit(10);
+                }
+            }
+
+            $scope.floatButton = true;
+            $('.float').attr('disabled', 'disabled');
+            $scope.Dinit= function(data)
+            {
+                $('.float').attr('disabled', 'disabled');
+                var Records = 30;
+                if (data != null)
+                {
+                    Records = Records + data;
+                }
+              
+                $scope.floatButton = true;
+                $scope.ajaxGet('api/JIPApi/GetExceptionIndexDetailsRequest', {JIPTeam:true, Pending: false, UserValidation: false, Records: Records,Limit:true , TempId: 0, RefNoExist: 0 }, function (resp) {
+                 
+                    console.log(resp);
+                    if (resp.Success) {
+                       
+                        //After Load
+                        if (resp.Limit == true)
+                       {
+                            if (resp.Records == false) {
+                                toastr.info('No more records found!');
+                                $scope.floatButton = false;
+                              
+                            }
+                            else {
+                                $scope.floatButton = true;
+                                $(".float").removeAttr("disabled");
+                            }
+                        }
+                        $scope.ExceptionListOperationUser = resp.ExceptionList;
+                        $scope.DindexSearchList = resp.ExceptionList;
+                    }
+                    else
+                    {
+                        $scope.float = true;
+                        $scope.float_spinner = false;
+                    }
+                }); // End request
+                $scope.GetStages();
+            }// DInit End
+
+            $scope.ImageUpload = function (fileuploadid) {
+
+                $scope.ImageUploadPromise(fileuploadid).then(
+                    function (response) {
+                        console.log(response);
+                        console.log("Response");
+                        $timeout(function () {
+                            $scope.JIPExDetails.Attachment = response;
+                            console.log($scope.JIPExDetails.Attachment);
+                            $('#download').show();
+                            toastr.success('Attachment Successfully uploaded!');
+                        }, 100);
+                    });
+                //}
+
+            }
+            //End Img Upload
+            $scope.ImageUploadOperation = function (fileuploadid) {
+             
+                $scope.ImageUploadPromise(fileuploadid).then(
+                    function (response) {
+                        console.log(response);
+                        console.log("Response");
+                        $timeout(function () {
+                            $scope.JIPUpdateDetails.Attachment = response;
+                            console.log($scope.JIPUpdateDetails.Attachment);
+                            
+                            $('#dropdownshow').show();
+                            $('#operationdownload').show();
+                            toastr.success('Attachment Successfully uploaded!');
+                        }, 100);
+                    });
+                //}
+                
+            }
+            //Image Upload End
+            $scope.ImageUploadStudy = function (fileuploadid) {
+
+                $scope.ImageUploadPromise(fileuploadid).then(
+                    function (response) {
+                        console.log(response);
+                        console.log("Response");
+                        $timeout(function () {
+                            $scope.JIPUpdateDetails.StudyAttachment = response;
+                            console.log($scope.JIPUpdateDetails.StudyAttachment);
+
+                            $('#dropdownshow').show();
+                            $('#studydownload').show();
+                            toastr.success('Attachment Successfully uploaded!');
+                        }, 100);
+                    });
+                //}
+
+            }
+            //Image Upload End
+            $scope.ImageUploadStering = function (fileuploadid) {
+
+                $scope.ImageUploadPromise(fileuploadid).then(
+                    function (response) {
+                        console.log(response);
+                        console.log("Response");
+                        $timeout(function () {
+                            $scope.JIPUpdateDetails.SteringAttachment = response;
+                            console.log($scope.JIPUpdateDetails.SteringAttachment);
+
+                            $('#dropdownshow').show();
+                            $('#steringdownload').show();
+                            toastr.success('Attachment Successfully uploaded!');
+                        }, 100);
+                    });
+                //}
+
+            }
+            //Image Upload End
+            //Update on Index Page Init code 
+            $scope.TaskId = '';
+            $scope.UpdateInit = function (data) {
+                console.log(data);
+                $scope.ajaxGet('api/JIPApi/GetExceptionEditDetailsRequest', { Id: data }, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success) {
+                        $scope.GetRemarksList();//GetRemarks List
+                        $('#dropdownshow').show();
+                        $scope.JIPUpdateDetails = resp;
+                        $scope.TaskId = data;
+                        if ($scope.JIPUpdateDetails.Attachment == null)
+                        {
+                            $('#operationdownload').hide();
+                          
+                            
+                        }
+                        if ($scope.JIPUpdateDetails.StudyAttachment == null) {
+                          
+                            $('#studydownload').hide();
+                         
+
+                        }
+                        if ($scope.JIPUpdateDetails.SteringAttachment == null) {
+                          
+                            $('#steringdownload').hide();
+
+                        }
+                       
+
+                    }
+                }); // End request
+            }
+            // Update on Index End
+        
+            //Save on Index Page Init code 
+
+            $scope.SaveChangesIndex = function (data) {
+             
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+                data.UpdatedAt = dat + " " + time;
+                data.Remarks =$('#Remarks').val().toString();
+                console.log(data);
+                $scope.ajaxPost('api/JIPApi/UpdateExceptionDeatils', data, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success) {
+                        var RefN = urlService.getUrlPrams();
+                        console.log(RefN);
+                        toastr.success('Exception Details Successfully Updated!');
+                        //$window.open('/JIP/Index?RefNo=' + RefN.RefNo, '_self');
+                        $scope.UpdateInit(data.Id);
+
+                    } // resp success end
+                    else {
+                        toastr.error('Faild to Update!');
+                    }
+                });
+            }
+            // Save on Index End
+
+            //Index Search 
+            $scope.IndexSearch = function () {
+                $scope.ExceptionListOperationUser = $scope.IndexSearchList;
+                var fromDate = moment($('#fromdate').val()).format('YYYY-MM-DDT00:00:00');
+                var toDate = moment($('#todate').val()).format('YYYY-MM-DDT23:59:59');
+                
+                $scope.ExceptionListOperationUser = $scope.ExceptionListOperationUser.filter(x=>x.PilotOnBoard <= toDate && x.PilotOnBoard >= fromDate);
+
+            }
+            //Index SearchEnd
+            function stringToDate(_date, format, delimiter) {
+                var formatLowerCase = format.toLowerCase();
+                var formatItems = formatLowerCase.split(delimiter);
+                var dateItems = _date.split(delimiter);
+                var monthIndex = formatItems.indexOf("mm");
+                var dayIndex = formatItems.indexOf("dd");
+                var yearIndex = formatItems.indexOf("yyyy");
+                var month = parseInt(dateItems[monthIndex]);
+                month -= 1;
+                var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+                return formatedDate;
+            }
+            //Index Search 
+            $scope.DIndexSearch = function (data) {
+                $scope.ExceptionListOperationUser = $scope.DindexSearchList;
+                var fromDate = moment(stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+                var toDate = moment(stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT23:59:59');
+               
+                $scope.ExceptionListOperationUser = $scope.ExceptionListOperationUser.filter(x=>x.PilotStation <= toDate && x.PilotStation >= fromDate);
+
+            }
+            //Index SearchEnd
+            $scope.test =function ()
+            {
+                $('#dropdownshow').hide();
+            }
+            // operation href to download attachment
+            $scope.operationhref = function (data)
+            {
+                $('#dropdownshow').show();
+                $window.open(data, "_blank");
+                
+            }
+            // Index UpdateStage Only Code Start
+            $scope.UpdateStageOnlyIndex = function (data,JIPDetails) {
+                var RefN = urlService.getUrlPrams();
+               
+                console.log(data,JIPDetails);
+               
+              
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+                if (data == 2 || data == 3)
+                {
+                    if ($('#Remarks').val().toString() == "")
+                    {
+                        toastr.error('Remarks is Required!');
+                        return false;
+                    }
+                }
+                //Save Changes 
+                JIPDetails.status=data;
+                  $scope.SaveChangesIndex(JIPDetails);
+                var UpdateData = {
+                    Id: $scope.TaskId,
+                    UpdatedAt: dat + " " + time,
+                    status: data,
+                    Remarks: $('#Remarks').val().toString(),
+                };
+                console.log(UpdateData);
+            
+                $scope.ajaxPost('api/JIPApi/UpdateException', UpdateData, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success) {
+                        if (_currentUser.UserType == 'Operations') {
+                            toastr.success('Exception Successfully Submited to Operation Approver!');
+                        }
+                        else {
+                            toastr.success('Exception Successfully Updated!');
+                        }
+                        console.log('Email Request Excuting...');
+                        $scope.ajaxPost('Reports/SendEmailSingleException', resp, function (response) {
+                            
+                            if (response.Success) {
+                                console.log(response);
+                              
+                            }
+                            else {
+                                console.log(response);
+                              
+                            }
+                        });
+                        console.log('Email Request Excuted');
+                        $timeout($window.open('/JIP/Index?RefNo=' + RefN.RefNo, '_self'), 2000);
+                        //$window.open('/JIP/Index?RefNo=' + RefN.RefNo, '_self');
+
+                    } // resp success end
+                    else {
+                        toastr.error('Faild to Update!');
+                    }
+                });
+
+            }// JIP Index STAGE only  UPdate End
+            //Href For Secure Links 
+            $scope.ViewHref = function (Id) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: Id }, function (resp) {
+                    console.log(resp);
+                    $window.open('/Reports/ExceptionPrint?TempId=' + resp, '_blank');
+                });
+
+            }
+            //Href For Secure Links 
+            $scope.PrintHref = function (Id) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: Id }, function (resp) {
+                    console.log(resp);
+                    $window.open('/Reports/ExceptionPrint?TempId=' + resp + '&Print=true', '_blank');
+                });
+
+            }
+            //Href For Secure Links 
+            $scope.PdfHref = function (Id) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: Id }, function (resp) {
+                    console.log(resp);
+                    $window.open('/Reports/PdfExceptionPrint?TempId=' + resp, '_blank');
+                });
+
+            }
+            //Href For Secure Links 
+            $scope.ExcelHref = function (Id) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: Id }, function (resp) {
+                    console.log(resp);
+                    $window.open('/Reports/DownloadJIPExcel?TempId=' + resp + '&IdExist=1', '_blank');
+                });
+            }
+                //Href For Secure Links 
+                $scope.StatusTrackHref = function (RefNO) {
+                    $scope.ajaxGet('api/UsersApi/Encrypt', { Id: RefNO }, function (resp) {
+                        console.log(resp);
+                        $window.open('/Reports/JIPStatusTracking?TempId=' + resp, '_blank');
+                    });
+                   }
+          // GetRemarks List
+          $scope.GetRemarksList =function ()
+          {
+              $scope.ajaxGet('api/JIPApi/GetRemarks',null, function (resp) {
+                  console.log(resp);
+                  $scope.ExplanationList = resp.ExplanationList;
+                  $scope.JustificationList = resp.JustificationList;
+              });
+          }
+          $scope.Reset = function () {
+              document.getElementById("ToDate").value = null;
+              document.getElementById("FromDate").value = null;
+              document.getElementById("Service").value = null;
+              document.getElementById("RefNo").value = null;
+              document.getElementById("VesselName").value = null;
+              document.getElementById("SelectExc").selectedIndex = 0;
+              document.getElementById("SelectSt").selectedIndex = 0;
+              document.getElementById("SelectStage").selectedIndex = 0;
+              document.getElementById("SelectStatus").selectedIndex = 0;
+              document.getElementById("ApprovalSelect").selectedIndex = 0;
+              document.getElementById("SelectTab2Status").selectedIndex = 0;
+
+              //document.getElementById("ToDate2").value = null;
+              //document.getElementById("FromDate2").value = null;
+              //document.getElementById("Service2").value = null;
+              //document.getElementById("RefNo2").value = null;
+              //document.getElementById("VesselName2").value = null;
+              //document.getElementById("SelectExc2").selectedIndex = 0;
+              //document.getElementById("SelectStage2").selectedIndex = 0;
+              //document.getElementById("SelectStatus2").selectedIndex = 0;
+              //document.getElementById("SelectTab2Status2").selectedIndex = 0;
+          }
+                }]); // Main Controler Bracket End

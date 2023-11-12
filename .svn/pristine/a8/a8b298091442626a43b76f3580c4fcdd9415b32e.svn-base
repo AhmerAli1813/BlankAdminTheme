@@ -1,0 +1,153 @@
+﻿@using DPWVessel.Web.Models
+
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+    Layout = null;
+    
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="TMS System">
+    <title>DPWorld Jeddah 
+    OPS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Technical Dashboard it will provide help to the Engineer">
+    <meta name="author" content="TDB DpWorld">
+    <meta name="keywords" content="Dpworld, Dubai, Fuel, Technical">
+    <link href="~/Content/css/icons/icomoon/styles.min.css" rel="stylesheet" />
+   
+    <!-- Favicon icon -->
+    <link rel="icon" type="~/Content/images/favicon.ico" sizes="16x16" href="~/Content/images/favicon.ico">
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap_limitless.min.css" rel="stylesheet" />
+    <link href="~/Content/css/layout.min.css" rel="stylesheet" />
+    @*<link href="~/Content/css/components.min.css" rel="stylesheet" />*@
+    <link href="~/Content/css/colors.min.css" rel="stylesheet" />
+    <style>
+        .form-control-feedback 
+        {
+            background: #173a64;
+            padding: -1px;
+            color: white;
+        }
+
+        .card-body {
+            background: #e4e4e4;
+        }
+
+        .btn-primary {
+            background-color: #173a64 !important;
+        }
+
+        .uniform-checker span, .uniform-choice span {
+            border: .125rem solid white !important;
+        }
+
+        .uniform-checker span {
+            color: white !important;
+        }
+        .form-group-feedback-left .form-control {
+    padding-left: 3.0rem!important;
+}
+
+    </style>
+</head>
+<body>
+    <div class="page-content">
+
+        <!-- Main content -->
+        <div class="content-wrapper">
+
+            <!-- Content area -->
+            <div class="content d-flex justify-content-center align-items-center pt-0">
+
+                <!-- Login form -->
+
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login-form", role = "form" }))
+            {
+
+                    <div class="card mb-0">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                @*<i class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i>*@
+                                <img src="~/Content/images/dpworldlogo.png" style="height:125px;" alt="dpworld is top leading company in Dubai" />
+                                <h6 class="mb-0 font-weight-bold"><br />Welcome to DPW OPS</h6>
+                                <span class="d-block">Enter the registered login id to login.</span>
+                            </div>
+                            @if (TempData["CustomError"] != null)
+                            {
+                                <div class="validation-summary-errors text-danger">
+                                    <ul>
+                                        <li>@TempData["CustomError"].</li>
+                                    </ul>
+                                </div>
+                            }
+
+                            @Html.AntiForgeryToken()
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Login Id" })
+                                @*<input type="text" class="form-control" placeholder="Username">*@
+                                <div class="form-control-feedback">
+                                    <i class="icon-user "></i>
+                                    @*@Html.LabelFor(m => m.Username, new { @class = "" })*@
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                @*<input type="password" class="form-control" placeholder="Password">*@
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                                <div class="form-control-feedback">
+                                    <i class="icon-lock2 "></i>
+                                    @*@Html.LabelFor(m => m.Password, new { @class = "" })*@
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+
+                          
+
+                            @*<div class="form-check form-group d-flex align-items-center">
+                                <div class="mb-0">
+                                        <label class="form-check-label">
+                                            @*<input type="checkbox" name="remember" class="form-input-styled" checked data-fouc>
+                                            @Html.CheckBoxFor(m => m.IsSSOEnabled, htmlAttributes: new { @checked = true, @class = "form-input-styled", name = "remember" })
+                                            <span class="">Remember</span>
+                                        </label>
+                                    </div>
+
+                                <a href="~/Account/ForgotPassword" class="ml-auto">Forgot password?</a>
+                            </div>*@
+
+
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" value="Log in">Sign in <i class="icon-circle-right2 ml-2"></i></button>
+                            </div>
+
+
+                        </div>
+                       
+                    </div>
+                }
+                <!-- /login form -->
+
+            </div>
+            <!-- /content area -->
+        </div>
+    </div>
+
+    @*<script src="~/Scripts/js/main/jquery.min.js"></script>
+    <script src="~/Scripts/js/main/bootstrap.bundle.min.js"></script>*@
+    <script src="~/Scripts/js/plugins/blockui.min.js"></script>
+    <script src="~/Scripts/js/plugins/uniform.min.js"></script>
+    <script src="~/Scripts/js/app.js"></script>
+    <script src="~/Scripts/js/plugins/login.js"></script>
+    @*<script src="~/Scripts/js/plugins/selects/select2.min.js"></script>
+    <script src="~/Scripts/js/plugins/selects/form_select2.js"></script>*@
+</body>
+</html>

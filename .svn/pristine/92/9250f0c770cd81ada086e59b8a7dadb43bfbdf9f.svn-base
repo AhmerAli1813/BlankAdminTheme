@@ -1,0 +1,79 @@
+﻿using DPWVessel.Web.Core.Session;
+using DE.Infrastructure.Logging;
+using NLog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using DE.Infrastructure.CodeContracts;
+
+namespace DPWVessel.Web.Core.Logs
+{
+    public class NLogger : DE.Infrastructure.Logging.ILogger
+    {
+        private readonly Logger _logger;
+        private readonly ISessionManager _sessionManager;
+
+        public NLogger(ISessionManager sessionManager)
+        {
+            _sessionManager = sessionManager;
+            _logger = LogManager.GetLogger("Server");
+        }
+
+        public void Debug(string message, object additionalInfo = null)
+        {
+            LogInfo(LogLevel.Debug, message, additionalInfo);
+        }
+
+        public void Error(Exception ex)
+        {
+            var info = new LogEventInfo(LogLevel.Fatal, _logger.Name, ex.Message);
+            info.Properties.Add("Detail", ex.GenerateErrorList().ToJson());
+            PopulateProperties(info);
+            _logger.Log(info);
+        }
+
+        public void Error(string message)
+        {
+            LogInfo(LogLevel.Error, message);
+        }
+
+        public void Fatal(string message, object additionalInfo = null)
+        {
+            LogInfo(LogLevel.Fatal, message, additionalInfo);
+        }
+
+        public void Info(string message, object additionalInfo = null)
+        {
+            LogInfo(LogLevel.Info, message, additionalInfo);
+        }
+
+        public void Trace(string message, object additionalInfo = null)
+        {
+            LogInfo(LogLevel.Trace, message, additionalInfo);
+        }
+
+        public void Warn(string message, object additionalInfo = null)
+        {
+            LogInfo(LogLevel.Warn, message, additionalInfo);
+        }
+
+        public void LogInfo(LogLevel level, string message, object additionalInfo = null)
+        {
+            var info = new LogEventInfo(level, _logger.Name, message);
+
+            info.Properties.Add("Detail", additionalInfo.ToJson());
+            PopulateProperties(info);
+            _logger.Log(info);
+        }
+
+        public void PopulateProperties(LogEventInfo info)
+        {
+            if (_sessionManager.CurrentUser != null)
+            {
+                info.Properties.Add("Username", _sessionManager.CurrentUser.UserName);
+                //info.Properties.Add("CompanyId", _sessionManager.CurrentUser.CompanyId);
+            }
+        }
+    }
+}

@@ -1,0 +1,445 @@
+﻿'use strict';
+app.controller('DashboardCtrl',
+    [
+        "$scope",
+        "$rootScope",
+        "$timeout",
+        "$q",
+        "urlService",
+        "newGridService",
+        "$window",
+        function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window) {
+
+            var url = urlService.getUrlPrams();
+            $scope.YearChart;
+            $scope.MonthChart;
+            $scope.DChart;
+            $scope.ShowDiv = false;
+            $scope.ShowMYV = false;
+            $scope.Refno;
+         
+            $scope.init = function () {
+                
+                $scope.ajaxGet('api/JIPApi/GetDashboardDetails', null, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success) {
+                        $scope.YearChart = resp.YearChartData;
+                        $scope.MonthChart = resp.MonthChartData;
+
+                        $scope.Yearchart();
+                        $scope.Monthchart();
+                       
+                        $scope.GetRefNoList();
+                        $scope.ShowDiv = false;
+                          $scope.ShowMYV = true;
+                    }
+                });
+            
+            }
+            $scope.GetDetails =function (data)
+            {
+                if (data != null)
+                {
+                    var d = {
+                        RefNo: data,
+                    }
+                    $scope.ajaxGetBackground('api/JIPApi/GetDashboardDetails', d, function (resp) {
+
+                        console.log(resp);
+                        if (resp.Success) {
+                            $scope.YearChart = resp.YearChartData;
+                            $scope.MonthChart = resp.MonthChartData;
+                            $scope.DChart = resp.DurationChartData;
+                            if (resp.DurationChartData!=null)
+                            {
+                                $("#MainDiv").empty().append('<div id="DurationCharId" style="height: 300px; width: 100%;"></div>');
+
+                                $scope.Durationchart();
+                                $scope.ShowDiv = true;
+                            }
+                            else
+                            {
+                                $scope.ShowDiv = false;
+                            }
+
+                        }
+                    });
+                }
+              
+            }
+            $scope.GetRefNoList =function ()
+            {
+                $scope.ajaxGet('api/JIPApi/GetRefNoDashboardList', null, function (resp) {
+                    console.log(resp);
+                    if (resp.Success)
+                    {
+                        $scope.RefNoList = resp.RefNoListDashboard;
+                    }
+                });
+            }
+            //AnyChart For year Wise Start 
+          $scope.Yearchart=function () {
+              // create data set on our data
+           
+         
+          
+              var chartData = {
+                  title: 'Yearly JIP Exceptions Records',
+                  header: ['#', 'Approved', 'Deny', 'Required More', 'Pending'],
+                  //Approve , Deny, RequiredMore, Pending
+                  rows:$scope.YearChart,
+                   
+                 
+                };
+           
+                var Approved_data = [];
+                $scope.YearChart.forEach(function (element1, i1) {
+
+                    Approved_data.push([element1.Year, element1.Approved]);
+
+
+                });
+
+
+                var Deny_data = [];
+                $scope.YearChart.forEach(function (element1, i1) {
+
+                    Deny_data.push([element1.Year, element1.Deny]);
+
+
+                });
+               
+
+                var RequiredMore_data = [];
+                $scope.YearChart.forEach(function (element1, i1) {
+
+                    RequiredMore_data.push([element1.Year,element1.RequiredMore]);
+
+
+                });
+             
+
+                var Pending_data = [];
+                $scope.YearChart.forEach(function (element1, i1) {
+
+                    Pending_data.push([element1.Year,element1.Pending]);
+
+
+                });
+           
+            
+                // create column chart
+                var chart = anychart.column();      
+                // set chart data
+                //chart.data(chartData);
+                var setupSeriesLabels = function (series, name) {
+                    series.name(name).stroke('3 #fff 1');
+                    series.hovered().stroke('3 #fff 1');
+                };
+                var Useries1 = chart.column(Approved_data);
+                setupSeriesLabels(Useries1, 'Approved');
+                Useries1.fill('#00a172');
+             
+
+                var Useries2 = chart.column(Deny_data);
+                setupSeriesLabels(Useries2, 'Deny');
+                Useries2.fill('#c51f41');
+
+                var Useries3 = chart.column(RequiredMore_data);
+                setupSeriesLabels(Useries3, 'Required More');
+                Useries3.fill('#ff7043');
+
+                var Useries4 = chart.column(Pending_data);
+                setupSeriesLabels(Useries4, 'Pending');
+                Useries4.fill('#013765');
+
+                chart.barsPadding(0.1);
+                chart.barGroupsPadding(0.2);
+                // turn on chart animation
+                chart.animation(true);
+
+                chart.yAxis().labels().format('{%Value}{groupsSeparator: }'); // Value on Left Side
+                 
+                 
+                 
+                // set titles for Y-axis
+                chart.yAxis().title('');
+
+                chart
+                  .labels()
+                  .enabled(true)
+                  .position('center-top')
+                  .anchor('center-bottom')
+                  .format('{%Value}{groupsSeparator: }');// Showing value in Graph
+                chart.hovered().labels(true);
+
+                // turn on legend and tune it
+                chart.legend().enabled(true).fontSize(13).padding([0, 0, 20, 0]);
+
+                // interactivity settings and tooltip position
+                chart.interactivity().hoverMode('single');
+
+                chart
+                  .tooltip()
+                  .positionMode('point')
+                  .position('center-top')
+                  .anchor('center-bottom')
+                  .offsetX(0)
+                  .offsetY(5)
+                  .titleFormat('{%X}')
+                  .format('{%SeriesName} : {%Value}{groupsSeparator: }');
+
+                // set container id for the chart
+                chart.container('YearCharId');
+                chart.title("Yearly JIP Exceptions Records");
+                // initiate chart drawing
+                chart.draw();
+            };
+
+            //AnyChart For year Wise End
+
+            //AnyChart For Month Wise Start 
+          $scope.Monthchart = function () {
+              // create data set on our data
+
+              var chartData = {
+                  title: 'Monthly JIP Exceptions Records',
+                  header: ['#', 'Approved', 'Deny', 'Required More', 'Pending'],
+                  //Approve , Deny, RequiredMore, Pending
+                  rows: $scope.MonthChart
+              };
+
+              // create column chart
+              var chart = anychart.column();
+           
+              // set chart data
+              //chart.data(chartData);
+
+              var Approved_data = [];
+              $scope.MonthChart.forEach(function (element1, i1) {
+
+                  Approved_data.push([element1.Month, element1.Approved]);
+
+
+              });
+
+
+              var Deny_data = [];
+              $scope.MonthChart.forEach(function (element1, i1) {
+
+                  Deny_data.push([element1.Month, element1.Deny]);
+
+
+              });
+
+
+              var RequiredMore_data = [];
+              $scope.MonthChart.forEach(function (element1, i1) {
+
+                  RequiredMore_data.push([element1.Month, element1.RequiredMore]);
+
+
+              });
+
+
+              var Pending_data = [];
+              $scope.MonthChart.forEach(function (element1, i1) {
+
+                  Pending_data.push([element1.Month, element1.Pending]);
+
+
+              });
+
+              var setupSeriesLabels = function (series, name) {
+                  series.name(name).stroke('3 #fff 1');
+                  series.hovered().stroke('3 #fff 1');
+
+              };
+              var Useries1 = chart.column(Approved_data);
+              setupSeriesLabels(Useries1, 'Approved');
+              Useries1.fill('#00a172');
+
+
+              var Useries2 = chart.column(Deny_data);
+              setupSeriesLabels(Useries2, 'Deny');
+              Useries2.fill('#c51f41');
+
+              var Useries3 = chart.column(RequiredMore_data);
+              setupSeriesLabels(Useries3, 'Required More');
+              Useries3.fill('#ff7043');
+
+              var Useries4 = chart.column(Pending_data);
+              setupSeriesLabels(Useries4, 'Pending');
+              Useries4.fill('#013765');
+              // turn on chart animation
+              chart.animation(true);
+
+              chart.barsPadding(0.1);
+              chart.barGroupsPadding(0.2);
+
+              chart.yAxis().labels().format('{%Value}{groupsSeparator: }'); // Value on Left Side
+
+              // set titles for Y-axis
+              chart.yAxis().title('');
+
+              chart
+                .labels()
+                .enabled(true)
+                .position('center-top')
+                .anchor('center-bottom')
+                .format('{%Value}{groupsSeparator: }');// Showing value in Graph
+              chart.hovered().labels(false);
+
+              // turn on legend and tune it
+              chart.legend().enabled(true).fontSize(13).padding([0, 0, 20, 0]);
+
+              // interactivity settings and tooltip position
+              chart.interactivity().hoverMode('single');
+
+              chart
+                .tooltip()
+                .positionMode('point')
+                .position('center-top')
+                .anchor('center-bottom')
+                .offsetX(0)
+                .offsetY(5)
+              .padding(0)
+                .titleFormat('{%X}')
+                .format('{%SeriesName} : {%Value}{groupsSeparator: }');
+
+              // set container id for the chart
+              chart.container('MonthCharId');
+              chart.title("Monthly JIP Exceptions Records");
+              // initiate chart drawing
+              chart.draw();
+          };
+
+            //AnyChart For Month Wise End
+
+            //Test 
+          $scope.Durationchart=function ()
+          {
+              var chart = anychart.bar();
+              // create data set on our data
+              var Approved_data = [];
+              $scope.DChart.forEach(function (element1, i1) {
+
+                  Approved_data.push([element1.EType, element1.Operation]);
+
+
+              });
+
+
+              var Deny_data = [];
+              $scope.DChart.forEach(function (element1, i1) {
+
+                  Deny_data.push([element1.EType, element1.Approver]);
+
+
+              });
+
+
+              var RequiredMore_data = [];
+              $scope.DChart.forEach(function (element1, i1) {
+
+                  RequiredMore_data.push([element1.EType, element1.Study]);
+
+
+              });
+
+
+              var Pending_data = [];
+              $scope.DChart.forEach(function (element1, i1) {
+
+                  Pending_data.push([element1.EType, element1.Stering]);
+
+
+              });
+
+              var Decesion_data = [];
+              $scope.DChart.forEach(function (element1, i1) {
+
+                  Decesion_data.push([element1.EType, element1.Decision]);
+
+
+              });
+
+              //var Start_data = [];
+              //$scope.DChart.forEach(function (element1, i1) {
+
+              //    Start_data.push([element1.EType, element1.StartDate]);
+
+
+              //});
+            
+              //var End_data = [];
+              //$scope.DChart.forEach(function (element1, i1) {
+
+              //    End_data.push([element1.EType, element1.EndDate]);
+
+
+              //});
+             
+              var setupSeriesLabels = function (series, name) {
+                  series.name(name).stroke('3 #fff 1');
+                  series.hovered().stroke('3 #fff 1');
+
+              };
+              var Useries1 = chart.bar(Approved_data);
+              setupSeriesLabels(Useries1, 'Operations');
+              Useries1.fill('#00a172');
+
+
+              var Useries2 = chart.bar(Deny_data);
+              setupSeriesLabels(Useries2, 'Operation Approver');
+              Useries2.fill('#c51f41');
+
+              var Useries3 = chart.bar(RequiredMore_data);
+              setupSeriesLabels(Useries3, 'Study Committee');
+              Useries3.fill('#ff7043');
+              
+              var Useries4 = chart.bar(Decesion_data);
+              setupSeriesLabels(Useries4, 'Decision Committee');
+              Useries4.fill('#013765');
+
+              var Useries5 = chart.bar(Pending_data);
+              setupSeriesLabels(Useries5, 'Steering Committee');
+              Useries5.fill('#2e2925');
+              // create bar chart
+            
+
+              // turn on chart animation
+              chart.animation(true);
+
+              // force chart to stack values by Y scale.
+              chart.yScale().stackMode('percent');
+
+              // set container id for the chart
+              chart.container('DurationCharId');
+
+              // set yAxis labels formatting, force it to add % to values
+              chart.yAxis(0).labels().format(function (info) {
+                  return info.value + '%';
+              });
+
+              // helper function to setup label settings for all series
+              var setupSeriesLabels = function (series, name) {
+                  series.name(name);
+                  series.tooltip().valuePrefix('$');
+                  series.stroke('3 #fff 1');
+                  series.hovered().stroke('3 #fff 1');
+              };
+
+              chart.title("Duration Record (HH.MM Formate)");
+            
+
+              // turn on legend
+              chart.legend().enabled(true).fontSize(14).padding([0, 0, 15, 0]);
+              chart.interactivity().hoverMode('by-x');
+              chart.tooltip().displayMode('union');
+              // initiate chart drawing
+              chart.draw();
+             
+          }
+        }]); // Main Controler Bracket End

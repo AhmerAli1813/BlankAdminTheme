@@ -1,0 +1,299 @@
+﻿
+@{
+    ViewBag.Title = "DIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .badgeFontSm
+    {
+        font-size: xx-small;
+    width: 90px;
+        padding: 0.6125rem .375rem!important;
+    }
+      .truncate {
+              overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+     width: 99px;
+    word-break: break-all;
+}
+      label,tbody,.btn{
+          font-weight: 500!important;
+      }
+
+
+
+</style>
+<script src="~/Scripts/DatePicker/jquery.min.js"></script>
+<link href="~/Scripts/DatePicker/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/Scripts/DatePicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/DatePicker/bootstrap-datepicker.js"></script>
+
+<link href="~/Content/css/PaganationStyleSheetCustom.css" rel="stylesheet" />
+<div ng-controller="JIPCtrl" ng-init="Dinit()">
+    <div class="page-header border-bottom-0">
+        <div class="page-header-content header-elements-md-inline">
+            <div class="page-title d-flex">
+                <h4>
+                    <i class="icon-stats-growth mr-2"></i>
+                    <span class="font-weight-semibold">JIP Exception Status</span>
+
+                </h4>
+            </div>
+            <input type="button" class="btn btn-secondary mt-3 pull-right" value="Filters" data-toggle="collapse" data-target="#demo" />
+        </div>
+    </div>
+    <hr />
+    <!-- /page header -->
+    <!--Search Filter Code Start-->
+    <div class="col-md-12 collapse" id="demo">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Reference No</label>
+                    <input type="text" class="form-control" id="RefNo" placeholder="Reference No" ng-model="search.RefNo" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Vessel Name</label>
+                    <input type="text" class="form-control"  id="VesselName" placeholder="Vessel Name" ng-model="search.VesselName" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Select Exception Type</label>
+                    <select data-placeholder="Select Type" id="SelectExc" class="form-control select-clear" ng-model="search.EType">
+                        <option></option>
+                        <option value="BERTH">Berth Exception</option>
+                        <option value="GMPH">GMPH Exception</option>
+                        <option value="WGMPH">WGMPH Exception</option>
+                    </select>
+                </div>
+            </div>
+            @if (User.IsInRole("Operations") || User.IsInRole("OperationApprover") || User.IsInRole("Admin"))
+            {
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select data-placeholder="Select Stage" id="SelectSt" class="form-control select-clear" ng-model="search.stage">
+                            <option></option>
+                            <option ng-repeat="Stages in ExceptionStages"  value="{{Stages.StageName}}">{{Stages.StageName}}</option>
+                        </select>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Stage</label>
+                        <select data-placeholder="Select Stage" id="SelectStage" class="form-control select-clear" ng-model="search.stage">
+                            <option></option>
+                            <option ng-repeat="Stages in ExceptionStages" ng-if="Stages.Id=='3'" value="{{Stages.StageName}}">{{Stages.StageName}}</option>
+                            <option ng-repeat="Stages in ExceptionStages" ng-if="Stages.Id=='4'" value="{{Stages.StageName}}">{{Stages.StageName}}</option>
+                            <option ng-repeat="Stages in ExceptionStages" ng-if="Stages.Id=='5'" value="{{Stages.StageName}}">{{Stages.StageName}}</option>
+                            @*<option value="Study Committee">Study Committee</option>
+                            <option value="Decision Committee">Decision Committee</option>
+                            <option value="Steering Committee">Steering Committee</option>*@
+                        </select>
+                    </div>
+                </div>
+            }
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Status</label>
+                    <select data-placeholder="Select Status"  id="ApprovalSelect" class="form-control select-clear" ng-model="search.status">
+                        <option></option>
+                        <option value="Approve">Approve</option>
+                        <option value="Required More Info">Required More</option>
+                        <option value="Deny">Deny</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+            </div>
+
+    
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Service</label>
+                    <input type="text" class="form-control" id="Service" placeholder="Service" ng-model="search.Service" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>From</label>
+                    @*<input type="date" class="form-control" placeholder="From" ng-model="data.FromDate" />*@
+                    <div id="sandbox-container">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="FromDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>To</label>
+                    @*<input type="date" class="form-control" placeholder="To" ng-model="data.ToDate" />*@
+                    <div id="sandbox-container">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="ToDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="button" class="btn btn-theme-gray pull-right  mt-3" value="Reset" ng-click="Reset()" />
+                    <input type="button" class="btn btn-primary mr-2 pull-right mt-3" value="Search" ng-click="DIndexSearch()" />
+                 </div>
+            </div>
+        </div>
+    </div>
+    <!--Search Filter Code End-->
+ 
+    <div class="row">
+        <div id="tblrep" class="card table-card scrollbar">
+            <table class="table datatable-show-all text-center" id="table-id">
+                <thead>
+                    <tr class="table-card-head">
+                        <th>SR#</th>
+                        <th>Reference No</th>
+                        <th>Sequence</th>
+                        <th>Vessel Name</th>
+                        <th>Exception Type</th>
+                        <th>Stage</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        @*<th>Explanation</th>
+                        <th>Justifications</th>*@
+                        <th>Service</th>
+                        <th>Created By</th>
+                        <th>Updated By</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>PilotOnBoard</th>
+                        <th>PilotStation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in ExceptionListOperationUser | filter:search">
+                        <td>{{$index+1}}</td>
+
+                        <td>{{item.RefNo}}</td>
+                        <td>{{item.Sequence}}</td>
+                        <td>{{item.VesselName}}</td>
+                        <td>{{item.EType}}</td>
+                        <td>{{item.stage}}</td>
+                        <td>
+                            <span ng-if="item.statuscode == 'Pending'" class="badge badge-info">{{item.status}}</span>
+                            <span ng-if="item.statuscode == 'Approve'" class="badge badge-success">{{item.status}}</span>
+                            <span ng-if="item.statuscode == 'Deny'" class="badge badge-danger">{{item.status}}</span>
+                           <div class="btn-group" ng-if="item.statuscode == 'Required More'" >
+                               <span class="badge badge-warning badgeFontSm">{{item.status}}</span>
+                           </div>
+                        </td>
+                        <td>
+                            <div class="list-icons">
+                                <a class="list-icons-item  cursor-pointer" ng-click="ViewHref(item.Id)" @*href="/Reports/ExceptionPrint?Id={{item.Id}}"*@>
+                                    <i class="icon-eye" title="View"></i>
+                                </a>
+                                <a ng-click="PrintHref(item.Id)" @*href="/Reports/ExceptionPrint?Id={{item.Id}}&Print={{true}}"*@ class=" list-icons-item"><i class="icon-printer" title="Print"></i></a>
+                                <a ng-click="PdfHref(item.Id)" @*href="/Reports/PdfExceptionPrint?Id={{item.Id}}"*@ class=" list-icons-"><i class="icon-file-pdf" title="PDF"></i></a>
+                                <a class="icon-stats-growth cursor-pointer " title="Exception Status Tracking" ng-click="StatusTrackHref(item.Id)" @*href="/Reports/JIPStatusTracking?Id={{item.Id}}"*@>
+
+                                </a>
+                                <a ng-click="ExcelHref(item.Id)" @*href="/Reports/DownloadJIPExcel?id={{item.id}}"*@ class="list-icons-item "><i class="icon-file-excel" title="Excel"></i></a>
+                             </div>
+                        </td>
+                        @*<td><div class="truncate">
+                            {{item.Explanation}}</div></td>
+                        <td><div class="truncate">{{item.Justifications}}</div></td>*@
+                        <td>{{item.Service}}</td>
+                        <td>{{item.CreatedBy}}</td>
+                        <td>{{item.UpdatedBy}}</td>
+                        <td>{{item.CreatedAt |date:'dd-MMM-yyyy h:mm:ss a'}}</td>
+                        <td>{{item.UpdatedAt |date:'dd-MMM-yyyy h:mm:ss a'}}</td>
+                        <td>{{item.PilotOnBoard |date:'dd-MMM-yyyy HH:mm:ss'}}</td>
+                        <td>{{item.PilotStation |date:'dd-MMM-yyyy HH:mm:ss'}}</td>
+                        @*<td>
+                                <span ng-if="item.Status == true" class="badge badge-success">Active</span>
+                                <span ng-if="item.Status != true" class="badge badge-danger">NotActive</span>
+                            </td>*@
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+                @*<i class="list-icons icon-spinner11 my-float"></i>*@
+            
+            <button ng-click="LoadMore('DIndex')" ng-show="floatButton" class="float btn btn-primary pull-right">Load More</button>
+            
+        </div>
+        
+    </div>
+    <!--pagination Code Start-->
+    <div class="row">
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Select Rows</label>
+                <select data-placeholder="Select Rows" name="state" id="maxRows" class="form-control select-clear" data-fouc>
+                    <option></option>
+                    <option value="5000">All Rows</option>
+                    <option value="4">4</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="70">70</option>
+                    <option value="100">100</option>
+
+                </select>
+            </div>
+        </div>
+        <div class='pagination-container' style="position: absolute;
+    right: 25px;">
+            <nav>
+                <ul class="pagination">
+
+                    <li data-page="prev">
+                        <span> < <span class="sr-only">(current)</span></span>
+                    </li>
+                    <!--	Here the JS Function Will Add the Rows -->
+                    <li data-page="next" id="prev">
+                        <span> > <span class="sr-only">(current)</span></span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!--pagination Code End-->
+</div> <!--Ng-Controller Div End-->
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+<script>
+    $('#sandbox-container .input-group.date').datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+        forceParse: true,
+    });
+</script>
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/PaganationScriptCustom.js"></script>
+<script>
+
+    $(document).ready(function () {
+        getPagination('#table-id');
+
+    });
+
+        window.onload = function () {
+            document.getElementById('minisidebar').className = 'sidebar-xs';
+        };
+
+
+</script>

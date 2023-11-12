@@ -1,0 +1,189 @@
+﻿
+@{
+    ViewBag.Title = "History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <script src="~/Scripts/DatePicker/jquery.min.js"></script>
+    <link href="~/Scripts/DatePicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Scripts/DatePicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+    <script src="~/Scripts/DatePicker/bootstrap-datepicker.js"></script>
+</head>
+
+<style>
+    td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+   
+    tr {
+        transition: 0.5s;
+    }
+
+        tr:hover {
+            background-color: lightgray;
+        }
+</style>
+
+<link href="~/Content/css/PaganationStyleSheetCustom.css" rel="stylesheet" />
+<div class="page-header border-bottom-0">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4><i class="icon-details mr-2"></i> <span class="font-weight-semibold"><i class="icon-file-text"></i>&nbsp; Form Update History</span></h4>
+
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+
+                <input type="button" class="btn btn-secondary  m-t-19 pull-right" value="Filters" data-toggle="collapse" data-target="#demo" />
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+<hr />
+<div ng-controller="VesselOpsCtr" ng-init="History()">
+    
+    <!--Search Filter Code Start-->
+    <div class="collapse" id="demo">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="form-group">
+
+                    <span style="font-weight:bold;">Search Vessel</span>
+                    <br />
+                    @*<input type="text" class="form-control" placeholder="Enter Visit Number" ng-model="search.Visit_id" />*@
+                    <input type="search" placeholder="Search" ng-model="search" class="form-control search-input" data-table="customers-list" />
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span style="font-weight:bold;">From</span>
+                    @*<input type="date" class="form-control" ng-model="Filter.DateFrom"  placeholder="From" />*@
+                    <div id="sandbox-container">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="FromDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span style="font-weight:bold;">To</span>
+                    @*<input type="date" class="form-control" ng-model="Filter.Dateto"  placeholder="To" />*@
+                    <div id="sandbox-container">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="ToDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="button" class="btn btn-secondary col-md-4 ml-3 mt-3" value="Search" ng-click="VAFFilter('DocUpdate')" />
+
+                    <input type="button" class="btn btn-secondary col-md-4 ml-3 mt-3" value="Reset" ng-click="Reset()" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--Search Filter Code End-->
+    <!-- Basic datatable -->
+    <div class="row">
+        <div class="card table-card scrollbar">
+            <table class="table datatable-show-all" id="table-id">
+                <thead>
+                    <tr class="table-card-head" style="text-align:center;height:50px;">
+                        <th>S.no</th>
+
+                        <th>Visit Id</th>
+                        <th>Form Name</th>
+                        <th>Form Image</th>
+                        
+                        <th>Form Remarks</th>
+                        @*<th>Submitted At</th>
+                        <th>Submitted By</th>*@
+                        <th>Updated At</th>
+                        <th>Updated By</th>
+                        @*<th>Remarks</th>*@
+                   
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="a in History | filter :search" @*ng-if="user.UserType!=2 && user.UserType!=3"*@ style="height:50px;">
+                        <td>{{$index+1}}</td>
+                        <td>{{a.Visit_id}}</td>
+                        <td>{{a.FormName}}</td>
+                        <td><a href="{{a.Image}}" target="_blank"><img src="{{a.Image}}" height="40px" /></a></td>
+
+                        <td>{{a.FormRemarks }}</td>
+
+                        @*<td>{{a.CreatedAt | date}}</td>
+                        <td>{{a.CreatedBy}}</td>*@
+                        <td>{{a.UpdatedAt| date :'dd/MM/yyyy HH:mm'}}</td>
+                        <td>{{a.UpdatedBy}}</td>
+                        @*<td ng-if="a.Remarks==null">-</td>
+                        <td ng-if="a.Remarks!=null">{{a.Remarks}}</td>*@
+
+        
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <!--pagination Code Start-->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <span>Select Rows</span>
+                <select data-placeholder="Select Rows" name="state" id="maxRows" class="form-control select-clear" data-fouc>
+                    <option></option>
+                    <option value="5000">All Rows</option>
+                    <option value="4">4</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="70">70</option>
+                    <option value="100">100</option>
+
+                </select>
+            </div>
+        </div>
+        <div class='pagination-container' style="position: absolute;
+    right: 25px;">
+            <nav>
+                <ul class="pagination">
+
+                    <li data-page="prev">
+                        <span> < <span class="sr-only">(current)</span></span>
+                    </li>
+                    <!--	Here the JS Function Will Add the Rows -->
+                    <li data-page="next" id="prev">
+                        <span> > <span class="sr-only">(current)</span></span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!--pagination Code End-->
+</div>
+<script src="~/Scripts/DatePicker/CustomIntilizeJS.js"></script>
+
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/PaganationScriptCustom.js"></script>
+<script>
+
+    $(document).ready(function () {
+        getPagination('#table-id');
+
+    });
+</script>

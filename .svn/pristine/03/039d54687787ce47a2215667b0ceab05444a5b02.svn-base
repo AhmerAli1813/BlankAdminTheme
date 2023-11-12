@@ -1,0 +1,258 @@
+﻿
+@model DPWVessel.Model.Features.DWH.GetCranesListResponse
+@{
+    ViewBag.Title = "DWHVesselPrint";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <title>DWH Crane Details Print</title>
+    <link rel="icon" type="~/Content/images/favicon.ico" sizes="16x16" href="~/Content/images/favicon.ico">
+    <style>
+     @@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
+
+        .heading-print {
+            color: black;
+            font-weight: bold;
+            margin: 0px;
+        }
+
+        * {
+            font-family: 'Lato', sans-serif;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        table {
+            width: 100%;
+            box-sizing: border-box;
+            border-collapse: collapse;
+            margin: 15px 0px;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        td, th {
+            padding: 10px !important;
+            border: 1px solid #191919;
+        }
+           .badge {
+             width: auto !important;
+                display: inline-block;
+                color:white;
+    padding: 0.3125rem 0.585rem;
+    font-size: auto;/*75%;*/
+    font-weight: bolder;
+    line-height: 1.3;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .125rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+
+        }
+
+     .badge-success {
+    color: #fff;
+    background-color: #28a745;
+}
+.badge-danger {
+    color: #fff;
+   background-color: #c51f41!important;
+}
+.badge-warning {
+    color: #fff;
+    background-color: #ff7043!important;
+}
+.badge-info {
+    color: #fff;
+    background-color: #013765!important;
+}
+ 
+        .badge-Completed {
+            /*background-color: #2cb97c!important;*/
+            background-color: #6c757d !important;
+            text-transform: uppercase;
+        }
+
+        .badge-InProgress {
+            background-color: #65becc !important;
+            text-transform: uppercase;
+        }
+
+        .badge-OverDue {
+            background-color: red !important;
+            text-transform: uppercase;
+        }
+
+        .badge-News {
+            background-color: #c776aa !important;
+            text-transform: uppercase;
+        }
+
+        .badge-Closed {
+            background-color: #463d32 !important;
+            text-transform: uppercase;
+        }
+
+        .badge-standby {
+            background-color: rgba(59, 85, 96, 0.7);
+            color: white;
+        }
+
+        .badge-Rejected {
+            background-color: #dc3545 !important;
+            text-transform: uppercase;
+        }
+
+   
+
+        img {
+            height: 70px;
+            border: none;
+        }
+
+     
+
+        .HeaderTr {
+            background: #f3f3f3;
+        }
+
+        @@media print {
+            table {
+                width: 100%;
+                box-sizing: border-box;
+                border-collapse: collapse;
+                margin: 15px 0px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <table>
+        <tr class="HeaderTr">
+            <td class="text-center">
+                <img src="~/Content/images/dpworldlogo.png" />
+            </td>
+            <td colspan="3">
+                <h1 class="text-center heading-print">
+                    DWH Crane Report
+                </h1>
+            </td>
+            <td colspan="3">
+                <table>
+                    <tr>
+                        <th>
+                            @*@if (Model.Print == true)*@
+                            <span>Print</span> Date
+                        </th>
+                        <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @*@if (Model.Print == true)*@
+                            <span>Print</span> Time
+                        </th>
+                        <td>@DateTime.Now.ToString("HH:mm")</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr class="HeaderTr">
+            <th>Reference No</th>
+            <td>@Model.VesselCraneList.FirstOrDefault().RefNo</td>
+            <th>Vessel Name</th>
+            <td>@Model.VesselName</td>
+            <th>Status</th>
+            <td>
+                <div>
+                    @if (Model.StatusCode == "invalid")
+                    {
+                        <span class="badge badge-danger"> @Model.Status</span>
+
+                    }
+                    @if (Model.StatusCode == "valid")
+                    {
+                        <span class="badge badge-success"> @Model.Status </span>
+                    }
+                    @if (Model.StatusCode == "cntrO")
+                    {
+                        <span class="badge badge-warning"> @Model.Status </span>
+                    }
+                    @if (Model.StatusCode == "cntrF")
+                    {
+                        <span class="badge badge-info"> @Model.Status </span>
+                    }
+                </div>
+           
+
+            </td>
+        </tr>
+    </table>
+    @{
+        int x = 0;
+    }
+
+    @foreach (var item in Model.VesselCraneList)
+            {
+                {
+                    x++;
+                }
+        <table>
+            <tr>
+                <th>Sr #</th>
+                <td>@x</td>
+                <th>Crane No</th>
+                <td>@item.ShortName</td>
+                <th>Crane Hrs</th>
+                <td> @item.CraneHrs</td>
+                <th>Status</th>
+                <td>
+                  <div>
+                      @if (item.StatusCode == "invalid")
+                      {
+                          <span class="badge badge-danger"> @item.Status</span>
+                      }
+                      else
+                      {
+                          <span class="badge badge-success"> @item.Status </span>
+                      }
+                  </div>
+                </td>
+            </tr>
+            @foreach (var item2 in item.CraneDelayHrsList)
+            {
+                <tr>
+                    <th>Code</th>
+                    <td>@item2.DelayHrsCode</td>
+                    <th>Delay Hrs</th>
+                    <td>@item2.DelayHrs</td>
+                    <th>Description</th>
+                    <td colspan="4">@item2.Description</td>
+                </tr>
+            }
+        </table>
+    }
+</body>
+</html>
+
+
+
+
+<script>
+    window.print();
+</script>
+
+
+
+

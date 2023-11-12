@@ -1,0 +1,148 @@
+﻿@using DPWVessel.Model.Resources
+@using System;
+@using System.Text.RegularExpressions;
+@{
+    Layout = null;
+    //Func <string> ab= ("a")=>"a";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="icon" type="image/favicon.png" sizes="16x16" href="~/Content/images/favicon.png">
+    <title>Report</title>
+    <meta name="viewport" content="width=device-width" />
+    <link href="@Url.Content("~/Content/css/libs/bootstrap/bootstrap.min.css")" rel="stylesheet">
+    <style>
+    .org-logo img{width: 100px; height: 100px; margin-right: 5px;}
+    img{vertical-align: middle; border-style: none;}
+    *{outline: none;}
+    *, ::after, ::before{box-sizing: border-box;}
+    .card-body ul{padding-left: 0;}
+    .org-logo label{color: #444; font-size: 18px; text-transform: uppercase;}
+    li{list-style: none;}
+    html{min-height: 100%; position: relative;}
+    table{width: 100%;}
+    tbody{display:table-row-group;}
+    tfoot{display:table-footer-group;}
+    .mainTable{min-height:100%;}
+    .header{margin-bottom: 15px; width: 100%;  display:table-header-group;}
+    .header tr th{padding: 0 35px; font-size: 30px;}
+    .header tr th img{display: block; width: 150px; margin: 10px 0 0 auto; margin-bottom: 5px;}
+    .header tr th .actionBtns{text-align:right; display:block; margin-top:10px}
+    .footer{width: 100%; left: 0; right: 0; bottom: 0;}
+    .footer label{display: block; text-align: center; font-size: 13px;}
+    .footer hr{margin: 5px 0; border: 1px solid #000;}
+    .clear{clear: both; float: none !important;}
+    .text-align-center{text-align: center !important;}
+    .text-align-right{text-align: right !important;}
+    .print-view{padding-bottom: 60px;}
+    .print-view .title{text-align: center; font-size: 20px;text-decoration: underline;}
+    .info{border-bottom: 1px solid #e0e0e0; display: flex; margin-bottom: 10px;}
+    .info span{display: inline-block; width: 25%; padding: 20px; flex: 0 0 25%;}
+    .info span label {display: block;}
+    .info span label:first-child {font-weight: bold;}
+    .table th{font-size:18px;}
+    .table td{font-size:18px;}
+    @@media print{
+        @@page {size: portrait}
+        .actionBtns{display:none!important;}
+        .footer{position: fixed; bottom: 0;}
+        tr.tr-title th{padding:0}
+        tr.tr-title th h3{background-color: #dee2e6; margin:0; padding:10px 15px; font-size:20px}
+        .col-md-7{flex: 0 0 58.333333%;max-width: 58.333333%;}
+        .col-md-5{flex: 0 0 41.666667%;max-width: 41.666667%;}
+    }
+    .table td img{width:160px;height:160px;margin:2px 2px 3px 2px;}
+    /*custom bootstrap start*/
+    /*custom bootstrap end*/
+    /*Report css start*/
+    .badge {
+            color: #fff;
+        }
+
+        .badge-New {
+            background-color: #28a745;
+        }
+
+        .badge-Closed {
+            background-color: #444;
+        }
+
+        .badge-InProgress {
+            background-color: #f7941d;
+        }
+
+        .badge-Rejected {
+            background-color: #ef5350;
+        }
+    tr.victum-info td{padding: 0;}
+    tr.victum-info td label{border-bottom: 1px solid #dee2e6; display: block; padding:10px; margin-bottom: 0;}
+    tr.victum-info td label p{margin-bottom:0}
+    tr.victum-info td label span{width: 30%; display: inline-block;}
+    tr.victum-info td label input{display: inline-block; width: 69%;}
+    tr.victum-info td.acc-type label span{display: inline-block; width: 49%;}
+    tr.victum-info td.acc-type label textarea{display: block; width: 100%; height: 63px !important;}
+    tr.tr-title th{padding:0}
+    tr.tr-title th h3{background-color: #dee2e6; margin:0; padding:10px 15px; font-size:30px}
+    .signature{height:80px}
+    .report-table tbody tr.tr-title td {color: #000;}
+    /*Report css end*/
+    </style>
+</head>
+<body>
+    @helper TicketTypeChange(string name)
+    {
+            var a = Regex.Split(name, @"(?<!^)(?=[A-Z])");                
+            <b>@a[0] @a[1]</b>
+            
+    }
+
+
+    <table class="mainTable">
+        <thead class="header">
+
+            <tr>
+                <th>
+                    @if (Model.TicketType == "CCTV")
+                    {
+                        <b>@Model.TicketType</b>
+                    }
+                    else if (Model.TicketType == "Snapshot")
+                    {
+                        <b>@Model.TicketType</b>
+                    }
+                    else
+                    {
+                        @TicketTypeChange(Model.TicketType)
+                    }
+                </th>
+                @*<th>
+                    <img src="../Content/images/DPWVessel.png" />
+                </th>*@
+                <th>
+                    <img style="height:100px; width:100px;" src="@Model.OrganizationLogo" />
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @RenderBody()
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    <div class="footer">
+                        <hr />
+                        <label>DPWVessel is a trademark in safety world. &emsp; &emsp;  &emsp;  &emsp; &emsp; Report Generated Date and time @Model.ReportTime</label>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>
+<script>
+    
+    window.print();
+</script>

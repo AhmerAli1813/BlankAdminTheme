@@ -1,0 +1,19 @@
+﻿using DE.Infrastructure.Concept;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DPWVessel.Model.Features.Account
+{
+    public class AllowWebAccess:IRequest<AllowWebAccessResponse>
+    {
+        public string Id { get; set; }
+        public bool Role { get; set; }
+    }
+
+    public class AllowWebAccessResponse:Response
+    {
+    }
+}

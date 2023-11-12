@@ -1,0 +1,421 @@
+﻿
+@{
+    ViewBag.Title = "StagingData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <script src="~/Scripts/DatePicker/jquery.min.js"></script>
+    <link href="~/Scripts/DatePicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Scripts/DatePicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+    <script src="~/Scripts/DatePicker/bootstrap-datepicker.js"></script>
+</head>
+<style>
+    .pagination {
+        display: inline-block;
+        padding-left: 0;
+        margin: 20px 0;
+        border-radius: 4px;
+    }
+
+        .pagination > li {
+            display: inline;
+        }
+
+    .nav {
+        display: block;
+    }
+
+    .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+        z-index: 2;
+        color: #fff;
+        cursor: default;
+        background-color: #013765;
+        border-color: #013765;
+    }
+
+    .pagination > li > span:hover {
+        color: lightgrey;
+        cursor: grab;
+    }
+
+    .pagination > li > a, .pagination > li > span {
+        position: relative;
+        float: left;
+        padding: 6px 12px;
+        margin-left: -1px;
+        line-height: 1.428571429;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .pagination > li:first-child > span {
+        margin-left: 0;
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+    }
+
+    .customOption {
+        width: auto;
+        display: initial;
+        margin-left: 15px;
+        border: 2px solid #bdc3c7;
+        color: #34495e;
+        font-family: Lato,Helvetica,Arial,sans-serif;
+        font-size: 15px;
+        line-height: 1.467;
+        padding: 8px 12px;
+        height: 42px;
+        -webkit-appearance: listitem;
+        border-radius: 6px;
+        margin-bottom: 10px;
+    }
+
+    td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    tr td:nth-child(2) {
+        text-align: left;
+    }
+
+    tr {
+        transition: 0.5s;
+    }
+
+        tr:hover {
+            background-color: lightgrey;
+        }
+    .text-right {
+        text-align: right !important;
+        position: relative;
+        top: -56px;
+        right: 12px;
+    }
+</style>
+
+
+<div class="page-header border-bottom-0">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4><i class="icon-details mr-2"></i> <span class="font-weight-semibold"><i class="icon-stack-text"></i>&nbsp;Approve Data</span></h4>
+
+        </div>
+
+
+        <div class="col-md-6">
+            <div class="form-group">
+             
+                <input type="button" class="btn btn-secondary  m-t-19 pull-right" value="Filters" data-toggle="collapse" data-target="#demo" />
+
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+
+<div ng-controller="VesselOpsCtr" ng-init="Staging_init()">
+
+
+    <!--Search Filter Code Start-->
+    <div class="collapse" id="demo">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="form-group">
+
+                    <span style="font-weight:bold;">Search Vessel</span>
+                    <br />
+                    @*<input type="text" class="form-control" placeholder="Enter Visit Number" ng-model="search.Visit_id" />*@
+                    <input type="search" placeholder="Search" id="SearchVessel" ng-model="search" class="form-control search-input" data-table="customers-list" />
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span style="font-weight:bold;">From</span>
+                    @*<input type="date" class="form-control" ng-model="Filter.DateFrom"  placeholder="From" />*@
+                    <div id="sandbox-container">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="FromDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span style="font-weight:bold;">To</span>
+                    @*<input type="date" class="form-control" ng-model="Filter.Dateto"  placeholder="To" />*@
+                    <div id="sandbox-container">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="ToDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="button" class="btn btn-secondary col-md-4 ml-3 mt-3" value="Search" ng-click="VAFFilter('Staging')" />
+
+                    <input type="button" class="btn btn-theme-gray col-md-4 ml-3 mt-3" value="Reset" ng-click="Reset()" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--Search Filter Code End-->
+    
+
+    <div class="card table-card scrollbar">
+
+        <table class="table datatable-show-all customers-list" id="table-id">
+            <thead>
+                <tr class="table-card-head" style="text-align:center;height:50px;">
+                    <th>S.No</th>
+
+                    <th>Visit Id-Vessel Name</th>
+                    <th>Column Name</th>
+                    <th>Updated Value</th>
+                    <th>Created At</th>
+                    <th>Created By</th>
+                    @*<th>Updated At</th>
+                    <th>Updated By</th>*@
+                
+                    <th width="13%">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="a in Stagingobj | filter :search" @*ng-if="user.UserType!=2 && user.UserType!=3"*@ style="height:50px;">
+                    <td>{{$index+1}}</td>
+                    
+                    <td>{{a.VisitRefNo}}</td>
+
+                    <td ng-if="a.ColumnName=='pilot_on_board'">Pilot boarded</td>
+                    <td ng-if="a.ColumnName=='Quarentine_arrived_AP'">Quarantine arrived at PORT</td>
+                    <td ng-if="a.ColumnName=='Quarentine_boarded_OV'">Quarantine boarded on Vessel</td>
+                    <td ng-if="a.ColumnName=='Quarentine_disembark_FV'">Quarantine disembark from Vessel</td>
+                    <td ng-if="a.ColumnName=='Custom_arrived_port'">Custom arrived at PORT </td>
+                    <td ng-if="a.ColumnName=='Custom_borded_Vessel'">Custom boarded on Vessel</td>
+                    <td ng-if="a.ColumnName=='Custom_disembark_FV'">Custom disembark from Vessel</td>
+                    <td ng-if="a.ColumnName=='Coastguard_arrived_AP'">Coastguard arrived at PORT</td>
+                    <td ng-if="a.ColumnName=='Coastguard_boarded_OV'">Coastguard boarded on Vessel</td>
+                    <td ng-if="a.ColumnName=='Coastguard_disembark_FV'">Coastguard disembark from Vessel</td>
+                    <td ng-if="a.ColumnName=='flex_string08'">Next port arrival</td>
+                    <td ng-if="a.ColumnName=='flex_string07'">Last port departed </td>
+                    <td ng-if="a.ColumnName=='flex_date04'">First Rope Secured Time</td>
+                    <td ng-if="a.ColumnName=='flex_date05'">Last Rope Secured Time </td>
+                    <td ng-if="a.ColumnName=='Vessel_Secure_alongside'">Vessel secure at alongside </td>
+                    <td ng-if="a.ColumnName=='flex_date02'">Gangway Secured</td>
+                    <td ng-if="a.ColumnName=='pilot_off_board'">PILOT Disembark </td>
+                    <td ng-if="a.ColumnName=='Lashing_Gang_on_board'">Lashing Gang Onboard </td>
+                    <td ng-if="a.ColumnName=='Gang_on_board_PAC'">Gang boarded on vessel prior authority clearance</td>
+                    <td ng-if="a.ColumnName=='start_work'">Gang boarded on vessel prior authority clearance</td>
+                    <td ng-if="a.ColumnName=='end_work'">Gang boarded on vessel prior authority clearance</td>
+
+
+                    <td>{{a.Value}}</td>
+
+                    <td>{{a.CreatedAt | date :'dd/MM/yyyy HH:mm'}}</td>
+                    <td>{{a.CreatedBy}}</td>
+
+                    @*<td>{{a.UpdatedAt | date :'medium'}}</td>
+                    <td>{{a.UpdatedBy}}</td>*@
+
+
+                    <td>
+                        <div class="list-icons">
+                            @if (!User.IsInRole("Operations"))
+                            {
+                                <div class="custom-control custom-checkbox mb-2" style="font-size: 14px;">
+                                    <input type="checkbox" ng-model="a.Checked" class="custom-control-input" id="cc_ls_c{{$index}}" ng-click="AddApproved(a,$index)" >
+                                    <label class="custom-control-label" for="cc_ls_c{{$index}}" style="color:#00946B;">Approve</label>
+                                </div>
+
+
+
+
+                            }
+
+                          
+
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+      
+
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <span style="font-weight:bold;">Select Rows</span>
+                <select data-placeholder="Select Rows" name="state" id="maxRows" class="form-control select-clear" data-fouc>
+                    <option></option>
+                    <option value="5000">All Rows</option>
+                    <option value="4">4</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="70">70</option>
+                    <option value="100">100</option>
+
+                </select>
+            </div>
+        </div>
+        <div class='pagination-container' style="position: absolute;
+    right: 25px;">
+            <nav>
+                <ul class="pagination">
+
+                    <li data-page="prev">
+                        <span> < <span class="sr-only">(current)</span></span>
+                    </li>
+                    <!--	Here the JS Function Will Add the Rows -->
+                    <li data-page="next" id="prev">
+                        <span> > <span class="sr-only">(current)</span></span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    @*<button   class="btn btn-primary pull-right" style="width: 115px;
+    font-size: 15px;">
+        Approve
+    </button>*@
+    <div class="text-right" ng-if="StagingApproved.length>0">
+        <button type="button" class="btn btn-primary" ng-click="UpdateStagingdata(StagingApproved)">Approved <i class="icon-paperplane ml-2"></i></button>
+    </div>
+
+
+</div>
+<script src="~/Scripts/DatePicker/CustomIntilizeJS.js"></script>
+
+<script src="~/Scripts/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        getPagination('#table-id');
+
+    });
+    function getPagination(table) {
+
+        var lastPage = 1;
+
+        $('#maxRows').on('change', function (evt) {
+            //$('.paginationprev').html('');						// reset pagination
+
+
+            lastPage = 1;
+            $('.pagination').find("li").slice(1, -1).remove();
+            var trnum = 0;									// reset tr counter
+            var maxRows = parseInt($(this).val());			// get Max Rows from select option
+
+            if (maxRows == 5000) {
+
+                $('.pagination').hide();
+            } else {
+
+                $('.pagination').show();
+            }
+
+            var totalRows = $(table + ' tbody tr').length;		// numbers of rows
+            $(table + ' tr:gt(0)').each(function () {			// each TR in  table and not the header
+                trnum++;									// Start Counter
+                if (trnum > maxRows) {						// if tr number gt maxRows
+
+                    $(this).hide();							// fade it out
+                } if (trnum <= maxRows) { $(this).show(); }// else fade in Important in case if it ..
+            });											//  was fade out to fade it in
+            if (totalRows > maxRows) {						// if tr total rows gt max rows option
+                var pagenum = Math.ceil(totalRows / maxRows);	// ceil total(rows/maxrows) to get ..
+                //	numbers of pages
+                for (var i = 1; i <= pagenum;) {			// for each page append pagination li
+                    $('.pagination #prev').before('<li data-page="' + i + '">\
+								      <span>'+ i++ + '<span class="sr-only">(current)</span></span>\
+								    </li>').show();
+                }											// end for i
+            } 												// end if row count > max rows
+            $('.pagination [data-page="1"]').addClass('active'); // add active class to the first li
+            $('.pagination li').on('click', function (evt) {		// on click each page
+                evt.stopImmediatePropagation();
+                evt.preventDefault();
+                var pageNum = $(this).attr('data-page');	// get it's number
+
+                var maxRows = parseInt($('#maxRows').val());			// get Max Rows from select option
+
+                if (pageNum == "prev") {
+                    if (lastPage == 1) { return; }
+                    pageNum = --lastPage;
+                }
+                if (pageNum == "next") {
+                    if (lastPage == ($('.pagination li').length - 2)) { return; }
+                    pageNum = ++lastPage;
+                }
+
+                lastPage = pageNum;
+                var trIndex = 0;							// reset tr counter
+                $('.pagination li').removeClass('active');	// remove active class from all li
+                $('.pagination [data-page="' + lastPage + '"]').addClass('active');// add active class to the clicked
+                // $(this).addClass('active');					// add active class to the clicked
+                $(table + ' tr:gt(0)').each(function () {		// each tr in table not the header
+                    trIndex++;								// tr index counter
+                    // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+                    if (trIndex > (maxRows * pageNum) || trIndex <= ((maxRows * pageNum) - maxRows)) {
+                        $(this).hide();
+                    } else { $(this).show(); } 				//else fade in
+                }); 										// end of for each tr in table
+            });										// end of on click pagination list
+
+        }).val(5000).change();
+
+        // end of on select change
+
+
+
+        // END OF PAGINATION
+    }
+
+        (function(document) {
+            'use strict';
+
+            var TableFilter = (function(myArray) {
+                var search_input;
+
+                function _onInputSearch(e) {
+                    search_input = e.target;
+                    var tables = document.getElementsByClassName(search_input.getAttribute('data-table'));
+                    myArray.forEach.call(tables, function(table) {
+                        myArray.forEach.call(table.tBodies, function(tbody) {
+                            myArray.forEach.call(tbody.rows, function(row) {
+                                var text_content = row.textContent.toLowerCase();
+                                var search_val = search_input.value.toLowerCase();
+                                row.style.display = text_content.indexOf(search_val) > -1 ? '' : 'none';
+                            });
+                        });
+                    });
+                }
+
+                return {
+                    init: function() {
+                        var inputs = document.getElementsByClassName('search-input');
+                        myArray.forEach.call(inputs, function(input) {
+                            input.oninput = _onInputSearch;
+                        });
+                    }
+                };
+            })(Array.prototype);
+
+            document.addEventListener('readystatechange', function() {
+                if (document.readyState === 'complete') {
+                    TableFilter.init();
+                }
+            });
+
+        })(document);
+</script>
+

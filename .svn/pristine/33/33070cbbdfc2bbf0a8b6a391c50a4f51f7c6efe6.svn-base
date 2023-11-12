@@ -1,0 +1,727 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="sparcsn4Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ref_crane_delay_types">
+    <Key>
+      <PropertyRef Name="gkey" />
+    </Key>
+    <Property Name="gkey" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id" Type="nvarchar" MaxLength="12" Nullable="false" />
+    <Property Name="description" Type="nvarchar" MaxLength="255" />
+    <Property Name="sparcs_code" Type="nvarchar" MaxLength="12" Nullable="false" />
+    <Property Name="reference_set" Type="bigint" Nullable="false" />
+    <Property Name="is_dispatch_stopped" Type="bit" />
+    <Property Name="is_for_shift" Type="bit" />
+    <Property Name="is_for_queue" Type="bit" />
+    <Property Name="is_for_n4rdt" Type="bit" />
+    <Property Name="is_stopped_by_new_work" Type="bit" />
+    <Property Name="is_stops_at_endtime" Type="bit" />
+    <Property Name="default_duration" Type="bigint" />
+    <Property Name="delay_category" Type="nvarchar" MaxLength="255" />
+    <Property Name="created" Type="datetime" />
+    <Property Name="creator" Type="nvarchar" MaxLength="30" />
+    <Property Name="changed" Type="datetime" />
+    <Property Name="changer" Type="nvarchar" MaxLength="30" />
+    <Property Name="life_cycle_state" Type="nvarchar" MaxLength="3" Nullable="false" />
+  </EntityType>
+  <EntityType Name="vsl_vessel_berthings">
+    <Key>
+      <PropertyRef Name="gkey" />
+    </Key>
+    <Property Name="gkey" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="seq" Type="bigint" Nullable="false" />
+    <Property Name="vvd_gkey" Type="bigint" />
+    <Property Name="quay" Type="bigint" Nullable="false" />
+    <Property Name="shift_time" Type="datetime" />
+    <Property Name="arr_fwd_draft_cm" Type="bigint" />
+    <Property Name="arr_aft_draft_cm" Type="bigint" />
+    <Property Name="dep_fwd_draft_cm" Type="bigint" />
+    <Property Name="dep_aft_draft_cm" Type="bigint" />
+    <Property Name="ship_side_to" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="created" Type="datetime" />
+    <Property Name="creator" Type="nvarchar" MaxLength="30" />
+    <Property Name="changed" Type="datetime" />
+    <Property Name="changer" Type="nvarchar" MaxLength="30" />
+    <Property Name="gm" Type="bigint" />
+    <Property Name="mean_draft_cm" Type="bigint" />
+    <Property Name="trim_cm" Type="bigint" />
+    <Property Name="gantry_count" Type="bigint" />
+    <Property Name="berth_location_cm" Type="bigint" />
+    <Property Name="estimated_loads" Type="bigint" />
+    <Property Name="estimated_discharges" Type="bigint" />
+    <Property Name="ingress_vertex" Type="bigint" />
+    <Property Name="egress_vertex" Type="bigint" />
+    <Property Name="receive_status" Type="nvarchar" MaxLength="3" />
+    <Property Name="distance_from_dock_cm" Type="bigint" />
+    <Property Name="slip_fold_cm" Type="bigint" />
+    <Property Name="slip_width_cm" Type="bigint" />
+    <Property Name="strategy_ref" Type="bigint" />
+    <Property Name="call_type" Type="bigint" />
+    <Property Name="call_slave_id" Type="bigint" />
+    <Property Name="call_remarks" Type="nvarchar" MaxLength="60" />
+    <Property Name="bollard_aft" Type="nvarchar" MaxLength="5" />
+    <Property Name="bollard_fore" Type="nvarchar" MaxLength="5" />
+    <Property Name="bollard_aft_offset" Type="nvarchar" MaxLength="10" />
+    <Property Name="bollard_fore_offset" Type="nvarchar" MaxLength="10" />
+    <Property Name="estimated_other_moves" Type="bigint" />
+    <Property Name="discharge_seals_checked" Type="bit" />
+    <Property Name="load_seals_checked" Type="bit" />
+    <Property Name="berth_alloc_status" Type="nvarchar" MaxLength="10" />
+    <Property Name="eta" Type="datetime" />
+    <Property Name="etd" Type="datetime" />
+    <Property Name="ata" Type="datetime" />
+    <Property Name="atd" Type="datetime" />
+    <Property Name="cargo_cutoff" Type="datetime" />
+    <Property Name="start_work" Type="datetime" />
+    <Property Name="stop_work" Type="datetime" />
+    <Property Name="time_begin_receive" Type="datetime" />
+    <Property Name="pos_loctype" Type="nvarchar" MaxLength="16" Nullable="false" />
+    <Property Name="pos_locid" Type="nvarchar" MaxLength="16" />
+    <Property Name="pos_loc_gkey" Type="bigint" />
+    <Property Name="pos_slot" Type="nvarchar" MaxLength="16" />
+    <Property Name="pos_orientation" Type="nvarchar" MaxLength="6" />
+    <Property Name="pos_name" Type="nvarchar" MaxLength="42" />
+    <Property Name="ops_pos_id" Type="nvarchar" MaxLength="80" />
+    <Property Name="pos_bin" Type="bigint" />
+    <Property Name="pos_tier" Type="bigint" />
+    <Property Name="pos_anchor" Type="geometry" />
+    <Property Name="pos_orientation_degrees" Type="float" />
+    <Property Name="pos_slot_on_carriage" Type="nvarchar" MaxLength="16" />
+    <Property Name="CUSTDFF_BOWPOS" Type="bigint" />
+    <Property Name="CUSTDFF_VSLINSCHEDULE" Type="bit" />
+    <Property Name="CUSTDFF_MAWANIWINDOW" Type="nvarchar" MaxLength="100" />
+    <Property Name="CUSTDFF_WINDOWHRS" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="vsl_vessel_visit_details">
+    <Key>
+      <PropertyRef Name="vvd_gkey" />
+    </Key>
+    <Property Name="vvd_gkey" Type="bigint" Nullable="false" />
+    <Property Name="bizu_gkey" Type="bigint" Nullable="false" />
+    <Property Name="vessel_gkey" Type="bigint" Nullable="false" />
+    <Property Name="ib_vyg" Type="nvarchar" MaxLength="17" />
+    <Property Name="ob_vyg" Type="nvarchar" MaxLength="17" />
+    <Property Name="stacking_strategy" Type="nvarchar" MaxLength="10" />
+    <Property Name="is_dray_off" Type="bit" Nullable="false" />
+    <Property Name="notes" Type="nvarchar" MaxLength="50" />
+    <Property Name="in_customs_voy_nbr" Type="nvarchar" MaxLength="16" />
+    <Property Name="out_customs_voy_nbr" Type="nvarchar" MaxLength="16" />
+    <Property Name="is_no_client_access" Type="bit" Nullable="false" />
+    <Property Name="is_common_carrier" Type="bit" Nullable="false" />
+    <Property Name="published_eta" Type="datetime" />
+    <Property Name="published_etd" Type="datetime" />
+    <Property Name="begin_receive" Type="datetime" />
+    <Property Name="empty_pickup" Type="datetime" />
+    <Property Name="cargo_cutoff" Type="datetime" />
+    <Property Name="haz_cutoff" Type="datetime" />
+    <Property Name="reefer_cutoff" Type="datetime" />
+    <Property Name="labor_on_board" Type="datetime" />
+    <Property Name="labor_off_board" Type="datetime" />
+    <Property Name="off_port_arr" Type="datetime" />
+    <Property Name="off_port_dep" Type="datetime" />
+    <Property Name="pilot_on_board" Type="datetime" />
+    <Property Name="pilot_off_board" Type="datetime" />
+    <Property Name="start_work" Type="datetime" />
+    <Property Name="end_work" Type="datetime" />
+    <Property Name="in_ves_captain" Type="nvarchar" MaxLength="35" />
+    <Property Name="out_ves_captain" Type="nvarchar" MaxLength="35" />
+    <Property Name="export_mnft_nbr" Type="nvarchar" MaxLength="30" />
+    <Property Name="import_mnft_nbr" Type="nvarchar" MaxLength="30" />
+    <Property Name="import_mnft_date" Type="datetime" />
+    <Property Name="export_mnft_date" Type="datetime" />
+    <Property Name="classification" Type="nvarchar" MaxLength="255" />
+    <Property Name="flex_string01" Type="nvarchar" MaxLength="255" />
+    <Property Name="flex_string02" Type="nvarchar" MaxLength="255" />
+    <Property Name="flex_string03" Type="nvarchar" MaxLength="255" />
+    <Property Name="flex_string04" Type="nvarchar" MaxLength="255" />
+    <Property Name="flex_string05" Type="nvarchar" MaxLength="255" />
+    <Property Name="flex_string06" Type="nvarchar" MaxLength="255" />
+    <Property Name="flex_string07" Type="nvarchar" MaxLength="255" />
+    <Property Name="flex_string08" Type="nvarchar" MaxLength="255" />
+    <Property Name="flex_date01" Type="datetime" />
+    <Property Name="flex_date02" Type="datetime" />
+    <Property Name="flex_date03" Type="datetime" />
+    <Property Name="flex_date04" Type="datetime" />
+    <Property Name="flex_date05" Type="datetime" />
+    <Property Name="flex_date06" Type="datetime" />
+    <Property Name="flex_date07" Type="datetime" />
+    <Property Name="flex_date08" Type="datetime" />
+    <Property Name="est_load" Type="bigint" />
+    <Property Name="est_discharge" Type="bigint" />
+    <Property Name="est_restow" Type="bigint" />
+    <Property Name="est_shift" Type="bigint" />
+    <Property Name="est_bbk_load" Type="bigint" />
+    <Property Name="est_bbk_discharge" Type="bigint" />
+    <Property Name="CUSTDFF_HATCHCOVERMOVES" Type="bigint" />
+    <Property Name="CUSTDFF_ETB" Type="datetime" />
+    <Property Name="CUSTDFF_ARRREMARKS" Type="nvarchar" MaxLength="50" />
+    <Property Name="CUSTDFF_DEPREMARKS" Type="nvarchar" MaxLength="50" />
+    <Property Name="CUSTDFF_CRANEDENSITY" Type="float" />
+    <Property Name="CUSTDFF_CRANEINTENSITY" Type="float" />
+    <Property Name="CUSTDFF_FIVEHIGHMOVE" Type="bigint" />
+    <Property Name="CUSTDFF_FIVEHIGHLOAD" Type="bigint" />
+    <Property Name="CUSTDFF_DUALCYCLE" Type="bigint" />
+    <Property Name="CUSTDFF_VESSELCAPACITY" Type="bigint" />
+    <Property Name="CUSTDFF_MAWANIREMARKS" Type="nvarchar" MaxLength="50" />
+    <Property Name="CUSTDFF_PTD" Type="datetime" />
+  </EntityType>
+  <EntityType Name="vsl_vessels">
+    <Key>
+      <PropertyRef Name="gkey" />
+    </Key>
+    <Property Name="gkey" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="reference_set" Type="bigint" Nullable="false" />
+    <Property Name="id" Type="nvarchar" MaxLength="8" Nullable="false" />
+    <Property Name="lloyds_id" Type="nvarchar" MaxLength="8" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="35" Nullable="false" />
+    <Property Name="vesclass_gkey" Type="bigint" Nullable="false" />
+    <Property Name="owner_gkey" Type="bigint" Nullable="false" />
+    <Property Name="ves_captain" Type="nvarchar" MaxLength="35" />
+    <Property Name="radio_call_sign" Type="nvarchar" MaxLength="10" />
+    <Property Name="country_code" Type="nvarchar" MaxLength="2" />
+    <Property Name="is_active" Type="bit" Nullable="false" />
+    <Property Name="unit_system" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="temperature_unit" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="notes" Type="nvarchar" MaxLength="100" />
+    <Property Name="created" Type="datetime" />
+    <Property Name="creator" Type="nvarchar" MaxLength="30" />
+    <Property Name="changed" Type="datetime" />
+    <Property Name="changer" Type="nvarchar" MaxLength="30" />
+    <Property Name="stowage_scheme" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="documentation_nbr" Type="nvarchar" MaxLength="10" />
+    <Property Name="service_registry_nbr" Type="nvarchar" MaxLength="10" />
+    <Property Name="life_cycle_state" Type="nvarchar" MaxLength="3" Nullable="false" />
+    <Property Name="CUSTDFF_VSLCAPACITY" Type="bigint" />
+    <Property Name="CUSTDFF_EMAIL" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'sparcsn4.dbo.Datawarehouse_Container' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Datawarehouse_Container">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="category" />
+      <PropertyRef Name="gkey" />
+      <PropertyRef Name="cv_gkey" />
+      <PropertyRef Name="declrd_ib_cv" />
+      <PropertyRef Name="restow_typ" />
+      <PropertyRef Name="hndlg_rsn" />
+      <PropertyRef Name="tare_kg" />
+      <PropertyRef Name="nominal_length" />
+      <PropertyRef Name="opr" />
+      <PropertyRef Name="requires_power" />
+      <PropertyRef Name="freight_kind" />
+      <PropertyRef Name="LineOpr" />
+      <PropertyRef Name="nominal_height" />
+      <PropertyRef Name="unit_gkey" />
+    </Key>
+    <Property Name="id" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Cntr" Type="nvarchar" MaxLength="30" />
+    <Property Name="category" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="goods_and_ctr_wt_kg" Type="float" />
+    <Property Name="gkey" Type="bigint" Nullable="false" />
+    <Property Name="cv_gkey" Type="bigint" Nullable="false" />
+    <Property Name="declrd_ib_cv" Type="bigint" Nullable="false" />
+    <Property Name="restow_typ" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="hndlg_rsn" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="tare_kg" Type="float" Nullable="false" />
+    <Property Name="goods_ctr_wt_kg_vgm" Type="float" />
+    <Property Name="move_kind" Type="nvarchar" MaxLength="255" />
+    <Property Name="nominal_length" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="fetchTime" Type="datetime" />
+    <Property Name="PutTime" Type="datetime" />
+    <Property Name="transit_state" Type="nvarchar" MaxLength="255" />
+    <Property Name="last_pos_slot" Type="nvarchar" MaxLength="16" />
+    <Property Name="opr" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="requires_power" Type="bit" Nullable="false" />
+    <Property Name="freight_kind" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="oprname" Type="nvarchar" MaxLength="80" />
+    <Property Name="LineOpr" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="LineOprName" Type="nvarchar" MaxLength="80" />
+    <Property Name="is_oog" Type="bit" />
+    <Property Name="is_bundle" Type="bit" />
+    <Property Name="relationship_role" Type="nvarchar" MaxLength="255" />
+    <Property Name="nominal_height" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="time_in" Type="datetime" />
+    <Property Name="time_out" Type="datetime" />
+    <Property Name="unit_gkey" Type="bigint" Nullable="false" />
+    <Property Name="paid_thru_day" Type="datetime" />
+    <Property Name="CUSTDFF_EMPTY_RETURN_DAYS" Type="nvarchar" MaxLength="255" />
+    <Property Name="CUSTDFF_IMPORT_DLVRY_DAYS" Type="nvarchar" MaxLength="255" />
+    <Property Name="CUSTDFF_MT_RETURN_LOC" Type="nvarchar" MaxLength="255" />
+    <Property Name="CUSTDFF_VALIDITY_DT_IMPR_DLVRY" Type="nvarchar" MaxLength="100" />
+    <Property Name="CUSTDFF_VALIDTITY_MT_RETURN" Type="nvarchar" MaxLength="100" />
+    <Property Name="CUSTDFF_BROKERNAME" Type="nvarchar" MaxLength="255" />
+    <Property Name="CUSTDFF_BROKERNO" Type="bigint" />
+    <Property Name="CUSTDFF_DECLARATIONTYPE" Type="bigint" />
+    <Property Name="CUSTDFF_DLVRYORDERNO" Type="bigint" />
+    <Property Name="oog_back_cm" Type="bigint" />
+    <Property Name="oog_front_cm" Type="bigint" />
+    <Property Name="oog_left_cm" Type="bigint" />
+    <Property Name="oog_right_cm" Type="bigint" />
+    <Property Name="oog_top_cm" Type="bigint" />
+    <Property Name="damage" Type="nvarchar" MaxLength="255" />
+    <Property Name="commodity" Type="nvarchar" MaxLength="255" />
+    <Property Name="destination" Type="nvarchar" MaxLength="30" />
+    <Property Name="hazardous" Type="bit" />
+    <Property Name="imdg_types" Type="nvarchar" MaxLength="100" />
+    <Property Name="hazard_un_nums" Type="nvarchar" MaxLength="15" />
+    <Property Name="bl_nbr" Type="nvarchar" MaxLength="35" />
+    <Property Name="temp_max_C" Type="float" />
+    <Property Name="temp_min_C" Type="float" />
+    <Property Name="temp_reqd_C" Type="float" />
+    <Property Name="CUSTDFF_COMMODITYGRP" Type="nvarchar" MaxLength="100" />
+    <Property Name="ISO" Type="nvarchar" MaxLength="6" />
+    <Property Name="Origin" Type="nvarchar" MaxLength="5" />
+    <Property Name="Shipper" Type="nvarchar" MaxLength="80" />
+    <Property Name="Consignee" Type="nvarchar" MaxLength="80" />
+    <Property Name="IsTransit" Type="nvarchar" MaxLength="255" />
+    <Property Name="LoadBroker" Type="nvarchar" MaxLength="255" />
+    <Property Name="CustomStatus" Type="nvarchar" MaxLength="255" />
+    <Property Name="ITTTo" Type="nvarchar" MaxLength="255" />
+    <Property Name="IsFreeZone" Type="nvarchar" MaxLength="255" />
+    <Property Name="ReinspReason" Type="nvarchar" MaxLength="255" />
+    <Property Name="LoadPermitNo" Type="nvarchar" MaxLength="255" />
+    <Property Name="ITTFrom" Type="nvarchar" MaxLength="255" />
+    <Property Name="CustomInspType" Type="nvarchar" MaxLength="255" />
+    <Property Name="ISN" Type="nvarchar" MaxLength="255" />
+    <Property Name="BayanNo" Type="nvarchar" MaxLength="255" />
+    <Property Name="DocRefNo" Type="nvarchar" MaxLength="255" />
+    <Property Name="AEO" Type="nvarchar" MaxLength="255" />
+    <Property Name="AppShift" Type="nvarchar" MaxLength="255" />
+    <Property Name="TransportedTo" Type="nvarchar" MaxLength="255" />
+    <Property Name="InspStages" Type="nvarchar" MaxLength="255" />
+    <Property Name="XrayStatus" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'sparcsn4.dbo.VOR_VesselVisit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VOR_VesselVisit">
+    <Key>
+      <PropertyRef Name="phase" />
+      <PropertyRef Name="Visit_RefNo" />
+      <PropertyRef Name="LineOperatorCode" />
+      <PropertyRef Name="Vessel_Length" />
+      <PropertyRef Name="bollard_aft" />
+      <PropertyRef Name="bollard_fore" />
+      <PropertyRef Name="carrier_mode" />
+      <PropertyRef Name="L20" />
+      <PropertyRef Name="L40" />
+      <PropertyRef Name="L45" />
+      <PropertyRef Name="D20" />
+      <PropertyRef Name="D40" />
+      <PropertyRef Name="D45" />
+      <PropertyRef Name="bizu_gkey" />
+      <PropertyRef Name="argo_career_visit_gkey" />
+      <PropertyRef Name="visit_details_gkey" />
+    </Key>
+    <Property Name="phase" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="Visit_RefNo" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="vsl_vessels_Name" Type="nvarchar" MaxLength="35" />
+    <Property Name="SailDirection" Type="nvarchar" MaxLength="16" />
+    <Property Name="pos_slot" Type="nvarchar" MaxLength="16" />
+    <Property Name="LineOperatorCode" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="LineOperatorName" Type="nvarchar" MaxLength="80" />
+    <Property Name="Vessel_Berthings_ETD" Type="datetime" />
+    <Property Name="Vessel_Length" Type="bigint" Nullable="false" />
+    <Property Name="bollard_aft" Type="nvarchar" MaxLength="5" Nullable="false" />
+    <Property Name="bollard_fore" Type="nvarchar" MaxLength="5" Nullable="false" />
+    <Property Name="BowPosition" Type="nvarchar" MaxLength="1" />
+    <Property Name="Bound" Type="nvarchar" MaxLength="16" />
+    <Property Name="Vessel_Berthings_ETA" Type="datetime" />
+    <Property Name="Vessel_Berthings_ATA" Type="datetime" />
+    <Property Name="arr_aft_draft_cm" Type="bigint" />
+    <Property Name="Vessel_Berthings_ATD" Type="datetime" />
+    <Property Name="Vessel_Berthings_PosName" Type="nvarchar" MaxLength="42" />
+    <Property Name="ib_vyg" Type="nvarchar" MaxLength="17" />
+    <Property Name="ob_vyg" Type="nvarchar" MaxLength="17" />
+    <Property Name="carrier_mode" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="vsl_vessels_IsActive" Type="bit" />
+    <Property Name="VS_Class_ID" Type="nvarchar" MaxLength="8" />
+    <Property Name="VS_Class_Name" Type="nvarchar" MaxLength="35" />
+    <Property Name="TotalMoves" Type="int" />
+    <Property Name="L20" Type="int" Nullable="false" />
+    <Property Name="L40" Type="int" Nullable="false" />
+    <Property Name="L45" Type="int" Nullable="false" />
+    <Property Name="D20" Type="int" Nullable="false" />
+    <Property Name="D40" Type="int" Nullable="false" />
+    <Property Name="D45" Type="int" Nullable="false" />
+    <Property Name="BerthAfter" Type="numeric" Precision="17" Scale="6" />
+    <Property Name="VslOpsHrs" Type="numeric" Precision="17" Scale="6" />
+    <Property Name="ETA_DHrs" Type="numeric" Precision="17" Scale="6" />
+    <Property Name="VslCode" Type="nvarchar" MaxLength="8" />
+    <Property Name="LOA" Type="numeric" Precision="26" Scale="6" />
+    <Property Name="off_port_arr" Type="datetime" />
+    <Property Name="start_work" Type="datetime" />
+    <Property Name="end_work" Type="datetime" />
+    <Property Name="VslClassification" Type="nvarchar" MaxLength="255" />
+    <Property Name="VslVistRemarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="ata" Type="datetime" />
+    <Property Name="atd" Type="datetime" />
+    <Property Name="labor_on_board" Type="datetime" />
+    <Property Name="pilot_on_board" Type="datetime" />
+    <Property Name="pilot_off_board" Type="datetime" />
+    <Property Name="FirstLineSecureDate" Type="datetime" />
+    <Property Name="LastLineSecureDate" Type="datetime" />
+    <Property Name="FirstLineReleaseDate" Type="datetime" />
+    <Property Name="LastLineReleaseDate" Type="datetime" />
+    <Property Name="bizu_gkey" Type="bigint" Nullable="false" />
+    <Property Name="radio_call_sign" Type="nvarchar" MaxLength="10" />
+    <Property Name="PreviousPort" Type="nvarchar" MaxLength="255" />
+    <Property Name="NextPort" Type="nvarchar" MaxLength="255" />
+    <Property Name="ETB" Type="datetime" />
+    <Property Name="Inwindow" Type="nvarchar" MaxLength="100" />
+    <Property Name="WindowHrs" Type="nvarchar" MaxLength="10" />
+    <Property Name="changed" Type="datetime" />
+    <Property Name="IMO" Type="nvarchar" MaxLength="8" />
+    <Property Name="berthings_gkey" Type="bigint" />
+    <Property Name="argo_career_visit_gkey" Type="bigint" Nullable="false" />
+    <Property Name="visit_details_gkey" Type="bigint" Nullable="false" />
+    <Property Name="Vessel_class_gkey" Type="bigint" />
+    <Property Name="vessels_gkey" Type="bigint" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'sparcsn4.dbo.VS_Agent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VS_Agent">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="LineOprCode" />
+      <PropertyRef Name="LineoprGkey" />
+      <PropertyRef Name="Ref" />
+    </Key>
+    <Property Name="Agent" Type="nvarchar" MaxLength="80" />
+    <Property Name="id" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="LineOprCode" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="LineOprName" Type="nvarchar" MaxLength="80" />
+    <Property Name="LineoprGkey" Type="bigint" Nullable="false" />
+    <Property Name="Ref" Type="nvarchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'sparcsn4.dbo.VS_FirstLastLift' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VS_FirstLastLift">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="short_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="CraneHrs" Type="numeric" Precision="17" Scale="6" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'sparcsn4.dbo.VS_HatchCover' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VS_HatchCover">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="HatchCoverMoves" Type="bigint" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'sparcsn4.dbo.VS_VesselVisit_Smry' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VS_VesselVisit_Smry">
+    <Key>
+      <PropertyRef Name="RefNo" />
+      <PropertyRef Name="LineOperatorCode" />
+      <PropertyRef Name="Vessel_Length" />
+      <PropertyRef Name="carrier_mode" />
+      <PropertyRef Name="SrvCode" />
+      <PropertyRef Name="SrvName" />
+    </Key>
+    <Property Name="RefNo" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="vslCode" Type="nvarchar" MaxLength="8" />
+    <Property Name="vsl_vessels_Name" Type="nvarchar" MaxLength="35" />
+    <Property Name="LineOperatorCode" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="LineOperatorName" Type="nvarchar" MaxLength="80" />
+    <Property Name="SailDirection" Type="nvarchar" MaxLength="16" />
+    <Property Name="pos_slot" Type="nvarchar" MaxLength="16" />
+    <Property Name="Vessel_Berthings_ETD" Type="datetime" />
+    <Property Name="Vessel_Length" Type="bigint" Nullable="false" />
+    <Property Name="Vessel_Berthings_PosName" Type="nvarchar" MaxLength="42" />
+    <Property Name="ib_vyg" Type="nvarchar" MaxLength="17" />
+    <Property Name="ob_vyg" Type="nvarchar" MaxLength="17" />
+    <Property Name="carrier_mode" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="VS_Class_ID" Type="nvarchar" MaxLength="8" />
+    <Property Name="VS_Class_Name" Type="nvarchar" MaxLength="35" />
+    <Property Name="VslOpsHrs" Type="numeric" Precision="17" Scale="6" />
+    <Property Name="Loa" Type="numeric" Precision="26" Scale="6" />
+    <Property Name="off_port_arr" Type="datetime" />
+    <Property Name="start_work" Type="datetime" />
+    <Property Name="end_work" Type="datetime" />
+    <Property Name="VslClassification" Type="nvarchar" MaxLength="255" />
+    <Property Name="VslVistRemarks" Type="nvarchar" MaxLength="50" />
+    <Property Name="ata" Type="datetime" />
+    <Property Name="atd" Type="datetime" />
+    <Property Name="pilot_on_board" Type="datetime" />
+    <Property Name="pilot_off_board" Type="datetime" />
+    <Property Name="DelayHrs" Type="numeric" Precision="38" Scale="11" />
+    <Property Name="BCDelays" Type="numeric" Precision="38" Scale="11" />
+    <Property Name="PortRotationNo" Type="nvarchar" MaxLength="255" />
+    <Property Name="BerthHrs" Type="numeric" Precision="17" Scale="6" />
+    <Property Name="PreviousPort" Type="nvarchar" MaxLength="255" />
+    <Property Name="NextPort" Type="nvarchar" MaxLength="255" />
+    <Property Name="CraneWorkHrs" Type="numeric" Precision="38" Scale="6" />
+    <Property Name="SrvCode" Type="nvarchar" MaxLength="16" Nullable="false" />
+    <Property Name="SrvName" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="lloyds_id" Type="nvarchar" MaxLength="8" />
+    <Property Name="CustomRorationNo" Type="nvarchar" MaxLength="7" />
+    <Property Name="ADelays" Type="numeric" Precision="38" Scale="11" />
+    <Property Name="BDelays" Type="numeric" Precision="38" Scale="11" />
+    <Property Name="CDelays" Type="numeric" Precision="38" Scale="11" />
+    <Property Name="CUSTDFF_VSLINSCHEDULE" Type="bit" />
+    <Property Name="time_discharge_complete" Type="datetime" />
+    <Property Name="TotalCranes" Type="int" />
+  </EntityType>
+  <Association Name="FK5AC9D1F5C1BC1DC2">
+    <End Role="vsl_vessels" Type="Self.vsl_vessels" Multiplicity="1" />
+    <End Role="vsl_vessel_visit_details" Type="Self.vsl_vessel_visit_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="vsl_vessels">
+        <PropertyRef Name="gkey" />
+      </Principal>
+      <Dependent Role="vsl_vessel_visit_details">
+        <PropertyRef Name="vessel_gkey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FKA64180BB53740873">
+    <End Role="vsl_vessel_visit_details" Type="Self.vsl_vessel_visit_details" Multiplicity="0..1" />
+    <End Role="vsl_vessel_berthings" Type="Self.vsl_vessel_berthings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="vsl_vessel_visit_details">
+        <PropertyRef Name="vvd_gkey" />
+      </Principal>
+      <Dependent Role="vsl_vessel_berthings">
+        <PropertyRef Name="vvd_gkey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="sparcsn4ModelStoreContainer">
+    <EntitySet Name="ref_crane_delay_types" EntityType="Self.ref_crane_delay_types" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vsl_vessel_berthings" EntityType="Self.vsl_vessel_berthings" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vsl_vessel_visit_details" EntityType="Self.vsl_vessel_visit_details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vsl_vessels" EntityType="Self.vsl_vessels" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Datawarehouse_Container" EntityType="Self.Datawarehouse_Container" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Datawarehouse_Container].[id] AS [id], 
+    [Datawarehouse_Container].[Cntr] AS [Cntr], 
+    [Datawarehouse_Container].[category] AS [category], 
+    [Datawarehouse_Container].[goods_and_ctr_wt_kg] AS [goods_and_ctr_wt_kg], 
+    [Datawarehouse_Container].[gkey] AS [gkey], 
+    [Datawarehouse_Container].[cv_gkey] AS [cv_gkey], 
+    [Datawarehouse_Container].[declrd_ib_cv] AS [declrd_ib_cv], 
+    [Datawarehouse_Container].[restow_typ] AS [restow_typ], 
+    [Datawarehouse_Container].[hndlg_rsn] AS [hndlg_rsn], 
+    [Datawarehouse_Container].[tare_kg] AS [tare_kg], 
+    [Datawarehouse_Container].[goods_ctr_wt_kg_vgm] AS [goods_ctr_wt_kg_vgm], 
+    [Datawarehouse_Container].[move_kind] AS [move_kind], 
+    [Datawarehouse_Container].[nominal_length] AS [nominal_length], 
+    [Datawarehouse_Container].[fetchTime] AS [fetchTime], 
+    [Datawarehouse_Container].[PutTime] AS [PutTime], 
+    [Datawarehouse_Container].[transit_state] AS [transit_state], 
+    [Datawarehouse_Container].[last_pos_slot] AS [last_pos_slot], 
+    [Datawarehouse_Container].[opr] AS [opr], 
+    [Datawarehouse_Container].[requires_power] AS [requires_power], 
+    [Datawarehouse_Container].[freight_kind] AS [freight_kind], 
+    [Datawarehouse_Container].[oprname] AS [oprname], 
+    [Datawarehouse_Container].[LineOpr] AS [LineOpr], 
+    [Datawarehouse_Container].[LineOprName] AS [LineOprName], 
+    [Datawarehouse_Container].[is_oog] AS [is_oog], 
+    [Datawarehouse_Container].[is_bundle] AS [is_bundle], 
+    [Datawarehouse_Container].[relationship_role] AS [relationship_role], 
+    [Datawarehouse_Container].[nominal_height] AS [nominal_height], 
+    [Datawarehouse_Container].[time_in] AS [time_in], 
+    [Datawarehouse_Container].[time_out] AS [time_out], 
+    [Datawarehouse_Container].[unit_gkey] AS [unit_gkey], 
+    [Datawarehouse_Container].[paid_thru_day] AS [paid_thru_day], 
+    [Datawarehouse_Container].[CUSTDFF_EMPTY_RETURN_DAYS] AS [CUSTDFF_EMPTY_RETURN_DAYS], 
+    [Datawarehouse_Container].[CUSTDFF_IMPORT_DLVRY_DAYS] AS [CUSTDFF_IMPORT_DLVRY_DAYS], 
+    [Datawarehouse_Container].[CUSTDFF_MT_RETURN_LOC] AS [CUSTDFF_MT_RETURN_LOC], 
+    [Datawarehouse_Container].[CUSTDFF_VALIDITY_DT_IMPR_DLVRY] AS [CUSTDFF_VALIDITY_DT_IMPR_DLVRY], 
+    [Datawarehouse_Container].[CUSTDFF_VALIDTITY_MT_RETURN] AS [CUSTDFF_VALIDTITY_MT_RETURN], 
+    [Datawarehouse_Container].[CUSTDFF_BROKERNAME] AS [CUSTDFF_BROKERNAME], 
+    [Datawarehouse_Container].[CUSTDFF_BROKERNO] AS [CUSTDFF_BROKERNO], 
+    [Datawarehouse_Container].[CUSTDFF_DECLARATIONTYPE] AS [CUSTDFF_DECLARATIONTYPE], 
+    [Datawarehouse_Container].[CUSTDFF_DLVRYORDERNO] AS [CUSTDFF_DLVRYORDERNO], 
+    [Datawarehouse_Container].[oog_back_cm] AS [oog_back_cm], 
+    [Datawarehouse_Container].[oog_front_cm] AS [oog_front_cm], 
+    [Datawarehouse_Container].[oog_left_cm] AS [oog_left_cm], 
+    [Datawarehouse_Container].[oog_right_cm] AS [oog_right_cm], 
+    [Datawarehouse_Container].[oog_top_cm] AS [oog_top_cm], 
+    [Datawarehouse_Container].[damage] AS [damage], 
+    [Datawarehouse_Container].[commodity] AS [commodity], 
+    [Datawarehouse_Container].[destination] AS [destination], 
+    [Datawarehouse_Container].[hazardous] AS [hazardous], 
+    [Datawarehouse_Container].[imdg_types] AS [imdg_types], 
+    [Datawarehouse_Container].[hazard_un_nums] AS [hazard_un_nums], 
+    [Datawarehouse_Container].[bl_nbr] AS [bl_nbr], 
+    [Datawarehouse_Container].[temp_max_C] AS [temp_max_C], 
+    [Datawarehouse_Container].[temp_min_C] AS [temp_min_C], 
+    [Datawarehouse_Container].[temp_reqd_C] AS [temp_reqd_C], 
+    [Datawarehouse_Container].[CUSTDFF_COMMODITYGRP] AS [CUSTDFF_COMMODITYGRP], 
+    [Datawarehouse_Container].[ISO] AS [ISO], 
+    [Datawarehouse_Container].[Origin] AS [Origin], 
+    [Datawarehouse_Container].[Shipper] AS [Shipper], 
+    [Datawarehouse_Container].[Consignee] AS [Consignee], 
+    [Datawarehouse_Container].[IsTransit] AS [IsTransit], 
+    [Datawarehouse_Container].[LoadBroker] AS [LoadBroker], 
+    [Datawarehouse_Container].[CustomStatus] AS [CustomStatus], 
+    [Datawarehouse_Container].[ITTTo] AS [ITTTo], 
+    [Datawarehouse_Container].[IsFreeZone] AS [IsFreeZone], 
+    [Datawarehouse_Container].[ReinspReason] AS [ReinspReason], 
+    [Datawarehouse_Container].[LoadPermitNo] AS [LoadPermitNo], 
+    [Datawarehouse_Container].[ITTFrom] AS [ITTFrom], 
+    [Datawarehouse_Container].[CustomInspType] AS [CustomInspType], 
+    [Datawarehouse_Container].[ISN] AS [ISN], 
+    [Datawarehouse_Container].[BayanNo] AS [BayanNo], 
+    [Datawarehouse_Container].[DocRefNo] AS [DocRefNo], 
+    [Datawarehouse_Container].[AEO] AS [AEO], 
+    [Datawarehouse_Container].[AppShift] AS [AppShift], 
+    [Datawarehouse_Container].[TransportedTo] AS [TransportedTo], 
+    [Datawarehouse_Container].[InspStages] AS [InspStages], 
+    [Datawarehouse_Container].[XrayStatus] AS [XrayStatus]
+    FROM [dbo].[Datawarehouse_Container] AS [Datawarehouse_Container]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="VOR_VesselVisit" EntityType="Self.VOR_VesselVisit" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VOR_VesselVisit].[phase] AS [phase], 
+    [VOR_VesselVisit].[Visit_RefNo] AS [Visit_RefNo], 
+    [VOR_VesselVisit].[vsl_vessels_Name] AS [vsl_vessels_Name], 
+    [VOR_VesselVisit].[SailDirection] AS [SailDirection], 
+    [VOR_VesselVisit].[pos_slot] AS [pos_slot], 
+    [VOR_VesselVisit].[LineOperatorCode] AS [LineOperatorCode], 
+    [VOR_VesselVisit].[LineOperatorName] AS [LineOperatorName], 
+    [VOR_VesselVisit].[Vessel_Berthings_ETD] AS [Vessel_Berthings_ETD], 
+    [VOR_VesselVisit].[Vessel_Length] AS [Vessel_Length], 
+    [VOR_VesselVisit].[bollard_aft] AS [bollard_aft], 
+    [VOR_VesselVisit].[bollard_fore] AS [bollard_fore], 
+    [VOR_VesselVisit].[BowPosition] AS [BowPosition], 
+    [VOR_VesselVisit].[Bound] AS [Bound], 
+    [VOR_VesselVisit].[Vessel_Berthings_ETA] AS [Vessel_Berthings_ETA], 
+    [VOR_VesselVisit].[Vessel_Berthings_ATA] AS [Vessel_Berthings_ATA], 
+    [VOR_VesselVisit].[arr_aft_draft_cm] AS [arr_aft_draft_cm], 
+    [VOR_VesselVisit].[Vessel_Berthings_ATD] AS [Vessel_Berthings_ATD], 
+    [VOR_VesselVisit].[Vessel_Berthings_PosName] AS [Vessel_Berthings_PosName], 
+    [VOR_VesselVisit].[ib_vyg] AS [ib_vyg], 
+    [VOR_VesselVisit].[ob_vyg] AS [ob_vyg], 
+    [VOR_VesselVisit].[carrier_mode] AS [carrier_mode], 
+    [VOR_VesselVisit].[vsl_vessels_IsActive] AS [vsl_vessels_IsActive], 
+    [VOR_VesselVisit].[VS_Class_ID] AS [VS_Class_ID], 
+    [VOR_VesselVisit].[VS_Class_Name] AS [VS_Class_Name], 
+    [VOR_VesselVisit].[TotalMoves] AS [TotalMoves], 
+    [VOR_VesselVisit].[L20] AS [L20], 
+    [VOR_VesselVisit].[L40] AS [L40], 
+    [VOR_VesselVisit].[L45] AS [L45], 
+    [VOR_VesselVisit].[D20] AS [D20], 
+    [VOR_VesselVisit].[D40] AS [D40], 
+    [VOR_VesselVisit].[D45] AS [D45], 
+    [VOR_VesselVisit].[BerthAfter] AS [BerthAfter], 
+    [VOR_VesselVisit].[VslOpsHrs] AS [VslOpsHrs], 
+    [VOR_VesselVisit].[ETA_DHrs] AS [ETA_DHrs], 
+    [VOR_VesselVisit].[VslCode] AS [VslCode], 
+    [VOR_VesselVisit].[LOA] AS [LOA], 
+    [VOR_VesselVisit].[off_port_arr] AS [off_port_arr], 
+    [VOR_VesselVisit].[start_work] AS [start_work], 
+    [VOR_VesselVisit].[end_work] AS [end_work], 
+    [VOR_VesselVisit].[VslClassification] AS [VslClassification], 
+    [VOR_VesselVisit].[VslVistRemarks] AS [VslVistRemarks], 
+    [VOR_VesselVisit].[ata] AS [ata], 
+    [VOR_VesselVisit].[atd] AS [atd], 
+    [VOR_VesselVisit].[labor_on_board] AS [labor_on_board], 
+    [VOR_VesselVisit].[pilot_on_board] AS [pilot_on_board], 
+    [VOR_VesselVisit].[pilot_off_board] AS [pilot_off_board], 
+    [VOR_VesselVisit].[FirstLineSecureDate] AS [FirstLineSecureDate], 
+    [VOR_VesselVisit].[LastLineSecureDate] AS [LastLineSecureDate], 
+    [VOR_VesselVisit].[FirstLineReleaseDate] AS [FirstLineReleaseDate], 
+    [VOR_VesselVisit].[LastLineReleaseDate] AS [LastLineReleaseDate], 
+    [VOR_VesselVisit].[bizu_gkey] AS [bizu_gkey], 
+    [VOR_VesselVisit].[radio_call_sign] AS [radio_call_sign], 
+    [VOR_VesselVisit].[PreviousPort] AS [PreviousPort], 
+    [VOR_VesselVisit].[NextPort] AS [NextPort], 
+    [VOR_VesselVisit].[ETB] AS [ETB], 
+    [VOR_VesselVisit].[Inwindow] AS [Inwindow], 
+    [VOR_VesselVisit].[WindowHrs] AS [WindowHrs], 
+    [VOR_VesselVisit].[changed] AS [changed], 
+    [VOR_VesselVisit].[IMO] AS [IMO], 
+    [VOR_VesselVisit].[berthings_gkey] AS [berthings_gkey], 
+    [VOR_VesselVisit].[argo_career_visit_gkey] AS [argo_career_visit_gkey], 
+    [VOR_VesselVisit].[visit_details_gkey] AS [visit_details_gkey], 
+    [VOR_VesselVisit].[Vessel_class_gkey] AS [Vessel_class_gkey], 
+    [VOR_VesselVisit].[vessels_gkey] AS [vessels_gkey]
+    FROM [dbo].[VOR_VesselVisit] AS [VOR_VesselVisit]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="VS_Agent" EntityType="Self.VS_Agent" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VS_Agent].[Agent] AS [Agent], 
+    [VS_Agent].[id] AS [id], 
+    [VS_Agent].[LineOprCode] AS [LineOprCode], 
+    [VS_Agent].[LineOprName] AS [LineOprName], 
+    [VS_Agent].[LineoprGkey] AS [LineoprGkey], 
+    [VS_Agent].[Ref] AS [Ref]
+    FROM [dbo].[VS_Agent] AS [VS_Agent]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="VS_FirstLastLift" EntityType="Self.VS_FirstLastLift" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VS_FirstLastLift].[id] AS [id], 
+    [VS_FirstLastLift].[short_name] AS [short_name], 
+    [VS_FirstLastLift].[CraneHrs] AS [CraneHrs]
+    FROM [dbo].[VS_FirstLastLift] AS [VS_FirstLastLift]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="VS_HatchCover" EntityType="Self.VS_HatchCover" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VS_HatchCover].[id] AS [id], 
+    [VS_HatchCover].[HatchCoverMoves] AS [HatchCoverMoves]
+    FROM [dbo].[VS_HatchCover] AS [VS_HatchCover]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="VS_VesselVisit_Smry" EntityType="Self.VS_VesselVisit_Smry" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VS_VesselVisit_Smry].[RefNo] AS [RefNo], 
+    [VS_VesselVisit_Smry].[vslCode] AS [vslCode], 
+    [VS_VesselVisit_Smry].[vsl_vessels_Name] AS [vsl_vessels_Name], 
+    [VS_VesselVisit_Smry].[LineOperatorCode] AS [LineOperatorCode], 
+    [VS_VesselVisit_Smry].[LineOperatorName] AS [LineOperatorName], 
+    [VS_VesselVisit_Smry].[SailDirection] AS [SailDirection], 
+    [VS_VesselVisit_Smry].[pos_slot] AS [pos_slot], 
+    [VS_VesselVisit_Smry].[Vessel_Berthings_ETD] AS [Vessel_Berthings_ETD], 
+    [VS_VesselVisit_Smry].[Vessel_Length] AS [Vessel_Length], 
+    [VS_VesselVisit_Smry].[Vessel_Berthings_PosName] AS [Vessel_Berthings_PosName], 
+    [VS_VesselVisit_Smry].[ib_vyg] AS [ib_vyg], 
+    [VS_VesselVisit_Smry].[ob_vyg] AS [ob_vyg], 
+    [VS_VesselVisit_Smry].[carrier_mode] AS [carrier_mode], 
+    [VS_VesselVisit_Smry].[VS_Class_ID] AS [VS_Class_ID], 
+    [VS_VesselVisit_Smry].[VS_Class_Name] AS [VS_Class_Name], 
+    [VS_VesselVisit_Smry].[VslOpsHrs] AS [VslOpsHrs], 
+    [VS_VesselVisit_Smry].[Loa] AS [Loa], 
+    [VS_VesselVisit_Smry].[off_port_arr] AS [off_port_arr], 
+    [VS_VesselVisit_Smry].[start_work] AS [start_work], 
+    [VS_VesselVisit_Smry].[end_work] AS [end_work], 
+    [VS_VesselVisit_Smry].[VslClassification] AS [VslClassification], 
+    [VS_VesselVisit_Smry].[VslVistRemarks] AS [VslVistRemarks], 
+    [VS_VesselVisit_Smry].[ata] AS [ata], 
+    [VS_VesselVisit_Smry].[atd] AS [atd], 
+    [VS_VesselVisit_Smry].[pilot_on_board] AS [pilot_on_board], 
+    [VS_VesselVisit_Smry].[pilot_off_board] AS [pilot_off_board], 
+    [VS_VesselVisit_Smry].[DelayHrs] AS [DelayHrs], 
+    [VS_VesselVisit_Smry].[BCDelays] AS [BCDelays], 
+    [VS_VesselVisit_Smry].[PortRotationNo] AS [PortRotationNo], 
+    [VS_VesselVisit_Smry].[BerthHrs] AS [BerthHrs], 
+    [VS_VesselVisit_Smry].[PreviousPort] AS [PreviousPort], 
+    [VS_VesselVisit_Smry].[NextPort] AS [NextPort], 
+    [VS_VesselVisit_Smry].[CraneWorkHrs] AS [CraneWorkHrs], 
+    [VS_VesselVisit_Smry].[SrvCode] AS [SrvCode], 
+    [VS_VesselVisit_Smry].[SrvName] AS [SrvName], 
+    [VS_VesselVisit_Smry].[lloyds_id] AS [lloyds_id], 
+    [VS_VesselVisit_Smry].[CustomRorationNo] AS [CustomRorationNo], 
+    [VS_VesselVisit_Smry].[ADelays] AS [ADelays], 
+    [VS_VesselVisit_Smry].[BDelays] AS [BDelays], 
+    [VS_VesselVisit_Smry].[CDelays] AS [CDelays], 
+    [VS_VesselVisit_Smry].[CUSTDFF_VSLINSCHEDULE] AS [CUSTDFF_VSLINSCHEDULE], 
+    [VS_VesselVisit_Smry].[time_discharge_complete] AS [time_discharge_complete], 
+    [VS_VesselVisit_Smry].[TotalCranes] AS [TotalCranes]
+    FROM [dbo].[VS_VesselVisit_Smry] AS [VS_VesselVisit_Smry]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK5AC9D1F5C1BC1DC2" Association="Self.FK5AC9D1F5C1BC1DC2">
+      <End Role="vsl_vessels" EntitySet="vsl_vessels" />
+      <End Role="vsl_vessel_visit_details" EntitySet="vsl_vessel_visit_details" />
+    </AssociationSet>
+    <AssociationSet Name="FKA64180BB53740873" Association="Self.FKA64180BB53740873">
+      <End Role="vsl_vessel_visit_details" EntitySet="vsl_vessel_visit_details" />
+      <End Role="vsl_vessel_berthings" EntitySet="vsl_vessel_berthings" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

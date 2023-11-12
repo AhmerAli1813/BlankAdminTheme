@@ -1,0 +1,564 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="mt-30">
+    <div class="section">
+        <h4>Page Title Heading and Button</h4>
+        <!--for Page Title-->
+        <div class="page-title">
+            <div class="flex">
+                <div class="Flex-coumn"><h4><i class="fas fa-file-alt"></i>  Forms</h4></div>
+                <div class="Flex-coumn">
+                    <button type="button" class="Customebtn btnSuccess  pull-right mr-10"><span>Filters</span></button>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <!--End-->
+    </div>
+
+    <div class="section">
+        <h4>Collapseable Filter</h4>
+        <div class="page-title">
+            <!--Filter Collapse-->
+            <button type="button" class="Customebtn btnSuccess  mr-10"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#Filters"
+                    aria-expanded="false"
+                    aria-controls="Filters">
+                <span>Filters</span>
+            </button>
+            <div class="card collapse" id="Filters">
+                <div class="card-header">
+                    Filters
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>User Id</label>
+                                <input type="text" class="form-control" placeholder="Id" ng-model="search.Id" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" placeholder="Name" ng-model="search.FullName" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control" placeholder="Email" ng-model="search.Email" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Login Id</label>
+                                <input type="text" class="form-control" placeholder="Login Id" ng-model="search.LoginId" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 float-right">
+                            <div class="form-group">
+                                <button type="button" onclick="reload()" class="Customebtn btnSecondary mr-10 pull-right mt-20"><span>Reset</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Filter Collapse End-->
+        </div>
+        <!--End-->
+    </div>
+
+    <div class="section">
+        <h4>Page Title with multi item</h4>
+        <!--for Page Title-->
+        <div class="page-title">
+            <div class="MultiFlex">
+                <div class="MultiFlex-coumn">
+                    <h4><i class="fas fa-file-alt"></i>  Forms</h4>
+                    <span class="badge bg-danger">Danger</span>
+                </div>
+                <div class="MultiFlex-coumn-Select">
+                    <div class="form-group">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <button type="button" class="Customebtn btnSuccess  pull-right mr-10"><span>Print</span></button>
+                    <button type="button" class="Customebtn btnPrimary  pull-right mr-10"><span>Update</span></button>
+                </div>
+
+
+            </div>
+            <hr />
+        </div>
+        <!--End-->
+    </div>
+
+    <div class="section">
+        <h4>Buttons</h4>
+        <!--for Collapse Content-->
+        <button class="Customebtn btnPrimary mr-10"><span>Submit</span></button>
+        <button class="Customebtn btnSecondary mr-10"><span>Cancel</span></button>
+        <button class="Customebtn btnSuccess mr-10"><span>Print</span></button>
+        <button class="Customebtn btnPrimary mr-10"><span>Save</span></button>
+        <button class="Customebtn btnSuccess mr-10"><span>Export To Excel</span></button>
+        <button class="Customebtn btnDanger mr-10"><span>Delete</span></button>
+        <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
+            Tooltip on top
+        </button>
+        <!--End-->
+    </div>
+    <div class="section">
+        <h4>Card</h4>
+        <!--for Card Content-->
+        <div class="card">
+            <div class="card-header">
+                Card Heading
+            </div>
+            <div class="card-body">
+                Content
+            </div>
+        </div>
+        <!--for Card Content-->
+    </div>
+    <div class="section">
+        <h4>Forms Fields</h4>
+        <!--for Forms Fileds Title-->
+        <div class="container">
+            <form class="needs-validation" novalidate">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="form-group" data-provide="datepicker">
+                            <label for="exampleFormControlInput1" class="form-label Starick">Email address</label>
+                            <input type="datetime-local" class="form-control is-invalid" id="exampleFormControlInput1" placeholder="name@example.com">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Default file input example</label>
+                            <input class="form-control is-valid" type="file">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Default example</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                                <select class="form-select" aria-label="Default select example">
+                                    <option selected>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Default example</label>
+                            <select class="select2-multi"
+                                    name="states[]" multiple="multiple"
+                                    data-tags="true"
+                                    data-placeholder="Select an option"
+                                    data-allow-clear="true">
+                                <option value="AL">Alabama</option>
+                                <option value="WY">Wyoming</option>
+                                <option value="AL">Alabama</option>
+                                <option value="WY">Wyoming</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <label for="validationCustomUsername" class="form-label">Username</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text" id="inputGroupPrepend"><i class="fas fas-user"></i></span>
+                            <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+                            <div class="invalid-feedback">
+                                Please choose a username.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Default example</label>
+                            <select class="select2-single" name="state">
+                                <option value="AL">Alabama</option>
+                                ...
+                                <option value="WY">Wyoming</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="form-label">Default example</label>
+                            <select class="slims">
+                                <optgroup label="Label 1">
+                                    <option value="value 1">Value 1</option>
+                                    <option value="value 2">Value 2</option>
+                                    <option value="value 3">Value 3</option>
+                                </optgroup>
+                                <optgroup label="Label 2">
+                                    <option value="value 21">Value 1</option>
+                                    <option value="value 22">Value 2</option>
+                                    <option value="value 23">Value 3</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="form-group mt-38">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Default checkbox
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="form-group mt-38">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Default radio
+                            </label>
+                        </div>
+                    </div>
+
+                    <details>
+                        <summary>Epcot Center</summary>
+                        <p>Epcot is a theme park at Walt Disney World Resort featuring exciting attractions, international pavilions, award-winning fireworks and seasonal special events.</p>
+                    </details>
+
+
+                </div>
+            </form>
+        </div>
+        <!--End-->
+    </div>
+    <div class="section">
+        <h4>Bootstrap Icon</h4>
+        <!--for Bootstrap Icon Title-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+        <i class="bi bi-check-circle-fill"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-justify" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+        </svg>
+        <!--End-->
+    </div>
+    <div class="section">
+        <h4>Custome Content</h4>
+        <!--for Custome Content-->
+        <ol class="list-group list-group-numbered">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Subheading</div>
+                    Cras justo odio
+                </div>
+                <span class="badge bg-primary rounded-pill">14</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Subheading</div>
+                    Cras justo odio
+                </div>
+                <span class="badge bg-primary rounded-pill">14</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Subheading</div>
+                    Cras justo odio
+                </div>
+                <span class="badge bg-primary rounded-pill">14</span>
+            </li>
+        </ol>
+        <!--End-->
+    </div>
+    <div class="section">
+        <h4>Data Table</h4>
+        <!--for Data Table-->
+        <table id="DataTable" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Office</th>
+                    <th>Age</th>
+                    <th>Start date</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Tiger Nixon</td>
+                    <td>System Architect</td>
+                    <td>Edinburgh</td>
+                    <td>61</td>
+                    <td>2011/04/25</td>
+                    <td>$320,800</td>
+                </tr>
+                <tr>
+                    <td>Garrett Winters</td>
+                    <td>Accountant</td>
+                    <td>Tokyo</td>
+                    <td>63</td>
+                    <td>2011/07/25</td>
+                    <td>$170,750</td>
+                </tr>
+            </tbody>
+        </table>
+        <!--End-->
+    </div>
+    <div class="section">
+        <h4>Tabs</h4>
+        <!--for Tabs-->
+        <div id="tsum-tabs">
+            <main>
+                <input id="tab1" type="radio" name="tabs" checked>
+                <label for="tab1">Codepen</label>
+
+                <input id="tab2" type="radio" name="tabs">
+                <label for="tab2">Dribbble</label>
+
+                <input id="tab3" type="radio" name="tabs">
+                <label for="tab3">Dropbox</label>
+
+                <input id="tab4" type="radio" name="tabs">
+                <label for="tab4">Drupal</label>
+
+                <section id="content1">
+                    <p>
+                        CONTENT FIR TAB 1
+                    </p>
+                </section>
+
+                <section id="content2">
+                    <p>
+                        CONTENT FIR TAB 2
+                    </p>
+                </section>
+
+                <section id="content3">
+                    <p>
+                        CONTENT FIR TAB 3
+                    </p>
+                </section>
+
+                <section id="content4">
+                    <p>
+                        CONTENT FIR TAB 4
+                    </p>
+                </section>
+
+            </main>
+        </div>
+        <!--End-->
+    </div>
+    <div class="section">
+        <h4>KPI</h4>
+        <!--for Kpi-->
+        <div class="row">
+            <div class="col-xl-3 col-sm-6 mb-3">
+                <div class="card text-white  o-hidden h-100">
+                    <div class="card-body bgprimary">
+                        <div class="card-body-icon">
+                            <i class="fa fa-fw fa-comments color-red"></i>
+                        </div>
+                        <div class="mr-5">26 New Messages!</div>
+                    </div>
+                    <a class="card-footer bgDanger text-white clearfix small z-1" href="#">
+                        <span class="float-left">View Details</span>
+                        <span class="float-right">
+                            <i class="fa fa-angle-right"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <!-- End-->
+    </div>
+    <div class="section">
+        <h4>Badges</h4>
+        <!--for Badegs-->
+        <span class="badge bg-primary">Primary</span>
+        <span class="badge bg-secondary">Secondary</span>
+        <span class="badge bg-success">Success</span>
+        <span class="badge bg-danger">Danger</span>
+        <span class="badge bg-warning text-dark">Warning</span>
+        <span class="badge bg-info text-dark">Info</span>
+        <span class="badge bg-light text-dark">Light</span>
+        <span class="badge bg-dark">Dark</span>
+
+        <button type="button" class="btn btn-primary position-relative">
+            Inbox
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                99+
+                <span class="visually-hidden">unread messages</span>
+            </span>
+        </button>
+        <!--End-->
+    </div>
+    <div class="section">
+        <h4>Collapse Content</h4>
+        <!--for Collapse Content-->
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Accordion Item #1
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Accordion Item #2
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Accordion Item #3
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End-->
+    </div>
+    <div class="section">
+        <h4>Modal</h4>
+        <!--for Collapse Content-->
+        <button type="button" class="Customebtn btnSuccess  mr-10" data-bs-toggle="modal" data-bs-target="#exampleModal"><span>Modal</span></button>
+        <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="Customebtn btnSecondary" data-bs-dismiss="modal"><span>Close</span></button>
+                        <button type="button" class="Customebtn btnPrimary"><span>Save changes</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End-->
+    </div>
+    <div class="section">
+        <h4>Alert</h4>
+        <!--for Alert -->
+        <button class="Customebtn btnPrimary" onclick="ShowAlert()"><span>Show Alert</span></button>
+        <!--Alert End-->
+    </div>
+    <div class="section">
+        <h4>Table</h4>
+        <!--for Table-->
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="12">
+                        <nav aria-label="...">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <!--End Table-->
+    </div>
+    <div class="section">
+        <h4>Table Pagination</h4>
+        <!--for Pagination-->
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+        <!--End Pagination-->
+    </div>
+
+</div>
+

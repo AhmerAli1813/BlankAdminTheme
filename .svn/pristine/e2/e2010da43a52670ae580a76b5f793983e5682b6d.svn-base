@@ -1,0 +1,110 @@
+﻿'use strict';
+app.controller('RemarksCtrl',
+    [
+        "$scope",
+        "$rootScope",
+        "$timeout",
+        "$q",
+        "urlService",
+        "newGridService",
+        "$window",
+        function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window) {
+        
+         var url = urlService.getUrlPrams();
+   
+            $scope.init = function () {
+
+                $scope.ajaxGet('api/RemarksApi/GetRemarksRequest', null, function (resp) {
+                    
+                    console.log(resp);
+                    if (resp.Success) {
+                        $scope.Remarks = resp.RemarksList;
+                     
+                    }
+                });
+             
+            }
+
+
+            $scope.Add = function (data) {
+
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+                data.RemarksTypeId=1;
+                data.CreatedAt = dat + " " + time;
+                data.UpdatedAt = dat + " " + time;
+                console.log(data);
+         
+                $scope.ajaxPost('api/RemarksApi/AddRemarksRequest', data, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success) {
+
+                        toastr.success('Remarks Successfully Instered!');
+                        $window.open('/Remarks/RemarksIndex', '_self');
+
+                    } // resp success end
+                    else {
+                        toastr.error('Faild to add!');
+                    }
+                });
+
+            }
+           
+            $scope.Editinit = function () {
+                //$scope.GetRemarksType();
+                var Id = urlService.getUrlPrams();
+       
+             
+                $scope.ajaxGet('api/RemarksApi/GetRemarksByIdRequest',Id, function (resp) {
+                    console.log(resp);
+                    if (resp.Success) {
+                        $scope.Remarks = resp;
+
+                    }
+                });
+
+            }
+
+            $scope.Update = function (data) {
+
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                data.RemarksTypeId = 1;
+                data.UpdatedAt = dat + " " + time;
+                console.log(data);
+
+                $scope.ajaxPost('api/RemarksApi/UpdateRemarksRequest', data, function (resp) {
+
+                    console.log(resp);
+                    if (resp.Success) {
+
+                        toastr.success('Remarks Successfully Instered!');
+                        $window.open('/Remarks/RemarksIndex', '_self');
+
+                    } // resp success end
+                    else {
+                        toastr.error('Faild to Update!');
+                    }
+                });
+
+            }
+
+            $scope.GetRemarksType = function () {
+                
+                $scope.ajaxGet('api/RemarksApi/GetRemarksTypesRequest', null, function (resp) {
+                    console.log(resp);
+                    if (resp.Success) {
+                        $scope.RemarksType = resp.RemarksTypesList;
+
+                    }
+                });
+            }
+            $scope.Reset = function () {
+                document.getElementById("RemarkEng").value = null;
+                document.getElementById("RemarkAr").value = null;
+            }
+
+
+                }]); // Main Controler Bracket End

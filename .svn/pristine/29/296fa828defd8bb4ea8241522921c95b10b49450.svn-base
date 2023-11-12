@@ -1,0 +1,29 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using DE.Infrastructure.Concept;
+
+namespace DPWVessel.Web.Core.Attributes
+{
+    public class TransactionFilter : IResultFilter
+    {
+        public IUnitOfWork _unitOfWork { get; set; }
+        
+        public void OnResultExecuting(ResultExecutingContext filterContext)
+        {
+        }
+
+        public void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+            if (filterContext.HttpContext.Request.HttpMethod == HttpMethod.Get.Method)
+                return;
+            if (filterContext.Exception == null || filterContext.ExceptionHandled)
+                _unitOfWork.Commit();
+        }
+    }
+}

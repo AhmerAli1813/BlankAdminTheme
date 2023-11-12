@@ -1,0 +1,53 @@
+﻿@using DPWVessel.Model.Resources
+
+@using DPWVessel.Model.EntityModel.Enums
+@{
+    ViewBag.Title = "Register User";
+}
+
+<div class="page-header border-bottom-0">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4><i class="icon-key mr-2 mr-2"></i> <span class="font-weight-semibold">Reset User Password</span></h4>
+            <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+        </div>
+    </div>
+</div>
+<hr />
+<div ng-controller="UsersCtr" ng-init="initEdit()">
+    <div class="col-lg-12">
+        <div>
+            <div class="row p-t-20">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Email*</label>
+                        <input type="text" id="Email" class="form-control" placeholder="{{data.Email}}" ng-model="User.Email" value="{{data.Email}}" disabled>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">User Name*</label>
+                        <input type="text" id="Name" class="form-control" placeholder="{{data.Username}}" ng-model="User.Username" value="{{data.Username}}" disabled>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Password*</label>
+                        <input type="password" id="Password" class="form-control" placeholder="" ng-model="User.Password" autofocus tabindex="1">
+                        <small>Mininum 6 Characters Password Is Required</small>
+                    </div>
+                </div>
+            
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Confirm Password*</label>
+                        <input type="password" id="Confirm_Password" class="form-control" placeholder="" ng-model="User.ConfirmPassword" tabindex="2">
+                    </div>
+                </div>
+        <div class="float-right col-md-12" style="margin-top:28px">
+            <a onclick="window.location='@Url.Action("Index","Users")'" class="btn btn-theme-gray pull-right" tabindex="4">Cancel</a>
+            <button type="button" ng-click="ResetPassword(User)" class="btn btn-primary pull-right mr-2"><i class="fa fa-check" tabindex="3"></i>Change Password</button>
+        </div>
+    </div>
+</div>
+        </div></div>

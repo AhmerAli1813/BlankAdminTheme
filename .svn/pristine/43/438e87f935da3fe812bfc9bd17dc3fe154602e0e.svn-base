@@ -1,0 +1,454 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/DatePicker/jquery.min.js"></script>
+<link href="~/Scripts/DatePicker/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/Scripts/DatePicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/DatePicker/bootstrap-datepicker.js"></script>
+<style>
+  
+        .pagination {
+            display: inline-block;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .pagination > li {
+            display: inline;
+        }
+        .nav{
+            display:block;
+        }
+        .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+            z-index: 2;
+            color: #fff;
+            cursor: default;
+            background-color: #013765;
+            border-color: #013765;
+        }
+        .pagination > li > span:hover{
+            color:lightgrey;
+            cursor: grab;
+        }
+            .pagination > li > a, .pagination > li > span {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.428571429;
+                text-decoration: none;
+                background-color: #fff;
+                border: 1px solid #ddd;
+            }
+        .pagination > li:first-child > span {
+                margin-left: 0;
+                border-bottom-left-radius: 4px;
+                border-top-left-radius: 4px;
+            }
+
+         .customOption {
+            width: auto;
+            display: initial;
+            margin-left: 15px;
+            border: 2px solid #bdc3c7;
+            color: #34495e;
+            font-family: Lato,Helvetica,Arial,sans-serif;
+            font-size: 15px;
+            line-height: 1.467;
+            padding: 8px 12px;
+            height: 42px;
+            -webkit-appearance: listitem;
+            border-radius: 6px;
+            margin-bottom:10px;
+        }
+    td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    tr td:nth-child(2) {
+        text-align: left;
+    }
+    tr{
+      
+  transition: 0.5s;
+    }
+    tr:hover {background-color:lightgrey;}
+</style>
+
+
+<div class="page-header border-bottom-0">
+    <div class="page-header-content header-elements-md-inline">
+        <div class="page-title d-flex">
+            <h4><i class="icon-details mr-2"></i> <span class="font-weight-semibold"><i class="icon-stack-text"></i>&nbsp;Doc Scanner</span></h4>
+
+        </div>
+       
+        
+        <div class="col-md-6">
+            <div class="form-group">
+                @*<button onclick="location.href='@Url.Action("AddNewDoc", "VesselFormOps")'" type="button" class="btn btn-primary m-t-19 pull-right"><i class="icon-diff-added"></i> Add New</button>*@
+                <input type="button" class="btn btn-secondary  m-t-19 pull-right" value="Filters" data-toggle="collapse" data-target="#demo" />
+               
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+
+<div ng-controller="VesselOpsCtr" ng-init="Index_init()">
+  
+
+    <!--Search Filter Code Start-->
+    <div class="collapse" id="demo">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="form-group">
+
+                    <span style="font-weight:bold;">Search Vessel</span>
+                    <br />
+                    @*<input type="text" class="form-control" placeholder="Enter Visit Number" ng-model="search.Visit_id" />*@
+                    <input type="search" placeholder="Search" id="SearchVessel" ng-model="search" class="form-control search-input" data-table="customers-list" />
+                </div>
+
+            </div>
+         
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span  style="font-weight:bold;">From</span>
+                    @*<input type="date" class="form-control" ng-model="Filter.DateFrom"  placeholder="From" />*@
+                    <div id="sandbox-container">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="FromDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <span style="font-weight:bold;">To</span>
+                    @*<input type="date" class="form-control" ng-model="Filter.Dateto"  placeholder="To" />*@
+                    <div id="sandbox-container">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" id="ToDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="button" class="btn btn-secondary col-md-4 ml-3 mt-3" value="Search" ng-click="VAFFilter('Index')" />
+
+                    <input type="button" class="btn btn-theme-gray col-md-4 ml-3 mt-3" value="Reset" ng-click="Reset()" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--Search Filter Code End-->
+    
+    
+    <div class="card table-card scrollbar">
+       
+            <table class="table datatable-show-all customers-list" id="table-id">
+                <thead>
+                    <tr class="table-card-head" style="text-align:center;height:50px;">
+                        <th>SR#</th>
+                        <th>Visit Id</th>
+                        <th>Vessel Name</th>
+                        <th>Phase</th>
+                        <th>ATB</th>
+                        <th>Created At</th>
+                        <th>Created By</th>
+                        <th>Updated At</th>
+                        <th>Updated By</th>
+                        <th>Remarks</th>
+                        <th width="8%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="a in FormsOPS | filter :search" @*ng-if="user.UserType!=2 && user.UserType!=3"*@ style="height:50px;">
+                        <td>{{$index+1}}</td>
+                         <td>{{a.Visit_id}}</td>
+                        <td>{{a.Vessel_Name}}</td>
+
+                        <td>{{a.Phase}}</td>
+
+                        <td>{{a.ATB | date :'dd/MM/yyyy HH:mm'}}</td>
+
+                        <td>{{a.CreatedAt | date :'dd/MM/yyyy HH:mm'}}</td>
+                        <td>{{a.CreatedBy}}</td>
+
+                        <td>{{a.UpdatedAt | date :'dd/MM/yyyy HH:mm'}}</td>
+                        <td>{{a.UpdatedBy}}</td>
+
+                        <td ng-if="a.Remarks==null">-</td>
+                        <td ng-if="a.Remarks!=null">{{a.Remarks}}</td>
+
+                        <td>
+                            <div class="list-icons">
+                                @if (User.IsInRole("Operations"))
+                                {
+                                    <a ng-if="a.Form" ng-click="EditHref(a.Id,a.Visit_id)" class="list-icons-item text-dark"><i class="icon-pencil7" title="Edit"></i></a>
+
+                                    <span ng-if="!a.Form" class="badge badge-dark" style="color: #fff;font-size: 12px;width: auto;">Contact Operation Manager</span>
+
+                                   
+                                }
+
+                                else
+                                {
+                                    <a ng-click="EditHref(a.Id,a.Visit_id)" class="list-icons-item text-dark"><i class="icon-pencil7" title="Edit"></i></a>
+
+                                  
+                                    <a ng-click="HistoryHref(a.Visit_id)" class="list-icons-item" style="color:#00946B;"><i class="icon-list" title="History"></i></a>
+                                }
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+       
+         <button ng-click="LoadMore('Index')" ng-show="floatButton" class="float btn btn-primary pull-right">Load More</button>
+     
+        </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <span style="font-weight:bold;">Select Rows</span>
+                <select data-placeholder="Select Rows" name="state" id="maxRows" class="form-control select-clear" data-fouc>
+                    <option></option>
+                    <option value="5000">All Rows</option>
+                    <option value="4">4</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="70">70</option>
+                    <option value="100">100</option>
+
+                </select>
+            </div>
+        </div>
+        <div class='pagination-container' style="position: absolute;
+    right: 25px;">
+            <nav>
+                <ul class="pagination">
+
+                    <li data-page="prev">
+                        <span> < <span class="sr-only">(current)</span></span>
+                    </li>
+                    <!--	Here the JS Function Will Add the Rows -->
+                    <li data-page="next" id="prev">
+                        <span> > <span class="sr-only">(current)</span></span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+ 
+
+
+
+
+
+    <!-- /page header -->
+    <!-- Basic datatable -->
+    
+  
+
+    @*<div class="card container" style="background:#E0E0E0;">
+        <div class="card-header header-elements-inline">
+            <h5 class="card-title"> <i class="icon-file-text2"></i> Recently Updated Form</h5>
+            <div class="header-elements">
+                <div class="list-icons">
+                    <a class="list-icons-item" data-action="collapse"></a>
+
+                </div>
+            </div>
+        </div>
+        <div class="card table-card ">
+            <table class="table datatable-show-all">
+                <thead>
+                    <tr class="table-card-head" style="text-align:center;height:50px;">
+                        <th>Visit Id</th>
+                        <th>Vessel Name</th>
+                        <th>Phase</th>
+                        <th>ATB</th>
+                        <th>Submitted At</th>
+                        <th>Submitted By</th>
+                        <th>Updated At</th>
+                        <th>Updated By</th>
+                        <th>Remarks</th>
+                      
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="height:50px;" ng-if="History!=null">
+                        <td>{{History.Visit_id}}</td>
+                        <td>{{History.Vessel_Name}}</td>
+                        <td>{{History.Phase}}</td>
+                        <td>{{History.ATB | date}}</td>
+                        <td>{{History.CreatedAt | date}}</td>
+                        <td>{{History.CreatedBy}}</td>
+                        <td>{{History.UpdatedAt | date}}</td>
+                        <td>{{History.UpdatedBy}}</td>
+                        <td>{{History.Remarks}}</td>
+
+                    </tr>
+                    <tr style="height:50px;" ng-if="History==null">
+                        <td>-</td>
+                        <td>-</td>
+
+                        <td>-</td>
+
+                        <td>-</td>
+
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+
+                        <td>-</td>
+
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+
+    </div>*@
+</div>
+<script src="~/Scripts/DatePicker/CustomIntilizeJS.js"></script>
+<script src="~/Scripts/jquery.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        getPagination('#table-id');
+
+    });
+    function getPagination(table) {
+
+        var lastPage = 1;
+
+        $('#maxRows').on('change', function (evt) {
+            //$('.paginationprev').html('');						// reset pagination
+
+
+            lastPage = 1;
+            $('.pagination').find("li").slice(1, -1).remove();
+            var trnum = 0;									// reset tr counter
+            var maxRows = parseInt($(this).val());			// get Max Rows from select option
+
+            if (maxRows == 5000) {
+
+                $('.pagination').hide();
+            } else {
+
+                $('.pagination').show();
+            }
+
+            var totalRows = $(table + ' tbody tr').length;		// numbers of rows
+            $(table + ' tr:gt(0)').each(function () {			// each TR in  table and not the header
+                trnum++;									// Start Counter
+                if (trnum > maxRows) {						// if tr number gt maxRows
+
+                    $(this).hide();							// fade it out
+                } if (trnum <= maxRows) { $(this).show(); }// else fade in Important in case if it ..
+            });											//  was fade out to fade it in
+            if (totalRows > maxRows) {						// if tr total rows gt max rows option
+                var pagenum = Math.ceil(totalRows / maxRows);	// ceil total(rows/maxrows) to get ..
+                //	numbers of pages
+                for (var i = 1; i <= pagenum;) {			// for each page append pagination li
+                    $('.pagination #prev').before('<li data-page="' + i + '">\
+								      <span>'+ i++ + '<span class="sr-only">(current)</span></span>\
+								    </li>').show();
+                }											// end for i
+            } 												// end if row count > max rows
+            $('.pagination [data-page="1"]').addClass('active'); // add active class to the first li
+            $('.pagination li').on('click', function (evt) {		// on click each page
+                evt.stopImmediatePropagation();
+                evt.preventDefault();
+                var pageNum = $(this).attr('data-page');	// get it's number
+
+                var maxRows = parseInt($('#maxRows').val());			// get Max Rows from select option
+
+                if (pageNum == "prev") {
+                    if (lastPage == 1) { return; }
+                    pageNum = --lastPage;
+                }
+                if (pageNum == "next") {
+                    if (lastPage == ($('.pagination li').length - 2)) { return; }
+                    pageNum = ++lastPage;
+                }
+
+                lastPage = pageNum;
+                var trIndex = 0;							// reset tr counter
+                $('.pagination li').removeClass('active');	// remove active class from all li
+                $('.pagination [data-page="' + lastPage + '"]').addClass('active');// add active class to the clicked
+                // $(this).addClass('active');					// add active class to the clicked
+                $(table + ' tr:gt(0)').each(function () {		// each tr in table not the header
+                    trIndex++;								// tr index counter
+                    // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+                    if (trIndex > (maxRows * pageNum) || trIndex <= ((maxRows * pageNum) - maxRows)) {
+                        $(this).hide();
+                    } else { $(this).show(); } 				//else fade in
+                }); 										// end of for each tr in table
+            });										// end of on click pagination list
+
+        }).val(5000).change();
+
+        // end of on select change
+
+
+
+        // END OF PAGINATION
+    }
+
+        (function(document) {
+            'use strict';
+
+            var TableFilter = (function(myArray) {
+                var search_input;
+
+                function _onInputSearch(e) {
+                    search_input = e.target;
+                    var tables = document.getElementsByClassName(search_input.getAttribute('data-table'));
+                    myArray.forEach.call(tables, function(table) {
+                        myArray.forEach.call(table.tBodies, function(tbody) {
+                            myArray.forEach.call(tbody.rows, function(row) {
+                                var text_content = row.textContent.toLowerCase();
+                                var search_val = search_input.value.toLowerCase();
+                                row.style.display = text_content.indexOf(search_val) > -1 ? '' : 'none';
+                            });
+                        });
+                    });
+                }
+
+                return {
+                    init: function() {
+                        var inputs = document.getElementsByClassName('search-input');
+                        myArray.forEach.call(inputs, function(input) {
+                            input.oninput = _onInputSearch;
+                        });
+                    }
+                };
+            })(Array.prototype);
+
+            document.addEventListener('readystatechange', function() {
+                if (document.readyState === 'complete') {
+                    TableFilter.init();
+                }
+            });
+
+        })(document);
+</script>

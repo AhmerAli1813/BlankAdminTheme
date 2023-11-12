@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<link href="~/Scripts/AnyChart/anychart-ui.min.css" rel="stylesheet" />
+<link href="~/Scripts/AnyChart/anychart-font.min.css" rel="stylesheet" />
+
+<style>
+    /*Disable Trail Logo*/
+    .anychart-credits-text {
+        display: none !important;
+    }
+
+    .anychart-credits-logo {
+        display: none !important;
+    }
+    /*Disable trail logo end*/
+
+</style>
+<div ng-controller="DashboardCtrl" ng-init="init()">
+
+    <div class="page-header border-bottom-0">
+        <div class="page-header-content header-elements-md-inline">
+            <div class="page-title d-flex">
+                <h4><i class="icon-details mr-2"></i> <span class="font-weight-semibold"><i class="icon-home4"></i>&nbsp; Dashboard</span></h4>
+            </div>
+        </div>
+    </div><hr />
+    <!--Tab Start-->
+    <!--Chart For YearWise Start-->
+   <div class="row card" ng-show="ShowMYV">
+       <div class="col-md-12">
+           <div id="YearCharId" style="width:100%;height:500px;"></div>
+       </div>
+   </div>
+    <!--Chart For YearWise End-->
+
+    <!--Chart For MonthWise Start-->
+    <div class="row mt-3 card" ng-show="ShowMYV">
+        <div class="col-md-12">
+            <div id="MonthCharId" style="width:100%;height:500px;"></div>
+        </div>
+    </div>
+    <!--Chart For  MonthWise End-->
+    <div class="row mt-3 card" ng-show="ShowMYV">
+        <h3 style="text-align: center;font-family: Verdana, Helvetica, Arial, sans-serif;font-size: large; margin-top: inherit; color: #93a092;">Duration Records JIP Exception</h3>
+        <div class="col-md-4 mt-2 mb-2">
+            <label>Select Vist Refrence No</label>
+            <select data-placeholder="Vist Ref No" ng-change="GetDetails(Refno.List)" ng-model="Refno.List" id="RefNo" class="form-control select-clear">
+            <option></option>
+            <option ng-repeat="item in RefNoList" value="{{item.RefNo}}">{{item.RefNo}}</option>
+            </select>
+        </div>
+        <div class="row mt-3 "  ng-show="ShowDiv">
+            <div class="col-md-12" id="MainDiv">
+                <div id="DurationCharId" style="width:100%;height:500px;"></div>
+            </div>
+        </div>
+    </div>
+    
+</div> <!--Controller Div End-->
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+
+<script src="~/Scripts/AnyChart/anychart-base.min.js"></script>
+<script src="~/Scripts/AnyChart/anychart-ui.min.js"></script>
+<script src="~/Scripts/AnyChart/anychart-exports.min.js"></script>
+<script src="~/Scripts/AnyChart/anychart-gantt.min.js"></script>
+<script src="~/Scripts/AnyChart/anchart-pert.mini.js"></script>
+<script src="~/Scripts/AnyChart/anychart-data-adapter.min.js"></script>
+<script src="~/Scripts/AnyChart/anychart-resource.min.js"></script>
+<script src="~/Scripts/jquery.min.js"></script>
+<script>
+       window.onload = function () {
+        document.getElementById('minisidebar').className = 'sidebar-xs';
+    };
+</script>
+
+
+
+
+

@@ -1,0 +1,116 @@
+﻿@using DPWVessel.Model.Resources
+@{
+    ViewBag.Title = "ImportUserData";
+}
+
+@*@using (Html.BeginForm("ImportUserData", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+{
+    <table>
+        <tr><td>Excel file</td><td><input type="file" id="FileUpload1" name="file" /></td></tr>
+        <tr><td></td><td><input type="submit" id="Submit" name="Submit" value="Submit" /></td></tr>
+    </table>
+}*@  
+
+
+
+<div ng-controller="ImportUsersCtr" ng-init="init()">
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Import User Data</h3>
+        </div>
+        <div class="col-md-7 align-self-center">
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-outline-primary">
+                    <div class="card-body">
+@using (Html.BeginForm("ImportUserData", "Users", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+{
+                                <div class="form-body">
+
+                                    <div class="row p-t-20">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">User Type</label>
+                                                <select ng-model="Register.UserType" name="UserType" class="form-control">
+                                                    <option value="" selected="">Please select User Type</option>
+                                                    <option value="4">SafetyInspecter</option>
+                                                    <option value="3">SafetyManager</option>
+                                                    <option value="6">QuickAction</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">@Content.Organization</label>
+                                                <select ng-model="Register.OrganizationId" name="OrganizationId" ng-change="Enable()" class="form-control">
+                                                    <option value="" selected>Please select Organization</option>
+                                                    <option ng-repeat="r in organization" value="{{r.Id}}">
+                                                        {{r.OrganizationName}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row p-t-20">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">@Content.Department</label>
+                                                <select ng-model="Register.DepartmentId" name="DepartmentId" class="form-control">
+                                                    <option value="" selected>Please select Department</option>
+                                                    <option ng-repeat="r in departments" value="{{r.Id}}">
+                                                        {{r.DepartmentName}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Select Location</label>
+                                                <select ng-model="Register.SelectedLocation" name="LocationId" class="form-control">
+                                                    <option value="" selected>Please select Location</option>
+                                                    <option ng-repeat="r in locations" value="{{r.Id}}">
+                                                        {{r.LocationName}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row p-t-20">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Upload File</label>
+                                                <input class="form-control" type="file" ng-model="Register.file" id="FileUpload1" name="file" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                @if (ViewBag.Message3!="") {<div style="color:red;font-weight:bolder;margin-top:30px">@ViewBag.Message3</div>}
+                                                @if (ViewBag.Message1 != ""&& ViewBag.Message2 != "")
+                                                {
+                                                <div style="color:green;font-weight:bolder;margin-top:30px">@ViewBag.Message1</div>
+                                                <div style="color:blue;font-weight:bolder;margin-top:10px">@ViewBag.Message2</div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit"  class="btn btn-primary"><i class="fa fa-check"></i>@Content.Save</button>
+                                    @*<button type="button" ng-click="ImportData(Register)" class="btn btn-primary"><i class="fa fa-check"></i>@Content.Save</button>*@
+                                    <a href="@Url.Action("Index", "Home")" class="btn btn-inverse">@Content.Cancel</a>
+                                </div>
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

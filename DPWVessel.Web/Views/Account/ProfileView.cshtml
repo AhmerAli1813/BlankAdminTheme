@@ -1,0 +1,67 @@
+﻿@using DPWVessel.Model.Resources
+@{
+    ViewBag.Title = "Profile";
+}
+<div ng-controller="AccountCtr" ng-init="InitEditProfile()">
+    <div class="row page-titles">
+        <div class="col-md-7 align-self-center">
+            <h3 class="text-primary">@Content.UserProfile</h3>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">@Content.Home</a></li>
+                <li class="breadcrumb-item active">@Content.UserProfile</li>
+            </ol>
+        </div>
+        <div class="col-md-5 align-self-center">
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-outline-primary">
+                    <div class="card-body">
+                        <form>
+                            <div class="form-body">
+                                <h3 class="card-title m-t-15">@Content.UserDetails</h3>
+                                <hr>
+                                <div class="row p-t-20">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">@Content.FullName</label>
+                                            <input type="text" id="firstName" class="form-control" placeholder="{{Contracts.FullName}}" ng-model="Contracts.FullName">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">@Content.FullNameAr</label>
+                                            <input type="text" id="lastName" class="form-control form-control-danger" placeholder="{{Contracts.FullNameAr}}" ng-model="Contracts.FullNameAr">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row p-t-20">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">@Content.Email</label>
+                                            <input type="text" id="firstName" class="form-control" placeholder="{{Contracts.Email}}" ng-model="Contracts.Email">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">@Content.Phone</label>
+                                            <input type="text" id="lastName" class="form-control form-control-danger" placeholder="{{Contracts.Phone}}" ng-model="Contracts.Phone">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-primary" ng-click="EditProfile(Contracts)"><i class="fa fa-check"></i>@Content.Save</button>
+                                <a type="button" href="@Url.Action("Index","Home")" class="btn btn-inverse">@Content.Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="@Url.Content("~/Content/js/crypto-js.min.js")"></script>

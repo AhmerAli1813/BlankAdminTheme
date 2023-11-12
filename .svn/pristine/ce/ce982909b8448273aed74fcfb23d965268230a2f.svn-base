@@ -1,0 +1,291 @@
+﻿
+@{
+    ViewBag.Title = "AddOperationUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    label {
+        font: menu;
+        font-size: larger;
+        font-family: 'Roboto';
+        font-weight: 500;
+    }
+
+    .timeHeader {
+        background: #00946b;
+        padding: 15px;
+        color: white;
+        font-size: 17px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        width: max-content;
+        margin-top: -36px;
+    }
+</style>
+
+
+<div ng-controller="JIPCtrl" ng-init="initADD()">
+    <div class="page-header border-bottom-0">
+        <div class="page-header-content header-elements-md-inline">
+            <div class="page-title d-flex">
+                <h4>
+                    <i class="icon-diff-added mr-2"></i>
+                    <span class="font-weight-semibold">Add JIP Exception</span>
+                    @*@if (User.IsInRole("Operations"))
+                        {<span class="font-weight-semibold"> Active Operations Breakdown </span>
+                        }
+                        @if (User.IsInRole("Planning"))
+                        {<span class="font-weight-semibold"> Active Planning Breakdown  </span>
+                        }
+                        @if (User.IsInRole("Engineer"))
+                        {<span class="font-weight-semibold"> Breakdown Assigned To Engineer  </span>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {<span class="font-weight-semibold"> Active Breakdown Management </span>
+                        }*@
+                </h4>
+
+            </div>
+
+        </div>
+        <div class="text-center timeHeader pull-right">
+            <span>@DateTime.Now.ToString("dd/MM/yyyy") {{theTime}}</span>
+        </div>
+    </div>
+    <hr />
+    <!-- /page header -->
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Reference No</label><span class="required">*</span>
+                        <select data-placeholder="Reference No" id="RefNo" class="form-control select-clear" name="state" ng-change="CheckException(JIP.RefNo)" ng-model="JIP.RefNo" data-fouc>
+                            <option value=""></option>
+                            <option ng-repeat="item in VisitRefno" value="{{item.RefNo}}">{{item.RefNo}}</option>
+                        </select>
+                        @*<input type="text" maxlength="100" min="1" class="form-control" placeholder="Enter Reference No" ng-model="JIP.RefNo" />*@
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Select Exception Type</label><span class="required">*</span>
+                        @*<select data-placeholder="Select" id="Etype" class="form-control select-clear" ng-model="JIP.EType" data-fouc>*@
+                        @*<option></option>
+                            <option value="BERTH">Berth Exception</option>
+                            <option value="WGMPH">WGMPH Exception</option>
+                            <option value="GMPH">GMPH Exception</option>*@
+                        <select data-placeholder="Select Exception Type" id="Etype" class="form-control select-clear" ng-change="GetVistDetails(JIP)" ng-model="JIP.EType" data-fouc>
+                            <option value=""></option>
+                            <option ng-repeat="item in ExceptionType" value="{{item.Name}}">{{item.Name}}</option>
+                        </select>
+                        @*</select>*@
+                    </div>
+                </div>
+                @*<div class="col-md-2">
+                        <div class="form-group">
+                            <input type="button" class="btn btn-primary mt-3 ml-10 col-md-8 p-2" id="searchbtn" value="Search" ng-click="GetVistDetails(JIP)" />
+                        </div>
+                    </div>*@
+
+            </div>
+        </div>
+    </div>
+    <div class="card" ng-show="DetailsDiv">
+        <div class="card-body">
+
+
+            <div class="row" >
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label><b>Vessel Name</b></label>
+                        <div>{{JIPExDetails.VesselName}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+                <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Service</label>
+                            <div>{{JIPExDetails.Service}}</div>
+                        </div>
+                    <div class="dropdown-divider"></div>
+                    </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label><b>Pilot Station</b></label>
+                        <div>{{JIPExDetails.PilotStation |date:'dd-MMM-yyyy HH:mm:ss'}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+                <div class="col-md-3"ng-show="JIPExDetails.PilotOnBoard!=null">
+                    <div class="form-group">
+                        <label><b>Pilot On Board</b></label>
+                        <div>{{JIPExDetails.PilotOnBoard | date:'dd-MMM-yyyy HH:mm:ss' }}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+                <div class="col-md-2" ng-show="JIPExDetails.PilotOnBoard!=null">
+                    <div class="form-group">
+                        <label><b>Duration</b></label>
+                        <div>{{JIPExDetails.Duration}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+
+                <br />
+            </div>
+
+
+            <div class="row" ng-show="DetailsDiv==true">
+                <hr />
+                @*<div class="col-md-12 text-center">
+                        <h2>Berth Exception</h2>
+                    </div>*@
+                <div class="form-group col-md-4">
+                    <label>Window</label><span class="required">*</span>
+                    @*<input type="text" placeholder="Window" ng-model="JIPExDetails.Window" class="form-control" required />*@
+                    <select data-placeholder="Window" id="Window" class="form-control select-clear" name="state" ng-model="JIPExDetails.Window" data-fouc required>
+                        <option></option>
+                        <option value="before window">before window</option>
+                        <option value="in window">in window</option>
+                        <option value="after window">after window</option>
+                        <option value="no window">no window</option>
+                    </select>
+                 </div>
+                <div class="form-group col-md-4">
+                    <label>Type</label><span class="required">*</span>
+                    @*<input type="text" placeholder="ML-A, ML-B" ng-model="JIPExDetails.Type" class="form-control" required />*@
+                    <select data-placeholder="Type" ng-change="ETypeVale(JIPExDetails.Type)" id="Type" class="form-control select-clear" name="Type" ng-model="JIPExDetails.Type" data-fouc required>
+                        <option></option>
+                        <option value="FD-2500-A">FD-2500-A</option>
+                        <option value="FD-2500-B">FD-2500-B</option>
+                        <option value="ML-2500-A">ML-2500-A</option>
+                        <option value="ML-2500-B">ML-2500-B</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Exception Value</label><span class="required">*</span>
+                    <input type="text" id="Jvalue" placeholder="Value" ng-model="JIPExDetails.Value" class="form-control" required />
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Justifications</label><span class="required">*</span>
+                    <select data-placeholder="Justifications"  id="Justifications" class="form-control select-clear" name="state"  ng-model="JIPExDetails.Justifications" data-fouc>
+                        <option value=""></option>
+                        <option ng-repeat="item in JustificationList" value="{{item.Id}}">{{item.RemarksEng}}</option>
+                    </select>
+                    @*<textarea class="form-control" id="Justifications" required ng-model="JIPExDetails.Justifications" style="height:120px;"></textarea>*@
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Explanation</label><span class="required">*</span>
+                               @* <select data-placeholder="Explanation" id="Explanation" class="form-control select-clear dropdown" name="state" ng-model="JIPExDetails.Explanation" data-fouc>
+                    <option value=""></option>
+                    <option ng-repeat="item in ExplanationList" value="{{item.Id}}">{{item.RemarksEng}} {{item.RemarksAr}}</option>
+                </select>*@
+                    <textarea class="form-control" id="Explanation" required ng-model="JIPExDetails.Explanation" style="height:120px;"></textarea>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="image-upload image-upload-submit">
+                        <label for="meterImg">
+                            <i class="icon-file-upload2" title="Upload Attachment" style="color:#011c33"></i>
+                        </label>
+                        <input type="file" id="meterImg" name="pic" accept="image/*" onchange="angular.element(this).scope().ImageUpload('meterImg')">
+                        <input type="hidden" ng-model="JIPExDetails.Attachment" />
+                        <label for="meterImg">Upload Evidence</label>
+                    </div>
+
+                    <div class="image-upload image-upload-submit" id="download"  >
+                        <a href="#" ng-click="operationhref(JIPExDetails.Attachment)" target="_blank" class="">
+                            <i class="icon-file-download2" title="Download Attachment"></i>
+                            <label>Download Evidence</label>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 pull-right">
+                    <input type="button" class="btn btn-primary pull-right mt-10" ng-click="JIPSave(JIPExDetails)" value="Save" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--END Berth Exception-->
+    <!--Universal Div End-->
+    <!--DPW Berth Exception -->
+    @*<div class="row" ng-show="JIP.EType=='BERTH' && DetailsDiv==true">
+                <hr />
+        <div class="col-md-12 text-center">
+            <h2>Berth Exception</h2>
+        </div>
+                <div class="form-group col-md-6">
+                    <label>Justifications</label>
+                    <textarea class="form-control" ng-model="JIPExDetails.BerthJustifications" style="height:120px;"></textarea>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Explanation</label>
+                    <textarea class="form-control" ng-model="JIPExDetails.BerthExplanation"  style="height:120px;"></textarea>
+                </div>
+            </div>*@
+    <!--END Berth Exception-->
+    <!--DPW  GMPH  Exception -->
+    @*<div class="row" ng-show="JIP.EType=='GMPH' && DetailsDiv==true">
+            <hr />
+            <div class="col-md-12 text-center">
+                <h2>GMPH Exception</h2>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Justifications</label>
+                <textarea class="form-control"  ng-model="JIPExDetails.GMPHJustifications" style="height:120px;"></textarea>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Explanation</label>
+                <textarea class="form-control" ng-model="JIPExDetails.GMPHExplanation" style="height:120px;"></textarea>
+            </div>
+        </div>*@
+    <!--END GMPH Exception-->
+    <!--DPW WGMPH Exception -->
+    @*<div class="row" ng-show="JIP.EType=='WGMPH' && DetailsDiv==true">
+            <hr />
+            <div class="col-md-12 text-center">
+                <h2>WGMPH Exception</h2>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Justifications</label>
+                <textarea class="form-control" ng-model="JIPExDetails.WGMPHJustifications" style="height:120px;"></textarea>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Explanation</label>
+                <textarea class="form-control" ng-model="JIPExDetails.WGMPHExplanation" style="height:120px;"></textarea>
+            </div>
+        </div>*@
+    <!--END WGMPH Exception-->
+
+</div> <!--Ng-Controller Div End-->
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+<script src="~/Scripts/jquery.min.js"></script>
+<script>
+    // Start phone Number Validation
+    function phoneFormatter() {
+        $('#valid').on('input', function () {
+            var number = $(this).val().replace(/[^.\d]/g, '')
+
+            $(this).val(number);
+            if (number.length == 7) {
+                $(this).val(null);
+                toastr.error('max limit 6 digit only');
+                return false;
+            }
+
+        });
+    };
+    $(phoneFormatter());
+
+    // End phone Number Validation
+</script>
+
+
+
+

@@ -1,0 +1,2140 @@
+﻿
+@{
+    ViewBag.Title = "Container Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+  
+    .badge {
+    /*font-size: 12px;*/
+    width: auto!important;
+}
+    .alertify .ajs-footer{
+         display:none;
+     }
+    
+        .ss-main .ss-multi-selected 
+{
+    min-height:38px!important;
+
+}
+.ss-add {
+    /*margin: auto !important;*/
+    padding-right: 12px;
+    font:bold;
+}
+
+
+.ss-main .ss-multi-selected .ss-values .ss-value
+{
+    background-color:#455a64;
+}
+ .dtp div.dtp-date, .dtp div.dtp-time {
+        background: #01213d !important;
+    }
+    .dtp .p10 > a {
+        color: #ffffff !important;
+    }
+    .dtp table.dtp-picker-days tr > td > a.selected {
+    background: #01213d !important;
+    color: #fff;
+}
+    .dtp > .dtp-content > .dtp-date-view > header.dtp-header {
+        background: #083358 !important;
+    }
+    .truncate{
+        text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 150px;
+    }
+   
+</style>
+
+<head>
+
+    <link href="~/Content/BootsrapDatetime/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+    <link href="~/Content/BootsrapDatetime/css.css" rel="stylesheet" />
+    <link href="~/Content/BootsrapDatetime/icon.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Content/BootsrapDatetime/ripples.min.js"></script>
+    <script src="~/Content/BootsrapDatetime/material.min.js"></script>
+
+    <script src="~/Scripts/js/plugins/moment/moment_locales.min.js"></script>
+    <script src="~/Content/BootsrapDatetime/bootstrap-material-datetimepicker.js"></script>
+  
+    
+    <link href="~/Scripts/SlimSelect/SlimSelectCustomStyle.css" rel="stylesheet" />
+    <link href="~/Scripts/SlimSelect/slimselect.min.css" rel="stylesheet" />
+    <script src="~/Scripts/SlimSelect/slimselect.min.js"></script>
+
+    @*<script src="~/Scripts/DatePicker/jquery.min.js"></script>*@
+    <link href="~/Scripts/DatePicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Scripts/DatePicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+    <script src="~/Scripts/DatePicker/bootstrap-datepicker.js"></script>
+    <link href="~/Content/css/PaganationStyleSheetCustom.css" rel="stylesheet" />
+    <!--Alertify CDN Start -->
+    <link href="~/Scripts/AlertifyCdn/alertify.min.css" rel="stylesheet" />
+    <script src="~/Scripts/AlertifyCdn/alertify.min.js"></script>
+    <link href="~/Scripts/AlertifyCdn/default.min.css" rel="stylesheet" />
+    <link href="~/Scripts/AlertifyCdn/jquery-confirm.min.css" rel="stylesheet" />
+
+
+
+</head>
+
+<div ng-controller="DWHCtrl" ng-init="CntrInit()" class="ng-cloak" ng-cloak>
+    <div class="page-header border-bottom-0">
+        <div class="page-header-content header-elements-md-inline">
+            <div class="page-title d-flex">
+                <h4>
+                    <img src="~/Content/images/container.png"  class="onhover mr-2" width="25" title="Container Details">
+                    <span class="font-weight-semibold">Containers Details</span><span class="ng-cloak" style="border-radius: 18px;margin-left: 12px;padding: 6px;color: white;width: 27px;background: #00946b;height: auto;" ng-cloak>{{resp.CntrCount}}</span>
+                </h4>    
+            </div>
+
+            <div class="mt-3">
+                    
+                <input type="button" class="btn btn-secondary  pull-right" value="Filters" data-toggle="collapse" data-target="#demo" />
+                  @if (User.IsInRole("Operations") || User.IsInRole("Admin"))
+                  {
+                    <input type="button" class="btn btn-secondary pull-right mr-2" ng-show="resp.CntrStatusIsClosed==false" value="Add Container" ng-click="ShowAddContainerModel()" />
+                  }
+                
+                @*<input type="button" class="btn btn-secondary  pull-right mr-2" value="Vessel Details" data-toggle="collapse" data-target="#VesselDetails" />*@
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <!--Search Filter Code Start-->
+        <div class="card collapse"  id="demo">
+            <div class="card-body">
+                <div class="col-md-12  border-bottom">
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Cntr</label>
+                                <input type="text" id="TabCntr" class="form-control" placeholder="Cntr" ng-model="search.Cntr" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>BL Nbr</label>
+                                <input type="text" class="form-control" id="Tabbl_nbr" placeholder="BL Nbr" ng-model="search.bl_nbr" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Category</label>
+                                @*<input type="text" id="TabCategory" class="form-control" placeholder="Category" ng-model="search.category" />*@
+                                <select id="searchcategory" class="is-valid" ng-model="search.category">
+                                    <option data-placeholder="true"></option>
+                                    <option ng-value="IMPRT">IMPRT</option>
+                                    <option ng-value="EXPRT">EXPRT</option>
+                                    <option ng-value="TRSHP">TRSHP</option>
+                                    <option ng-value="THRGH">THRGH</option>
+                                    <option ng-value="STRGE">STRGE</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Vgm(KG)</label>
+                                <input type="text" class="form-control" id="Tabgoods_and_ctr_wt_kg" placeholder="Vgm(KG)" ng-model="search.goods_ctr_wt_kg_vgm" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Line Operator</label>
+                                <input type="text" class="form-control" id="Taboprname" placeholder="Line Operator" ng-model="search.opr" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Vessel Operator</label>
+                                <input type="text" class="form-control" id="TabLineOprName" placeholder="Vessel Operator" ng-model="search.LineOpr" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Commodity</label>
+                                <input type="text" class="form-control" id="Tabcommodity" placeholder="Commodity" ng-model="search.commodity" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Destination</label>
+                                <input type="text" class="form-control" id="Tabdestination" placeholder="Destination" ng-model="search.destination" />
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Origin</label>
+                                <input type="text" class="form-control" id="TabOrigin" placeholder="Origin" ng-model="search.Origin" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>InspStages</label>
+                                <input type="text" class="form-control" id="TabInspStages" placeholder="InspStages" ng-model="search.InspStages" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Move Kind</label>
+                                <input type="text" class="form-control" id="TabMoveKind" placeholder="Move Kind" ng-model="search.move_kind" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Nominal Length</label>
+                                @*<input type="text" class="form-control" id="TabNominalLength" placeholder="Nominal Length" ng-model="search.nominal_length" />*@
+                                <select id="searchnominal_length" class="is-valid" ng-model="search.nominal_length">
+                                    <option data-placeholder="true"></option>
+                                    <option ng-value="NOM20">NOM20</option>
+                                    <option ng-value="NOM40">NOM40</option>
+                                </select>
+                             </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Nominal Height</label>
+                                @*<input type="text" class="form-control" id="TabnominalHeight" placeholder="Nominal Height" ng-model="search.nominal_height" />*@
+                                <select id="searchnominal_height" class="is-valid" ng-model="search.nominal_height">
+                                    <option data-placeholder="true"></option>
+                                    <option ng-value="NOM86">NOM86</option>
+                                    <option ng-value="NOM96">NOM96</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>ISO</label>
+                                <input type="text" class="form-control" id="TabISO" placeholder="ISO" ng-model="search.ISO" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>AEO</label>
+                                <input type="text" class="form-control" id="TabAEO" placeholder="AEO" ng-model="search.AEO" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Is oog</label>
+                                <select id="TabisOog" class="input displaySelect" ng-model="search.is_oog">
+                                    <option data-placeholder="true"></option>
+                                    <option ng-value="true">Yes</option>
+                                    <option ng-value="false">NO</option>
+                                </select>
+
+
+
+                                @*<input type="text" class="form-control" id="TabisOog" placeholder="Is oog" ng-model="search.is_oog" />*@
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Is Bundle</label>
+                                <select id="TabisBundle" class="input displaySelect" ng-model="search.is_bundle">
+                                    <option data-placeholder="true"></option>
+                                    <option ng-value="true">Yes</option>
+                                    <option ng-value="false">NO</option>
+                                </select>
+
+                                @*<input type="text" class="form-control" id="TabisBundle" placeholder="Is Bundle" ng-model="search.is_bundle" />*@
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Custom Insp Type</label>
+                                <input type="text" class="form-control" id="TabCustomInspType" placeholder="Custom Insp Type" ng-model="search.CustomInspType" />
+                            </div>
+                        </div>
+                      
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Is Transit</label>
+                                <input type="text" class="form-control" id="TabIsTransit" placeholder="Is Transit" ng-model="search.IsTransit" />
+                            </div>
+                        </div>
+                           <div class="col-md-2">
+                               <div class="form-group">
+                                    <label>ITTTo</label>
+                                        <input type="text" class="form-control" id="TabIsTransit" placeholder="ITTTo" ng-model="search.ITTTo" />
+                                  </div>
+                              </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>XrayStatus</label>
+                                <input type="text" class="form-control" id="TabXrayStatus" placeholder="XrayStatus" ng-model="search.XrayStatus" />
+                            </div>
+                        </div>
+                        @*<div class="col-md-3">
+                    <div class="form-group">
+                        <label>From</label>
+                        @*<input type="date" class="form-control" placeholder="From" ng-model="data.FromDate" />
+                        <div id="sandbox-container">
+                            <div class="input-group date">
+                                <input type="text" class="form-control" id="TabFromDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>To</label>
+                        <input type="date" class="form-control" placeholder="To" ng-model="data.ToDate" />
+                        <div id="sandbox-container">
+                            <div class="input-group date">
+                                <input type="text" class="form-control" id="TabToDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-theme-gray pull-right mt-3"  ng-click="ResetCntr()" >Reset</button>
+                                @*<input type="button" class="btn btn-primary pull-right  mr-2 mt-3" value="Search"  />*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!--Search Filter Code End-->
+    <!--Vessel Master Information Start-->
+    <div class="card ng-cloak"  ng-cloak>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label><b>Reference No</b></label>
+                        <div>{{resp.RefNo}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+
+                <div class="col-md-3" ng-show="resp.VesselName!=null && resp.VesselName!=''">
+                    <div class="form-group">
+                        <label><b>Vessel Name</b></label>
+                        <div>{{resp.VesselName}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label><b>ATD</b></label>
+                        <div>{{resp.atd |date:'dd-MM-yyyy HH:mm:ss'}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+
+                <div class="col-md-2" ng-show="resp.AgentName!=null && resp.AgentName!=''">
+                    <div class="form-group">
+                        <label><b>Agent Name</b></label>
+                        <div>{{resp.AgentName}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+
+                <div class="col-md-2" ng-show="resp.LineOprName!=null && resp.LineOprName!=''">
+                    <div class="form-group">
+                        <label><b>Line Operator </b></label>
+                        <div>{{resp.LineOprName}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+
+                <div class="col-md-2" ng-show="resp.SailDirection!=null && resp.SailDirection!=''">
+                    <div class="form-group">
+                        <label><b>SailDirection</b></label>
+                        <div>{{resp.SailDirection}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+
+                <div class="col-md-3" ng-show="resp.VSClassName!=null && resp.VSClassName!=''">
+                    <div class="form-group">
+                        <label><b>VS Class Name</b></label>
+                        <div>{{resp.VSClassName}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+
+                <div class="col-md-3" ng-show="resp.SrvName!=null && resp.SrvName!=''">
+                    <div class="form-group">
+                        <label><b>SrvName</b></label>
+                        <div>{{resp.SrvName}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label><b>Vessel Status</b></label>
+                        <div>
+                            <span class="badge badge-danger" ng-show="resp.VesselStatusCode=='invalid'">{{resp.VesselStatus}}</span>
+                            <span class="badge badge-success" ng-show="resp.VesselStatusCode=='valid'">{{resp.VesselStatus}}</span>
+                            <span class="badge badge-warning" ng-show="resp.VesselStatusCode=='cntrO'">{{resp.VesselStatus}}</span>
+                            <span class="badge badge-info" ng-show="resp.VesselStatusCode=='cntrF'">{{resp.VesselStatus}}</span>
+                        </div>
+                    </div>
+                    @*<div class="dropdown-divider"></div>*@
+                </div>
+                <div class="col-md-2" ng-show="resp.UpdatedAt!=null && resp.UpdatedAt!=''">
+                    <div class="form-group">
+                        <label><b>Updated At</b></label>
+                        <div>{{resp.UpdatedAt | date:'dd-MM-yyyy'}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+                <div class="col-md-2" ng-show="resp.UpdatedBy!=null && resp.UpdatedBy!=''">
+                    <div class="form-group">
+                        <label><b>Updated By</b></label>
+                        <div>{{resp.UpdatedBy}}</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+                <div class="col-md-3" ng-show="resp.Remarks!=null && resp.Remarks!=''">
+                    <div class="form-group">
+                        <label><b>Remarks</b></label>
+                        <div>
+                         <textarea class="form-control"rows="4" disabled  cols="12" ng-model="resp.Remarks" placeholder="Remarks"></textarea>
+                        </div>
+                    </div>
+                    @*<div class="dropdown-divider"></div>*@
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Vessel Master Information End-->
+    <div class="row">
+      <div class="col-md-12">
+              <button ng-click="ExpotToExcelContainer(resp.RefNo ,search)" class="btn btn-secondary pull-right mr-2 ">Export To Excel</button> 
+              @if (User.IsInRole("Finance") || User.IsInRole("Admin"))
+              {
+                <a class="btn btn-secondary cursor-pointer text-white mr-2 pull-right" ng-show="resp.CntrStatusIsClosed==false" ng-click="UpdateContainerStatusMethod()">Validate & Close</a>
+              }
+
+                @if (User.IsInRole("Operations") || User.IsInRole("Admin"))
+                {
+                    <a class="btn btn-primary cursor-pointer text-white pull-right mr-2" ng-show="resp.VesselStatusCode=='cntrO' && resp.CntrStatusIsClosed==false" ng-click="ShowUpdateStatusModal()" ng-cloak>Finance Confirmation</a>
+                }
+             
+              @if (User.IsInRole("Finance") || User.IsInRole("Admin"))
+              {
+                <a class="btn btn-primary cursor-pointer text-white pull-right mr-2" ng-show="resp.VesselStatusCode!='cntrO' && resp.CntrStatusIsClosed==false"  ng-click="ShowUpdateStatusModal()" ng-cloak>Operation Review</a>
+              }
+      </div>
+    </div>
+    <div class="row">
+
+        <div id="tblrep" class="card table-card scrollbar">
+           
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table datatable-show-all text-center" id="table-id">
+                        <thead>
+                            <tr class="table-card-head">
+                                <th>SR#</th>
+                                <th>Cntr</th>
+                                <th>Category</th>
+                                <th>Vgm(KG)</th>
+                                <th>Line Operator  @*opr*@</th>
+                                <th>Vessel Operator </th>
+                                <th>Commodity</th>
+                                <th>Destination</th>
+                                <th>BL Nbr</th>
+                                <th>Origin</th>
+                                <th>InspStages</th>
+
+                                <th>Move Kind</th>
+                                <th>Nominal Length</th>
+                                <th>Nominal Height</th>
+                                <th>AEO</th>
+                                <th>Is oog</th>
+                                <th>Is Bundle</th>
+                                <th>Custom Insp Type</th>
+                                <th>ISO</th>
+                                <th>Is Transit</th>
+                                <th>ITTTo</th>
+                                <th>Xray Status</th>
+                                <th>Status</th>
+                                <th style="width:100px;">Action</th>
+
+                            </tr>
+
+
+                        </thead>
+                        <tbody>
+                            @*class="clickable-style"*@ @*ng-click="GetTask(item.RefNo)"*@
+                            <tr class="clickable-style" ng-repeat="item in VesselContainersDetails | filter:search">
+                                <td>{{$index+1}}</td>
+                                <td>{{item.Cntr}}</td>
+                                <td>{{item.category}}</td>
+                                <td>{{item.goods_ctr_wt_kg_vgm}}</td>
+                                <td>{{item.opr}}</td>
+                                <td>{{item.LineOpr}}</td>
+                                <td>
+                                    <div class="truncate">{{item.commodity}}</div>
+                                </td>
+                                <td>{{item.destination}}</td>
+                                <td>{{item.bl_nbr}}</td>
+                                <td>{{item.Origin}}</td>
+                                <td>{{item.InspStages}}</td>
+                                <td>{{item.move_kind}}</td>
+                                <td>{{item.nominal_length}}</td>
+                                <td>{{item.nominal_height}}</td>
+                                <td>{{item.AEO}}</td>
+                                <td>
+                                    <span ng-if="item.is_oog == true">Yes</span>
+
+                                    <span ng-if="item.is_oog == false">No</span>
+                                </td>
+                                <td>
+                                    <span ng-if="item.is_bundle == true">Yes</span>
+
+                                    <span ng-if="item.is_bundle == false">No</span>
+                                </td>
+                                <td>{{item.CustomInspType}}</td>
+                                <td>{{item.ISO}}</td>
+                                <td>{{item.IsTransit}}</td>
+                                <td>{{item.ITTTo}}</td>
+                                <td>{{item.XrayStatus}}</td>
+
+                                <td>
+                                    <span class="badge badge-danger" ng-show="item.StatusCode=='invalid'">{{item.Status}}</span>
+                                    <span class="badge badge-success" style="font-size: 15px;" ng-show="item.StatusCode=='valid'">{{item.Status}}</span>
+                                    <span class="badge badge-secondary" style="font-size: 15px;" ng-show="item.StatusCode=='cntrClosed'">{{item.Status}}</span>
+                                 </td>
+                                <td style="width:100px">
+                                    <a ng-click="ContainerPrint(item.Cntr,item.RefNo)">
+                                        <i class="icon-printer" title="Print"></i>
+                                    </a>
+                                    <a ng-click="DWHContainerPdf(item.Cntr,item.RefNo)"><i class="icon-file-pdf" title="PDF"></i></a>
+
+                                    <a>
+                                        <i class="icon-file-excel cursor-pointer" title="Export To Excel" ng-click="CntrExcel(item.Cntr,item.RefNo)"></i>
+                                    </a>
+
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Operations"))
+                                    {
+                                        <a ng-show="(item.StatusCode=='invalid' || resp.VesselStatusCode=='cntrO') &&(resp.VesselStatusCode!='valid' && resp.CntrStatusIsClosed ==false)">
+                                            <i class="icon-pencil7 cursor-pointer" title="Edit Container Details" ng-click="ShowContainerDetailsEditModel(item)"></i>
+                                        </a>
+                                    }
+
+                                   
+                                    <a ng-show="item.StatusCode=='valid' ||( _currentUser.UserType.includes('Finance') || _currentUser.UserType.includes('Admin'))">
+                                        <i class="icon-eye cursor-pointer" style="font-size: large; /*cursor: not-allowed*/" ng-click="ShowContainerDetailsReadOnlyModel(item)" title="View"></i>
+                                    </a>
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Operations"))
+                                    {
+                                        <a>
+                                            <i class="icon-bin2 cursor-pointer" data-toggle="modal" data-target="#myModal" ng-show="resp.VesselStatusCode!='valid' && resp.CntrStatusIsClosed ==false" title="Delete Container" ng-click="DeleteRecord(item.Id,item,'Cntr')"></i>
+                                        </a>
+                                    }
+                                  
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="col-md-12">
+                        <button class="floatBottom btn btn-primary" style="width: -webkit-fill-available;" ng-click="LoadMore('Cntr')" ng-show="floatButton">Load More</button>
+                    </div>
+                </div>
+              
+            </div>
+           
+
+
+        </div>
+
+        <!--Alertify Modal Container Edit Start-->
+        <form autocomplete="off" style="display:none;width: auto;position: relative;margin: 0px auto;" id="ContainerDetailsEdit" name="ContainerDetailsEdit">
+
+            <div class="form-body" style="margin:10px;margin-top: 20px;">
+                <div class="row p-t-20">
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label><b>Referenece No</b></label>
+                            <div>{{resp.RefNo}} </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label><b>Cntr No</b></label>
+                            <div>{{CntrDeatils.Cntr}} </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label><b>Status</b></label>
+                            <br />
+                            <div class="badge badge-danger" ng-show="CntrDeatils.StatusCode=='invalid'">{{CntrDeatils.Status}}</div>
+                            <div class="badge badge-success" ng-show="CntrDeatils.StatusCode=='valid'">{{CntrDeatils.Status}}</div>
+                            <div class="badge badge-secondary" style="font-size: 15px;" ng-show="CntrDeatils.CntrDeatils=='cntrClosed'">{{CntrDeatils.Status}}</div>
+                            </div>
+                    </div>
+
+                
+                      
+                    <div class="col-md-6 mt-4">
+                        <a ng-click="ContainerPrint(CntrDeatils.Cntr,resp.RefNo)"><span class="btn btn-success pull-right" title="Print">Print</span></a>
+                        <button type="submit" ng-disabled="ContainerDetailsEdit.$invalid" class="btn btn-primary pull-right mr-3 cursor-pointer" ng-show="DisplaySelect==true" ng-click="UpdateContainerDetailsMethod(CntrDeatils)">Save &amp; Validate</button>
+                    </div>
+
+                </div>
+                <div class="dropdown-divider"></div>
+
+                <!--Edit Records Start-->
+                <div class="row p-t-20  m-2">
+
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">BL Nbr</label><span class="required">*</span>
+                            <input type="text" id="bl_nbr" class="form-control input disabled" placeholder="BL Nbr" ng-model="CntrDeatils.bl_nbr" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Category</label><span class="required">*</span>
+                            @*<input type="text" id="category" class="form-control input disabled" placeholder="Category" ng-model="CntrDeatils.category" required>*@
+                            <select id="Editcategory" ng-show="DisplaySelect==true" class="border border-success rounded" ng-change="BEditCatValidation(CntrDeatils.category)" ng-model="CntrDeatils.category" required>
+                                @*<option data-placeholder="true"></option>*@
+                                <option ng-selected="CntrDeatils.category=='IMPRT'" ng-value="IMPRT">IMPRT</option>
+                                <option ng-selected="CntrDeatils.category=='EXPRT'" ng-value="EXPRT">EXPRT</option>
+                                <option ng-selected="CntrDeatils.category=='TRSHP'" ng-value="TRSHP">TRSHP</option>
+                                <option ng-selected="CntrDeatils.category=='THRGH'" ng-value="THRGH">THRGH</option>
+                                <option ng-selected="CntrDeatils.category=='STRGE'" ng-value="STRGE">STRGE</option>
+                            </select>
+                            <div ng-show="DisplaySelect==false" class="form-control" style="color: #999;background-color: #fafafa;">
+
+                                <span>{{CntrDeatils.category}}</span>
+
+                            </div>
+                         </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">Line Operator@*Opr*@</label> <span class="required">*</span>
+                            <input type="text" id="opr" class="form-control input" placeholder="Line Operator" ng-model="CntrDeatils.opr" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Vgm(KG)</label>
+                            <input type="text" id="goods_ctr_wt_kg_vgm" class="form-control input disabled numaric" placeholder="Vgm(KG)" ng-model="CntrDeatils.goods_ctr_wt_kg_vgm">
+                        </div>
+                    </div>
+                    @*<div class="col-md-6">
+        <div class="form-group has-danger">
+            <label class="control-label">GKey</label>
+            <input type="text" id="gkey" class="form-control input disabled numaric" placeholder="GKey" ng-model="CntrDeatils.gkey">
+        </div>
+    </div>*@
+                    @*<div class="col-md-6">
+        <div class="form-group has-danger">
+            <label class="control-label">CV GKey</label>
+            <input type="text" id="cv_gkey" class="form-control input disabled numaric" placeholder="CV GKey" ng-model="CntrDeatils.cv_gkey">
+        </div>
+    </div>*@
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Declrd Ib Cv</label>
+                            <input type="text" id="declrd_ib_cv" class="form-control input disabled numaric" placeholder="Declrd Ib Cv" ng-model="CntrDeatils.declrd_ib_cv">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Restow Typ</label>
+                            <input type="text" id="restow_typ" class="form-control input disabled" placeholder="Restow typ" ng-model="CntrDeatils.restow_typ">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Hndlg rsn</label>
+                            <input type="text" id="hndlg_rsn" class="form-control input disabled" placeholder="Hndlg rsn" ng-model="CntrDeatils.hndlg_rsn">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label" >Tare Kg</label><span class="required">*</span>
+                            <input type="text" id="tare_kg" class="form-control input disabled numaric" placeholder="" ng-model="CntrDeatils.tare_kg" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">Goods Weight(Kg)</label><span class="required">*</span>
+                            <input type="text" id="goods_and_ctr_wt_kg" class="form-control input disabled numaric" placeholder="Goods Weight(Kg)" ng-model="CntrDeatils.goods_and_ctr_wt_kg" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">Move Kind</label><span class="required">*</span>
+                            <input type="text" id="move_kind" class="form-control input disabled" placeholder="Move Kind" ng-model="CntrDeatils.move_kind" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Nominal length</label><span class="required">*</span>
+                            @*<input type="text" id="nominal_length" class="form-control input disabled" placeholder="Nominal length" ng-model="CntrDeatils.nominal_length">*@
+                            <select id="Editnominal_length" ng-show="DisplaySelect==true"  class="border border-success rounded" ng-model="CntrDeatils.nominal_length" required>
+                                @*<option data-placeholder="true"></option>*@
+                                <option ng-selected="CntrDeatils.nominal_length=='NOM20'" ng-value="NOM20">NOM20</option>
+                                <option ng-selected="CntrDeatils.nominal_length=='NOM40'" ng-value="NOM40">NOM40</option>
+                            </select>
+                            <div ng-show="DisplaySelect==false" class="form-control" style="color: #999;background-color: #fafafa;">
+
+                                <span>{{CntrDeatils.nominal_length}}</span>
+
+                            </div>
+                          </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Nominal Height</label><span class="required">*</span>
+                            @*<input type="text" id="nominal_height" class="form-control input" placeholder="nominal_height" ng-model="CntrDeatils.nominal_height">*@
+                            <select id="Editnominal_height" ng-show="DisplaySelect==true" class="border border-success rounded" ng-model="CntrDeatils.nominal_height" required>
+                                @*<option data-placeholder="true"></option>*@
+                                <option ng-selected="CntrDeatils.nominal_height=='NOM86'" ng-value="NOM86">NOM86</option>
+                                <option ng-selected="CntrDeatils.nominal_height=='NOM96'" ng-value="NOM96">NOM96</option>
+                            </select>
+                            <div ng-show="DisplaySelect==false" class="form-control" style="color: #999;background-color: #fafafa;">
+
+                                <span>{{CntrDeatils.nominal_height}}</span>
+                             
+                            </div>
+                         </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">ISO</label><span class="required">*</span>
+                            <input type="text" id="ISO" class="form-control input" placeholder="ISO" ng-model="CntrDeatils.ISO" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Transit State</label>
+                            <input type="text" id="transit_state" class="form-control input disabled" placeholder="Transit State" ng-model="CntrDeatils.transit_state">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Last Pos Slot</label>
+                            <input type="text" id="last_pos_slot" class="form-control input disabled" placeholder="last pos slot" ng-model="CntrDeatils.last_pos_slot">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Requires Power</label>
+                            @*<input type="text" id="requires_power" class="form-control input" placeholder="Requires Power" ng-model="CntrDeatils.requires_power">*@
+                         
+
+                            <select id="requires_power" class="input" ng-model="CntrDeatils.requires_power" ng-show="DisplaySelect==true">
+                                @*<option data-placeholder="true"></option>*@
+
+                                <option ng-selected="CntrDeatils.requires_power ==true " ng-value="true">Yes</option>
+                                <option ng-selected="CntrDeatils.requires_power == false" ng-value="false">NO</option>
+                            </select>
+                            <div ng-show="DisplaySelect==false" class="form-control" style="color: #999;background-color: #fafafa;">
+
+                                <span ng-show="CntrDeatils.requires_power==true">Yes</span>
+                                <span ng-show="CntrDeatils.requires_power==false">NO</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">Freight Kind</label><span class="required">*</span>
+                            <input type="text" id="freight_kind" class="form-control input" placeholder="Freight Kind" ng-model="CntrDeatils.freight_kind" required>
+                        </div>
+                    </div>
+                    @*<div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Opr Name</label>
+                            <input type="text" id="oprname" class="form-control input" placeholder="Line Opr" ng-model="CntrDeatils.oprname">
+                        </div>
+                    </div>*@
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">Vessel operator@*Line Opr*@</label><span class="required">*</span>
+                            <input type="text" id="LineOpr" class="form-control input" placeholder="Line Operator" ng-model="CntrDeatils.LineOpr" required>
+                        </div>
+                    </div>
+                    @*<div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Line Operator </label>
+                            <input type="text" id="LineOprName" class="form-control input" placeholder="Line Operator" ng-model="CntrDeatils.LineOprName">
+                        </div>
+                    </div>*@
+                    <div class="col-md-3">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Is oog</label>
+                            @*<input type="text" id="is_oog" class="form-control input" placeholder="Is oog" ng-model="CntrDeatils.is_oog">*@
+
+                            <select id="is_oog1" class="input" ng-model="CntrDeatils.is_oog" ng-show="DisplaySelect==true">
+                                <option data-placeholder="true"></option>
+
+                                <option ng-selected="CntrDeatils.is_oog ==true " ng-value="true">Yes</option>
+                                <option ng-selected="CntrDeatils.is_oog == false" ng-value="false">NO</option>
+                            </select>
+                            <div ng-show="DisplaySelect==false" class="form-control" style="color: #999;background-color: #fafafa;">
+
+                                <span ng-show="CntrDeatils.is_oog==true">Yes</span>
+                                <span ng-show="CntrDeatils.is_oog==false">NO</span>
+                            </div>
+
+                            @*<input type="checkbox" ng-model="CntrDeatils.is_oog" />*@
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Is Bundle</label>
+                            @*<input type="text" id="is_bundle" class="form-control input" placeholder="Is Bundle" ng-model="CntrDeatils.is_bundle">*@
+
+                            @*<input type="checkbox" ng-model="CntrDeatils.is_bundle" />*@
+
+
+                            <select id="is_bundle1" class="input displaySelect" ng-model="CntrDeatils.is_bundle" ng-show="DisplaySelect==true">
+                                <option data-placeholder="true"></option>
+
+                                <option ng-selected="CntrDeatils.is_bundle ==true " ng-value="true">Yes</option>
+                                <option ng-selected="CntrDeatils.is_bundle == false" ng-value="false">NO</option>
+                            </select>
+                            <div ng-show="DisplaySelect==false" class="form-control" style="color: #999;background-color: #fafafa;">
+
+                                <span ng-show="CntrDeatils.is_bundle==true">Yes</span>
+                                <span ng-show="CntrDeatils.is_bundle==false">NO</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Relationship Role</label>
+                            <input type="text" id="relationship_role" class="form-control input" placeholder="relationship_role" ng-model="CntrDeatils.relationship_role">
+                        </div>
+                    </div>
+                  
+
+
+
+                    @*<div class="col-md-6">
+                            <div class="form-group has-danger">
+                                <label class="control-label">Unit GKey</label>
+
+                                <div class="input-group">
+                                    <input type="text" class="form-control input date" id="unit_gkey" ng-model="CntrDeatils.unit_gkey" placeholder="DD/MM/YYYY HH:mm">
+
+                                    <span class="input-group-append">
+                                        <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Paid thru day</label>
+                            <input type="text" id="paid_thru_day" class="form-control input" placeholder="Paid thru day" ng-model="CntrDeatils.paid_thru_day">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@*CUSTDFF*@ EMPTY RETURN DAYS</label>
+                            <input type="text" id="CUSTDFF_EMPTY_RETURN_DAYS" class="form-control input" placeholder="EMPTY RETURN DAYS" ng-model="CntrDeatils.CUSTDFF_EMPTY_RETURN_DAYS">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@*CUSTDFF*@ IMPORT DLVRY DAYS</label>
+                            <input type="text" id="CUSTDFF_IMPORT_DLVRY_DAYS" class="form-control input" placeholder="IMPORT DLVRY DAYS" ng-model="CntrDeatils.CUSTDFF_IMPORT_DLVRY_DAYS">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@*CUSTDFF*@ MT RETURN LOC</label>
+                            <input type="text" id="CUSTDFF_MT_RETURN_LOC" class="form-control input" placeholder="MT RETURN LOC" ng-model="CntrDeatils.CUSTDFF_MT_RETURN_LOC">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@*CUSTDFF*@ VALIDITY DT IMPR DLVRY</label>
+                            <input type="text" id="CUSTDFF_VALIDITY_DT_IMPR_DLVRY" class="form-control input" placeholder="VALIDITY DT IMPR DLVRY" ng-model="CntrDeatils.CUSTDFF_VALIDITY_DT_IMPR_DLVRY">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@*CUSTDFF*@ VALIDTITY MT RETURN</label>
+                            <input type="text" id="CUSTDFF BROKERNAME" class="form-control input" placeholder="VALIDTITY MT RETURN" ng-model="CntrDeatils.CUSTDFF_VALIDTITY_MT_RETURN">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@*CUSTDFF*@ BROKERNAME</label>
+                            <input type="text" id="CUSTDFF_BROKERNAME" class="form-control input" placeholder="BROKERNAME" ng-model="CntrDeatils.CUSTDFF_BROKERNAME">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@*CUSTDFF*@ BROKERNO</label>
+                            <input type="text" id="CUSTDFF_BROKERNO" class="form-control input numaric" placeholder="BROKERNO" ng-model="CntrDeatils.CUSTDFF_BROKERNO">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@*CUSTDFF*@ DECLARATIONTYPE</label>
+                            <input type="text" id="CUSTDFF_DECLARATIONTYPE" class="form-control input" placeholder="DECLARATIONTYPE" ng-model="CntrDeatils.CUSTDFF_DECLARATIONTYPE">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@*CUSTDFF*@ DLVRYORDERNO</label>
+                            <input type="text" id="CUSTDFF_DLVRYORDERNO" class="form-control input numaric" placeholder="DLVRYORDERNO" ng-model="CntrDeatils.CUSTDFF_DLVRYORDERNO">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">oog back cm</label>
+                            <input type="text" id="oog_back_cm" class="form-control input numaric" placeholder="oog back cm" ng-model="CntrDeatils.oog_back_cm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">oog front cm</label>
+                            <input type="text" id="oog_front_cm" class="form-control input numaric" placeholder="oog_front_cm" ng-model="CntrDeatils.oog_front_cm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">oog left cm</label>
+                            <input type="text" id="oog_left_cm" class="form-control input numaric" placeholder="oog left cm" ng-model="CntrDeatils.oog_left_cm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">oog right cm</label>
+                            <input type="text" id="oog_right_cm" class="form-control input numaric" placeholder="oog right cm" ng-model="CntrDeatils.oog_right_cm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">oog top cm</label>
+                            <input type="text" id="oog_top_cm" class="form-control input numaric" placeholder="oog top cm" ng-model="CntrDeatils.oog_top_cm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Damage</label>
+                            <input type="text" id="damage" class="form-control input" placeholder="Damage" ng-model="CntrDeatils.damage">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">Commodity</label><span class="required">*</span>
+                            <input type="text" id="commodity" class="form-control input" placeholder="commodity" ng-model="CntrDeatils.commodity" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 was-validated">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Destination</label><span class="required">*</span>
+                            <input type="text" id="TotalCranes" class="form-control input" placeholder="Destination" ng-model="CntrDeatils.destination" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Hazard ous</label>
+                            @*<input type="text" id="hazardous" class="form-control input" placeholder="hazard ous" ng-model="CntrDeatils.hazardous">*@
+
+                            <select id="hazardous" ng-change="BEditHazardValidation(CntrDeatils.hazardous)" class="input" ng-model="CntrDeatils.hazardous" ng-show="DisplaySelect==true">
+                                <option data-placeholder="true"></option>
+
+                                <option ng-selected="CntrDeatils.hazardous ==true" ng-value="true">Yes</option>
+                                <option ng-selected="CntrDeatils.hazardous == false" ng-value="false">NO</option>
+                            </select>
+                            <div ng-show="DisplaySelect==false" class="form-control" style="color: #999;background-color: #fafafa;">
+
+                                <span ng-show="CntrDeatils.hazardous==true">Yes</span>
+                                <span ng-show="CntrDeatils.hazardous==false">NO</span>
+                            </div>
+                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div ng-class="EditHazrazValueClass">
+                            <label class="control-label">Imdg Types</label> <span ng-show="CntrDeatils.hazardous=='true'" class="required">*</span>
+                            <input type="text" id="imdg_types" class="form-control input" placeholder="Imdg Types" ng-model="CntrDeatils.imdg_types" ng-required="CntrDeatils.hazardous=='true'">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div ng-class="EditHazrazValueClass">
+                            <label class="control-label">hazard un nums</label><span ng-show="CntrDeatils.hazardous=='true'" class="required">*</span>
+                            <input type="text" id="hazard_un_nums" class="form-control input" placeholder="hazard un nums" ng-model="CntrDeatils.hazard_un_nums" ng-required="CntrDeatils.hazardous=='true'">
+                        </div>
+                    </div>
+                  
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Temp max C</label>
+                            <input type="text" id="temp_max_C" class="form-control input numaric" placeholder="temp_max_C" ng-model="CntrDeatils.temp_max_C">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Temp min C</label>
+                            <input type="text" id="temp_min_C" class="form-control input numaric" placeholder="Temp min C" ng-model="CntrDeatils.temp_min_C">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Temp reqd C</label>
+                            <input type="text" id="temp_reqd_C" class="form-control input numaric" placeholder="Temp reqd C" ng-model="CntrDeatils.temp_reqd_C">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">@*CUSTDFF*@ COMMODITYGRP</label>
+                            <input type="text" id="CUSTDFF_COMMODITYGRP" class="form-control input" placeholder="COMMODITYGRP" ng-model="CntrDeatils.CUSTDFF_COMMODITYGRP">
+                        </div>
+                    </div>
+                  
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">Origin</label><span class="required">*</span>
+                            <input type="text" id="Origin" class="form-control input" placeholder="Origin" ng-model="CntrDeatils.Origin" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">Shipper</label><span class="required">*</span>
+                            <input type="text" id="Shipper" class="form-control input" placeholder="Shipper" ng-model="CntrDeatils.Shipper" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">Consignee</label><span class="required">*</span>
+                            <input type="text" id="Consignee" class="form-control input" placeholder="Consignee" ng-model="CntrDeatils.Consignee" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Is Transit</label>
+                            <input type="text" id="IsTransit" class="form-control input" placeholder="Is Transit" ng-model="CntrDeatils.IsTransit">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Load Broker</label>
+                            <input type="text" id="Load Broker" class="form-control input" placeholder="Load Broker" ng-model="CntrDeatils.LoadBroker">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">Custom Status</label><span class="required">*</span>
+                            <input type="text" id="Custom Status" class="form-control input" placeholder="Custom Status" ng-model="CntrDeatils.CustomStatus" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">ITTTo</label>
+                            <input type="text" id="ITTTo" class="form-control input" placeholder="ITTTo" ng-model="CntrDeatils.ITTTo">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Is Free Zone</label>
+                            <input type="text" id="IsFreeZone" class="form-control input" placeholder="Is Free Zone" ng-model="CntrDeatils.IsFreeZone">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Reinsp Reason</label>
+                            <input type="text" id="ReinspReason" class="form-control input" placeholder="Reinsp Reason" ng-model="CntrDeatils.ReinspReason">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div ng-class="EditCatExprtValueClass">
+                            <label class="control-label">Load Permit No</label><span ng-show="CntrDeatils.category=='EXPRT'" class="required">*</span>
+                            <input type="text" id="Load Permit No" class="form-control input" placeholder="Load Permit No" ng-model="CntrDeatils.LoadPermitNo" ng-required="CntrDeatils.category=='EXPRT'">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">ITT From</label>
+                            <input type="text" id="ITT From" class="form-control input" placeholder="ITT From" ng-model="CntrDeatils.ITTFrom">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Custom Insp Type</label>
+                            <input type="text" id="CustomInspType" class="form-control input" placeholder="Custom Insp Type" ng-model="CntrDeatils.CustomInspType">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">ISN</label>
+                            <input type="text" id="ISN" class="form-control input" placeholder="ISN" ng-model="CntrDeatils.ISN">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div ng-class="EditCatImprtValueClass">
+                            <label class="control-label">Bayan No</label><span ng-show="CntrDeatils.category=='IMPRT'" class="required">*</span>
+                            <input type="text" id="BayanNo" class="form-control input" placeholder="Bayan No" ng-model="CntrDeatils.BayanNo" ng-required="CntrDeatils.category=='IMPRT'">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Doc RefNo</label>
+                            <input type="text" id="DocRefNo" class="form-control input" placeholder="Doc RefNo" ng-model="CntrDeatils.DocRefNo">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">AEO</label>
+                            <input type="text" id="AEO" class="form-control input" placeholder="AEO" ng-model="CntrDeatils.AEO">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger was-validated">
+                            <label class="control-label">App Shift</label><span class="required">*</span>
+                            <input type="text" id="AppShift" class="form-control input" placeholder="App Shift" ng-model="CntrDeatils.AppShift" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Transported To</label>
+                            <input type="text" id="TransportedTo" class="form-control input" placeholder="Transported To" ng-model="CntrDeatils.TransportedTo">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">InspStages</label>
+                            <input type="text" id="InspStages" class="form-control input" placeholder="InspStages" ng-model="CntrDeatils.InspStages">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div ng-class="EditCatImprtValueClass">
+                            <label class="control-label">XrayStatus</label><span ng-show="CntrDeatils.category=='IMPRT'" class="required">*</span>
+                            <input type="text" id="XrayStatus" class="form-control input" placeholder="XrayStatus" ng-required="CntrDeatils.category=='IMPRT'" ng-model="CntrDeatils.XrayStatus">
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Fetch Time</label>
+                            @*<input type="text" id="fetchTime" class="form-control input disabled" placeholder="Fetch Time" ng-model="CntrDeatils.fetchTime">*@
+
+                            <div class="input-group">
+                                <input type="text" class="form-control input date" id="fetchTime" ng-model="CntrDeatils.fetchTime" placeholder="DD/MM/YYYY HH:mm">
+
+                                <span class="input-group-append">
+                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                </span>
+                            </div> <!--DateTIme End-->
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Put Time</label>
+                            @*<input type="text" id="PutTime" class="form-control input disabled" placeholder="Put Time" ng-model="CntrDeatils.PutTime">*@
+                            <div class="input-group">
+                                <input type="text" class="form-control input date" id="PutTime" ng-model="CntrDeatils.PutTime" placeholder="DD/MM/YYYY HH:mm">
+
+                                <span class="input-group-append">
+                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                </span>
+                            </div> <!--DateTIme End-->
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Time in</label>
+                            @*<input type="text" id="time_in" class="form-control input" placeholder="Time in" ng-model="CntrDeatils.time_in">*@
+                            <div class="input-group">
+                                <input type="text" class="form-control input date" id="time_in" ng-model="CntrDeatils.time_in" placeholder="DD/MM/YYYY HH:mm">
+
+                                <span class="input-group-append">
+                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                </span>
+                            </div> <!--DateTIme End-->
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <label class="control-label">Time Out</label>
+                            @*<input type="text" id="time_out" class="form-control input" placeholder="Time Out" ng-model="CntrDeatils.time_out">*@
+                            <div class="input-group">
+                                <input type="text" class="form-control input date" id="time_out" ng-model="CntrDeatils.time_out" placeholder="DD/MM/YYYY HH:mm">
+
+                                <span class="input-group-append">
+                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                </span>
+                            </div> <!--DateTIme End-->
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+            </div><!--form Body End-->
+
+        </form> 
+       <!--Form Close-->
+        <!--Alertify Modal Container Edit End-->
+        <!--Alertify Add Container Modal  Start-->
+        <form autocomplete="off" style="display:none;width: auto;position: relative;margin: 0px auto;" id="AddContainerDetails" name="AddContainerDetails" >
+
+            <div class="form-body" style="margin:10px;margin-top: 20px;">
+                <div class="row p-t-20">
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label><b>Referenece No</b></label>
+                            <div>{{resp.RefNo}} </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="dropdown-divider"></div>
+
+                <!--Add Records Start-->
+                <div class="row p-t-20  m-2">
+
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Cntr</label><span class="required">*</span>
+                            <input type="text" id="addCntr" class="form-control  disabled" placeholder="Cntr" ng-model="AddCntrDeatils.Cntr" required>
+                          </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">BL Nbr</label><span class="required">*</span>
+                            <input type="text" id="addbl_nbr" class="form-control" placeholder="BL Nbr" ng-model="AddCntrDeatils.bl_nbr" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Category</label><span class="required">*</span>
+                            @*<input type="text" id="addcategory" class="form-control input disabled" placeholder="Category" ng-model="AddCntrDeatils.category" required>*@
+                            <select id="addcategory"  ng-class="bordercolorCat" ng-change="usetwoMethod4Validation(AddCntrDeatils.category,'cat')"  ng-model="AddCntrDeatils.category" required>
+                                <option data-placeholder="true"></option>
+                                <option ng-value="IMPRT">IMPRT</option>
+                                <option ng-value="EXPRT">EXPRT</option>
+                                <option ng-value="TRSHP">TRSHP</option>
+                                <option ng-value="THRGH">THRGH</option>
+                                <option ng-value="STRGE">STRGE</option>
+                            </select>
+ 
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Line Operator@*Opr*@</label><span class="required">*</span>    
+                            <input type="text" id="addopr" class="form-control" placeholder="Line Operator" ng-model="AddCntrDeatils.opr" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Vgm(Kg) @*Goods & Ctr wt(kg)*@</label>
+                            <input type="text" id="addgoods_and_ctr_wt_kg" class="form-control input  numaric" placeholder="Vgm(Kg)" ng-model="AddCntrDeatils.goods_ctr_wt_kg_vgm">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">GKey</label>
+                            <input type="text" id="addgkey" class="form-control numaric" placeholder="GKey" ng-model="AddCntrDeatils.gkey">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">CV GKey</label>
+                            <input type="text" id="addcv_gkey" class="form-control numaric" placeholder="CV GKey" ng-model="AddCntrDeatils.cv_gkey">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Declrd Ib Cv</label>
+                            <input type="text" id="adddeclrd_ib_cv" class="form-control numaric" placeholder="Declrd Ib Cv" ng-model="AddCntrDeatils.declrd_ib_cv">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Restow Typ</label>
+                            <input type="text" id="addrestow_typ" class="form-control" placeholder="Restow typ" ng-model="AddCntrDeatils.restow_typ">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Hndlg rsn</label>
+                            <input type="text" id="addhndlg_rsn" class="form-control" placeholder="Hndlg rsn" ng-model="AddCntrDeatils.hndlg_rsn">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label was-validated">Tare Kg</label><span class="required">*</span>
+                            <input type="text" id="addtare_kg" class="form-control numaric" placeholder="Tare Kg" ng-model="AddCntrDeatils.tare_kg" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Goods Weight(Kg)</label><span class="required">*</span>
+                            <input type="text" id="addgoods_and_ctr_wt_kg" class="form-control numaric" placeholder="Goods Weight" ng-model="AddCntrDeatils.goods_and_ctr_wt_kg" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Move Kind</label><span class="required">*</span>
+                            <input type="text" id="addmove_kind" class="form-control" placeholder="Move Kind" ng-model="AddCntrDeatils.move_kind" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Nominal length</label><span class="required">*</span><!--Drop Dwon-->
+                            @*<input type="text" id="addnominal_length" class="form-control input disabled" placeholder="Nominal length" ng-model="AddCntrDeatils.nominal_length">*@
+                            <select id="addnominal_length" ng-class="bordercolorlength"  ng-change="colorchange('length')" ng-model="AddCntrDeatils.nominal_length" required>
+                                <option data-placeholder="true"></option>
+                                <option ng-value="NOM20">NOM20</option>
+                                <option ng-value="NOM40">NOM40</option>
+                            </select>
+                         </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Nominal Height</label><span class="required">*</span>
+                            @*<input type="text" id="addnominal_height" class="form-control" placeholder="nominal_height" ng-model="AddCntrDeatils.nominal_height">*@
+                            <select id="addnominal_height" ng-class="bordercolorheight"  ng-change="colorchange('height')"  ng-model="AddCntrDeatils.nominal_height" required>
+                                <option data-placeholder="true"></option>
+                                <option ng-value="NOM86">NOM86</option>
+                                <option ng-value="NOM96">NOM96</option>
+                            </select>
+                         </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">ISO</label><span class="required">*</span>
+                            <input type="text" id="addISO" class="form-control" placeholder="ISO" ng-model="AddCntrDeatils.ISO" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Transit State</label>
+                            <input type="text" id="addtransit_state" class="form-control" placeholder="Transit State" ng-model="AddCntrDeatils.transit_state">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Last Pos Slot</label>
+                            <input type="text" id="addlast_pos_slot" class="form-control" placeholder="last pos slot" ng-model="AddCntrDeatils.last_pos_slot">
+                        </div>
+                    </div>
+                   
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Requires Power</label>
+                            <!-- <input type="text" id="addrequires_power" class="form-control input" placeholder="Requires Power" ng-model="AddCntrDeatils.requires_power">-->
+                            <select id="addrequires_power"  ng-model="AddCntrDeatils.requires_power">
+                                <option data-placeholder="true"></option>
+
+                                <option ng-value="true">Yes</option>
+                                <option ng-value="false" ng-selected="AddCntrDeatils.requires_power==null || AddCntrDeatils.requires_power==''">NO</option>
+                            </select>
+                        </div>
+                         </div>
+            
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Freight Kind</label><span class="required">*</span>
+                            <input type="text" id="addfreight_kind" class="form-control" placeholder="Freight Kind" ng-model="AddCntrDeatils.freight_kind" required>
+                        </div>
+                    </div>
+                    @*<div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Opr Name</label>
+                            <input type="text" id="addoprname" class="form-control input" placeholder="Opr Name" ng-model="AddCntrDeatils.oprname">
+                        </div>
+                    </div>*@
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Vessel Operator@*Line Opr*@</label><span class="required">*</span>
+                            <input type="text" id="addLineOpr" class="form-control" placeholder="Vessel Operator" ng-model="AddCntrDeatils.LineOpr" required>
+                        </div>
+                    </div>
+                    @*<div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Line Operator</label>
+                            <input type="text" id="addLineOprName" class="form-control input" placeholder="Line Opr Name" ng-model="AddCntrDeatils.LineOprName">
+                        </div>
+                    </div>*@
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Is oog</label>
+                            @*<input type="text" id="is_oog" class="form-control input" placeholder="Is oog" ng-model="AddCntrDeatils.is_oog">*@
+
+                            <select id="addis_oog"  ng-model="AddCntrDeatils.is_oog">
+                                <option data-placeholder="true"></option>
+                                   
+                                <option  ng-value="true">Yes</option>
+                                <option ng-selected="AddCntrDeatils.is_oog=='' || AddCntrDeatils.is_oog==null" ng-value="false">NO</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Is Bundle</label>
+                            @*<input type="text" id="is_bundle" class="form-control input" placeholder="Is Bundle" ng-model="CntrDeatils.is_bundle">*@
+
+                            @*<input type="checkbox" ng-model="CntrDeatils.is_bundle" />*@
+
+
+                            <select id="addis_bundle"  ng-model="AddCntrDeatils.is_bundle">
+                                <option data-placeholder="true"></option>
+
+                                <option ng-value="true">Yes</option>
+                                <option ng-selected="AddCntrDeatils.is_bundle=='' || AddCntrDeatils.is_bundle==null" ng-value="false">NO</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Relationship Role</label>
+                            <input type="text" id="addrelationship_role" class="form-control" ng-model="AddCntrDeatils.relationship_role" placeholder="relationship_role" value="PRIMARY">
+                        </div>
+                    </div>
+                  
+               
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Unit GKey</label>
+                            <input type="text" id="unit_gkey" class="form-control numaric" placeholder="unit gkey" ng-model="AddCntrDeatils.unit_gkey">
+                          
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Paid thru day</label>
+                            <input type="text" id="addpaid_thru_day" class="form-control" placeholder="Paid thru day" ng-model="AddCntrDeatils.paid_thru_day">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">@*CUSTDFF*@ EMPTY RETURN DAYS</label>
+                            <input type="text" id="addCUSTDFF_EMPTY_RETURN_DAYS" class="form-control" placeholder="EMPTY RETURN DAYS" ng-model="AddCntrDeatils.CUSTDFF_EMPTY_RETURN_DAYS">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">@*CUSTDFF*@ IMPORT DLVRY DAYS</label>
+                            <input type="text" id="addCUSTDFF_IMPORT_DLVRY_DAYS" class="form-control " placeholder="IMPORT DLVRY DAYS" ng-model="AddCntrDeatils.CUSTDFF_IMPORT_DLVRY_DAYS">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">@*CUSTDFF*@ MT RETURN LOC</label>
+                            <input type="text" id="addCUSTDFF_MT_RETURN_LOC" class="form-control" placeholder="MT RETURN LOC" ng-model="AddCntrDeatils.CUSTDFF_MT_RETURN_LOC">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">@*CUSTDFF*@ VALIDITY DT IMPR DLVRY</label>
+                            <input type="text" id="addCUSTDFF_VALIDITY_DT_IMPR_DLVRY" class="form-control" placeholder="VALIDITY DT IMPR DLVRY" ng-model="AddCntrDeatils.CUSTDFF_VALIDITY_DT_IMPR_DLVRY">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">@*CUSTDFF*@ VALIDTITY MT RETURN</label>
+                            <input type="text" id="addCUSTDFFCUSTDFF_VALIDTITY_MT_RETURN" class="form-control" placeholder="VALIDTITY MT RETURN" ng-model="AddCntrDeatils.CUSTDFF_VALIDTITY_MT_RETURN">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">@*CUSTDFF*@ BROKERNAME</label>
+                            <input type="text" id="addCUSTDFF_BROKERNAME" class="form-control" placeholder="BROKERNAME" ng-model="AddCntrDeatils.CUSTDFF_BROKERNAME">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">@*CUSTDFF*@ BROKERNO</label>
+                            <input type="text" id="addCUSTDFF_BROKERNO" class="form-control numaric" placeholder="BROKERNO" ng-model="AddCntrDeatils.CUSTDFF_BROKERNO">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">@*CUSTDFF*@ DECLARATIONTYPE</label>
+                            <input type="text" id="addCUSTDFF_DECLARATIONTYPE" class="form-control numaric" placeholder="DECLARATIONTYPE" ng-model="AddCntrDeatils.CUSTDFF_DECLARATIONTYPE">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">@*CUSTDFF*@ DLVRYORDERNO</label>
+                            <input type="text" id="addCUSTDFF_DLVRYORDERNO" class="form-control numaric" placeholder="DLVRYORDERNO" ng-model="AddCntrDeatils.CUSTDFF_DLVRYORDERNO">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">oog back cm</label>
+                            <input type="text" id="addoog_back_cm" class="form-control numaric" placeholder="oog back cm" ng-model="AddCntrDeatils.oog_back_cm">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">oog front cm</label>
+                            <input type="text" id="addoog_front_cm" class="form-control numaric" placeholder="oog_front_cm" ng-model="AddCntrDeatils.oog_front_cm">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">oog left cm</label>
+                            <input type="text" id="addoog_left_cm" class="form-control numaric" placeholder="oog left cm" ng-model="AddCntrDeatils.oog_left_cm">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">oog right cm</label>
+                            <input type="text" id="addoog_right_cm" class="form-control numaric" placeholder="oog right cm" ng-model="AddCntrDeatils.oog_right_cm">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">oog top cm</label>
+                            <input type="text" id="addoog_top_cm" class="form-control numaric" placeholder="oog top cm" ng-model="AddCntrDeatils.oog_top_cm">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-grou ">
+                            <label class="control-label">Damage</label>
+                            <input type="text" id="adddamage" class="form-control" placeholder="Damage" ng-model="AddCntrDeatils.damage">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Commodity</label><span class="required">*</span>
+                            <input type="text" id="addcommodity" class="form-control" placeholder="commodity" ng-model="AddCntrDeatils.commodity" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Destination</label><span class="required">*</span>
+                            <input type="text" id="addTotalCranes" class="form-control" placeholder="Destination" ng-model="AddCntrDeatils.destination" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Hazard ous</label>
+                            @*<input type="text" id="addhazardous" class="form-control input" placeholder="hazard ous" ng-model="AddCntrDeatils.hazardous">*@
+                            <select id="addhazardous" ng-change="BHazardValidation(AddCntrDeatils.hazardous,'Hazard')" ng-model="AddCntrDeatils.hazardous">
+                                <option value="false" ng-selected="AddCntrDeatils.hazardous==null || AddCntrDeatils.hazardous==''">NO</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div ng-class="HazrazValueClass">
+                            <label class="control-label">Imdg Types</label><span ng-show="AddCntrDeatils.hazardous=='true'"  class="required">*</span>
+                            <input type="text" id="addimdg_types" class="form-control" placeholder="Imdg Types" ng-required="AddCntrDeatils.hazardous=='true'" ng-model="AddCntrDeatils.imdg_types"> 
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div  ng-class="HazrazValueClass">
+                            <label class="control-label">hazard un nums</label><span ng-show="AddCntrDeatils.hazardous=='true'" class="required">*</span>
+                            <input type="text" id="addhazard_un_nums" class="form-control" placeholder="hazard un nums" ng-required="AddCntrDeatils.hazardous=='true'" ng-model="AddCntrDeatils.hazard_un_nums">
+                        </div>
+                    </div>
+                  
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Temp max C</label>
+                            <input type="text" id="addtemp_max_C" class="form-control numaric" placeholder="temp_max_C" ng-model="AddCntrDeatils.temp_max_C">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Temp min C</label>
+                            <input type="text" id="addtemp_min_C" class="form-control numaric" placeholder="Temp min C" ng-model="AddCntrDeatils.temp_min_C">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Temp reqd C</label>
+                            <input type="text" id="addtemp_reqd_C" class="form-control numaric" placeholder="Temp reqd C" ng-model="AddCntrDeatils.temp_reqd_C">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">@*CUSTDFF*@ COMMODITYGRP</label>
+                            <input type="text" id="addCUSTDFF_COMMODITYGRP" class="form-control" placeholder="COMMODITYGRP" ng-model="AddCntrDeatils.CUSTDFF_COMMODITYGRP">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Origin</label><span class="required">*</span>
+                            <input type="text" id="addOrigin" class="form-control" placeholder="Origin" ng-model="AddCntrDeatils.Origin"  required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Shipper</label><span class="required">*</span>
+                            <input type="text" id="addShipper" class="form-control" placeholder="Shipper" ng-model="AddCntrDeatils.Shipper" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Consignee</label><span class="required">*</span>
+                            <input type="text" id="addConsignee" class="form-control" placeholder="Consignee" ng-model="AddCntrDeatils.Consignee" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Is Transit</label>
+                            <input type="text" id="addIsTransit" class="form-control" placeholder="Is Transit" ng-model="AddCntrDeatils.IsTransit">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Load Broker</label>
+                            <input type="text" id="addLoadBroker" class="form-control" placeholder="Load Broker" ng-model="AddCntrDeatils.LoadBroker">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">Custom Status</label><span class="required">*</span>
+                            <input type="text" id="addCustomStatus" class="form-control" placeholder="Custom Status" ng-model="AddCntrDeatils.CustomStatus" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">ITTTo</label>
+                            <input type="text" id="addITTTo" class="form-control" placeholder="ITTTo" ng-model="AddCntrDeatils.ITTTo">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Is Free Zone</label>
+                            <input type="text" id="addIsFreeZone" class="form-control" placeholder="Is Free Zone" ng-model="AddCntrDeatils.IsFreeZone">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Reinsp Reason</label>
+                            <input type="text" id="addReinspReason" class="form-control" placeholder="Reinsp Reason" ng-model="AddCntrDeatils.ReinspReason">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div  ng-class="CatExprtValueClass">
+                            <label class="control-label">Load Permit No</label><span ng-show="AddCntrDeatils.category=='EXPRT'" class="required">*</span>
+                            <input type="text" id="addLoadPermitNo" class="form-control" placeholder="Load Permit No" ng-required="AddCntrDeatils.category=='EXPRT'" ng-model="AddCntrDeatils.LoadPermitNo">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">ITT From</label>
+                            <input type="text" id="addITTFrom" class="form-control" placeholder="ITT From" ng-model="AddCntrDeatils.ITTFrom">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Custom Insp Type</label>@*<span ng-show="AddCntrDeatils.category=='IMPRT'" class="required">*</span>*@
+                            <input type="text" id="addCustomInspType" class="form-control" placeholder="Custom Insp Type" @*ng-required="AddCntrDeatils.category=='IMPRT'"*@ ng-model="AddCntrDeatils.CustomInspType">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">ISN</label>
+                            <input type="text" id="addISN" class="form-control" placeholder="ISN" ng-model="AddCntrDeatils.ISN">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div ng-class="CatImprtValueClass">
+                            <label class="control-label">Bayan No</label><span ng-show="AddCntrDeatils.category=='IMPRT'" class="required">*</span>
+                            <input type="text" id="addBayanNo" class="form-control" placeholder="Bayan No" ng-required="AddCntrDeatils.category=='IMPRT'" ng-model="AddCntrDeatils.BayanNo">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Doc RefNo</label>
+                            <input type="text" id="addDocRefNo" class="form-control" placeholder="Doc RefNo" ng-model="AddCntrDeatils.DocRefNo">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">AEO</label>
+                            <input type="text" id="addAEO" class="form-control" placeholder="AEO" ng-model="AddCntrDeatils.AEO">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group was-validated">
+                            <label class="control-label">App Shift</label><span class="required">*</span>
+                            <input type="text" id="addAppShift" class="form-control" placeholder="App Shift" ng-model="AddCntrDeatils.AppShift" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Transported To</label>
+                            <input type="text" id="addTransportedTo" class="form-control" placeholder="Transported To" ng-model="AddCntrDeatils.TransportedTo">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">InspStages</label>
+                            <input type="text" id="addInspStages" class="form-control" placeholder="InspStages" ng-model="AddCntrDeatils.InspStages">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div ng-class="CatImprtValueClass">
+                            <label class="control-label">XrayStatus</label><span ng-show="AddCntrDeatils.category=='IMPRT'" class="required">*</span>
+                            <input type="text" id="addXrayStatus" class="form-control" placeholder="XrayStatus" ng-required="AddCntrDeatils.category=='IMPRT'" ng-model="AddCntrDeatils.XrayStatus">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="dropdown-divider"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label class="control-label">Fetch Time</label>
+
+
+                            <div class="input-group">
+                                <input type="text" class="form-control  date" id="addfetchTime" ng-model="AddCntrDeatils.fetchTime" placeholder="DD/MM/YYYY HH:mm">
+
+                                <span class="input-group-append">
+                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Put Time</label>
+                            @*<input type="text" id="PutTime" class="form-control input disabled" placeholder="Put Time" ng-model="AddCntrDeatils.PutTime">*@
+                            <div class="input-group">
+                                <input type="text" class="form-control  date" id="addPutTime" ng-model="AddCntrDeatils.PutTime" placeholder="DD/MM/YYYY HH:mm">
+
+                                <span class="input-group-append">
+                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                </span>
+                            </div> <!--DateTIme End-->
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Time in</label>
+                            @*<input type="text" id="time_in" class="form-control input" placeholder="Time in" ng-model="AddCntrDeatils.time_in">*@
+                            <div class="input-group">
+                                <input type="text" class="form-control  date" id="addtime_in" ng-model="AddCntrDeatils.time_in" placeholder="DD/MM/YYYY HH:mm">
+
+                                <span class="input-group-append">
+                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                </span>
+                            </div> <!--DateTIme End-->
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Time Out</label>
+                            @*<input type="text" id="time_out" class="form-control input" placeholder="Time Out" ng-model="AddCntrDeatils.time_out">*@
+                            <div class="input-group">
+                                <input type="text" class="form-control  date" id="addtime_out" ng-model="AddCntrDeatils.time_out" placeholder="DD/MM/YYYY HH:mm">
+
+                                <span class="input-group-append">
+                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                </span>
+                            </div> <!--DateTIme End-->
+                        </div>
+                    </div>
+                    <div  class="col-md-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary pull-right mr-3 mt-3 cursor-pointer" ng-disabled="AddContainerDetails.$invalid" ng-click="AddContainerDetailsMethod(AddCntrDeatils)">Add</button>
+                        </div>
+                    </div>
+
+
+            </div><!--form Body End-->
+                </div>
+        </form> <!--Form Close-->
+        <!--Alertify Add Container Modal  End-->
+        <!--Alertify Modal Action Start-->
+        <form style="display:none;width: auto;position: relative;margin: 0px auto;" id="CntrAction" name="CntrAction">
+
+            <div class="form-body" style="margin:10px;margin-top: 20px;">
+
+                <!--Cooment Start-->
+            
+            
+                <div class="row p-t-20 border m-2">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Remarks</label><span class="required">*</span>
+                                    <textarea class="form-control" id="Remarks" style="height:100px" placeholder="Enter Your Remarks" ng-model="Remarks" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Previous User Remarks</label>
+                                    <textarea class="form-control" disabled style="height:100px" placeholder="Previous User Remarks" ng-model="resp.Remarks" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Comment End-->
+                   
+                </div>
+               <div class="row">
+                   <div class="col-md-12">
+                       @if (User.IsInRole("Finance") || User.IsInRole("Admin"))
+                       {
+                           <button class="btn btn-primary pull-right mr-3 cursor-pointer" ng-click="UpdateVesselStatus(resp.RefNo,Remarks,'4',search)" ng-show="resp.VesselStatusCode!='cntrO'" style="margin-top: 25px;">Operation review</button>
+                       }
+                       @if (User.IsInRole("Operations") || User.IsInRole("Admin"))
+                       {
+                        <span class="btn btn-primary pull-right mr-3 cursor-pointer" ng-click="UpdateVesselStatus(resp.RefNo,Remarks,'5',search)" ng-show="resp.VesselStatusCode=='cntrO'" style="margin-top: 25px;">Finance Confirmation</span>
+                       }
+                   </div>
+               </div>
+                <!--Button for Update Crane Edit -->
+                @*<div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <span class="btn btn-primary pull-right mr-3 cursor-pointer" ng-click="UpdateCraneEditModel(CraneDeatils)" style="margin-top: 25px;">Save &amp; Validate</span>
+                    </div>
+
+                </div>*@
+
+
+
+    </div><!--form Body End-->
+    </form> <!--Form Close-->
+    <!--Alertify Modal Action Edit End-->
+    <!--Simple Delete Modal Strat-->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog" style="width:300px">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header border">
+                        <h4 class="modal-title">Confrim</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <p>Are you sure to delete?</p>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" ng-click="DeleteMethod(Id, item, RemoveFor)">Yes</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">No</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    <!--Simple Delete Modal End-->
+    </div><!--Table Row End-->
+    <!--pagination Code Start-->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Select Rows</label>
+                <select data-placeholder="Select Rows" name="state" id="maxRows" class="form-control select-clear" data-fouc>
+                    <option></option>
+                    <option value="5000">All Rows</option>
+                    <option value="4">4</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="70">70</option>
+                    <option value="100">100</option>
+
+                </select>
+            </div>
+        </div>
+        <div class='pagination-container col-md-9' style="position: absolute;
+    right: 0px; text-align: end;">
+            <nav>
+                <ul class="pagination">
+
+                    <li data-page="prev">
+                        <span> < <span class="sr-only">(current)</span></span>
+                    </li>
+                    <!--	Here the JS Function Will Add the Rows -->
+                    <li data-page="next" id="prev">
+                        <span> > <span class="sr-only">(current)</span></span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!--pagination Code End-->
+</div><!--Controller Div End-->
+
+<script>
+     //DAte Time
+                $('.date').bootstrapMaterialDatePicker({
+                    format: 'DD/MM/YYYY HH:mm',
+                    //minDate: mintime,
+                    nowButton: true,
+                    //currentDate: moment(),
+                });
+
+</script>
+<script src="~/Scripts/DatePicker/CustomIntilizeJS.js"></script>
+
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/PaganationScriptCustom.js"></script>
+<script src="~/Scripts/AlertifyCdn/jquery-confirm.min.js"></script>
+<script src="~/Scripts/AlertifyCdn/alertify.min.js"></script>
+<script src="~/Scripts/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+
+    // Start phone Number Validation
+    function phoneFormatter() {
+        $('.numaric').on('input', function () {
+            var number = $(this).val().replace(/[^.\d]/g, '')
+
+            $(this).val(number);
+            if (number.length == 16) {
+                $(this).val(null);
+                toastr.error('max limit 15 digit only');
+                return false;
+            }
+
+        });
+    };
+    $(phoneFormatter());
+
+    // End phone Number Validation
+
+</script>
+<script>
+                //Pagination Code
+                $(document).ready(function () {
+                    getPagination('#table-id');
+                    getPaginationJIPStatusAwating('#table-id1');
+
+                    var o = new SlimSelect({
+                        select: '#addis_oog',
+                        placeholder: 'Is oog',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var z= new SlimSelect({
+                        select: '#addis_bundle',
+                        placeholder: 'Is Bundle',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var o1 = new SlimSelect({
+                        select: '#is_oog1',
+                        placeholder: 'Is oog',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var z1 = new SlimSelect({
+                        select: '#is_bundle1',
+                        placeholder: 'Is Bundle',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+                    
+                    var tab1 = new SlimSelect({
+                        select: '#TabisOog',
+                        placeholder: 'Is oog',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var tab2 = new SlimSelect({
+                        select: '#TabisBundle',
+                        placeholder: 'Is Bundle',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var Required = new SlimSelect({
+                        select: '#requires_power',
+                        placeholder: 'Requires power',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var hazardous = new SlimSelect({
+                        select: '#hazardous',
+                        placeholder: 'Hazard ous',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var AddRequired = new SlimSelect({
+                        select: '#addrequires_power',
+                        placeholder: 'Requires power',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var Addhazardous = new SlimSelect({
+                        select: '#addhazardous',
+                        showSearch: false,
+                        selected:true,
+     
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var addcategory = new SlimSelect({
+                        select: '#addcategory',
+                        placeholder: 'Category',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+                    var addnominal_height = new SlimSelect({
+                        select: '#addnominal_height',
+                        placeholder: 'Nominal Height',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+                    var addnominal_length = new SlimSelect({
+                        select: '#addnominal_length',
+                        placeholder: 'Nominal Length',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var searchcategory = new SlimSelect({
+                        select: '#searchcategory',
+                        placeholder: 'Category',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+                    var searchnominal_height = new SlimSelect({
+                        select: '#searchnominal_height',
+                        placeholder: 'Nominal Height',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+                    var searchnominal_length = new SlimSelect({
+                        select: '#searchnominal_length',
+                        placeholder: 'Nominal Length',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var Editcategory = new SlimSelect({
+                        select: '#Editcategory',
+                        placeholder: 'Category',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var Editnominal_length = new SlimSelect({
+                        select: '#Editnominal_length',
+                        placeholder: 'Nominal Length',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                    var Editnominal_height = new SlimSelect({
+                        select: '#Editnominal_height',
+                        placeholder: 'Nominal Height',
+                        showSearch: false,
+                        //allowDeselectOption: true,
+                        //hideSelectedOption: true
+                        //deselectLabel: '<span class="red">✖</span>',
+                    });
+
+                });
+           
+               
+
+                //Hide Side Menu
+                window.onload = function () {
+                    document.getElementById('minisidebar').className = 'sidebar-xs';
+                };
+
+</script>

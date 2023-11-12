@@ -1,0 +1,433 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="sparcsn4ModelStoreContainer" CdmEntityContainer="sparcsn4Entities">
+    <EntitySetMapping Name="VOR_VesselVisit">
+      <EntityTypeMapping TypeName="sparcsn4Model.VOR_VesselVisit">
+        <MappingFragment StoreEntitySet="VOR_VesselVisit">
+          <ScalarProperty Name="vessels_gkey" ColumnName="vessels_gkey" />
+          <ScalarProperty Name="Vessel_class_gkey" ColumnName="Vessel_class_gkey" />
+          <ScalarProperty Name="visit_details_gkey" ColumnName="visit_details_gkey" />
+          <ScalarProperty Name="argo_career_visit_gkey" ColumnName="argo_career_visit_gkey" />
+          <ScalarProperty Name="berthings_gkey" ColumnName="berthings_gkey" />
+          <ScalarProperty Name="IMO" ColumnName="IMO" />
+          <ScalarProperty Name="changed" ColumnName="changed" />
+          <ScalarProperty Name="WindowHrs" ColumnName="WindowHrs" />
+          <ScalarProperty Name="Inwindow" ColumnName="Inwindow" />
+          <ScalarProperty Name="ETB" ColumnName="ETB" />
+          <ScalarProperty Name="NextPort" ColumnName="NextPort" />
+          <ScalarProperty Name="PreviousPort" ColumnName="PreviousPort" />
+          <ScalarProperty Name="radio_call_sign" ColumnName="radio_call_sign" />
+          <ScalarProperty Name="bizu_gkey" ColumnName="bizu_gkey" />
+          <ScalarProperty Name="LastLineReleaseDate" ColumnName="LastLineReleaseDate" />
+          <ScalarProperty Name="FirstLineReleaseDate" ColumnName="FirstLineReleaseDate" />
+          <ScalarProperty Name="LastLineSecureDate" ColumnName="LastLineSecureDate" />
+          <ScalarProperty Name="FirstLineSecureDate" ColumnName="FirstLineSecureDate" />
+          <ScalarProperty Name="pilot_off_board" ColumnName="pilot_off_board" />
+          <ScalarProperty Name="pilot_on_board" ColumnName="pilot_on_board" />
+          <ScalarProperty Name="labor_on_board" ColumnName="labor_on_board" />
+          <ScalarProperty Name="atd" ColumnName="atd" />
+          <ScalarProperty Name="ata" ColumnName="ata" />
+          <ScalarProperty Name="VslVistRemarks" ColumnName="VslVistRemarks" />
+          <ScalarProperty Name="VslClassification" ColumnName="VslClassification" />
+          <ScalarProperty Name="end_work" ColumnName="end_work" />
+          <ScalarProperty Name="start_work" ColumnName="start_work" />
+          <ScalarProperty Name="off_port_arr" ColumnName="off_port_arr" />
+          <ScalarProperty Name="LOA" ColumnName="LOA" />
+          <ScalarProperty Name="VslCode" ColumnName="VslCode" />
+          <ScalarProperty Name="ETA_DHrs" ColumnName="ETA_DHrs" />
+          <ScalarProperty Name="VslOpsHrs" ColumnName="VslOpsHrs" />
+          <ScalarProperty Name="BerthAfter" ColumnName="BerthAfter" />
+          <ScalarProperty Name="D45" ColumnName="D45" />
+          <ScalarProperty Name="D40" ColumnName="D40" />
+          <ScalarProperty Name="D20" ColumnName="D20" />
+          <ScalarProperty Name="L45" ColumnName="L45" />
+          <ScalarProperty Name="L40" ColumnName="L40" />
+          <ScalarProperty Name="L20" ColumnName="L20" />
+          <ScalarProperty Name="TotalMoves" ColumnName="TotalMoves" />
+          <ScalarProperty Name="VS_Class_Name" ColumnName="VS_Class_Name" />
+          <ScalarProperty Name="VS_Class_ID" ColumnName="VS_Class_ID" />
+          <ScalarProperty Name="vsl_vessels_IsActive" ColumnName="vsl_vessels_IsActive" />
+          <ScalarProperty Name="carrier_mode" ColumnName="carrier_mode" />
+          <ScalarProperty Name="ob_vyg" ColumnName="ob_vyg" />
+          <ScalarProperty Name="ib_vyg" ColumnName="ib_vyg" />
+          <ScalarProperty Name="Vessel_Berthings_PosName" ColumnName="Vessel_Berthings_PosName" />
+          <ScalarProperty Name="Vessel_Berthings_ATD" ColumnName="Vessel_Berthings_ATD" />
+          <ScalarProperty Name="arr_aft_draft_cm" ColumnName="arr_aft_draft_cm" />
+          <ScalarProperty Name="Vessel_Berthings_ATA" ColumnName="Vessel_Berthings_ATA" />
+          <ScalarProperty Name="Vessel_Berthings_ETA" ColumnName="Vessel_Berthings_ETA" />
+          <ScalarProperty Name="Bound" ColumnName="Bound" />
+          <ScalarProperty Name="BowPosition" ColumnName="BowPosition" />
+          <ScalarProperty Name="bollard_fore" ColumnName="bollard_fore" />
+          <ScalarProperty Name="bollard_aft" ColumnName="bollard_aft" />
+          <ScalarProperty Name="Vessel_Length" ColumnName="Vessel_Length" />
+          <ScalarProperty Name="Vessel_Berthings_ETD" ColumnName="Vessel_Berthings_ETD" />
+          <ScalarProperty Name="LineOperatorName" ColumnName="LineOperatorName" />
+          <ScalarProperty Name="LineOperatorCode" ColumnName="LineOperatorCode" />
+          <ScalarProperty Name="pos_slot" ColumnName="pos_slot" />
+          <ScalarProperty Name="SailDirection" ColumnName="SailDirection" />
+          <ScalarProperty Name="vsl_vessels_Name" ColumnName="vsl_vessels_Name" />
+          <ScalarProperty Name="Visit_RefNo" ColumnName="Visit_RefNo" />
+          <ScalarProperty Name="phase" ColumnName="phase" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vsl_vessel_berthings">
+      <EntityTypeMapping TypeName="sparcsn4Model.vsl_vessel_berthings">
+        <MappingFragment StoreEntitySet="vsl_vessel_berthings">
+          <ScalarProperty Name="CUSTDFF_WINDOWHRS" ColumnName="CUSTDFF_WINDOWHRS" />
+          <ScalarProperty Name="CUSTDFF_MAWANIWINDOW" ColumnName="CUSTDFF_MAWANIWINDOW" />
+          <ScalarProperty Name="CUSTDFF_VSLINSCHEDULE" ColumnName="CUSTDFF_VSLINSCHEDULE" />
+          <ScalarProperty Name="CUSTDFF_BOWPOS" ColumnName="CUSTDFF_BOWPOS" />
+          <ScalarProperty Name="pos_slot_on_carriage" ColumnName="pos_slot_on_carriage" />
+          <ScalarProperty Name="pos_orientation_degrees" ColumnName="pos_orientation_degrees" />
+          <ScalarProperty Name="pos_anchor" ColumnName="pos_anchor" />
+          <ScalarProperty Name="pos_tier" ColumnName="pos_tier" />
+          <ScalarProperty Name="pos_bin" ColumnName="pos_bin" />
+          <ScalarProperty Name="ops_pos_id" ColumnName="ops_pos_id" />
+          <ScalarProperty Name="pos_name" ColumnName="pos_name" />
+          <ScalarProperty Name="pos_orientation" ColumnName="pos_orientation" />
+          <ScalarProperty Name="pos_slot" ColumnName="pos_slot" />
+          <ScalarProperty Name="pos_loc_gkey" ColumnName="pos_loc_gkey" />
+          <ScalarProperty Name="pos_locid" ColumnName="pos_locid" />
+          <ScalarProperty Name="pos_loctype" ColumnName="pos_loctype" />
+          <ScalarProperty Name="time_begin_receive" ColumnName="time_begin_receive" />
+          <ScalarProperty Name="stop_work" ColumnName="stop_work" />
+          <ScalarProperty Name="start_work" ColumnName="start_work" />
+          <ScalarProperty Name="cargo_cutoff" ColumnName="cargo_cutoff" />
+          <ScalarProperty Name="atd" ColumnName="atd" />
+          <ScalarProperty Name="ata" ColumnName="ata" />
+          <ScalarProperty Name="etd" ColumnName="etd" />
+          <ScalarProperty Name="eta" ColumnName="eta" />
+          <ScalarProperty Name="berth_alloc_status" ColumnName="berth_alloc_status" />
+          <ScalarProperty Name="load_seals_checked" ColumnName="load_seals_checked" />
+          <ScalarProperty Name="discharge_seals_checked" ColumnName="discharge_seals_checked" />
+          <ScalarProperty Name="estimated_other_moves" ColumnName="estimated_other_moves" />
+          <ScalarProperty Name="bollard_fore_offset" ColumnName="bollard_fore_offset" />
+          <ScalarProperty Name="bollard_aft_offset" ColumnName="bollard_aft_offset" />
+          <ScalarProperty Name="bollard_fore" ColumnName="bollard_fore" />
+          <ScalarProperty Name="bollard_aft" ColumnName="bollard_aft" />
+          <ScalarProperty Name="call_remarks" ColumnName="call_remarks" />
+          <ScalarProperty Name="call_slave_id" ColumnName="call_slave_id" />
+          <ScalarProperty Name="call_type" ColumnName="call_type" />
+          <ScalarProperty Name="strategy_ref" ColumnName="strategy_ref" />
+          <ScalarProperty Name="slip_width_cm" ColumnName="slip_width_cm" />
+          <ScalarProperty Name="slip_fold_cm" ColumnName="slip_fold_cm" />
+          <ScalarProperty Name="distance_from_dock_cm" ColumnName="distance_from_dock_cm" />
+          <ScalarProperty Name="receive_status" ColumnName="receive_status" />
+          <ScalarProperty Name="egress_vertex" ColumnName="egress_vertex" />
+          <ScalarProperty Name="ingress_vertex" ColumnName="ingress_vertex" />
+          <ScalarProperty Name="estimated_discharges" ColumnName="estimated_discharges" />
+          <ScalarProperty Name="estimated_loads" ColumnName="estimated_loads" />
+          <ScalarProperty Name="berth_location_cm" ColumnName="berth_location_cm" />
+          <ScalarProperty Name="gantry_count" ColumnName="gantry_count" />
+          <ScalarProperty Name="trim_cm" ColumnName="trim_cm" />
+          <ScalarProperty Name="mean_draft_cm" ColumnName="mean_draft_cm" />
+          <ScalarProperty Name="gm" ColumnName="gm" />
+          <ScalarProperty Name="changer" ColumnName="changer" />
+          <ScalarProperty Name="changed" ColumnName="changed" />
+          <ScalarProperty Name="creator" ColumnName="creator" />
+          <ScalarProperty Name="created" ColumnName="created" />
+          <ScalarProperty Name="ship_side_to" ColumnName="ship_side_to" />
+          <ScalarProperty Name="dep_aft_draft_cm" ColumnName="dep_aft_draft_cm" />
+          <ScalarProperty Name="dep_fwd_draft_cm" ColumnName="dep_fwd_draft_cm" />
+          <ScalarProperty Name="arr_aft_draft_cm" ColumnName="arr_aft_draft_cm" />
+          <ScalarProperty Name="arr_fwd_draft_cm" ColumnName="arr_fwd_draft_cm" />
+          <ScalarProperty Name="shift_time" ColumnName="shift_time" />
+          <ScalarProperty Name="quay" ColumnName="quay" />
+          <ScalarProperty Name="vvd_gkey" ColumnName="vvd_gkey" />
+          <ScalarProperty Name="seq" ColumnName="seq" />
+          <ScalarProperty Name="gkey" ColumnName="gkey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vsl_vessel_visit_details">
+      <EntityTypeMapping TypeName="sparcsn4Model.vsl_vessel_visit_details">
+        <MappingFragment StoreEntitySet="vsl_vessel_visit_details">
+          <ScalarProperty Name="CUSTDFF_PTD" ColumnName="CUSTDFF_PTD" />
+          <ScalarProperty Name="CUSTDFF_MAWANIREMARKS" ColumnName="CUSTDFF_MAWANIREMARKS" />
+          <ScalarProperty Name="CUSTDFF_VESSELCAPACITY" ColumnName="CUSTDFF_VESSELCAPACITY" />
+          <ScalarProperty Name="CUSTDFF_DUALCYCLE" ColumnName="CUSTDFF_DUALCYCLE" />
+          <ScalarProperty Name="CUSTDFF_FIVEHIGHLOAD" ColumnName="CUSTDFF_FIVEHIGHLOAD" />
+          <ScalarProperty Name="CUSTDFF_FIVEHIGHMOVE" ColumnName="CUSTDFF_FIVEHIGHMOVE" />
+          <ScalarProperty Name="CUSTDFF_CRANEINTENSITY" ColumnName="CUSTDFF_CRANEINTENSITY" />
+          <ScalarProperty Name="CUSTDFF_CRANEDENSITY" ColumnName="CUSTDFF_CRANEDENSITY" />
+          <ScalarProperty Name="CUSTDFF_DEPREMARKS" ColumnName="CUSTDFF_DEPREMARKS" />
+          <ScalarProperty Name="CUSTDFF_ARRREMARKS" ColumnName="CUSTDFF_ARRREMARKS" />
+          <ScalarProperty Name="CUSTDFF_ETB" ColumnName="CUSTDFF_ETB" />
+          <ScalarProperty Name="CUSTDFF_HATCHCOVERMOVES" ColumnName="CUSTDFF_HATCHCOVERMOVES" />
+          <ScalarProperty Name="est_bbk_discharge" ColumnName="est_bbk_discharge" />
+          <ScalarProperty Name="est_bbk_load" ColumnName="est_bbk_load" />
+          <ScalarProperty Name="est_shift" ColumnName="est_shift" />
+          <ScalarProperty Name="est_restow" ColumnName="est_restow" />
+          <ScalarProperty Name="est_discharge" ColumnName="est_discharge" />
+          <ScalarProperty Name="est_load" ColumnName="est_load" />
+          <ScalarProperty Name="flex_date08" ColumnName="flex_date08" />
+          <ScalarProperty Name="flex_date07" ColumnName="flex_date07" />
+          <ScalarProperty Name="flex_date06" ColumnName="flex_date06" />
+          <ScalarProperty Name="flex_date05" ColumnName="flex_date05" />
+          <ScalarProperty Name="flex_date04" ColumnName="flex_date04" />
+          <ScalarProperty Name="flex_date03" ColumnName="flex_date03" />
+          <ScalarProperty Name="flex_date02" ColumnName="flex_date02" />
+          <ScalarProperty Name="flex_date01" ColumnName="flex_date01" />
+          <ScalarProperty Name="flex_string08" ColumnName="flex_string08" />
+          <ScalarProperty Name="flex_string07" ColumnName="flex_string07" />
+          <ScalarProperty Name="flex_string06" ColumnName="flex_string06" />
+          <ScalarProperty Name="flex_string05" ColumnName="flex_string05" />
+          <ScalarProperty Name="flex_string04" ColumnName="flex_string04" />
+          <ScalarProperty Name="flex_string03" ColumnName="flex_string03" />
+          <ScalarProperty Name="flex_string02" ColumnName="flex_string02" />
+          <ScalarProperty Name="flex_string01" ColumnName="flex_string01" />
+          <ScalarProperty Name="classification" ColumnName="classification" />
+          <ScalarProperty Name="export_mnft_date" ColumnName="export_mnft_date" />
+          <ScalarProperty Name="import_mnft_date" ColumnName="import_mnft_date" />
+          <ScalarProperty Name="import_mnft_nbr" ColumnName="import_mnft_nbr" />
+          <ScalarProperty Name="export_mnft_nbr" ColumnName="export_mnft_nbr" />
+          <ScalarProperty Name="out_ves_captain" ColumnName="out_ves_captain" />
+          <ScalarProperty Name="in_ves_captain" ColumnName="in_ves_captain" />
+          <ScalarProperty Name="end_work" ColumnName="end_work" />
+          <ScalarProperty Name="start_work" ColumnName="start_work" />
+          <ScalarProperty Name="pilot_off_board" ColumnName="pilot_off_board" />
+          <ScalarProperty Name="pilot_on_board" ColumnName="pilot_on_board" />
+          <ScalarProperty Name="off_port_dep" ColumnName="off_port_dep" />
+          <ScalarProperty Name="off_port_arr" ColumnName="off_port_arr" />
+          <ScalarProperty Name="labor_off_board" ColumnName="labor_off_board" />
+          <ScalarProperty Name="labor_on_board" ColumnName="labor_on_board" />
+          <ScalarProperty Name="reefer_cutoff" ColumnName="reefer_cutoff" />
+          <ScalarProperty Name="haz_cutoff" ColumnName="haz_cutoff" />
+          <ScalarProperty Name="cargo_cutoff" ColumnName="cargo_cutoff" />
+          <ScalarProperty Name="empty_pickup" ColumnName="empty_pickup" />
+          <ScalarProperty Name="begin_receive" ColumnName="begin_receive" />
+          <ScalarProperty Name="published_etd" ColumnName="published_etd" />
+          <ScalarProperty Name="published_eta" ColumnName="published_eta" />
+          <ScalarProperty Name="is_common_carrier" ColumnName="is_common_carrier" />
+          <ScalarProperty Name="is_no_client_access" ColumnName="is_no_client_access" />
+          <ScalarProperty Name="out_customs_voy_nbr" ColumnName="out_customs_voy_nbr" />
+          <ScalarProperty Name="in_customs_voy_nbr" ColumnName="in_customs_voy_nbr" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="is_dray_off" ColumnName="is_dray_off" />
+          <ScalarProperty Name="stacking_strategy" ColumnName="stacking_strategy" />
+          <ScalarProperty Name="ob_vyg" ColumnName="ob_vyg" />
+          <ScalarProperty Name="ib_vyg" ColumnName="ib_vyg" />
+          <ScalarProperty Name="vessel_gkey" ColumnName="vessel_gkey" />
+          <ScalarProperty Name="bizu_gkey" ColumnName="bizu_gkey" />
+          <ScalarProperty Name="vvd_gkey" ColumnName="vvd_gkey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vsl_vessels">
+      <EntityTypeMapping TypeName="sparcsn4Model.vsl_vessels">
+        <MappingFragment StoreEntitySet="vsl_vessels">
+          <ScalarProperty Name="CUSTDFF_EMAIL" ColumnName="CUSTDFF_EMAIL" />
+          <ScalarProperty Name="CUSTDFF_VSLCAPACITY" ColumnName="CUSTDFF_VSLCAPACITY" />
+          <ScalarProperty Name="life_cycle_state" ColumnName="life_cycle_state" />
+          <ScalarProperty Name="service_registry_nbr" ColumnName="service_registry_nbr" />
+          <ScalarProperty Name="documentation_nbr" ColumnName="documentation_nbr" />
+          <ScalarProperty Name="stowage_scheme" ColumnName="stowage_scheme" />
+          <ScalarProperty Name="changer" ColumnName="changer" />
+          <ScalarProperty Name="changed" ColumnName="changed" />
+          <ScalarProperty Name="creator" ColumnName="creator" />
+          <ScalarProperty Name="created" ColumnName="created" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="temperature_unit" ColumnName="temperature_unit" />
+          <ScalarProperty Name="unit_system" ColumnName="unit_system" />
+          <ScalarProperty Name="is_active" ColumnName="is_active" />
+          <ScalarProperty Name="country_code" ColumnName="country_code" />
+          <ScalarProperty Name="radio_call_sign" ColumnName="radio_call_sign" />
+          <ScalarProperty Name="ves_captain" ColumnName="ves_captain" />
+          <ScalarProperty Name="owner_gkey" ColumnName="owner_gkey" />
+          <ScalarProperty Name="vesclass_gkey" ColumnName="vesclass_gkey" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="lloyds_id" ColumnName="lloyds_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="reference_set" ColumnName="reference_set" />
+          <ScalarProperty Name="gkey" ColumnName="gkey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Datawarehouse_Container">
+      <EntityTypeMapping TypeName="sparcsn4Model.Datawarehouse_Container">
+        <MappingFragment StoreEntitySet="Datawarehouse_Container">
+          <ScalarProperty Name="XrayStatus" ColumnName="XrayStatus" />
+          <ScalarProperty Name="InspStages" ColumnName="InspStages" />
+          <ScalarProperty Name="TransportedTo" ColumnName="TransportedTo" />
+          <ScalarProperty Name="AppShift" ColumnName="AppShift" />
+          <ScalarProperty Name="AEO" ColumnName="AEO" />
+          <ScalarProperty Name="DocRefNo" ColumnName="DocRefNo" />
+          <ScalarProperty Name="BayanNo" ColumnName="BayanNo" />
+          <ScalarProperty Name="ISN" ColumnName="ISN" />
+          <ScalarProperty Name="CustomInspType" ColumnName="CustomInspType" />
+          <ScalarProperty Name="ITTFrom" ColumnName="ITTFrom" />
+          <ScalarProperty Name="LoadPermitNo" ColumnName="LoadPermitNo" />
+          <ScalarProperty Name="ReinspReason" ColumnName="ReinspReason" />
+          <ScalarProperty Name="IsFreeZone" ColumnName="IsFreeZone" />
+          <ScalarProperty Name="ITTTo" ColumnName="ITTTo" />
+          <ScalarProperty Name="CustomStatus" ColumnName="CustomStatus" />
+          <ScalarProperty Name="LoadBroker" ColumnName="LoadBroker" />
+          <ScalarProperty Name="IsTransit" ColumnName="IsTransit" />
+          <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+          <ScalarProperty Name="Shipper" ColumnName="Shipper" />
+          <ScalarProperty Name="Origin" ColumnName="Origin" />
+          <ScalarProperty Name="ISO" ColumnName="ISO" />
+          <ScalarProperty Name="CUSTDFF_COMMODITYGRP" ColumnName="CUSTDFF_COMMODITYGRP" />
+          <ScalarProperty Name="temp_reqd_C" ColumnName="temp_reqd_C" />
+          <ScalarProperty Name="temp_min_C" ColumnName="temp_min_C" />
+          <ScalarProperty Name="temp_max_C" ColumnName="temp_max_C" />
+          <ScalarProperty Name="bl_nbr" ColumnName="bl_nbr" />
+          <ScalarProperty Name="hazard_un_nums" ColumnName="hazard_un_nums" />
+          <ScalarProperty Name="imdg_types" ColumnName="imdg_types" />
+          <ScalarProperty Name="hazardous" ColumnName="hazardous" />
+          <ScalarProperty Name="destination" ColumnName="destination" />
+          <ScalarProperty Name="commodity" ColumnName="commodity" />
+          <ScalarProperty Name="damage" ColumnName="damage" />
+          <ScalarProperty Name="oog_top_cm" ColumnName="oog_top_cm" />
+          <ScalarProperty Name="oog_right_cm" ColumnName="oog_right_cm" />
+          <ScalarProperty Name="oog_left_cm" ColumnName="oog_left_cm" />
+          <ScalarProperty Name="oog_front_cm" ColumnName="oog_front_cm" />
+          <ScalarProperty Name="oog_back_cm" ColumnName="oog_back_cm" />
+          <ScalarProperty Name="CUSTDFF_DLVRYORDERNO" ColumnName="CUSTDFF_DLVRYORDERNO" />
+          <ScalarProperty Name="CUSTDFF_DECLARATIONTYPE" ColumnName="CUSTDFF_DECLARATIONTYPE" />
+          <ScalarProperty Name="CUSTDFF_BROKERNO" ColumnName="CUSTDFF_BROKERNO" />
+          <ScalarProperty Name="CUSTDFF_BROKERNAME" ColumnName="CUSTDFF_BROKERNAME" />
+          <ScalarProperty Name="CUSTDFF_VALIDTITY_MT_RETURN" ColumnName="CUSTDFF_VALIDTITY_MT_RETURN" />
+          <ScalarProperty Name="CUSTDFF_VALIDITY_DT_IMPR_DLVRY" ColumnName="CUSTDFF_VALIDITY_DT_IMPR_DLVRY" />
+          <ScalarProperty Name="CUSTDFF_MT_RETURN_LOC" ColumnName="CUSTDFF_MT_RETURN_LOC" />
+          <ScalarProperty Name="CUSTDFF_IMPORT_DLVRY_DAYS" ColumnName="CUSTDFF_IMPORT_DLVRY_DAYS" />
+          <ScalarProperty Name="CUSTDFF_EMPTY_RETURN_DAYS" ColumnName="CUSTDFF_EMPTY_RETURN_DAYS" />
+          <ScalarProperty Name="paid_thru_day" ColumnName="paid_thru_day" />
+          <ScalarProperty Name="unit_gkey" ColumnName="unit_gkey" />
+          <ScalarProperty Name="time_out" ColumnName="time_out" />
+          <ScalarProperty Name="time_in" ColumnName="time_in" />
+          <ScalarProperty Name="nominal_height" ColumnName="nominal_height" />
+          <ScalarProperty Name="relationship_role" ColumnName="relationship_role" />
+          <ScalarProperty Name="is_bundle" ColumnName="is_bundle" />
+          <ScalarProperty Name="is_oog" ColumnName="is_oog" />
+          <ScalarProperty Name="LineOprName" ColumnName="LineOprName" />
+          <ScalarProperty Name="LineOpr" ColumnName="LineOpr" />
+          <ScalarProperty Name="oprname" ColumnName="oprname" />
+          <ScalarProperty Name="freight_kind" ColumnName="freight_kind" />
+          <ScalarProperty Name="requires_power" ColumnName="requires_power" />
+          <ScalarProperty Name="opr" ColumnName="opr" />
+          <ScalarProperty Name="last_pos_slot" ColumnName="last_pos_slot" />
+          <ScalarProperty Name="transit_state" ColumnName="transit_state" />
+          <ScalarProperty Name="PutTime" ColumnName="PutTime" />
+          <ScalarProperty Name="fetchTime" ColumnName="fetchTime" />
+          <ScalarProperty Name="nominal_length" ColumnName="nominal_length" />
+          <ScalarProperty Name="move_kind" ColumnName="move_kind" />
+          <ScalarProperty Name="goods_ctr_wt_kg_vgm" ColumnName="goods_ctr_wt_kg_vgm" />
+          <ScalarProperty Name="tare_kg" ColumnName="tare_kg" />
+          <ScalarProperty Name="hndlg_rsn" ColumnName="hndlg_rsn" />
+          <ScalarProperty Name="restow_typ" ColumnName="restow_typ" />
+          <ScalarProperty Name="declrd_ib_cv" ColumnName="declrd_ib_cv" />
+          <ScalarProperty Name="cv_gkey" ColumnName="cv_gkey" />
+          <ScalarProperty Name="gkey" ColumnName="gkey" />
+          <ScalarProperty Name="goods_and_ctr_wt_kg" ColumnName="goods_and_ctr_wt_kg" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="Cntr" ColumnName="Cntr" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VS_Agent">
+      <EntityTypeMapping TypeName="sparcsn4Model.VS_Agent">
+        <MappingFragment StoreEntitySet="VS_Agent">
+          <ScalarProperty Name="Ref" ColumnName="Ref" />
+          <ScalarProperty Name="LineoprGkey" ColumnName="LineoprGkey" />
+          <ScalarProperty Name="LineOprName" ColumnName="LineOprName" />
+          <ScalarProperty Name="LineOprCode" ColumnName="LineOprCode" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Agent" ColumnName="Agent" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VS_FirstLastLift">
+      <EntityTypeMapping TypeName="sparcsn4Model.VS_FirstLastLift">
+        <MappingFragment StoreEntitySet="VS_FirstLastLift">
+          <ScalarProperty Name="CraneHrs" ColumnName="CraneHrs" />
+          <ScalarProperty Name="short_name" ColumnName="short_name" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VS_HatchCover">
+      <EntityTypeMapping TypeName="sparcsn4Model.VS_HatchCover">
+        <MappingFragment StoreEntitySet="VS_HatchCover">
+          <ScalarProperty Name="HatchCoverMoves" ColumnName="HatchCoverMoves" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VS_VesselVisit_Smry">
+      <EntityTypeMapping TypeName="sparcsn4Model.VS_VesselVisit_Smry">
+        <MappingFragment StoreEntitySet="VS_VesselVisit_Smry">
+          <ScalarProperty Name="TotalCranes" ColumnName="TotalCranes" />
+          <ScalarProperty Name="time_discharge_complete" ColumnName="time_discharge_complete" />
+          <ScalarProperty Name="CUSTDFF_VSLINSCHEDULE" ColumnName="CUSTDFF_VSLINSCHEDULE" />
+          <ScalarProperty Name="CDelays" ColumnName="CDelays" />
+          <ScalarProperty Name="BDelays" ColumnName="BDelays" />
+          <ScalarProperty Name="ADelays" ColumnName="ADelays" />
+          <ScalarProperty Name="CustomRorationNo" ColumnName="CustomRorationNo" />
+          <ScalarProperty Name="lloyds_id" ColumnName="lloyds_id" />
+          <ScalarProperty Name="SrvName" ColumnName="SrvName" />
+          <ScalarProperty Name="SrvCode" ColumnName="SrvCode" />
+          <ScalarProperty Name="CraneWorkHrs" ColumnName="CraneWorkHrs" />
+          <ScalarProperty Name="NextPort" ColumnName="NextPort" />
+          <ScalarProperty Name="PreviousPort" ColumnName="PreviousPort" />
+          <ScalarProperty Name="BerthHrs" ColumnName="BerthHrs" />
+          <ScalarProperty Name="PortRotationNo" ColumnName="PortRotationNo" />
+          <ScalarProperty Name="BCDelays" ColumnName="BCDelays" />
+          <ScalarProperty Name="DelayHrs" ColumnName="DelayHrs" />
+          <ScalarProperty Name="pilot_off_board" ColumnName="pilot_off_board" />
+          <ScalarProperty Name="pilot_on_board" ColumnName="pilot_on_board" />
+          <ScalarProperty Name="atd" ColumnName="atd" />
+          <ScalarProperty Name="ata" ColumnName="ata" />
+          <ScalarProperty Name="VslVistRemarks" ColumnName="VslVistRemarks" />
+          <ScalarProperty Name="VslClassification" ColumnName="VslClassification" />
+          <ScalarProperty Name="end_work" ColumnName="end_work" />
+          <ScalarProperty Name="start_work" ColumnName="start_work" />
+          <ScalarProperty Name="off_port_arr" ColumnName="off_port_arr" />
+          <ScalarProperty Name="Loa" ColumnName="Loa" />
+          <ScalarProperty Name="VslOpsHrs" ColumnName="VslOpsHrs" />
+          <ScalarProperty Name="VS_Class_Name" ColumnName="VS_Class_Name" />
+          <ScalarProperty Name="VS_Class_ID" ColumnName="VS_Class_ID" />
+          <ScalarProperty Name="carrier_mode" ColumnName="carrier_mode" />
+          <ScalarProperty Name="ob_vyg" ColumnName="ob_vyg" />
+          <ScalarProperty Name="ib_vyg" ColumnName="ib_vyg" />
+          <ScalarProperty Name="Vessel_Berthings_PosName" ColumnName="Vessel_Berthings_PosName" />
+          <ScalarProperty Name="Vessel_Length" ColumnName="Vessel_Length" />
+          <ScalarProperty Name="Vessel_Berthings_ETD" ColumnName="Vessel_Berthings_ETD" />
+          <ScalarProperty Name="pos_slot" ColumnName="pos_slot" />
+          <ScalarProperty Name="SailDirection" ColumnName="SailDirection" />
+          <ScalarProperty Name="LineOperatorName" ColumnName="LineOperatorName" />
+          <ScalarProperty Name="LineOperatorCode" ColumnName="LineOperatorCode" />
+          <ScalarProperty Name="vsl_vessels_Name" ColumnName="vsl_vessels_Name" />
+          <ScalarProperty Name="vslCode" ColumnName="vslCode" />
+          <ScalarProperty Name="RefNo" ColumnName="RefNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ref_crane_delay_types">
+      <EntityTypeMapping TypeName="sparcsn4Model.ref_crane_delay_types">
+        <MappingFragment StoreEntitySet="ref_crane_delay_types">
+          <ScalarProperty Name="life_cycle_state" ColumnName="life_cycle_state" />
+          <ScalarProperty Name="changer" ColumnName="changer" />
+          <ScalarProperty Name="changed" ColumnName="changed" />
+          <ScalarProperty Name="creator" ColumnName="creator" />
+          <ScalarProperty Name="created" ColumnName="created" />
+          <ScalarProperty Name="delay_category" ColumnName="delay_category" />
+          <ScalarProperty Name="default_duration" ColumnName="default_duration" />
+          <ScalarProperty Name="is_stops_at_endtime" ColumnName="is_stops_at_endtime" />
+          <ScalarProperty Name="is_stopped_by_new_work" ColumnName="is_stopped_by_new_work" />
+          <ScalarProperty Name="is_for_n4rdt" ColumnName="is_for_n4rdt" />
+          <ScalarProperty Name="is_for_queue" ColumnName="is_for_queue" />
+          <ScalarProperty Name="is_for_shift" ColumnName="is_for_shift" />
+          <ScalarProperty Name="is_dispatch_stopped" ColumnName="is_dispatch_stopped" />
+          <ScalarProperty Name="reference_set" ColumnName="reference_set" />
+          <ScalarProperty Name="sparcs_code" ColumnName="sparcs_code" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="gkey" ColumnName="gkey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

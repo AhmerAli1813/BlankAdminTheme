@@ -1,0 +1,145 @@
+﻿using DE.Infrastructure.Concept;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http;
+using DPWVessel.Model.EntityModel;
+using DPWVessel.Model.EntityModel.Enums;
+using DPWVessel.Web.Core.Session;
+using System.IO;
+using OfficeOpenXml;
+using System.Web.Hosting;
+
+namespace DPWVessel.Web.Models.Jobs
+{
+    public class ReportScheduler : IBackgroundJob<int>
+    {
+
+        private readonly dpw_VesselEntities _context;
+        private IRequestExecutor _requestExecutor;
+
+        public ReportScheduler(dpw_VesselEntities context,IRequestExecutor requestExecutor)
+        {
+            _context = context;
+            _requestExecutor = requestExecutor;
+        }
+
+        public Task Execute(int args)
+        {
+           return Execute(0);
+        }
+
+        public Task Execute()
+        {
+            //try
+            //{
+                //        var request = new GetFilledEquipmentListForExcelRequest();
+                //        var resp = _requestExecutor.Execute(request);
+                //        string FileName = HostingEnvironment.MapPath("~/App_Data/SnapShot.xlsx");
+                //        if (System.IO.File.Exists(FileName))
+                //            System.IO.File.Delete(FileName);
+
+                //        var fi = new FileInfo(FileName);
+
+                //        using (var p = new ExcelPackage(fi))
+                //        {
+
+                //            var ws = p.Workbook.Worksheets.Add("MaximoReport");
+                //            var datalist = resp.FilledEquipmentList.Select(x => new { x.ItemCode, x.TotalFilledLiters, x.EquipmentName, x.UseType, x.ShedName, x.ShedName2, x.FilledDate, x.FromBin, x.FilledBy, x.ISSUEDTO, x.Orgid, x.SiteId, x.Status, x.ItemsetId, x.FEId }).ToList();
+
+
+                //            foreach (var item in datalist)
+                //            {
+                //                ws.Cells.LoadFromCollection(datalist);
+
+                //            }
+                //            ws.Cells.LoadFromCollection(datalist);
+                //            ws.InsertRow(1, 1);
+
+                //            ws.Cells["A1"].Value = "ITEMCODE";
+                //            ws.Cells["A1"].Style.Font.Bold = true;
+                //            ws.Cells["A1"].AutoFitColumns();
+
+                //            ws.Cells["B1"].Value = "ISSUEDQTY";
+                //            ws.Cells["B1"].Style.Font.Bold = true;
+                //            ws.Cells["B1"].AutoFitColumns();
+
+                //            ws.Cells["C1"].Value = "EQNO";
+                //            ws.Cells["C1"].Style.Font.Bold = true;
+                //            ws.Cells["C1"].AutoFitColumns();
+
+                //            ws.Cells["D1"].Value = "USETYPE";
+                //            ws.Cells["D1"].Style.Font.Bold = true;
+                //            ws.Cells["D1"].AutoFitColumns();
+
+                //            ws.Cells["E1"].Value = "FROMSTROEROOM";
+                //            ws.Cells["E1"].Style.Font.Bold = true;
+                //            ws.Cells["E1"].AutoFitColumns();
+
+                //            ws.Cells["F1"].Value = "IUL_FROMSTOREROOM";
+                //            ws.Cells["F1"].Style.Font.Bold = true;
+                //            ws.Cells["F1"].AutoFitColumns();
+
+                //            ws.Cells["G1"].Value = "ISSUEDATE";
+                //            ws.Cells["G1"].Style.Font.Bold = true;
+                //            ws.Cells["G1"].AutoFitColumns();
+
+                //            ws.Cells["H1"].Value = "FROMBIN";
+                //            ws.Cells["H1"].Style.Font.Bold = true;
+                //            ws.Cells["H1"].AutoFitColumns();
+
+                //            ws.Cells["I1"].Value = "ENTERBY";
+                //            ws.Cells["I1"].Style.Font.Bold = true;
+                //            ws.Cells["I1"].AutoFitColumns();
+
+                //            ws.Cells["J1"].Value = "ISSUEDTO";
+                //            ws.Cells["J1"].Style.Font.Bold = true;
+                //            ws.Cells["J1"].AutoFitColumns();
+
+                //            ws.Cells["K1"].Value = "ORGID";
+                //            ws.Cells["K1"].Style.Font.Bold = true;
+                //            ws.Cells["K1"].AutoFitColumns();
+
+                //            ws.Cells["L1"].Value = "SITEID";
+                //            ws.Cells["L1"].Style.Font.Bold = true;
+                //            ws.Cells["L1"].AutoFitColumns();
+
+                //            ws.Cells["M1"].Value = "STATUS";
+                //            ws.Cells["M1"].Style.Font.Bold = true;
+                //            ws.Cells["M1"].AutoFitColumns();
+
+                //            ws.Cells["N1"].Value = "ITEMSETID";
+                //            ws.Cells["N1"].Style.Font.Bold = true;
+                //            ws.Cells["N1"].AutoFitColumns();
+
+                //            ws.Cells["O1"].Value = "TRANSID";
+                //            ws.Cells["O1"].Style.Font.Bold = true;
+                //            ws.Cells["O1"].AutoFitColumns();
+                //            ws.Cells["A1"].Style.Font.Bold = true;
+                //            ws.Cells["A:AZ"].AutoFitColumns();
+                //            // ws.Cells["A:AZ"].Style.Font.Bold = true;
+                //            ws.Cells["G1:G1000"].Style.Numberformat.Format = "dd-MMM-yyyy h:mm:ss a";
+                //            ws.Cells["G1"].AutoFitColumns();
+
+                //            MemoryStream get = new MemoryStream();
+                //            var filename = ConfigurationManager.AppSettings["MaximoReportPath"];
+                //            filename = filename + "MaximoReport" + DateTime.Now.ToString(" dd-MM-yyyy h mm tt ") + ".xlsx";
+
+                //            var save = new FileInfo(filename);
+                //            p.SaveAs(save);
+            //}
+
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine("error in excel export " + e);
+            //}
+            return Execute();
+        }
+    }
+}

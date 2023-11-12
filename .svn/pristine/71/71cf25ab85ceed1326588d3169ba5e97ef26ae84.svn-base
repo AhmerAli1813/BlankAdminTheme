@@ -1,0 +1,180 @@
+﻿@model DPWVessel.Model.Features.VesselOps.VesselArrivalStagingResponse
+
+@{
+    Layout = "~/Views/Shared/_EmailLayout.cshtml";
+}
+<style>
+    .tb {
+        margin: 0px auto;
+        text-align: center;
+    }
+
+        .tb th {
+            padding: 10px;
+            color: gray;
+        }
+</style>
+
+
+
+
+<p style="color:#02A16F;font-weight:600">
+   Please approve the following below changes.
+</p>
+
+<table class="table table-striped tb" style="font-size:small;color:black">
+    <thead>
+        <tr>
+            @*<th>S.no</th>*@
+            <th>Visit Id-Vessel Name</th>
+            <th>Column Name</th>
+            <th>Updated Value</th>
+            <th>Created At</th>
+            <th>Created By</th>
+            
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var i = 1; }
+        @foreach (var item in Model.respsatgingdata)
+        {
+            
+            <tr>
+                @*<td>@i</td>*@
+                <td>@item.VisitRefNo</td>
+
+                @if (item.ColumnName=="pilot_on_board")
+                {
+                    <td>Pilot boarded</td>
+                }
+
+
+                @if (item.ColumnName=="Quarentine_arrived_AP")
+
+                {
+                    <td>Quarantine arrived at PORT</td>
+                }
+
+                @if (item.ColumnName=="Quarentine_boarded_OV")
+                {
+                    <td>Quarantine boarded on Vessel</td>
+                }
+                @if (item.ColumnName=="Quarentine_disembark_FV")
+                {
+                    <td>Quarantine disembark from Vessel</td>
+                }
+                @if (item.ColumnName=="Custom_arrived_port")
+                {
+                    <td>Custom arrived at PORT</td>
+                }
+                @if (item.ColumnName == "Custom_borded_Vessel")
+                {
+                    <td>Custom boarded on Vessel</td>
+                }
+                @if (item.ColumnName == "Custom_disembark_FV")
+                {
+                    <td>Custom disembark from Vessel</td>
+                }
+                @if (item.ColumnName =="Coastguard_arrived_AP")
+                {
+                    <td>Coastguard arrived at PORT</td>
+                }
+                @if (item.ColumnName =="Coastguard_boarded_OV")
+                {
+                    <td>Coastguard boarded on Vessel</td>
+                }
+                @if (item.ColumnName =="Coastguard_disembark_FV")
+                {
+                    <td>CCoastguard disembark from Vessel</td>
+                }
+                @if (item.ColumnName =="flex_string08")
+                {
+                    <td>Next port arrival</td>
+                }
+                @if (item.ColumnName == "flex_string07")
+                {
+                    <td>Last port departed</td>
+                }
+
+                @if (item.ColumnName =="flex_date04")
+                {
+                    <td>First Rope Secured Time</td>
+                }
+                @if (item.ColumnName == "flex_date05")
+                {
+                    <td>Last Rope Secured Time</td>
+                }
+                @if (item.ColumnName =="flex_date02")
+                {
+                    <td>Gangway Secured</td>
+                }
+
+
+                @if (item.ColumnName =="Vessel_Secure_alongside")
+                {
+                    <td>Vessel secure at alongside</td>
+                }
+                @if (item.ColumnName =="pilot_off_board")
+                {
+                    <td>PILOT Disembark </td>
+                }
+                @if (item.ColumnName =="Lashing_Gang_on_board")
+                {
+                    <td>Lashing Gang Onboard</td>
+                }
+                @if (item.ColumnName =="Gang_on_board_PAC")
+                {
+                    <td>Gang boarded on vessel prior authority clearance</td>
+
+                } 
+                @if (item.ColumnName == "start_work")
+                {
+                    <td>First lift on Vessel</td>
+                }
+                 @if (item.ColumnName == "end_work")
+                {
+                    <td>Operation Commenced</td>
+                }
+
+
+
+
+                 @if (item.ColumnName == "Gang_on_board_PAC")
+                 {
+                    <td>@(item.Value=="true" ?" Yes" :"No" )</td>
+
+                 }
+                 @if (item.ColumnName != "Gang_on_board_PAC" && item.ColumnName != "flex_string08" && item.ColumnName != "flex_string07")
+                 {
+                     DateTime dateTime12 = Convert.ToDateTime(item.Value);
+                    <td>@dateTime12.ToString("dd/MM/yyyy HH:mm")</td>
+
+
+                 }
+                 else
+                 {
+                    <td>@item.Value</td>
+                 }
+                <td>@item.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.CreatedBy</td>
+
+            </tr>
+            i++;
+        }
+       
+       
+    </tbody>
+</table>
+<button class="btn-info" style="float: right;
+    padding: 5px;
+    position: relative;
+    top: 22px;"><a href="https://ops.dpworld.sa/VesselFormOps/StagingData" target="_blank" style="color: white;
+    text-decoration: none;
+    font-size: 13px;">Approve Changes</a>
+</button>
+
+
+
+

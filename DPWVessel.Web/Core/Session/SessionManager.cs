@@ -1,0 +1,113 @@
+﻿using DE.Infrastructure.Memory;
+using DPWVessel.Model.EntityModel;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace DPWVessel.Web.Core.Session
+{
+    public interface ISessionManager
+    {
+        bool IsLoggedIn { get; }
+        UserInformation CurrentUser { get; }
+        bool IsInRole(string role);
+        UserInformation GetUserDetails(string userName);
+    }
+
+    public class UserInformation
+    {
+        public string Id { get; set; }
+        public string Email { get; set; }
+        public string UserName { get; set; }
+        public IEnumerable<string> Roles { get; set; }
+        public bool Active { get; set; }
+        public string FullName { get; set; }
+        public string FullNameAr { get; set; }
+        public IEnumerable<string> UserType { get; set; }
+        public int UserId { get; set; }
+        public bool IsLogIn { get; set; }
+        public List<string> UsersApplication { get; set; }
+
+    }
+
+    public class SessionManager : ISessionManager
+    {
+        private dpw_VesselEntities _dbContext;
+        private UserInformation _user;
+        private IMemoryCacher _cacher;
+        public SessionManager(dpw_VesselEntities dbContext, IMemoryCacher cacher)
+        {
+            _dbContext = dbContext;
+            _cacher = cacher;
+        }
+
+        public bool IsLoggedIn
+        {
+            get { return HttpContext.Current.User.Identity.IsAuthenticated; }
+        }
+
+        public bool IsInRole(string role)
+        {
+            return HttpContext.Current.User.IsInRole(role);
+        }
+
+        public UserInformation CurrentUser
+        {
+            get
+            {
+                //todo: build users using claims instead of querying db
+                var userName = HttpContext.Current.User.Identity.Name;
+
+                if (userName == "")
+                    return null;
+
+                //get user from cache if available
+                _user = _user ?? _cacher.GetValue<UserInformation>(userName);
+
+                if (_user == null)
+                {
+                    var user = GetUserDetails(userName);
+
+                    //cache for 1 mins
+                    _cacher.Add(userName, user, 1);
+
+                    _user = user;
+                }
+                return _user;
+            }
+        }
+
+        public UserInformation GetUserDetails(string userName)
+        {
+            //var shedId = (int?)_cacher.GetValue("ShedId");
+            var user = _dbContext.AspNetUsers
+                .Where(u => u.UserName == userName)
+                .Select(u => new UserInformation
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Email = u.Email,
+
+                })
+                .FirstOrDefault();
+            if (user != null)
+            {
+                user.Active = true;
+
+                var siteUser = _dbContext.SiteUsers.FirstOrDefault(x => x.AspNetUserId == user.Id);
+
+                if (siteUser != null)
+                {
+                    user.FullName = siteUser.FullName;
+                    user.UserType = siteUser.AspNetUser.AspNetRoles.Select(c => c.Name).ToList();
+                    user.UserId = siteUser.Id;
+                    user.UsersApplication = siteUser.UsersApplications.Select(d => d.Application.AppCode.ToString()).ToList();
+
+                    //user.ShedNumber = siteUser.ShedId!=null?siteUser.Shaed.ShaedNumber:null;
+                    //user.ShedName = siteUser.ShedId != null ? siteUser.Shaed.ShaedName : null;
+                }
+            }
+            return user;
+        }
+    }
+}

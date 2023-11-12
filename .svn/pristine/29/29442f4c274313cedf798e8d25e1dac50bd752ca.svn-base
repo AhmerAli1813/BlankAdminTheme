@@ -1,0 +1,152 @@
+﻿
+@{
+    ViewBag.Title = "EditException";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="JIPCtrl" ng-init="EditInit()">
+    <div class="page-header border-bottom-0">
+        <div class="page-header-content header-elements-md-inline">
+            <div class="page-title d-flex">
+                <h4>
+                    <i class="icon-task mr-2"></i>
+                    <span class="font-weight-semibold">Edit JIP Exception</span>
+                    @*@if (User.IsInRole("Operations"))
+                        {<span class="font-weight-semibold"> Active Operations Breakdown </span>
+                        }
+                        @if (User.IsInRole("Planning"))
+                        {<span class="font-weight-semibold"> Active Planning Breakdown  </span>
+                        }
+                        @if (User.IsInRole("Engineer"))
+                        {<span class="font-weight-semibold"> Breakdown Assigned To Engineer  </span>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {<span class="font-weight-semibold"> Active Breakdown Management </span>
+                        }*@
+                </h4>
+
+            </div>
+        </div>
+    </div>
+    <hr />
+    <!-- /page header -->
+    <div class="row">
+     
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Vessel Name</label>
+                    <div>{{JIPEditDetails.VesselName}}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Window</label>
+                    <div>?</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Pilot Station</label>
+                    <div>{{JIPEditDetails.PilotStation |date:'dd-MMM-yyyy h:mm:ss a'}}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Pilot On Board</label>
+                    <div>{{JIPEditDetails.PilotOnBoard | date:'dd-MMM-yyyy h:mm:ss a' }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Duration</label>
+                    <div>{{JIPEditDetails.Duration}}</div>
+                </div>
+            </div>
+            
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Created At</label>
+                <div>{{JIPEditDetails.CreatedAt  | date:'dd-MMM-yyyy h:mm:ss a'}}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Exception Type</label>
+                <div>{{JIPEditDetails.EType}}</div>
+            </div>
+        </div>
+        <div class="col-md-3" ng-show="_currentUser.UserType == 'Operations' || _currentUser.UserType=='Admin'">
+            <div class="image-upload image-upload-submit" style="width:140px;text-align:center">
+                <label for="meterImg">
+                    <i class="icon-upload" title="Upload Attachment" style="color:#011c33"></i>
+                </label>
+                <input type="file" id="meterImg" name="pic" accept="*" onchange="angular.element(this).scope().ImageUpload('meterImg')">
+                <input type="hidden" ng-model="JIPExDetails.Attachment" /><br />
+              <span ng-if="_currentUser.UserType == 'Operations'">Attachment</span>  
+                <span ng-if="_currentUser.UserType=='Admin'">Operation  Attachmnet</span>
+            </div>
+        </div>
+        <div class="col-md-3" ng-show="_currentUser.UserType == 'StudyCommittee' || _currentUser.UserType=='Admin'">
+            <div class="image-upload image-upload-submit" style="width:140px;text-align:center">
+                <label for="study">
+                    <i class="icon-upload" title="Upload Attachment" style="color:#011c33"></i>
+                </label>
+                <input type="file" id="study" name="pic" accept="*" onchange="angular.element(this).scope().ImageUpload('study')">
+                <input type="hidden" ng-model="JIPExDetails.StudyAttachment" /><br />
+                <span ng-if="_currentUser.UserType == 'StudyCommittee'">Attachment</span>
+                <span ng-if="_currentUser.UserType=='Admin'">StudyCommittee  Attachmnet</span>
+            </div>
+        </div>
+        <div class="col-md-3" ng-show="_currentUser.UserType == 'SteeringCommittee' || _currentUser.UserType=='Admin'">
+            <div class="image-upload image-upload-submit" style="width:140px;text-align:center">
+                <label for="stering">
+                    <i class="icon-upload" title="Upload Attachment" style="color:#011c33"></i>
+                </label>
+                <input type="file" id="stering" name="pic" accept="*" onchange="angular.element(this).scope().ImageUpload('stering')">
+                <input type="hidden" ng-model="JIPExDetails.SteringAttachment" /><br />
+                <span ng-if="_currentUser.UserType == 'SteeringCommittee'">Attachment</span>
+                <span ng-if="_currentUser.UserType=='Admin'">SteeringCommittee Attachmnet</span>
+            </div>
+        </div>
+        
+            <hr />
+           
+           
+       
+    </div>
+    <div class="row" ng-show="_currentUser.UserType == 'Operations' || _currentUser.UserType=='Admin'">
+        <div class="form-group col-md-6">
+            <label>Justifications</label>
+            <textarea class="form-control" id="Justifications" ng-model="JIPEditDetails.Justifications" style="height:120px;"></textarea>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Explanation</label>
+            <textarea class="form-control" id="Explanation" ng-model="JIPEditDetails.Explanation" style="height:120px;"></textarea>
+        </div>
+        
+    </div>
+    <div class="row" ng-show="_currentUser.UserType == 'StudyCommittee' || _currentUser.UserType=='Admin'">
+        <div class="form-group col-md-6">
+            <label>Opinion</label>
+            <textarea class="form-control" id="Opinion" ng-model="JIPEditDetails.Opinion" style="height:120px;"></textarea>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Recommendations</label>
+            <textarea class="form-control" id="Recommendations" ng-model="JIPEditDetails.Recommendations" style="height:120px;"></textarea>
+        </div>
+        
+    </div>
+    <div class="row" ng-show="_currentUser.UserType == 'SteeringCommittee' || _currentUser.UserType=='Admin'">
+        <div class="form-group col-md-6">
+            <label>The Decision</label>
+            <textarea class="form-control" id="Decision" ng-model="JIPEditDetails.Decision" style="height:120px;"></textarea>
+        </div>
+      
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <input type="button" class="btn btn-secondary pull-right  col-md-4 p-2" ng-click="JIPUpdate(JIPEditDetails)" value="Update" />
+        </div>
+    </div>  
+</div> <!--Ng-Controller Div End-->
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>

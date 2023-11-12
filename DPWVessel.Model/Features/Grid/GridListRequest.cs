@@ -1,0 +1,122 @@
+﻿using DE.Infrastructure.Concept;
+using DE.Infrastructure.Helpers;
+using DPWVessel.Model.EntityModel;
+using FluentValidation;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DPWVessel.Model.Features.Grid
+{
+    public class GridListRequest : IRequest<GridListResponse>
+    {
+        public string EntityName { get; set; }
+        public ListingParams Params { get; set; }
+    }
+
+    public class GridListResponse : Response
+    {
+        public QueryableModel Model { get; set; }
+    }
+
+    public class GridListRequestValidator : AbstractValidator<GridListRequest>
+    {
+
+    }
+
+    public class GridListRequestHandler : IRequestHandler<GridListRequest, GridListResponse>
+    {
+        private dpw_VesselEntities _dbContext;
+        public GridListRequestHandler(dpw_VesselEntities dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public GridListResponse Execute(GridListRequest request)
+        {
+            var table = request.EntityName;
+
+            //setting default field
+            if (string.IsNullOrEmpty(request.Params.SortField))
+                request.Params.SortField = "Id";
+
+            //setting default order
+            if (string.IsNullOrEmpty(request.Params.SortDirection))
+                request.Params.SortDirection = "asc";
+
+            //query templates
+            var countQueryTemplate = @"SELECT COUNT(*) FROM [{0}]";
+            var queryTemplate = @"SELECT {6} FROM [{0}]";
+
+            //SELECT Fields
+            string fields = null;
+            if (request.Params.Fields != null)
+                fields = string.Join(",", request.Params.Fields);
+
+            //Where Clause
+            string clause = null;
+            if (request.Params.QueryFilters.Count > 0)
+            {
+                var clauses = new List<string>();
+                foreach (var filter in request.Params.QueryFilters)
+                {
+                    if (filter.Field == null || filter.Value == null)
+                        continue;
+                    switch (filter.Type)
+                    {
+                        case FilterType.Like:
+                            clauses.Add(string.Format("{0} like '{1}%'", filter.Field, filter.Value));
+                            break;
+                        case FilterType.Equal:
+                            clauses.Add(string.Format("{0} = '{1}'", filter.Field, filter.Value));
+                            break;
+                        case FilterType.NotEqual:
+                            clauses.Add(string.Format("{0} <> '{1}'", filter.Field, filter.Value));
+                            break;
+                        case FilterType.LessThan:
+                            clauses.Add(string.Format("{0} < '{1}'", filter.Field, filter.Value));
+                            break;
+                        case FilterType.LessThanOrEqual:
+                            clauses.Add(string.Format("{0} <= '{1}'", filter.Field, filter.Value));
+                            break;
+                        case FilterType.GreaterThan:
+                            clauses.Add(string.Format("{0} > '{1}'", filter.Field, filter.Value));
+                            break;
+                        case FilterType.GreaterThanOrEqual:
+                            clauses.Add(string.Format("{0} >= '{1}'", filter.Field, filter.Value));
+                            break;
+                        case FilterType.StartsWith:
+                            clauses.Add(string.Format("{0} like '{1}%'", filter.Field, filter.Value));
+                            break;
+                        case FilterType.EndsWith:
+                            clauses.Add(string.Format("{0} like '%{1}'", filter.Field, filter.Value));
+                            break;
+                        case FilterType.Contains:
+                            clauses.Add(string.Format("{0} like '%{1}%'", filter.Field, filter.Value));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                clause = string.Join(" and ", clauses);
+            }
+
+            if (!string.IsNullOrEmpty(clause))
+            {
+                queryTemplate += " WHERE {5}";
+                countQueryTemplate += " WHERE {1}";
+            }
+
+            //Applying Order By
+            queryTemplate += " ORDER BY {1} {2}";
+
+            //Pagination
+            if (request.Params.PageSize != 0)
+                queryTemplate += " OFFSET {3} ROWS FETCH NEXT {4} ROWS ONLY";
+
+            int skipRows = (request.Params.PageNumber - 1) * request.Params.PageSize;
+            var result = Dapper.SqlMapper.Query(_dbContext.Database.Connection, string.Format(queryTemplate, table, request.Params.SortField, request.Params.SortDirection, skipRows, request.Params.PageSize, clause, fields ?? "*"));
+            var count = Dapper.SqlMapper.Query<int>(_dbContext.Database.Connection, string.Format(countQueryTemplate, table, clause));
+            return new GridListResponse { Model = new QueryableModel { Results = result, Count = count.First() } };
+        }
+    }
+}

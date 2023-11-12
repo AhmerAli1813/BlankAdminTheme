@@ -1,0 +1,37 @@
+﻿using DPWVessel.Model.EntityModel;
+using DE.Infrastructure.Concept;
+using DE.Infrastructure.ConceptImplementation;
+using FluentValidation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DPWVessel.Model.Features.Grid
+{
+    public class GridRemoveRequest : IRequest<Response>
+    {
+        public object Entity { get; set; }
+    }
+
+    public class GridRemoveRequestValidator : AbstractValidator<GridRemoveRequest>
+    {
+
+    }
+
+    public class GridRemoveRequestHandler : IRequestHandler<GridRemoveRequest, Response>
+    {
+        private dpw_VesselEntities _dbContext;
+        public GridRemoveRequestHandler(dpw_VesselEntities dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public Response Execute(GridRemoveRequest request)
+        {
+            _dbContext.Entry(request.Entity).State = System.Data.Entity.EntityState.Deleted;
+            return new Response();
+        }
+    }
+}

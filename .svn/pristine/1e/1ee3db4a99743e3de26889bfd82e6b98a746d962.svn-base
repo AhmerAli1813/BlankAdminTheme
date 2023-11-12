@@ -1,0 +1,530 @@
+﻿@model DPWVessel.Model.Features.VesselOps.GetVesselReportResponse
+@{
+    Layout = null;
+}
+
+<!--This Will Show Multiple Exception List-->
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <title>Print || Vessel Report</title>
+    <link href="@Url.Content("~/Content/css/icons/icomoon/styles.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet" ) />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
+    <script src="~/Scripts/js/main/jquery.min.js"></script>
+    <link rel="icon" type="~/Content/images/favicon.ico" sizes="16x16" href="~/Content/images/favicon.ico">
+    <style>
+        .heading-print {
+            color: #173a64;
+            font-weight: bold;
+        }
+
+        .row {
+            margin: 0px !important;
+        }
+
+        .badge {
+            font-size: 15px;
+            width: 90px;
+        }
+
+        body {
+            background-color: white !important;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: white !important;
+        }
+
+        .table thead th {
+            background: #e7e7e7 !important;
+        }
+        .table th {
+            background: #e7e7e7 !important;
+           
+        }
+        .table tbody td {
+           
+            font-weight:500;
+        }
+        .badge-size {
+            width: 70px;
+            padding: 8px 6px 5px 7px;
+        }
+
+        .table-bordered td, .table-bordered th {
+            border: 1px solid #979797 !important;
+        }
+
+        .badge-xs {
+            font-size: 9px;
+            -webkit-transform: translate(0, -2px);
+            -ms-transform: translate(0, -2px);
+            -o-transform: translate(0, -2px);
+            transform: translate(0, -2px);
+        }
+
+        .badge-sm {
+            -webkit-transform: translate(0, -2px);
+            -ms-transform: translate(0, -2px);
+            -o-transform: translate(0, -2px);
+            transform: translate(0, -2px);
+        }
+        /*All Table Badges*/
+
+        .badge-Completed {
+            /*background-color: #2cb97c!important;*/
+            background-color: #6c757d !important;
+            text-transform: uppercase;
+        }
+
+        .badge-InProgress {
+            background-color: #65becc !important;
+            text-transform: uppercase;
+        }
+
+        .badge-OverDue {
+            background-color: red !important;
+            text-transform: uppercase;
+        }
+
+        .badge-News {
+            background-color: #c776aa !important;
+            text-transform: uppercase;
+        }
+
+        .badge-Closed {
+            background-color: #463d32 !important;
+            text-transform: uppercase;
+        }
+
+        .badge-Rejected {
+            background-color: #dc3545 !important;
+            text-transform: uppercase;
+        }
+
+        img {
+            height: 80px;
+            border: none;
+        }
+
+        @@font-face {
+            font-family: 'AvenirLTStd-Book';
+            src: url('../../fonts/AvenirLTStd-Book.otf') format('opentype');
+        }
+
+        @@font-face {
+            font-family: 'AvenirLTStd-Medium';
+            src: url('../../fonts/AvenirLTStd-Medium.otf') format('opentype');
+        }
+
+        @@font-face {
+            font-family: 'AvenirLTStd-Roman';
+            src: url('../../fonts/AvenirLTStd-Roman.otf') format('opentype');
+        }
+
+        h2 {
+            font-family: AvenirLTStd-Medium !important;
+        }
+
+        .testRotate {
+            transform: rotate(180deg);
+            writing-mode: vertical-rl;
+        }
+
+        #StudyHeading {
+            margin-left: 20px;
+            margin-top: 70px;
+        }
+
+        #otherheading {
+            margin-left: 20px;
+        }
+
+        .truncate {
+            width: fit-content;
+            word-break: break-all;
+        }
+
+        .headingbgColor {
+            background: #e7e7e7;
+        }
+
+        .tblue {
+            color: #173a64 !important;
+        }
+        .thWidht tr th{
+            width:22%!important
+        } 
+         .thWidht tr td{
+            width:22%!important
+        } 
+         .pageBreak{
+             page-break-after:always;
+         }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="row page-titles" style="padding:10px">
+            <table class="table-bordered tblue table" style="border: 1px solid black;">
+                <tr style="border: 1px solid black; text-align:center">
+                    <td style="width:25%;text-align:center">
+
+                        <img src="~/Content/images/dpworldlogo.png" style="height:96px;margin: 17px;" />
+                    </td>
+                    <td align="center" style="vertical-align:inherit">
+                        <h1 class="tblue" style="font-size:30px">
+                            <b>
+                                Vessel Arrival Form Report
+                            </b>
+
+                        </h1>
+                        <h1 class="tblue" style="font-weight:600;">DATE <span style="color:#cb3655 !important">  @DateTime.Now.ToString("dd-MM-yyyy")</span> TIME <span style="color:#cb3655 !important"> @DateTime.Now.ToString("HH:mm")</span> </h1>
+                    </td>
+
+                </tr>
+            </table>
+
+
+        </div>
+
+
+
+    </div>
+
+    <div class="container-fluid general">
+        <table class="table table_heading table-bordered table-striped text-center">
+
+
+
+            <tbody class="table table_heading table-bordered table-striped">
+                <tr>
+                    <th width="10%" class="headingbgColor" style="vertical-align:middle">
+                        <div class="testRotate" id="otherheading">
+                            Vessel Detail
+                        </div>
+                    </th>
+                    <td colspan="10" style="padding:0px!important">
+                        <table width="100%" class="thWidht">
+                            <tr>
+                                <th>
+                                    Visit Id-VesselName
+                                </th>
+                                <th>
+                                    Arrival at pilot station
+                                </th>
+                                <th>
+                                    Berth number
+                                </th>
+                                <th>
+                                    Berthed at DPW-JED
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>@Model.VOPSReport.Vessel_RefernceNo</td>
+                                <td>@Model.VOPSReport.ata.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.pos_slot</td>
+                                <td>@Model.VOPSReport.eta.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    Pilot boarded
+                                </th>
+                                <th>
+                                    Quarantine arrived at PORT
+                                </th>
+                                <th>
+                                    Quarantine boarded on Vessel
+                                </th>
+                                <th>
+                                    Quarantine disembark from Vessel
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>@Model.VOPSReport.pilot_on_board.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.Quarentine_arrived_AP.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.Quarentine_boarded_OV.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.Quarentine_disembark_FV.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    Custom arrived at PORT
+                                </th>
+                                <th>
+                                    Custom boarded on Vessel
+                                </th>
+                                <th>
+                                    Custom disembark from Vessel
+                                </th>
+                                <th>
+                                    Coastguard arrived at PORT
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>@Model.VOPSReport.Custom_arrived_port.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.Custom_borded_Vessel.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.Custom_disembark_FV.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.Coastguard_arrived_AP.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    Coastguard boarded on Vessel
+                                </th>
+                                <th>
+                                    Coastguard disembark from Vessel
+                                </th>
+                                <th>
+                                    Next port arrival
+                                </th>
+                                <th>
+                                    Last port departed
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>@Model.VOPSReport.Coastguard_boarded_OV.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.Coastguard_disembark_FV.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.flex_string08</td>
+                                <td>@Model.VOPSReport.flex_string07</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="10%" class="headingbgColor" style="vertical-align:middle">
+                        <div class="testRotate" id="otherheading">
+                            DP World Representative to fill
+                        </div>
+                    </th>
+                    <td style="padding:0px!important">
+                        <table width="100%" class="thWidht">
+                            <tr>
+                                <th>
+                                    Operation Lead Name
+                                </th>
+                                <th>
+                                    Employee ID
+                                </th>
+                                <th>
+                                    First Rope Secured Time
+                                </th>
+                                <th>
+                                    Last Rope Secured Time
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>@Model.VOPSReport.Operation_LeadName</td>
+                                <td>@Model.VOPSReport.Employee_Id</td>
+                                <td>@Model.VOPSReport.flex_date04.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.flex_date05.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    Vessel secure at alongside
+                                </th>
+                                <th>
+                                    Gangway Secured
+                                </th>
+                                <th>
+                                    Pilot Disembark
+                                </th>
+                                <th>
+                                    Lashing Gang Onboard
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>@Model.VOPSReport.Vessel_Secure_alongside</td>
+                                <td>@Model.VOPSReport.flex_date02.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.pilot_off_board.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.Lashing_Gang_on_board</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    Gang boarded on vessel prior authority clearance
+                                </th>
+                                <th>
+                                    First lift on Vessel
+                                </th>
+                                <th>
+                                    Operation Commenced
+                                </th>
+                                <th></th>
+                            </tr>
+                            <tr>
+
+                                @if (Model.VOPSReport.Gang_on_board_PAC == true)
+                                {
+                                    <td>Yes</td>
+                                }
+                                else
+                                {
+                                    <td>No</td>
+                                }
+
+                                <td>@Model.VOPSReport.start_work.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td>@Model.VOPSReport.end_work.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                                <td></td>
+
+                            </tr>
+
+
+                        </table>
+                    </td>
+                </tr>
+
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+    <div class="pageBreak"></div>
+
+    <div>
+        <div class="row page-titles" style="padding:10px">
+            <table class="table-bordered tblue table" style="border: 1px solid black;">
+                <tr style="border: 1px solid black; text-align:center">
+                    <td style="width:25%;text-align:center">
+
+                        <img src="~/Content/images/dpworldlogo.png" style="height:96px;margin: 17px;" />
+                    </td>
+                    <td align="center" style="vertical-align:inherit">
+                        <h1 class="tblue" style="font-size:30px">
+                            <b>
+                                Doc Scanner Vessel Report
+                            </b>
+
+                        </h1>
+                       
+                    </td>
+
+                </tr>
+            </table>
+
+
+        </div>
+
+
+
+    </div>
+
+    <div class="container-fluid general">
+        <table class="table table_heading table-bordered table-striped text-center">
+          
+                <tr class=tblue>
+                    <th>
+                        Vessel Name
+                    </th>
+                    <th>
+
+                        Visit Id
+                    </th>
+                    <th>
+
+                        ATB
+                    </th>
+                    <th>
+                        Line
+                    </th>
+                    <th>
+                        Classification
+                    </th>
+                    <th>
+                        Created At
+                    </th>
+                    <th>
+                        Created By
+                    </th>
+                </tr>
+         
+            <tbody>
+                <tr>
+                    <td>@Model.VOPSReport.VesselName</td>
+                    <td>@Model.VOPSReport.VisitId</td>
+                    <td>@Model.VOPSReport.ATB.ToString("dd-MM-yyyy HH:mm")</td>
+                    <td>@Model.VOPSReport.Line</td>
+                    <td>@Model.VOPSReport.Classification</td>
+                    <td>@Model.VOPSReport.CreatedAt.Value.ToString("dd-MM-yyyy HH:mm")</td>
+                    <td>@Model.VOPSReport.CreatedBy</td>
+
+
+                </tr>
+       
+                <tr>
+
+                    <td colspan="10" style="padding:0px!important">
+                        <table width="100%">
+                            <thead>
+                                <tr>
+                                    <th>S.no</th>
+                                    <th>Form Name</th>
+                                    <th>Images</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            @{ int x = 0;}
+                            @foreach (var item in Model.VOPSReport.FormData)
+                            {
+                                x++;
+                                
+                                <tr>
+
+                                    <td style="vertical-align:middle">@x</td>
+                                    <td style="vertical-align:middle;text-align:left">@item.FormName</td>
+                                    <td>
+
+                                        <img src="@item.Image" height="80" width="80" /><br />
+
+                                    </td>
+                                    @if (item.FormRemarks == null)
+                                    {
+                                    <td style="vertical-align:middle">
+                                       -
+                                    </td>
+
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @item.FormRemarks
+                                        </td>
+                                    }
+                                </tr>
+                                
+
+                            }
+                        </table>
+                    </td>
+                </tr>
+
+
+           
+          </tbody>
+            
+            
+            
+        </table>
+
+     
+    </div>
+
+
+   
+
+</body>
+</html>
+
+<script>
+
+    window.print();
+</script>

@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewBag.Title = "RemarksIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/DatePicker/jquery.min.js"></script>
+<link href="~/Content/css/PaganationStyleSheetCustom.css" rel="stylesheet" />
+<div ng-controller="RemarksCtrl" ng-init="init()">
+    <div class="page-header border-bottom-0">
+        <div class="page-header-content header-elements-md-inline">
+            <div class="page-title d-flex">
+                <h4>
+                    <i class="icon-task mr-2"></i>
+                    <span class="font-weight-semibold">Exception Justification</span>
+                </h4>
+            </div>
+            <div class="page-title d-flex">
+                <input type="button" class="btn btn-secondary  pull-right mr-2" value="Filters" data-toggle="collapse" data-target="#demo" />
+                <a href="/Remarks/RemarksAdd" class="btn btn-primary  pull-right" @*ng-show="_currentUser.UserType=='Admin' "*@  >Add Exception Remark</a>
+            </div>
+        </div>
+    </div>
+    <!--Search Filter Code Start-->
+    <div class="col-md-12 collapse" id="demo">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Remarks Eng</label>
+                    <input type="text" class="form-control" id="RemarkEng" placeholder="Remarks Eng" ng-model="search.RemarksEng" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Remarks Ar</label>
+                    <input type="text" class="form-control" id="RemarkAr" placeholder="Remarks Ar" ng-model="search.RemarksAr" />
+                </div>
+            </div>
+        
+            @*<div class="col-md-3">
+                <div class="form-group">
+                    <label>Remarks Type</label>
+                    <select data-placeholder="Select Remarks Type" class="form-control select-clear" ng-model="search.RemarksTypeId" data-fouc>
+                        <option></option>
+                        <option value="1">Justifications</option>
+                        <option value="2">Explanation</option>
+                    </select>
+                </div>
+            </div>*@
+
+
+     
+    
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input type="button" class="btn btn-theme-gray pull-right mt-3 mr-2" value="Reset" ng-click="Reset()" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Search Filter Code End-->
+    <hr />
+    <!-- /page header -->
+    <div class="row">
+        <div id="tblrep" class="card table-card scrollbar" >
+            <table class="table datatable-show-all text-center" id="table-id">
+                <thead>
+                    <tr class="table-card-head">
+                        <th>SR#</th>
+                        <th>Remarks Eng</th>
+                        <th>Remarks Ar</th>
+                        @*<th>Remarks Type</th>*@
+                        <th>Created By</th>
+                        <th>Updated By</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Action</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in Remarks | filter:search">
+                        <td>{{$index+1}}</td>
+                    
+                        <td>{{item.RemarksEng}}</td>
+                        <td>{{item.RemarksAr}}</td>
+                        @*<td>
+                            <span ng-show="item.RemarksTypeId==1">Justifications</span>
+                            <span ng-show="item.RemarksTypeId==2">Explanation</span>
+                        </td>*@
+                        <td>{{item.CreatedBy}}</td>
+                        <td>{{item.UpdatedBy}}</td>
+                        <td>{{item.CreatedAt |date:'dd-MMM-yyyy h:mm:ss a'}}</td>
+                        <td>{{item.UpdatedAt |date:'dd-MMM-yyyy h:mm:ss a'}}</td>
+                        <td>
+                            <div class="list-icons">
+                                <a  href="/Remarks/RemarksEdit?Id={{item.Id}}" class="cursor-pointer list-icons-item "><i class="icon-pencil7" title="Edit"></i></a>
+                            </div>
+                        </td>
+                        @*<td>
+                            <span ng-if="item.Status == true" class="badge badge-success">Active</span>
+                            <span ng-if="item.Status != true" class="badge badge-danger">NotActive</span>
+                        </td>*@
+
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+       
+    </div>
+    <!--pagination Code Start-->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Select Rows</label>
+                <select data-placeholder="Select Rows" name="state" id="maxRows" class="form-control select-clear" data-fouc>
+                    <option></option>
+                    <option value="5000">All Rows</option>
+                    <option value="4">4</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="70">70</option>
+                    <option value="100">100</option>
+
+                </select>
+            </div>
+        </div>
+        <div class='pagination-container' style="position: absolute;
+    right: 25px;">
+            <nav>
+                <ul class="pagination">
+
+                    <li data-page="prev">
+                        <span> < <span class="sr-only">(current)</span></span>
+                    </li>
+                    <!--	Here the JS Function Will Add the Rows -->
+                    <li data-page="next" id="prev">
+                        <span> > <span class="sr-only">(current)</span></span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!--pagination Code End-->
+</div> <!--Ng-Controller Div End-->
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+<script src="~/Scripts/PaganationScriptCustom.js"></script>
+<script src="~/Scripts/jquery.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        getPagination('#table-id');
+
+    });
+    window.onload = function () {
+        document.getElementById('minisidebar').className = 'sidebar-xs';
+    };
+
+</script>

@@ -1,0 +1,140 @@
+﻿@using DPWVessel.Model.Resources
+@using DPWVessel.Model.EntityModel.Enums
+@{
+    ViewBag.Title = "Register User";
+}
+<div ng-controller="AccountCtr" ng-init="initEdit()">
+    <div class="page-title">
+        <div class="flex">
+            <div class="Flex-coumn"><h4><i class="fas fa-user"></i>Edit User</h4></div>
+        </div>
+        <hr />
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            User Detail
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="ProfileCard">
+                        <div class="ProfileCardBody  text-center">
+                            <img class="rounded-circle" src="~/Content/images/profile.jpg" width="170" height="170" alt=""><br /><br />
+                            <h6>{{User.FullName}}</h6>
+                            <span>Availability ( ON DUTY )</span>
+                        </div>
+                        <div class="profileCardFooter">
+                            <div><i class="icon-stats-bars"></i> Status</div>
+                            <div ng-if="User.Status==true" class="badge badge-success pull-right">Active</div>
+                            <div ng-if="User.Status!=true" class="badge badge-warning pull-right">Not Active</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>Email</label><span class="required-starig">*</span>
+                            <input type="text" id="Email" class="form-control" placeholder="" ng-model="User.Email" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="control-label">Login Id</label><span class="required-starig">*</span>
+                            <input type="text" id="Name" class="form-control" placeholder="" ng-model="User.Username" readonly>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="control-label">FullName</label><span class="required-starig">*</span>
+                            <input type="text" id="FullName" class="form-control" placeholder="" ng-model="User.FullName">
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label class="control-label">Phone</label><span class="required-starig">*</span>
+                            <input type="text" id="phone" class="form-control" placeholder="" ng-model="User.Phone">
+                        </div>
+                        <div class="col-md-4">
+                            <label>Application Access</label><span class="required-starig">*</span>
+                            <select multiple id="UserAppId" ng-model="User.UsersApplication" ng-change="CheckAccessEdit(User.UsersApplication)">
+                                <option ng-repeat="App in AppList" ng-if="App.Id==2" ng-selected="User.UsersApplication=='2'" value="{{App.Id}}">Vessel</option>
+                                <option ng-repeat="App in AppList" ng-if="App.Id==1" ng-selected="User.UsersApplication=='1'" value="{{App.Id}}">JIP</option>
+                                <option ng-repeat="App in AppList" ng-if="App.Id==3" ng-selected="User.UsersApplication=='3'" value="{{App.Id}}">{{App.Name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Role</label><span class="required-starig">*</span>
+                            <select multiple id="UserRoleId" ng-model="User.UserType" ng-change="RoleCountEdit(User.UserType)">
+                                <option ng-repeat="r in Roles" value="{{r.Id}}">{{r.Text}}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label>Status</label><span class="required-starig">*</span>
+                            <select data-placeholder="Status" class="form-control select-clear" ng-model="User.Status" data-fouc>
+                                <option disabled selected>Select Status </option>
+                                <option ng-selected="User.Status ==true " ng-value="true">Active</option>
+                                <option ng-selected="User.Status == false" ng-value="false">Not Active</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>SHIFT & WORK HOURS</label>
+                            <input type="text" value="Shift A - 10Hrs 08:00am - 06:00pm" class="form-control">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Department</label>
+                            <input type="text" value="Department" class="form-control">
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label>Sub Department</label>
+                            <input type="text" value="Sub Department" class="form-control">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Nationality</label>
+                            <input type="text" value="Nationality" class="form-control">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Religion</label>
+                            <input type="text" value="Religion" class="form-control">
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label>DOJ</label>
+                            <input type="text" value="DOJ" class="form-control">
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" ng-click="SaveUser(User)" class="Customebtn btnPrimary mr-10 pull-right"><span>Update</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+<script src="~/Scripts/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+
+    // Start phone Number Validation
+    function phoneFormatter() {
+        $('#phone').on('input', function () {
+            var number = $(this).val().replace(/[^+\d]/g, '')
+
+            $(this).val(number);
+            if (number.length == 17) {
+                $(this).val(null);
+                toastr.error('max limit 17 digit only');
+                return false;
+            }
+
+        });
+    };
+    $(phoneFormatter());
+
+    // End phone Number Validation
+
+</script>

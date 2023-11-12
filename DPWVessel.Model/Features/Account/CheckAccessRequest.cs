@@ -1,0 +1,70 @@
+﻿using DE.Infrastructure.Concept;
+using DPWVessel.Model.EntityModel;
+using FluentValidation;
+using System.Linq;
+
+namespace DPWVessel.Model.Features.Account
+{
+    public class CheckAccessRequest : IRequest<CheckAccessResponse>
+    {
+        // public string[] AppCode { get; set; }
+        public int UserId { get; set; }
+        public string[] UserType { get; set; }
+        public int UserApplication { get; set; }
+    }
+    public class CheckAccessResponse : Response
+    {
+        public bool Return { get; set; }
+    }
+    public class CheckAccessRequestValidator : AbstractValidator<CheckAccessRequest>
+    {
+        private dpw_VesselEntities _dbcontext;
+        public CheckAccessRequestValidator(dpw_VesselEntities _context)
+        {
+            _dbcontext = _context;
+            // RuleFor(x => x.RefNo).NotEmpty().WithMessage("Enter Reference No!");
+        }
+    }
+    public class CheckAccessRequestHandler : IRequestHandler<CheckAccessRequest, CheckAccessResponse>
+    {
+        private dpw_VesselEntities _dbcontext;
+        public CheckAccessRequestHandler(dpw_VesselEntities _context)
+        {
+            _dbcontext = _context;
+        }
+        public CheckAccessResponse Execute(CheckAccessRequest request)
+        {
+            var row = _dbcontext.SiteUsers.FirstOrDefault(x => x.Id == request.UserId);
+            int countapp = 0;
+            if (row.Status)
+            {
+                countapp++;
+            }
+
+            if (row.UsersApplications.Count() == request.UserApplication)
+            {
+                countapp++;
+            }
+
+            if (row.AspNetUser.AspNetRoles.Count() == request.UserType.Count())
+            {
+                countapp++;
+            }
+
+
+
+
+
+            CheckAccessResponse response = new CheckAccessResponse();
+            if (countapp == 3)
+            {
+                response.Return = true;
+            }
+            else
+            {
+                response.Return = false;
+            }
+            return response;
+        }
+    }
+}

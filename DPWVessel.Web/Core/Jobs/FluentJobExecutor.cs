@@ -1,0 +1,67 @@
+﻿using Autofac;
+using Autofac.Core.Lifetime;
+using DE.Infrastructure.Concept;
+using FluentScheduler;
+using System.Web.Hosting;
+
+namespace DPWVessel.Web.Core.Jobs
+{
+    public class JobExecutor<T1> : IJob, IRegisteredObject where T1 : IBackgroundJob
+    {
+        private readonly object _lock = new object();
+        private readonly ILifetimeScope context;
+        private bool _shuttingDown;
+
+        public JobExecutor(ILifetimeScope context)
+        {
+            this.context = context;
+            // Register this job with the hosting environment.
+            // Allows for a more graceful stop of the job, in the case of IIS shutting down.
+            HostingEnvironment.RegisterObject(this);
+        }
+
+        public void Execute()
+        {
+            try
+            {
+                lock (_lock)
+                {
+                    if (_shuttingDown)
+                        return;
+
+                    // Do work, son!
+                    using (var scope = context.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
+                    {
+                        var bgJob = scope.Resolve<T1>();
+                        using (var _unitOfWork = scope.Resolve<IUnitOfWork>())
+                        {
+                            //execute job synchornously
+                            bgJob.Execute().Wait();
+
+                            //commit changes
+                            _unitOfWork.Commit();
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                // Always unregister the job when done.
+                HostingEnvironment.UnregisterObject(this);
+            }
+        }
+
+        public void Stop(bool immediate)
+        {
+            // Locking here will wait for the lock in Execute to be released until this code can continue.
+            lock (_lock)
+            {
+                _shuttingDown = true;
+            }
+
+            HostingEnvironment.UnregisterObject(this);
+        }
+    }
+
+
+}

@@ -1,0 +1,1765 @@
+﻿'use strict';
+app.controller('VesselOpsCtr',
+    [
+        "$scope",
+        "$rootScope",
+        "$timeout",
+        "$q",
+        "urlService",
+        "newGridService",
+        "$window",
+        "$interval",
+       "$filter",
+        function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window, $interval, $filter) {
+            $scope.VAF = { dbVAF: {} };
+            $scope.staging = {  };
+            
+           
+
+          
+            $scope.theTime = new Date().toLocaleTimeString();
+            $interval(function () {
+                $scope.theTime = new Date().toLocaleTimeString();
+            }, 1000);
+
+            function convertTimezoneToISO(dates) {
+                var convertdate = moment(dates).format('YYYY-MM-DDTHH:mm');
+                return convertdate;
+            }
+
+            function convertdateforsubmit(data, page) {
+                if (page == "Submit") {
+                    data.ata = moment(convertFromStringToDate(document.getElementById('ata').value)).format('YYYY-MM-DDTHH:mm');
+                    data.eta = moment(convertFromStringToDate(document.getElementById('eta').value)).format('YYYY-MM-DDTHH:mm');
+                }
+              
+               
+                if (document.getElementById('end_work').value != "") {
+
+                    data.end_work = moment(convertFromStringToDate(document.getElementById('end_work').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('start_work').value != "") {
+
+                    data.start_work = moment(convertFromStringToDate(document.getElementById('start_work').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('flex_date02').value != "") {
+
+                    data.flex_date02 = moment(convertFromStringToDate(document.getElementById('flex_date02').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+
+                if (document.getElementById('flex_date04').value != "") {
+
+                    data.flex_date04 = moment(convertFromStringToDate(document.getElementById('flex_date04').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('flex_date05').value != "") {
+
+                    data.flex_date05 = moment(convertFromStringToDate(document.getElementById('flex_date05').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('pilot_off_board').value != "") {
+
+                    data.pilot_off_board = moment(convertFromStringToDate(document.getElementById('pilot_off_board').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('pilot_on_board').value != "") {
+
+                    data.pilot_on_board = moment(convertFromStringToDate(document.getElementById('pilot_on_board').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('Coastguard_arrived_AP').value != "") {
+
+        
+                   
+                    data.dbVAF.Coastguard_arrived_AP = moment(convertFromStringToDate(document.getElementById('Coastguard_arrived_AP').value)).format('YYYY-MM-DDTHH:mm');
+                }
+
+                if (document.getElementById('Coastguard_boarded_OV').value != "") {
+
+                    data.dbVAF.Coastguard_boarded_OV = moment(convertFromStringToDate(document.getElementById('Coastguard_boarded_OV').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('Coastguard_disembark_FV').value != "") {
+
+                    data.dbVAF.Coastguard_disembark_FV = moment(convertFromStringToDate(document.getElementById('Coastguard_disembark_FV').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('Custom_arrived_port').value != "") {
+
+                    data.dbVAF.Custom_arrived_port = moment(convertFromStringToDate(document.getElementById('Custom_arrived_port').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('Custom_borded_Vessel').value != "") {
+
+                    data.dbVAF.Custom_borded_Vessel = moment(convertFromStringToDate(document.getElementById('Custom_borded_Vessel').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('Custom_disembark_FV').value != "") {
+
+                    data.dbVAF.Custom_disembark_FV = moment(convertFromStringToDate(document.getElementById('Custom_disembark_FV').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+
+                if (document.getElementById('Quarentine_arrived_AP').value != "") {
+
+                    data.dbVAF.Quarentine_arrived_AP = moment(convertFromStringToDate(document.getElementById('Quarentine_arrived_AP').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('Quarentine_boarded_OV').value != "") {
+
+                    data.dbVAF.Quarentine_boarded_OV = moment(convertFromStringToDate(document.getElementById('Quarentine_boarded_OV').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('Quarentine_disembark_FV').value != "") {
+
+                    data.dbVAF.Quarentine_disembark_FV = moment(convertFromStringToDate(document.getElementById('Quarentine_disembark_FV').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('Vessel_Secure_alongside').value != "") {
+
+                    data.dbVAF.Vessel_Secure_alongside = moment(convertFromStringToDate(document.getElementById('Vessel_Secure_alongside').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('Lashing_Gang_on_board').value != "") {
+
+                    data.dbVAF.Lashing_Gang_on_board = moment(convertFromStringToDate(document.getElementById('Lashing_Gang_on_board').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+
+                console.log(data);
+                return data;
+            }
+
+            function convertdateforedit(data) {
+
+                var a = document.getElementById('pilot_on_board').value;
+                console.log(a);
+
+                if (document.getElementById('end_work').value != null) {
+
+                    data.end_work = convertFromStringToDate(document.getElementById('end_work').value);
+
+                }
+
+                if (document.getElementById('start_work').value != null) {
+
+                    data.start_work = convertFromStringToDate(document.getElementById('start_work').value);
+
+                }
+                if (document.getElementById('flex_date02').value != null) {
+
+                    data.flex_date02 = convertFromStringToDate(document.getElementById('flex_date02').value);
+
+                }
+
+                if (document.getElementById('flex_date04').value != null) {
+
+                    data.flex_date04 = convertFromStringToDate(document.getElementById('flex_date04').value);
+
+                }
+                if (document.getElementById('flex_date05').value != null) {
+
+                    data.flex_date05 = convertFromStringToDate(document.getElementById('flex_date05').value);
+
+                }
+                if (document.getElementById('pilot_off_board').value != null) {
+
+                    data.pilot_off_board = convertFromStringToDate(document.getElementById('pilot_off_board').value);
+
+                }
+                if (document.getElementById('pilot_on_board').value != null) {
+
+                    data.pilot_on_board = convertFromStringToDate(document.getElementById('pilot_on_board').value);
+
+                }
+                if (document.getElementById('Coastguard_arrived_AP').value != null) {
+
+
+
+                    data.dbVAF.Coastguard_arrived_AP = convertFromStringToDate(document.getElementById('Coastguard_arrived_AP').value);
+                }
+
+                if (document.getElementById('Coastguard_boarded_OV').value != null) {
+
+                    data.dbVAF.Coastguard_boarded_OV = convertFromStringToDate(document.getElementById('Coastguard_boarded_OV').value);
+
+                }
+                if (document.getElementById('Coastguard_disembark_FV').value != null) {
+
+                    data.dbVAF.Coastguard_disembark_FV = convertFromStringToDate(document.getElementById('Coastguard_disembark_FV').value);
+
+                }
+                if (document.getElementById('Custom_arrived_port').value != null) {
+
+                    data.dbVAF.Custom_arrived_port = convertFromStringToDate(document.getElementById('Custom_arrived_port').value);
+
+                }
+                if (document.getElementById('Custom_borded_Vessel').value != null) {
+
+                    data.dbVAF.Custom_borded_Vessel = convertFromStringToDate(document.getElementById('Custom_borded_Vessel').value);
+
+                }
+                if (document.getElementById('Custom_disembark_FV').value != null) {
+
+                    data.dbVAF.Custom_disembark_FV = convertFromStringToDate(document.getElementById('Custom_disembark_FV').value);
+
+                }
+
+                if (document.getElementById('Quarentine_arrived_AP').value != null) {
+
+                    data.dbVAF.Quarentine_arrived_AP = convertFromStringToDate(document.getElementById('Quarentine_arrived_AP').value);
+                }
+                if (document.getElementById('Quarentine_boarded_OV').value != null) {
+
+                    data.dbVAF.Quarentine_boarded_OV = convertFromStringToDate(document.getElementById('Quarentine_boarded_OV').value);
+
+                }
+                if (document.getElementById('Quarentine_disembark_FV').value != null) {
+
+                    data.dbVAF.Quarentine_disembark_FV = convertFromStringToDate(document.getElementById('Quarentine_disembark_FV').value);
+
+                }
+                if (document.getElementById('Vessel_Secure_alongside').value != "") {
+
+                    data.dbVAF.Vessel_Secure_alongside =convertFromStringToDate(document.getElementById('Vessel_Secure_alongside').value);
+
+                }
+                if (document.getElementById('Lashing_Gang_on_board').value != "") {
+
+                    data.dbVAF.Lashing_Gang_on_board = convertFromStringToDate(document.getElementById('Lashing_Gang_on_board').value);
+
+                }
+
+                return data;
+            }
+
+       
+            function convertFromStringToDate(responseDate) {
+              
+                let dateComponents = responseDate.split(' ');
+                let datePieces = dateComponents[0].split("/");
+                let timePieces = dateComponents[1].split(":");
+                return (new Date(datePieces[2], (datePieces[1] - 1), datePieces[0],
+                                     timePieces[0], timePieces[1]))
+            }
+
+
+
+            function convertdate(data) {
+                console.log(data);
+                data.eta = new Date(data.eta);
+                data.ata = new Date(data.ata);
+                if (data.end_work != null) {
+
+                    data.end_work = moment(data.end_work).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.start_work != null) {
+
+                    data.start_work = moment(data.start_work).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.flex_date02 != null) {
+
+                    data.flex_date02 = moment(data.flex_date02).format('DD/MM/YYYY HH:mm');
+                }
+
+                if (data.flex_date04 != null) {
+
+                    data.flex_date04 = moment(data.flex_date04).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.flex_date05 != null) {
+
+                    data.flex_date05 = moment(data.flex_date05).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.pilot_off_board != null) {
+
+                    data.pilot_off_board = moment(data.pilot_off_board).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.pilot_on_board != null) {
+
+                    data.pilot_on_board = moment(data.pilot_on_board).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.dbVAF.Coastguard_arrived_AP != null) {
+
+                    data.dbVAF.Coastguard_arrived_AP = moment(data.dbVAF.Coastguard_arrived_AP).format('DD/MM/YYYY HH:mm');
+                }
+
+                if (data.dbVAF.Coastguard_boarded_OV != null) {
+
+                    data.dbVAF.Coastguard_boarded_OV = moment(data.dbVAF.Coastguard_boarded_OV).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.dbVAF.Coastguard_disembark_FV != null) {
+
+                    data.dbVAF.Coastguard_disembark_FV = moment(data.dbVAF.Coastguard_disembark_FV).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.dbVAF.Custom_arrived_port != null) {
+
+                    data.dbVAF.Custom_arrived_port = moment(data.dbVAF.Custom_arrived_port).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.dbVAF.Custom_borded_Vessel != null) {
+
+                    data.dbVAF.Custom_borded_Vessel = moment(data.dbVAF.Custom_borded_Vessel).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.dbVAF.Custom_disembark_FV != null) {
+
+                    data.dbVAF.Custom_disembark_FV = moment(data.dbVAF.Custom_disembark_FV).format('DD/MM/YYYY HH:mm');
+                }
+
+                if (data.dbVAF.Quarentine_arrived_AP != null) {
+
+                    data.dbVAF.Quarentine_arrived_AP = moment(data.dbVAF.Quarentine_arrived_AP).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.dbVAF.Quarentine_boarded_OV != null) {
+
+                    data.dbVAF.Quarentine_boarded_OV = moment(data.dbVAF.Quarentine_boarded_OV).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.dbVAF.Quarentine_disembark_FV != null) {
+
+                    data.dbVAF.Quarentine_disembark_FV = moment(data.dbVAF.Quarentine_disembark_FV).format('DD/MM/YYYY HH:mm');
+                }
+                if (data.dbVAF.Vessel_Secure_alongside  != null) {
+
+                    data.dbVAF.Vessel_Secure_alongside = moment(data.dbVAF.Vessel_Secure_alongside).format('DD/MM/YYYY HH:mm');
+
+                }
+                if (data.dbVAF.Lashing_Gang_on_board != null) {
+
+                    data.dbVAF.Lashing_Gang_on_board = moment(data.dbVAF.Lashing_Gang_on_board).format('DD/MM/YYYY HH:mm');
+
+                }
+
+                return data;
+            }
+
+            //Signature
+            $scope.type;
+            $scope.SectionSignature = function (type) {
+                $scope.type = type;
+
+                $('#modal_small_Signagure').modal('show');
+
+                $scope.SaveSectionSignature = function () {
+                   
+                    var canvas = document.getElementById("sig-canvas");
+                    console.log(canvas.toDataURL());
+                    var context = canvas.getContext('2d');
+                    const pixelBuffer = new Uint32Array(
+                        context.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+                    );
+                    var IsBlank = !pixelBuffer.some(color => color !== 0);
+                    console.log(IsBlank);
+                    if (IsBlank) {
+                        return false;
+                    }
+                    var signData = canvas.toDataURL();
+                    $scope.SignatureUploadPromise(signData, false, "").then(
+                        function (response) {
+                            console.log(response);
+
+                            canvas.width = canvas.width;
+                             $('#modal_small_Signagure').modal('hide');
+                             $scope.VAF.dbVAF.Signature = response;
+                           
+                        });
+                }
+
+
+
+            }
+
+      
+            //signature
+
+
+            //VAF Form Start//
+
+          
+
+            $scope.getdate = function getdate(id, data) {
+                console.log(id);
+                console.log(data);
+              
+                var d = new Date();
+                var dateString = moment(d).format('DD/MM/YYYY HH:mm');
+
+                if (data != null && data != undefined) {
+
+                    $scope.VAF.dbVAF[id] = dateString;
+
+                }
+                else {
+
+                    $scope.VAF[id] = dateString;
+
+                }
+
+                console.log(dateString);
+          
+            }
+
+            $scope.validaetdate = function (id, data) {
+                console.log("s");
+
+                var d = new Date();
+
+                var date = document.getElementById(id).value;
+                const dateOne = moment(d).format('YYYY-MM-DDTHH:mm');
+                const dateTwo = moment(date).format('YYYY-MM-DDTHH:mm');
+                const dateOneObj = new Date(dateOne);
+                const dateTwoObj = new Date(dateTwo);
+                const milliseconds = Math.abs(dateTwoObj - dateOneObj);
+                const hours = milliseconds / 36e5;
+                console.log(hours);
+                console.log(dateTwoObj);
+                console.log(dateOneObj);
+                if (dateTwoObj > dateOneObj) {
+                    toastr.error("You can not edit datetime");
+                    if (data != null && data != undefined) {
+
+                        $scope.VAF.dbVAF[id] = new Date(dateOne);
+                    }
+                    else {
+
+                        $scope.VAF[id] = new Date(dateOne);
+
+                    }
+                    return false;
+                }
+
+                if (hours > 2) {
+                    toastr.error("You can not edit datetime less then 2 hours");
+                    if (data != null && data != undefined) {
+
+                        $scope.VAF.dbVAF[id] = new Date(dateOne);
+                    }
+                    else {
+
+                        $scope.VAF[id] = new Date(dateOne);
+
+                    }
+                    return false;
+                }
+
+
+
+            }
+
+
+
+            $scope.Validatedate_Edit = function (id, data) {
+              
+                var d = new Date();
+                var date = document.getElementById(id).value;
+                const Currentdate = $filter('date')(d, "yyyy-MM-dd hh:mm");
+                const Selectdate = $filter('date')(date, "yyyy-MM-dd hh:mm");
+                const ATA = $filter('date')($scope.VAF.ata, "yyyy-MM-dd hh:mm");
+                const dateOne = moment(d).format('YYYY-MM-DDTHH:mm');
+
+                if ($scope.VAF.atd == null) {
+                   
+                    if (Selectdate > ATA && Selectdate <= Currentdate) {
+                       
+                        if (data != null && data != undefined) {
+
+                            $scope.VAF.dbVAF[id] = new Date(Selectdate);
+                        }
+                        else {
+                            $scope.VAF[id] = new Date(Selectdate);
+
+                        }
+                          
+                       
+                    }
+                    else {
+
+                        toastr.error("Please Select date & time between ATA date to Current date. ");
+                        if (data != null && data != undefined) {
+
+                            $scope.VAF.dbVAF[id] = new Date(dateOne);
+                        }
+                        else {
+                            $scope.VAF[id] = new Date(dateOne);
+
+                        }
+                      
+
+                    }
+
+                    
+                }
+                else {
+                    const ATD = $filter('date')($scope.VAF.atd, "yyyy-MM-dd hh:mm");
+
+                    if (Selectdate > ATA && Selectdate <= ATD) {
+
+                        if (data != null && data != undefined) {
+
+                            $scope.VAF.dbVAF[id] = new Date(Selectdate);
+                        }
+                        else {
+                            $scope.VAF[id] = new Date(Selectdate);
+
+                        }
+
+
+                    }
+                    else {
+
+                        toastr.error("Please Select date & time between ATA date to ATD date. ");
+                        if (data != null && data != undefined) {
+
+                            $scope.VAF.dbVAF[id] = new Date(dateOne);
+                        }
+                        else {
+                            $scope.VAF[id] = new Date(dateOne);
+
+                        }
+
+
+                    }
+
+                }
+            }
+
+
+           
+            $scope.Staging_init = function () {
+                $scope.GetSatgingdata();
+
+
+            }
+
+            $scope.VAfinit = function () {
+          // GetVAFVesselNumber();
+
+
+            }
+            $scope.UpdateVAfinit = function () {
+                var url = urlService.getUrlPrams();
+                console.log(url);
+                $scope.ajaxGet('api/UsersApi/Decryptstring', { Id: url.IsCompleted + "==" }, function (resp) {
+
+                    $scope.isCompleted = resp;
+                 
+                });
+              $scope.GetVesselArrivalFormById(url.argogkey);
+             
+               
+            }
+
+
+            $scope.VAf_initindex = function (data) {
+                SubmitVesselArrivalForms(data);
+
+
+            }
+
+            
+            $scope.GetSatgingdata = function () {
+
+                $scope.ajaxGet('api/VesselOpsApi/GetStagingdata', null, function (response) {
+
+                    $scope.Stagingobj = response;
+
+                    console.log($scope.Stagingobj);
+                 
+                    angular.forEach($scope.Stagingobj, function (value, key) {
+                        if (value.ColumnName != "Gang_on_board_PAC"  && value.ColumnName != "flex_string08" && value.ColumnName != "flex_string07") {
+                            console.log($scope.Stagingobj[key].Value = moment($scope.Stagingobj[key].Value).format('DD/MM/YYYY HH:mm'));
+                        }
+                        if (value.ColumnName == "Gang_on_board_PAC") {
+                            if (value.Value == "true") {
+                                $scope.Stagingobj[key].Value = "Yes";
+                            }
+                            else {
+                                $scope.Stagingobj[key].Value = "No";
+
+                            }
+                        }
+
+                    });
+
+                    $scope.FilterStagingobj = $scope.Stagingobj;
+                })
+
+
+            }
+
+            $scope.StagingColumn = [];
+           $scope.GetVesselArrivalFormById=function(id) {
+             
+                $scope.ajaxGet('api/VesselOpsApi/GetVesselArrivalFormById', { argo_career_visit_gkey: id + "==" }, function (response) {
+
+                    if (response.Success) {
+                        
+                        $scope.VAF = response.VAFdata;
+                        console.log($scope.VAF);
+                        $scope.VAF = convertdate($scope.VAF);
+                        $scope.StagingColumn = response.Stagingcolumn;
+                       
+
+                        $scope.ajaxGet('api/VesselOpsApi/GetVesselArrivalFormById', { argo_career_visit_gkey: id + "==" }, function (response) {
+
+                            $scope.BackupVAF = response.VAFdata;
+                         
+                        });
+
+                    }
+
+                    else {
+                        toastr.error();
+                    }
+                })
+
+                
+           }
+
+           $scope.LoadMoreVAF = function () {
+               
+               $scope.VAf_initindex(60);
+               
+           }
+           function SubmitVesselArrivalForms(data) {
+               $scope.floatButton = true;
+
+               $('.float').attr('disabled', 'disabled');
+               if (data != null) {
+                   Records = Records + data;
+               }
+               $scope.ajaxGet('api/VesselOpsApi/GetVesselArrivalForms', { Records: Records, Limit: true }, function (response) {
+
+                   if (response.Success) {
+                       $scope.VesselArrivalForms = response.VesselForms;
+                       $scope.FilterVesselArrivalForms = response.VesselForms;
+
+                       console.log($scope.VesselArrivalForms);
+                       if (response.Records == false) {
+                           toastr.info('No more records found!');
+                           $scope.floatButton = false;
+                       }
+                       else {
+                           $scope.floatButton = true;
+                           $(".float").removeAttr("disabled");
+                       }
+                       $scope.FormsOPS = response.SubmittedFormData;
+                       $scope.FilterFormsOPS = response.SubmittedFormData;
+
+                   }
+                   else {
+                       toastr.error();
+                   }
+               })
+
+
+           }
+
+           $scope.VAF_init = function (data) {
+               console.log(data);
+               if (_currentUser.UsersApplication.includes('DPW_OPS')) {
+                   SubmitVesselArrivalForms(data);
+               }
+               else {
+                   if (_currentUser.UsersApplication.includes('DPW_JIP')) {
+                       toastr.error("You Dont Have Access of OPS!");
+                       $window.location.href = '/JIP/VistIndex';
+                   }
+                   if(_currentUser.UsersApplication.includes('DPW_DWH'))
+                   {
+                        toastr.error("You Dont Have Access of OPS!");
+                       $window.location.href = '/DWH';
+                   }
+
+              
+               }
+
+           }
+          
+            
+
+            function GetVAFVesselNumber() {
+
+                $scope.ajaxGet('api/VesselOpsApi/GetVAFVesselNumber', null, function (response) {
+
+                    if (response.Success) {
+                        $scope.VAFVesselList = response.VAFVesselNumberList;
+                        $scope.BerthNumbers = response.BerthNumbers;
+
+                        console.log($scope.VAFVesselList);
+                        console.log($scope.BerthNumbers);
+                       
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+
+
+            }
+       
+           
+            $scope.UpdateVesselForm = function (data) {
+
+             console.log(data);
+             data = convertdateforsubmit(data, "Update");
+
+             console.log(data);
+           // $scope.VAF = convertdate(data);
+                $scope.ajaxPost('api/VesselOpsApi/UpdateVesselForm', { VAF: data }, function (response) {
+
+                    if (response.Success) {
+                        toastr.success("Successfully Updated");
+                        $timeout($window.location.href = '/VesselFormOps/VesselArrivalForm', 2000);
+
+                        //console.log($scope.VesselDetail);
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+
+
+
+                 }
+
+            $scope.UpdateSatging = [];
+            $scope.UpdateStagingForm = function (updatedata) {
+                console.log($scope.VAF);
+                //data.FormData = $scope.Images;
+
+               var update=  convertdateforedit($scope.VAF);
+          
+              
+
+               angular.forEach(update, function (value, key) {
+                    $scope.staging = {};
+                    if (value instanceof Date) {
+            
+                        value = moment(value).format('YYYY-MM-DDTHH:mm');
+                        $scope.BackupVAF[key] = moment($scope.BackupVAF[key]).format('YYYY-MM-DDTHH:mm');
+                        console.log(key + " " + value);
+                        console.log(key + " " + $scope.BackupVAF[key]);
+
+                    }
+
+                    if (value != $scope.BackupVAF[key] && key != "dbVAF") {
+                        console.log("!dbVAF")
+
+                        $scope.staging.Value = value;
+                        $scope.staging.ColumnName = key;
+                        $scope.staging.Id = updatedata.dbVAF.Id;
+                        $scope.staging.VisitRefNo = updatedata.dbVAF.Vessel_RefernceNo;
+                        $scope.staging.Db_Name ="sparcsn4";
+
+                        $scope.UpdateSatging.push($scope.staging);
+                    }
+
+                   
+                    
+     
+
+                });
+               angular.forEach(update.dbVAF, function (value1, key1) {
+                    $scope.staging = {};
+                    if (value1 instanceof Date) {
+                        value1 = moment(value1).format('YYYY-MM-DDTHH:mm');
+                        $scope.BackupVAF.dbVAF[key1] = moment($scope.BackupVAF.dbVAF[key1]).format('YYYY-MM-DDTHH:mm');
+
+                    }
+                    if (value1 != $scope.BackupVAF.dbVAF[key1] && key1 !== "DPW_Vessel_Staging" && key1 != "VesselOPS_Forms") {
+                       
+
+                        //$scope.staging.dbVAF[key1] = value1;
+                        $scope.staging.Value = value1;
+                        $scope.staging.ColumnName = key1;
+                        $scope.staging.Id = updatedata.dbVAF.Id;
+                        $scope.staging.VisitRefNo = updatedata.dbVAF.Vessel_RefernceNo;
+                        $scope.staging.Db_Name = "dpworlddb";
+                        $scope.UpdateSatging.push($scope.staging);
+                    }
+
+                });
+               
+            
+                
+                console.log($scope.UpdateSatging);
+
+                
+
+
+                if ($scope.UpdateSatging.length > 0) {
+                    $scope.VAF = convertdate($scope.VAF);
+
+                    $scope.ajaxPost('api/VesselOpsApi/SubmitStagingdata', { satgingdata: $scope.UpdateSatging }, function (response) {
+
+                        if (response.Success) {
+                            $.alert({
+                                icon: 'icon-notification2',
+                                title: 'Email Notification',
+                                content: '<h6>Email sent to Manager for approve the following changes.</h6>',
+                                type: 'blue',
+                                typeAnimated: true,
+                                buttons: {
+                                    tryAgain4: {
+
+                                        text: 'OK',
+                                        //btnClass: 'btn-red',
+                                        action: function () {
+                                            $timeout($window.location.href = '/VesselFormOps/VesselArrivalForm', 2000);
+                                        }
+                                    }
+                                }
+                            });
+                          
+
+                            //console.log($scope.VesselDetail);
+
+                        }
+                        else {
+                            toastr.error();
+                        }
+                    })
+                }
+                else {
+
+                    $scope.VAF = convertdate($scope.VAF);
+                    toastr.error("Kinldy update the values");
+                }
+            }
+
+     
+            $scope.StagingApproved = [];
+            $scope.AddApproved = function (data, index) {
+                console.log(data);
+                var check = data.Checked;
+
+                console.log(index);
+                var arrayindex = 0;
+                if (check) {
+                    $scope.StagingApproved.push(data);
+                    console.log($scope.StagingApproved);
+
+                }
+
+                else {
+                    $scope.remInvioce(data)
+                    //$scope.SettledInvoiceContainers.splice(arrayindex, 1);
+                }
+              
+
+
+            }
+
+
+
+            $scope.remInvioce = function (data) {
+                // get the index
+
+                var index = $scope.StagingApproved.indexOf(data);
+                console.log(index);
+                //delete the element from the array
+                $scope.StagingApproved.splice(index, 1);
+             
+            };
+
+            $scope.UpdateStagingdata = function (data) {
+
+                angular.forEach(data, function (value, key) {
+                    if (value.ColumnName != "Gang_on_board_PAC" && value.ColumnName != "flex_string08" && value.ColumnName != "flex_string07") {
+                        console.log(data[key].Value = moment(convertFromStringToDate(data[key].Value)).format('YYYY-MM-DDTHH:mm'));
+                       
+                    }
+                    if (value.ColumnName == "Gang_on_board_PAC") {
+                        if (value.Value == "Yes") {
+                            data[key].Value = "true";
+                        }
+                        else {
+                            data[key].Value= "false";
+
+                        }
+                    }
+                   
+
+                });
+                        
+                console.log(data);
+                $scope.ajaxPost('api/VesselOpsApi/UpdateStagingdata', { Approveddata: data }, function (response) {
+
+                    if (response.Success) {
+                        toastr.success("Successfully Updated");
+                        $timeout($window.location.href = '/VesselFormOps/VesselArrivalForm', 2000);
+
+                        //console.log($scope.VesselDetail);
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+            }
+           
+            $scope.GetVesselArrivalformDetails = function (ref) {
+          
+                var splitString = ref.split('-');
+
+                console.log(splitString);
+
+                $scope.Vesseldata = $scope.VAFVesselList.filter(x=>x.Visit_RefNo == splitString[0]);
+
+                console.log($scope.Vesseldata);
+                if ($scope.VesselDetail != null) {
+                    var data = {
+                        argo_career_visit_gkey: $scope.Vesseldata[0].argo_career_visit_gkey,
+                        visit_details_gkey: $scope.Vesseldata[0].visit_details_gkey,
+                        berthings_gkey: $scope.Vesseldata[0].berthings_gkey
+                    }
+
+
+                    $scope.ajaxGet('api/VesselOpsApi/GetVesselArrivalFormDetail', data, function (resp) {
+                        if (resp.Success) {
+
+                        
+
+                            if (resp.IsAlready) {
+                                $.alert({
+                                    icon: 'icon-notification2',
+                                    title: 'Info',
+                                    content: '<h6>Vessel Arrival form is Already Submitted.</h6>',
+                                    type: 'blue',
+                                    typeAnimated: true,
+                                    buttons: {
+                                        tryAgain4: {
+
+                                            text: 'OK',
+                                            //btnClass: 'btn-red',
+                                            action: function () {
+                                                $timeout($window.location.href = '/VesselFormOps/VAForm', 2000);
+                                            }
+                                        }
+                                    }
+                                });
+                                return false;
+                            }
+
+                            $scope.VAF = resp.VAF;
+
+                           
+                            $scope.VAF.dbVAF.Operation_LeadName = $scope._currentUser.FullName;
+                            $scope.VAF.dbVAF.Employee_Id = $scope._currentUser.Id;
+
+                            console.log($scope._currentUser);
+
+                            
+                            $scope.VAF.dbVAF.Vessel_RefernceNo = ref;
+                            if ($scope.VAF.ata != null) {
+
+                                $scope.VAF.ata = moment($scope.VAF.ata).format('DD/MM/YYYY HH:mm');
+                                //$scope.VAF.ata = new Date($scope.VAF.ata);
+                            } if ($scope.VAF.eta != null) {
+
+                                //$scope.VAF.eta = new Date($scope.VAF.eta);
+                                $scope.VAF.eta = moment($scope.VAF.eta).format('DD/MM/YYYY HH:mm');
+                            }
+
+                             if ($scope.VAF.end_work != null) {
+
+                                // $scope.VAF.end_work = new Date($scope.VAF.end_work);
+                                 $scope.VAF.end_work = moment($scope.VAF.end_work).format('DD/MM/YYYY HH:mm');
+
+                        }
+                        if ($scope.VAF.start_work != null) {
+
+                           // $scope.VAF.start_work = new Date($scope.VAF.start_work);
+                            $scope.VAF.start_work = moment($scope.VAF.start_work).format('DD/MM/YYYY HH:mm');
+
+                        }
+                        if ($scope.VAF.flex_date02 != null) {
+
+                            //$scope.VAF.flex_date02 = new Date($scope.VAF.flex_date02);
+                            $scope.VAF.flex_date02 = moment($scope.VAF.flex_date02).format('DD/MM/YYYY HH:mm');
+
+                        }
+
+                        if ($scope.VAF.flex_date04 != null) {
+
+                            //$scope.VAF.flex_date04 = new Date($scope.VAF.flex_date04);
+                            $scope.VAF.flex_date04 = moment($scope.VAF.flex_date04).format('DD/MM/YYYY HH:mm');
+
+                        }
+                        if ($scope.VAF.flex_date05 != null) {
+
+                          //  $scope.VAF.flex_date05 = new Date($scope.VAF.flex_date05);
+                            $scope.VAF.flex_date05 = moment($scope.VAF.flex_date05).format('DD/MM/YYYY HH:mm');
+
+                        }
+                        if ($scope.VAF.pilot_off_board != null) {
+
+                            //$scope.VAF.pilot_off_board = new Date($scope.VAF.pilot_off_board);
+                            $scope.VAF.pilot_off_board = moment($scope.VAF.pilot_off_board).format('DD/MM/YYYY HH:mm');
+
+                        }
+                        if ($scope.VAF.pilot_on_board != null) {
+
+                           // $scope.VAF.pilot_on_board = new Date($scope.VAF.pilot_on_board);
+                            $scope.VAF.pilot_on_board = moment($scope.VAF.pilot_on_board).format('DD/MM/YYYY HH:mm');
+
+                        }
+                        if ($scope.VAF.dbVAF.Coastguard_arrived_AP != null) {
+
+                            $scope.VAF.dbVAF.Coastguard_arrived_AP = new Date($scope.VAF.dbVAF.Coastguard_arrived_AP);
+                        }
+
+                        if ($scope.VAF.dbVAF.Coastguard_boarded_OV != null) {
+
+                            $scope.VAF.dbVAF.Coastguard_boarded_OV = new Date($scope.VAF.dbVAF.Coastguard_boarded_OV);
+                        }
+                        if ($scope.VAF.dbVAF.Coastguard_disembark_FV != null) {
+
+                            $scope.VAF.dbVAF.Coastguard_disembark_FV = new Date($scope.VAF.dbVAF.Coastguard_disembark_FV);
+                        }
+                        if ($scope.VAF.dbVAF.Custom_arrived_port != null) {
+
+                            $scope.VAF.dbVAF.Custom_arrived_port = new Date($scope.VAF.dbVAF.Custom_arrived_port);
+                        }
+                        if ($scope.VAF.dbVAF.Custom_borded_Vessel != null) {
+
+                            $scope.VAF.dbVAF.Custom_borded_Vessel = new Date($scope.VAF.dbVAF.Custom_borded_Vessel);
+                        }
+                        if ($scope.VAF.dbVAF.Custom_disembark_FV != null) {
+
+                            $scope.VAF.dbVAF.Custom_disembark_FV = new Date($scope.VAF.dbVAF.Custom_disembark_FV);
+                        }
+
+                        if ($scope.VAF.dbVAF.Quarentine_arrived_AP != null) {
+
+                            $scope.VAF.dbVAF.Quarentine_arrived_AP = new Date($scope.VAF.dbVAF.Quarentine_arrived_AP);
+                        }
+                        if ($scope.VAF.dbVAF.Quarentine_boarded_OV != null) {
+
+                            $scope.VAF.dbVAF.Quarentine_boarded_OV = new Date($scope.VAF.dbVAF.Quarentine_boarded_OV);
+                        }
+                        if ($scope.VAF.dbVAF.Quarentine_disembark_FV != null) {
+
+                            $scope.VAF.dbVAF.Quarentine_disembark_FV = new Date($scope.VAF.dbVAF.Quarentine_disembark_FV);
+                        }
+
+                        if ($scope.VAF.dbVAF.Quarentine_boarded_OV != null) {
+
+                            $scope.VAF.dbVAF.Quarentine_boarded_OV = new Date($scope.VAF.dbVAF.Quarentine_boarded_OV);
+                        }
+                        if ($scope.VAF.dbVAF.Lashing_Gang_on_board != null) {
+
+                            $scope.VAF.dbVAF.Lashing_Gang_on_board = new Date($scope.VAF.dbVAF.Lashing_Gang_on_board);
+                        }
+                        if ($scope.VAF.dbVAF.Vessel_Secure_alongside != null) {
+
+                            $scope.VAF.dbVAF.Vessel_Secure_alongside = new Date($scope.VAF.dbVAF.Vessel_Secure_alongside);
+                        }
+
+                        console.log($scope.VAF);
+                      
+
+                        $(document).ready(function () {
+
+                            var o = new SlimSelect({
+                                select: '#Berth',
+                                placeholder: 'Select Berth Number',
+                                //allowDeselectOption: true,
+                                //hideSelectedOption: true
+                                //deselectLabel: '<span class="red">✖</span>',
+                            });
+
+                         
+
+
+                        });
+
+                        }
+                    });
+
+
+
+                }
+
+            }
+
+
+            $scope.SubmitVAF = function (data) {
+                data = convertdateforsubmit(data, "Submit");
+                //var convert = convertdateforsubmit(data, "Submit");
+                if (data.dbVAF.Vessel_RefernceNo == null) {
+                    toastr.error("Please Select Vessel Number");
+                    return false;
+                }
+                
+                var refno = data.dbVAF.Vessel_RefernceNo;
+                var splitString = refno.split('-');
+
+                console.log(splitString);
+
+                $scope.Vesseldata = $scope.VAFVesselList.filter(x=>x.Visit_RefNo == splitString[0]);
+
+                console.log($scope.Vesseldata);
+                if ($scope.VesselDetail != null) {
+                    data.argo_visit = $scope.Vesseldata[0].argo_career_visit_gkey;
+                    data.vessel_visit = $scope.Vesseldata[0].visit_details_gkey;
+                    data.berthings_gkey = $scope.Vesseldata[0].berthings_gkey;
+                }
+
+               // $scope.VAF = convertdate(convert);
+
+
+
+               // data = ConvertobjecttoISO(data);
+                console.log(data)
+
+                $scope.ajaxPost('api/VesselOpsApi/SubmitVesselForm', { VAF: data }, function (response) {
+
+                    if (response.Success) {
+                        toastr.success("Successfully Submit");
+                        $timeout($window.location.href = '/VesselFormOps/VesselArrivalForm', 2000);
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+            }
+
+            $scope.SubmitDoc = function (number) {
+               
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: number }, function (resp) {
+                    $window.open('/VesselFormOps/AddNewDoc?id=' + resp, '_self');
+                });
+               
+            }
+
+            $scope.EditSubmitDoc = function (argo,iscompleted) {
+            
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: argo }, function (resp) {
+                    $scope.ajaxGet('api/UsersApi/Encrypt', { Id: iscompleted }, function (resp2) {
+
+                        $window.open('/VesselFormOps/VesselArrivalEdit?argogkey=' + resp + "&IsCompleted="+ resp2 , '_self');
+
+                    });
+                });
+              
+            }
+
+            //VAF Form End//
+            //Href For Secure Links 
+            $scope.PDFHref = function (argo_career_visit_gkey) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: argo_career_visit_gkey }, function (resp) {
+                    console.log(resp);
+                    $window.open('/Reports/PDFVesselReport?TempId=' + resp, '_blank');
+                });
+
+            }
+
+            $scope.PrintForm = function (argo) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: argo }, function (resp) {
+                  
+                    $window.open('/Reports/VesselReport?Id=' + resp, '_blank');
+                });
+
+            }
+
+
+            var url = urlService.getUrlPrams();
+
+            $scope.VesselDetail = { FormData: [] };
+            $scope.ValidateForm = [];
+            var Id;
+            var FormCode;
+            var data;
+            var Records = 30;
+            $scope.LoadMore = function (PageName) {
+                if (PageName == "Index") {
+                    $scope.Index_init(60);
+                }
+            }
+            //Default Value For Float Button
+            $scope.floatButton = true;
+            $('.float').attr('disabled', 'disabled');
+
+            $scope.init = function () {
+                var url = urlService.getUrlPrams();
+                console.log(url);
+                if (url.id == null) {
+                    $.alert({
+                        icon: 'icon-notification2',
+                        title: 'Info',
+                        content: '<h6>Please submit Vessel Arrival form first.</h6>',
+                        type: 'blue',
+                        typeAnimated: true,
+                        buttons: {
+                            tryAgain4: {
+
+                                text: 'OK',
+                                //btnClass: 'btn-red',
+                                action: function () {
+                                    $window.location.href = '/VesselFormOps/VAForm';
+                                }
+                            }
+                        }
+                    });
+                }
+
+                else {
+                    $scope.ajaxGet('api/UsersApi/Decrypt', { Id: url.id + "==" }, function (resp) {
+                        $scope.GetVesselDetails(resp)
+                      //  GetVesselNumber(resp);
+                    });// 
+                }
+              
+                // GetFormNmae();       
+            }
+            $scope.History = function () {
+                //request toDecrypt
+                $scope.ajaxGet('api/UsersApi/Decrypt', { Id: url.VisitId + "==" }, function (respVisitId) {
+
+                    GetSubmittedFormhistory(respVisitId);
+                });// request toDecrypt End Here 
+
+                // GetFormNmae();       
+            }
+
+            $scope.initEdit = function () {
+
+
+                var url = urlService.getUrlPrams();
+                var id = url.Id;
+                var Visitid = url.VisitId;
+                //request toDecrypt
+                $scope.ajaxGet('api/UsersApi/Decrypt', { Id: id + "==" }, function (respId) {
+
+                    $scope.ajaxGet('api/UsersApi/Decrypt', { Id: Visitid + "==" }, function (respVisitId) {
+
+                        GetSubmittedFormbyId(respId, respVisitId);
+                    });
+
+                });// request toDecrypt End Here 
+                //GetSubmittedFormbyId(id, Visitid);
+                var validation = function () {
+                    var Createdat = $filter('date')($scope.VesselDetail.CreatedAt, "yyyy-MM-dd hh:mm");
+                    var now = new Date();
+                    var Current = $filter('date')(now, "yyyy-MM-dd hh:mm");
+                    if (Current >= Createdat) {
+                        toastr.error("Form Edit time is Expired.");
+                        $timeout($window.location.href = '/VesselFormOps/Index', 2000);
+                    }
+                    console.log(Current); console.log(Createdat);
+                }
+                if ($scope._currentUser.UserType == "Operations") {
+                    $interval(validation, 60000);
+                }
+
+            }
+
+            $scope.Index_init = function (data) {
+                console.log(data);
+               
+                if (_currentUser.UsersApplication.includes('DPW_OPS')) {
+                    GetAllSubmittedForm(data);
+                }
+                else {
+                    if (_currentUser.UsersApplication.includes('DPW_JIP')) {
+                        toastr.error("You Dont Have Access of OPS!");
+                        $window.location.href = '/JIP/VistIndex';
+                    }
+                    if (_currentUser.UsersApplication.includes('DPW_DWH')) {
+                        toastr.error("You Dont Have Access of OPS!");
+                        $window.location.href = '/DWH';
+                    }
+
+
+                }
+
+            }
+            $interval(GetAllSubmittedForm(data), 300000);
+
+            function GetVesselNumber(reference) {
+                console.log(reference);
+
+                $scope.ajaxGet('api/VesselOpsApi/GetVesselNumber', null, function (response) {
+
+                    if (response.Success) {
+                        $scope.VesselList = response.VesselNumberList;
+
+                        console.log($scope.VesselList);
+                            console.log(url);
+                            $scope.RefNoVesName = reference;
+                            console.log($scope.RefNoVesName);
+                            $scope.GetVesselDetails($scope.RefNoVesName);
+                        
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+
+
+            }
+
+            function GetFormNmae() {
+
+                $scope.ajaxGet('api/VesselOpsApi/GetVesselForm', null, function (response) {
+
+                    if (response.Success) {
+                        $scope.VesselDetail.FormData = response.Forms;
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+
+
+            }
+
+            function stringToDate(_date, format, delimiter) {
+             var formatLowerCase = format.toLowerCase();
+             var formatItems = formatLowerCase.split(delimiter);
+             var dateItems = _date.split(delimiter);
+             var monthIndex = formatItems.indexOf("mm");
+             var dayIndex = formatItems.indexOf("dd");
+             var yearIndex = formatItems.indexOf("yyyy");
+             var month = parseInt(dateItems[monthIndex]);
+             month -= 1;
+             var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+             return formatedDate;
+         }
+
+            $scope.Filters = function (data) {
+                console.log(data);
+                if (stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/") == "Invalid Date" || stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/") == "Invalid Date") {
+                    toastr.error("Please Select Date");
+                    return false;
+                }
+                if (stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/") == null || stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/") == null) {
+                    toastr.error("Please Select Date");
+                    return false;
+                }
+                if (stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/") < stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/")) {
+                    toastr.error("DateFrom must be less than from ToDate");
+                    return false;
+                }
+                $scope.ajaxGet('api/VesselOpsApi/GetSubmittedForms', { Dateto: $filter('date')(stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/"), "yyyy-MM-dd 23:59:59"), DateFrom: $filter('date')(stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/"), "yyyy-MM-dd 00:00:00") }, function (response) {
+                    if (response.Success) {
+                        console.log(response);
+                        $scope.FormsOPS = response.SubmittedFormData;
+
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+            }
+
+            $scope.VAFFilter = function (pagename) {
+                console.log($scope.VesselArrivalForms);
+
+                if (stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/") == "Invalid Date" || stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/") == "Invalid Date") {
+                    toastr.error("Please Select ToDate");
+                    return false;
+                }
+                if (stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/") == null || stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/") == null) {
+                    toastr.error("Please Select FromDate");
+                    return false;
+                }
+                if (stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/") < stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/")) {
+                    toastr.error("DateFrom must be less than from ToDate");
+                    return false;
+                }
+                if (pagename == "VesselArrivalForm") {
+                    $scope.VesselArrivalForms = $scope.VesselArrivalForms.filter(x=>x.CreatedAt >= $filter('date')(stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/"), "yyyy-MM-ddT00:00:00") && x.CreatedAt <= $filter('date')(stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/"), "yyyy-MM-ddT23:59:59"));
+
+             
+                }
+                
+                if (pagename == "Index") {
+                    $scope.FormsOPS = $scope.FormsOPS.filter(x=>x.CreatedAt >= $filter('date')(stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/"), "yyyy-MM-ddT00:00:00") && x.CreatedAt <= $filter('date')(stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/"), "yyyy-MM-ddT23:59:59"));
+
+
+                }
+                if (pagename == "Staging") {
+                    $scope.Stagingobj = $scope.Stagingobj.filter(x=>x.CreatedAt >= $filter('date')(stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/"), "yyyy-MM-ddT00:00:00") && x.CreatedAt <= $filter('date')(stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/"), "yyyy-MM-ddT23:59:59"));
+
+
+                }
+                if (pagename == "DocUpdate") {
+                    $scope.History = $scope.History.filter(x=>x.UpdatedAt >= $filter('date')(stringToDate($('#FromDate').val(), "dd/MM/yyyy", "/"), "yyyy-MM-ddT00:00:00") && x.UpdatedAt <= $filter('date')(stringToDate($('#ToDate').val(), "dd/MM/yyyy", "/"), "yyyy-MM-ddT23:59:59"));
+
+
+                }
+
+
+           
+            }
+
+            $scope.Reset = function () {
+               
+                $scope.search = "";
+                $scope.FormsOPS = $scope.FilterFormsOPS;
+                $scope.Stagingobj = $scope.FilterStagingobj;
+                $scope.History = $scope.FilterHistory;
+               
+                $scope.VesselArrivalForms = $scope.FilterVesselArrivalForms;
+                document.getElementById("ToDate").value = null;
+                document.getElementById("FromDate").value = null;
+             
+                
+            }
+
+            function GetAllSubmittedForm(data) {
+                //float Button Code LoadMore
+                //Onload Value
+                $scope.floatButton = true;
+
+                $('.float').attr('disabled', 'disabled');
+                if (data != null) {
+                    Records = Records + data;
+                }
+
+                $scope.ajaxGet('api/VesselOpsApi/GetSubmittedForms', { Records: Records, Limit: true }, function (response) {
+                    if (response.Success) {
+                        //After Loading Value
+
+                        if (response.Records == false) {
+                            toastr.info('No more records found!');
+                            $scope.floatButton = false;
+                        }
+                        else {
+                            $scope.floatButton = true;
+                            $(".float").removeAttr("disabled");
+                        }
+
+                        $scope.FormsOPS = response.SubmittedFormData;
+                        $scope.FilterFormsOPS = response.SubmittedFormData;
+                   
+
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+
+            }
+
+            function GetSubmittedFormbyId(id, visitid) {
+
+                $scope.ajaxGet('api/VesselOpsApi/GetSubmittedFormsByid', { Id: id, VisitId: visitid }, function (response) {
+
+                    if (response.Success) {
+                        $scope.VesselDetail = response.VesselDetail;
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+
+
+            }
+
+            function GetSubmittedFormhistory(visitid) {
+
+                $scope.ajaxGet('api/VesselOpsApi/GetSubmittedHistory', { VisitId: visitid }, function (response) {
+
+                    if (response.Success) {
+                        $scope.History = response.HisoryData;
+                        $scope.FilterHistory = response.HisoryData;
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+
+
+            }
+
+            $scope.GetVesselDetails = function (data) {
+                console.log(data);
+                if (data == null || data == "" || data == undefined) {
+                    $scope.VesselDetail = [];
+                    $scope.Images = [];
+                    return false;
+                }
+                $scope.ajaxGet('api/VesselOpsApi/GetVesselDetail', { Id: data }, function (response) {
+
+                    if (response.Success) {
+                        if (!response.IsVAF) {
+                            $.alert({
+                                icon: 'icon-notification2',
+                                title: 'Info',
+                                content: '<h6>Please submit Vessel Arrival form first.</h6>',
+                                type: 'blue',
+                                typeAnimated: true,
+                                buttons: {
+                                    tryAgain4: {
+
+                                        text: 'OK',
+                                        //btnClass: 'btn-red',
+                                        action: function () {
+                                            $window.location.href = '/VesselFormOps/VAForm';
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        if (!response.Issubmit) {
+                            $scope.VesselDetail = response.VesselDetail;
+                            $scope.VesselDetail.ATB = new Date(response.VesselDetail.ATB);
+                            console.log($scope.VesselDetail);
+                        }
+
+                        else {
+                            $.alert({
+                                icon: 'icon-warning22',
+                                title: 'Alert',
+                                content: '<h6>Doc Scanner is already submitted against this vessel number.</h6>',
+                                type: 'blue',
+                                typeAnimated: true,
+                                buttons: {
+                                    tryAgain4: {
+
+                                        text: 'OK',
+                                        //btnClass: 'btn-red',
+                                        close: function () {
+                                            $scope.VesselDetail = [];
+                                        }
+                                    }
+                                }
+                            });
+                            // toastr.error("Already Submitted");
+
+                        }
+
+                        $scope.Images = [];
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+            }
+
+            $scope.SubmitFormOPS = function (data) {
+                //data.FormData = $scope.Images;
+                console.log(data);
+                console.log($scope.ValidateForm);
+                if (data.VisitId == null || data.VisitId == "") {
+                    toastr.error("Please Select Vessel Number.");
+                    return false;
+                }
+
+                if ($scope.ValidateForm.length < 9 || $scope.ValidateForm.length == 0) {
+                    toastr.error("Please Upload images for highlighted forms.");
+                    return false;
+                }
+                data.ATB = convertTimezoneToISO(data.ATB);
+                $scope.ajaxPost('api/VesselOpsApi/SumbitForm', { VesselDetail: data }, function (response) {
+
+                    if (response.Success) {
+                        toastr.success("Successfully Submitted");
+
+                        $timeout($window.location.href = '/VesselFormOps/Index', 2000);
+
+                        //console.log($scope.VesselDetail);
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+            }
+
+            $scope.UpdatedFormOPS = function (data) {
+                //data.FormData = $scope.Images;
+                console.log(data);
+                data.ATB = convertTimezoneToISO(data.ATB);
+                $scope.ajaxPost('api/VesselOpsApi/UpdateSumbittedForm', { VesselDetail: data }, function (response) {
+
+                    if (response.Success) {
+                        toastr.success("Successfully Updated");
+                        $timeout($window.location.href = '/VesselFormOps/Index', 2000);
+
+                        //console.log($scope.VesselDetail);
+
+                    }
+                    else {
+                        toastr.error();
+                    }
+                })
+            }
+
+            $scope.RemakrsID;
+
+            $scope.SetRemarks = function (data) {
+                console.log($scope.RemakrsID);
+                console.log(data);
+                if (data == null) {
+                    toastr.error("Please enter your Remarks.");
+                    return false;
+                }
+                $scope.VesselDetail.FormData[$scope.RemakrsID - 1].FormRemarks = data;
+                $scope.VesselDetail.FormData[$scope.RemakrsID - 1].IsUpdated = "true";
+                $scope.FRemarks = null;
+                document.getElementById("close").click();
+                toastr.success("Remarks Submitted");
+
+            }
+
+            $scope.Spliceimage = function () {
+
+
+                $scope.ValidateForm.splice(0, 1);
+                console.log($scope.ValidateForm);
+            }
+
+            $scope.Stampupload = function (Id) {
+                console.log(Id);
+              
+                $scope.ImageUploadPromise(Id).then(
+
+                    function (response) {
+                        console.log(response);
+                        $scope.VAF.dbVAF.Stamp = response;
+                    
+                    });
+            }
+
+            $scope.ImageUpload = function (Id, FormCode) {
+                console.log(Id);
+                $scope.RemakrsID = Id;
+                $scope.ImageUploadPromise(Id).then(
+
+                    function (response) {
+                        console.log(response);
+                        $timeout(function () {
+                            $scope.VesselDetail.FormData[Id - 1].Image = response;
+                            if (FormCode == "VAF" || FormCode == "GC" || FormCode == "LA" || FormCode == "LC" || FormCode == "VCA_One" || FormCode == "VCA_Two" || FormCode == "VCA_Final" || FormCode == "VSC" || FormCode == "VCC") {
+                                $scope.ValidateForm.push(FormCode);
+                            }
+                            document.getElementById("openmodal").click();
+                            console.log($scope.ValidateForm);
+                        }, 100);
+                    });
+            }
+
+            $scope.OpenCam = function (id, code) {
+                $scope.RemakrsID = id;
+                Id = id;
+                FormCode = code;
+                $('#CamModel_small').modal('show');
+                Webcam.set({
+                    width: 560,
+                    height: 400,
+                    image_format: 'jpeg',
+                    jpeg_quality: 160
+                });
+                Webcam.attach('#my_camera');
+            }
+
+            $scope.reOpenCam = function () {
+                Webcam.set({
+                    width: 560,
+                    height: 400,
+                    image_format: 'jpeg',
+                    jpeg_quality: 160
+                });
+                Webcam.attach('#my_camera');
+            }
+
+            $scope.take_snapshot = function () {
+                Webcam.snap(function (data_uri) {
+                    data = data_uri;
+                    $(".image-tag").val(data_uri);
+                    document.getElementById('my_camera').innerHTML = '<img id="cameImg" src="' + data_uri + '"/>';
+                });
+            }
+
+            $scope.cameClose = function () {
+                $('#CamModel_small').modal('hide');
+            }
+
+            $scope.saveImage = function () {
+                console.log(data);
+                if (data == undefined || data == '' || data == null) {
+                    toastr.error("Take Form Photo!");
+                    return false;
+                }
+                var fileData = document.getElementById('cameImg').src;
+
+                $scope.ImageDataUploadPromise(fileData, "Form.jpeg").then(
+                    function (response) {
+
+                        $timeout(function () {
+                            console.log(FormCode);
+
+                            $scope.VesselDetail.FormData[Id - 1].Image = response;
+                            if (FormCode == "VAF" || FormCode == "GC" || FormCode == "LA" || FormCode == "LC" || FormCode == "VCA_One" || FormCode == "VCA_Two" || FormCode == "VCA_Final" || FormCode == "VSC" || FormCode == "VCC") {
+                                $scope.ValidateForm.push({ FormCode });
+                            };
+                            $('#CamModel_small').modal('hide');
+                            document.getElementById("openmodal").click();
+                        }, 100);
+                    });
+            }
+
+            //Href For Secure Links 
+            $scope.EditHref = function (Id, VistId) {
+
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: Id }, function (respId) {
+
+                    $scope.ajaxGet('api/UsersApi/Encrypt', { Id: VistId }, function (respVist) {
+                      
+
+                            $window.open('/VesselFormOps/Edit?Id=' + respId + "&VisitId=" + respVist + "&IsComplete=" + respVist, '_self');
+                       
+                    });
+
+                });
+
+            }
+
+            //Href For Secure Links 
+            $scope.HistoryHref = function (VistId) {
+
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: VistId }, function (respVist) {
+                    $window.open('/VesselFormOps/History?VisitId=' + respVist, '_self');
+                });
+            }
+
+            $scope.check = function (_date, format, delimiter) {
+                console.log(_date);
+                console.log(format);
+                console.log(delimiter);
+                //var formatLowerCase = format.toLowerCase();
+               
+               // console.log(formatLowerCase);
+
+                var formatItems = format.split(delimiter);
+                var dateItems = _date.split(delimiter);
+                var monthIndex = formatItems.indexOf("MM");
+                var dayIndex = formatItems.indexOf("DD");
+                var yearIndex = formatItems.indexOf("YYYY");
+               
+                var month = parseInt(dateItems[monthIndex]);
+                month -= 1;
+                var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+                console.log(formatedDate);
+
+
+
+                return formatedDate;
+            }
+
+
+        }]);

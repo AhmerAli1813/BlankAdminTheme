@@ -1,0 +1,1476 @@
+﻿@using DPWVessel.Web.Core.Session
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    .floatBottom {
+        margin-top: 10px;
+    }
+    .timeHeader {
+        background: #00946b;
+        padding: 15px;
+        color: white;
+        font-size: 17px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+    }
+    .tab {
+        overflow: hidden;
+        /*border: 1px solid #ccc;
+        background-color: #f1f1f1;*/
+    }
+    .tabheading {
+        padding: 10px;
+        background: #00946b;
+        color: white;
+    }
+    /* Style the buttons inside the tab */
+    .tab button {
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        background: #e9e9e9;
+        padding: 15px;
+        /*float: left;*/
+        border: none;
+        outline: none;
+        cursor: pointer;
+        /*padding: 14px 16px;*/
+        transition: 0.3s;
+        font-size: 17px;
+    }
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #00946b;
+            color: white;
+            font-size: 17px;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #00946b;
+            color: white;
+            font-size: 17px;
+        }
+
+    .tab button {
+        width: 100%;
+    }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 0px 10px;
+        /*border: 1px solid #ccc;*/
+        border-top: none;
+    }
+
+    .badgeRequired {
+        /*position: fixed!important;*/
+    }
+
+        /*.truncate {
+            width: 99px;
+            word-break: break-all;
+        }*/
+     .truncate{
+        text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 90px;
+    }
+    label, tbody, .btn {
+        font-weight: 500 !important;
+    }
+
+    .badge {
+        /*font-size: 12px;*/
+        width: auto !important;
+    }
+
+    .alertify .ajs-footer {
+        display: none;
+    }
+
+    a {
+        cursor: pointer !important;
+    }
+</style>
+
+<link href="~/Content/BootsrapDatetime/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+<link href="~/Content/BootsrapDatetime/css.css" rel="stylesheet" />
+<link href="~/Content/BootsrapDatetime/icon.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Content/BootsrapDatetime/ripples.min.js"></script>
+<script src="~/Content/BootsrapDatetime/material.min.js"></script>
+
+<script src="~/Scripts/js/plugins/moment/moment_locales.min.js"></script>
+<script src="~/Content/BootsrapDatetime/bootstrap-material-datetimepicker.js"></script>
+
+
+<link href="~/Scripts/SlimSelect/SlimSelectCustomStyle.css" rel="stylesheet" />
+<link href="~/Scripts/SlimSelect/slimselect.min.css" rel="stylesheet" />
+<script src="~/Scripts/SlimSelect/slimselect.min.js"></script>
+
+@*<script src="~/Scripts/DatePicker/jquery.min.js"></script>*@
+<link href="~/Scripts/DatePicker/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/Scripts/DatePicker/bootstrap-datepicker.standalone.css" rel="stylesheet" />
+<script src="~/Scripts/DatePicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/css/PaganationStyleSheetCustom.css" rel="stylesheet" />
+<!--Alertify CDN Start -->
+<link href="~/Scripts/AlertifyCdn/alertify.min.css" rel="stylesheet" />
+<script src="~/Scripts/AlertifyCdn/alertify.min.js"></script>
+<link href="~/Scripts/AlertifyCdn/default.min.css" rel="stylesheet" />
+<link href="~/Scripts/AlertifyCdn/jquery-confirm.min.css" rel="stylesheet" />
+<!--Alertify CDN End-->
+
+<div ng-controller="DWHCtrl">
+
+
+    <div class="row ng-cloak" style="margin-top: 13px;" ng-cloak>
+        <div class="col-md-12">
+            <!--Tab Code Start -->
+            <div class="tab">
+                <div class="row">
+                    <div class="col-md-3 text-center ">
+                        <button class="tablinks active" onclick="openCity(event, 'tab1')" ng-init="init()"><i class="icon-task mr-2"></i> Awaiting Actions</button>
+                    </div>
+                    <div class="col-md-3 text-center ">
+                        <button class="tablinks" onclick="openCity(event, 'tab2');"><i class="icon-file-check mr-2"></i>Validate Vessels Sailed</button>
+                    </div>
+
+
+                    <div class="col-md-6 text-center">
+                        <div class="text-center timeHeader pull-right">
+                            <span>
+                                @DateTime.Now.ToString("dd-MM-yyyy")
+                            </span>
+                            <span ng-controller="JIPCtrl">
+                                {{theTime}}
+                            </span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!--Tab Code End -->
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body" style="padding:0px!important">
+
+            <!--Awating Action Tab Content Tab 1 start -->
+            <div id="tab1" class="tabcontent ng-cloak" style="display:block" ng-cloak>
+                <!--NG-controller Class Awating Action Start-->
+                <div>
+                    <div class="page-header border-bottom-0">
+                        <div class="page-header-content header-elements-md-inline">
+                            <div class="page-title d-flex">
+                                <h4>
+                                    <i class="icon-task mr-2"></i>
+                                    <span class="font-weight-semibold">Awaiting Actions</span>
+                                </h4>
+
+                            </div>
+
+                            <div class="mt-3">
+
+
+
+                            </div>
+                            <div class="mt-3">
+                                <input type="button" class="btn btn-secondary  pull-right" value="Filters" data-toggle="collapse" data-target="#demo" />
+
+                                <button ng-click="ExportToExcel1('1',search1)" class="btn btn-secondary mr-2 ml-5">Export To Excel</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <!-- /page header -->
+                    <!--Search Filter Code Start-->
+                    <div class="card collapse" id="demo">
+                        <div class="card-body">
+                            <div class="col-md-12">
+                                <div class="row">
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Reference No</label>
+                                            <input type="text" id="TabRefNo" class="form-control" placeholder="Reference No" ng-model="search1.RefNo" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Vessel Name</label>
+                                            <input type="text" id="TabVesselName" class="form-control" placeholder="Vessel Name" ng-model="search1.VesselsName" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Agent Name</label>
+                                            <input type="text" class="form-control" id="TabAgent" placeholder="Agent Name" ng-model="search1.Agent" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Hatch Cover</label>
+                                            <input type="text" class="form-control" id="TabHatchCover" placeholder="Hatch Cover" ng-model="search1.HatchCover" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Line Operator </label>
+                                            <input type="text" class="form-control" id="TabLineOperatorName" placeholder="Line Operator " ng-model="search1.LineOperatorName" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Sail Direction</label>
+                                            <input type="text" class="form-control" id="TabSailDirection" placeholder="Sail Direction" ng-model="search1.SailDirection" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Vessel Class Name</label>
+                                            <input type="text" class="form-control" id="TabVS_Class_Name" placeholder="VS Class Name" ng-model="search1.VS_Class_Name" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Srv Name</label>
+                                            <input type="text" class="form-control" id="TabSrvName" placeholder="Srv Name" ng-model="search1.SrvName" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>From</label>
+                                            @*<input type="date" class="form-control" placeholder="From" ng-model="data.FromDate" />*@
+                                            <div id="sandbox-container">
+                                                <div class="input-group date">
+                                                    <input type="text" class="form-control" id="TabFromDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>To</label>
+                                            @*<input type="date" class="form-control" placeholder="To" ng-model="data.ToDate" />*@
+                                            <div id="sandbox-container">
+                                                <div class="input-group date">
+                                                    <input type="text" class="form-control" id="TabToDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mt-1">
+                                            <input type="button" class="btn btn-theme-gray pull-right mt-3" value="Reset" ng-click="Reset('Invalid')">
+                                            <input type="button" class="btn btn-primary pull-right  mr-2 mt-3" value="Search" ng-click="VistIndexSearch(1)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    <!--Search Filter Code End-->
+                    <!--Table-->
+                    <div class="row">
+
+                        <div id="tblrep" class="card table-card scrollbar">
+                            <table class="table datatable-show-all text-center" id="table-id">
+                                <thead>
+                                    <tr class="table-card-head">
+                                        <th>SR#</th>
+                                        <th>Reference No</th>
+                                        <th>Vessel Name</th>
+                                        <th>Agent Name</th>
+                                        <th>Hatch Cover</th>
+                                        <th>@*Line*@Vessel Operator</th>
+                                        <th>SailDirection</th>
+                                        <th>Vessel Class Name</th>
+                                        <th>ATD</th>
+                                        <th>SrvName</th>
+                                        <th style="width:10%">Deatils</th>
+                                        <th style="width:8%">Action</th>
+                                        <th>Status</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @*class="clickable-style"*@ @*ng-click="GetTask(item.RefNo)"*@
+                                    <tr ng-repeat="item in VesselSailedDetails | filter:search1">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.RefNo}}</td>
+                                        <td>{{item.VesselsName}}</td>
+                                        <td>{{item.Agent}}</td>
+                                        <td>{{item.HatchCover}}</td>
+                                        <td>{{item.LineOperatorName}}</td>
+                                        <td>{{item.SailDirection}}</td>
+                                        <td>{{item.VS_Class_Name}}</td>
+                                        <td>{{item.atd | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                                        <td>{{item.SrvName}}</td>
+                                        <td>
+                                            <a>
+                                                <!--Crane-->
+                                                <img src="~/Content/images/crane2.png" id="{{$index+1}}" ng-click="ShowCraneDetailsModel(item)" ng-mouseover="changeicon($index+1,'move','crane')" ng-mouseleave="changeicon($index+1,'leave','crane')" class="onhover list-icons-item" width="25" title="Crane Details" />
+                                            </a>
+                                            <a>
+                                                <i class="icon-ship onhover list-icons-item" title="Vessel Details" style="font-size:x-large" ng-click="ShowAwatingForm(item)"></i>
+                                            </a>
+                                            <a @*href="DWH/CntrIndex?RefNo={{item.RefNo}}" target="_blank"*@ ng-click="Container(item.RefNo)">
+                                                <!--Container-->
+                                                <img src="~/Content/images/container.png" id="{{$index+1+'a'}}" ng-mouseover="changeicon($index+1+'a','move','container')" ng-mouseleave="changeicon($index+1+'a','leave','container')" class="onhover list-icons-item" width="25" title="Container Details" />
+                                            </a>
+                                       
+                                          
+                                         
+                                        </td>
+
+                                        <td>
+                                         
+                                            <a ng-click="DWHVesselPrint(item.Id)" @*href="Reports/DWHVesselPrint" target="_blank"*@>
+                                                <i class="icon-printer" title="Print"></i>
+                                            </a>
+                                            <a ng-click="DWHVesselPdf(item.Id)"><i class="icon-file-pdf" title="PDF"></i></a>
+
+                                            <a ng-click="VesselExportToExcel(item.Id,1)"><i class="icon-file-excel" title="Export To Excel"></i></a>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-danger" ng-show="item.StatusCode=='invalid'">{{item.Status}}</span>
+                                            <span class="badge badge-warning" ng-show="item.StatusCode=='cntrO'">{{item.Status}}</span>
+                                            <span class="badge badge-info" ng-show="item.StatusCode=='cntrF'">{{item.Status}}</span>
+                                        </td>
+                                        <td>
+                                           <div class="truncate">
+                                               {{item.Remarks}}
+                                           </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <button ng-click="LoadMore('Invalid')" ng-show="floatButton" class="floatBottom btn btn-primary pull-right">Load More</button>
+
+                        </div>
+                        <!--Alertify Modal Vessel Edit Start-->
+                        <form autocomplete="off" style="display:none;width: auto;position: relative;margin: 0px auto;" id="form2" name="form2">
+
+                            <div class="form-body" style="margin:10px;margin-top: 20px;">
+                           
+                                <div class="row p-t-20">
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Reference No</label>
+                                            <input type="text" id="RefNo" class="form-control input"  name="RefNo" placeholder="Reference No" ng-model="itemDeatils.RefNo" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Vessel Name</label><span class="required">*</span>
+                                            <input type="text" id="VeseelName" class="form-control input" name="VeseelName" placeholder="Vessel Name" ng-model="itemDeatils.VesselsName" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Vsl Code</label><span class="required">*</span>
+                                            <input type="text" id="VslCode" class="form-control input" name="VslCode" placeholder="Vsl Code" ng-model="itemDeatils.VslCode" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Line Operator Code</label><span class="required">*</span>
+                                            <input type="text" id="LineOperatorCode" class="form-control input" name="LineOperatorCode" placeholder="Line Operator Code" ng-model="itemDeatils.LineOperatorCode" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Agent Name</label><span class="required">*</span>
+                                            <input type="text" id="Agent" class="form-control input" name="Agent" placeholder="Agent" ng-model="itemDeatils.Agent" >
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-6">
+                <div class="form-group has-danger">
+                    <label class="control-label">Line Operator</label>
+                    <input type="text" id="LineOperatorName" class="form-control input" placeholder="Line Operator" ng-model="itemDeatils.LineOperatorName">
+                </div>
+            </div>*@
+                                    @*<div class="col-md-6">
+                <div class="form-group has-danger">
+                    <label class="control-label">Sail Direction</label>
+                    <input type="text" id="SailDirection" class="form-control input" placeholder="Sail Direction" ng-model="itemDeatils.SailDirection">
+                </div>
+            </div>*@
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Berth No <!--POS Slot--></label><span class="required">*</span>
+                                            <input type="text" id="pos_slot" class="form-control input" name="pos_slot" placeholder="Berth No" ng-model="itemDeatils.pos_slot" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Srv Code</label><span class="required">*</span>
+                                            <input type="text" id="SrvCode" class="form-control input" name="SrvCode" placeholder="Srv Code" ng-model="itemDeatils.SrvCode" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Srv Name</label><span class="required">*</span>
+                                            <input type="text" id="SrvName" class="form-control input" name="SrvName" placeholder="Srv Name" ng-model="itemDeatils.SrvName" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">IB VYG</label><span class="required">*</span>
+                                            <input type="text" id="ib_vyg" class="form-control input" name="ib_vyg" placeholder="IB VYG" ng-model="itemDeatils.ib_vyg" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">OB VYG</label><span class="required">*</span>
+                                            <input type="text" id="ob_vyg" class="form-control input" name="ob_vyg" placeholder="OB VYG" ng-model="itemDeatils.ob_vyg" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">lloyds Id</label><span class="required">*</span>
+                                            <input type="text" id="lloyds_id" class="form-control input" name="lloyds_id" placeholder="lloyds Id" ng-model="itemDeatils.lloyds_id" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Port Rotation No</label><span class="required">*</span>
+                                            <input type="text" id="PortRotationNo" class="form-control input" name="PortRotationNo" placeholder="Port Rotation No" ng-model="itemDeatils.PortRotationNo" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Vessel Length</label><span class="required">*</span>
+                                            <input type="text" id="Vessel_Length" class="form-control input" name="Vessel_Length" placeholder="Vessel Length" ng-model="itemDeatils.Vessel_Length" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Carrier Mode</label><span class="required">*</span>
+                                            <input type="text" id="carrier_mode" class="form-control input" name="carrier_mode" placeholder="Carrier Mode" ng-model="itemDeatils.carrier_mode" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">@*VS*@Vessel Class ID</label><span class="required">*</span>
+                                            <input type="text" id="VS_Class_ID" class="form-control input" name="VS_Class_ID" placeholder="Vessel Class ID" ng-model="itemDeatils.VS_Class_ID">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">@*VS*@ Vessel Class Name</label><span class="required">*</span>
+                                            <input type="text" id="VS_Class_Name" class="form-control input" name="VS_Class_Name" placeholder="Vessel Class Name" ng-model="itemDeatils.VS_Class_Name" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Custom Rotation No</label><span class="required">*</span>
+                                            <input type="text" id="CustomRorationNo" class="form-control input" name="CustomRorationNo" placeholder="Custom Roration No" ng-model="itemDeatils.CustomRorationNo" >
+                                        </div>
+                                    </div>
+                                 
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">LOA</label><span class="required">*</span>
+                                            <input type="text" id="Loa" class="form-control input" name="Loa" placeholder="LOA" ng-model="itemDeatils.Loa" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Vsl Classification</label><span class="required">*</span>
+                                            <input type="text" id="VslClassification" class="form-control input" name="VslClassification" placeholder="Vsl Classification" ng-model="itemDeatils.VslClassification" >
+                                        </div>
+                                    </div>
+                              
+
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Total Hatch Cover Moves</label><span class="required">*</span>
+                                            <input type="text" id="TotalHatchCover" class="form-control input" name="TotalHatchCover" placeholder="Total Hatch Cover" ng-model="itemDeatils.HatchCover" >
+                                        </div>
+                                    </div>
+                               
+                                    <div class="col-md-12">
+
+                                        <div class="dropdown-divider"></div>
+
+                                    </div>
+                                    <!--Port Details Start  -->
+                                  
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Previous Port</label><span class="required">*</span>
+                                            <input type="text" id="PreviousPort" class="form-control input" name="PreviousPort" placeholder="Previous Port" ng-model="itemDeatils.PreviousPort" >
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Next Port</label><span class="required">*</span>
+                                            <input type="text" id="NextPort" class="form-control input" name="NextPort" placeholder="Next Port" ng-model="itemDeatils.NextPort" >
+                                        </div>
+                                    </div>
+
+                                
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">@*CUST DFF VSL*@ IN SCHEDULE</label><span class="required">*</span>
+                                            @*<input type="text" id="CUSTDFF_VSLINSCHEDULE" class="form-control input" placeholder="CUST DFF VSL IN SCHEDULE" ng-model="itemDeatils.CUSTDFF_VSLINSCHEDULE">*@
+                                            <select id="CUSTDFF_VSLINSCHEDULE" name="CUSTDFF_VSLINSCHEDULE" class="input displaySelect" @*ng-class="itemDeatils.CUSTDFF_VSLINSCHEDULE==null?'border border-danger rounded':'border border-success rounded'"*@ ng-model="itemDeatils.CUSTDFF_VSLINSCHEDULE">
+                                                <option data-placeholder="true"></option>
+                                                <option ng-selected="itemDeatils.CUSTDFF_VSLINSCHEDULE ==true" ng-value="true">Yes</option>
+                                                <option ng-selected="itemDeatils.CUSTDFF_VSLINSCHEDULE ==false" ng-value="false">NO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Total Cranes</label><span class="required">*</span>
+                                            <input type="text" id="TotalCranes" name="TotalCranes" class="form-control input" placeholder="Total Cranes" ng-model="itemDeatils.TotalCranes" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Vsl Ops Hrs</label><span class="required">*</span>
+                                            <input type="text" id="VslOpsHrs" class="form-control input" placeholder="Vsl Ops Hrs" ng-model="itemDeatils.VslOpsHrs" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Berth Hrs</label><span class="required">*</span>
+                                            <input type="text" id="BerthHrs" class="form-control input" placeholder="Berth Hrs" ng-model="itemDeatils.BerthHrs" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+
+                                        <div class="dropdown-divider"></div>
+
+                                    </div>
+                                    <!--Dates Start -->
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">ATA @*off_port_arr*@</label><span class="required">*</span>
+                                            @*<input type="text" id="off_port_arr" class="form-control input" placeholder="Off Port Arr" ng-model="itemDeatils.off_port_arr">*@
+
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input date" name="off_port_arr" onchange="CheckDatesValidation('off_port_arr', '<', 'ata', 'ATA should not be greater than ATB')" id="off_port_arr" ng-model="itemDeatils.off_port_arr" placeholder="DD/MM/YYYY HH:mm">
+
+                                                <span class="input-group-append">
+                                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                                </span>
+                                            </div> <!--DateTIme End-->
+                                            <p id="1off_port_arr"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">ATB @*ATA*@</label><span class="required">*</span>
+                                            @*<input type="text" id="ata" class="form-control input" placeholder="Ata" ng-model="itemDeatils.ata">*@
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input date" name="ata"  id="ata" ng-model="itemDeatils.ata" placeholder="DD/MM/YYYY HH:mm">
+
+                                                <span class="input-group-append">
+                                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                                </span>
+                                            </div> <!--DateTIme End-->
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Pilot On Board</label><span class="required">*</span>
+                                            @*<input type="text" id="PilotOnBoard" class="form-control input" placeholder="Pilot On Board" ng-model="itemDeatils.PilotOnBoard">*@
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input date" name="PilotOnBoard" id="PilotOnBoard" ng-model="itemDeatils.PilotOnBoard" placeholder="DD/MM/YYYY HH:mm">
+
+                                                <span class="input-group-append">
+                                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                                </span>
+                                            </div> <!--DateTIme End-->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Start Work</label><span class="required">*</span>
+                                            @*<input type="text" id="start_work" class="form-control input" placeholder="Start Work" ng-model="itemDeatils.start_work">*@
+
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input date" name="start_work" id="start_work" onchange="CheckDatesValidation('start_work', '>', 'ata', 'Start Work should be greater than ATB')" ng-model="itemDeatils.start_work" placeholder="DD/MM/YYYY HH:mm">
+
+                                                <span class="input-group-append">
+                                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                                </span>
+                                            </div> 
+                                            <p id="1start_work"></p>
+                                            <!--DateTIme End-->
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Time Discharge Complete</label><span class="required">*</span>
+                                            @*<input type="text" id="time_discharge_complete" class="form-control input" placeholder="Time Discharge Complete" ng-model="itemDeatils.time_discharge_complete">*@
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input date" name="time_discharge_complete" id="time_discharge_complete" onchange="CheckDatesValidation('time_discharge_complete', '>', 'start_work', 'Time Discharge Complete should be greater than Start Work')" ng-model="itemDeatils.time_discharge_complete" placeholder="DD/MM/YYYY HH:mm">
+
+                                                <span class="input-group-append">
+                                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                                </span>
+                                            </div>
+                                            <p id="1time_discharge_complete"></p>
+                                             <!--DateTIme End-->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">End Work</label><span class="required">*</span>
+                                            @*<input type="text" id="end_work" class="form-control input" placeholder="End Work" ng-model="itemDeatils.end_work">*@
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input date" name="end_work" id="end_work" onchange="CheckDatesValidation('end_work', '>', 'start_work', 'End Work should be greater than Start Work')" ng-model="itemDeatils.end_work" placeholder="DD/MM/YYYY HH:mm" >
+
+                                                <span class="input-group-append">
+                                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                                </span>
+                                            </div>
+                                            <p id="1end_work"></p>
+                                             <!--DateTIme End-->
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Pilot Off Board</label><span class="required">*</span>
+                                            @*<input type="text" id="PilotOffBoard" class="form-control input" placeholder="Pilot Off Board" ng-model="itemDeatils.PilotOffBoard">*@
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input date" name="PilotOffBoard" id="PilotOffBoard" ng-model="itemDeatils.PilotOffBoard" placeholder="DD/MM/YYYY HH:mm" >
+
+                                                <span class="input-group-append">
+                                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                                </span>
+                                            </div> <!--DateTIme End-->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">ATD</label><span class="required">*</span>
+                                            @*<input type="text" id="atd" class="form-control input" placeholder="Atd" ng-model="itemDeatils.atd">*@
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input date" name="atd" onchange="CheckDatesValidation('atd', '>', 'ata', 'ATD should be greater than ATB'); CheckDatesValidation('atd', '>', 'off_port_arr', 'ATD should be greater then ATA');" id="atd" ng-model="itemDeatils.atd" placeholder="DD/MM/YYYY HH:mm" >
+
+                                                <span class="input-group-append">
+                                                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                                                </span>
+                                            </div>
+                                            <p id="1atd"></p>
+                                             <!--DateTIme End-->
+                                        </div>
+                                    </div>
+
+
+
+                                   @* <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">ATD</label>
+                                           <input type="text" id="atd" class="form-control input" placeholder="Atd" ng-model="itemDeatils.atd">
+            <div class="input-group">
+                <input type="text" class="form-control input date" id="atd" ng-model="itemDeatils.atd" placeholder="DD/MM/YYYY HH:mm">
+
+                <span class="input-group-append">
+                    <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                </span>
+            </div> <!--DateTIme End-->
+        </div>
+    </div>*@
+                                   
+       @* <div class="col-md-6">
+    <div class="form-group has-danger">
+        <label class="control-label">Vessel Berthings ETD</label>
+        <input type="text" id="Vessel_Berthings_ETD" class="form-control input" placeholder="Vessel Berthings ETD" ng-model="itemDeatils.Vessel_Berthings_ETD">
+
+                <div class="input-group">
+                    <input type="text" class="form-control input date" id="Vessel_Berthings_ETD" ng-model="itemDeatils.Vessel_Berthings_ETD" placeholder="DD/MM/YYYY HH:mm">
+
+                    <span class="input-group-append">
+                        <span class="input-group-text"><i class="icon-calendar text-white"></i></span>
+                    </span>
+                </div>
+            </div>
+        </div>*@
+                                    @*<div class="col-md-6">
+                <div class="form-group has-danger">
+                    <label class="control-label">Vessel Berthings PosName</label>
+                    <input type="text" id="Vessel_Berthings_PosName" class="form-control input" placeholder="" ng-model="itemDeatils.Vessel_Berthings_PosName">
+                </div>
+            </div>*@
+
+
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">@*Vsl*@ Vist Remarks</label><span class="required">*</span>
+                                            <input type="text" id="VslVistRemarks" class="form-control input" placeholder="Vist Remarks" ng-model="itemDeatils.VslVistRemarks" required>
+                                        </div>
+                                    </div>
+
+
+                                    @if (User.IsInRole("Operations") || User.IsInRole("Admin"))
+                                    {
+                                        <div class="col-md-6" ng-show="itemDeatils.StatusCode!='valid'">
+                                            <div class="form-group has-danger">
+                                                <button type="submit" class="btn btn-primary pull-right mr-3 cursor-pointer"  ng-click="UpdateVesselEditModel(itemDeatils)" style="margin-top: 25px;">Save &amp; Validate</button>
+                                            </div>
+                                        </div>
+                                    }
+
+
+                                </div>
+                             
+                             
+
+                            </div><!--form Body End-->
+
+                        </form> <!--Form Close-->
+                        <!--Alertify Modal Vessel Edit End-->
+                        <!--Alertify Modal Crane Details Start-->
+                        <form style="display:none;width: auto;position: relative;margin: 0px auto;" id="CraneFormDeatils" name="CraneFormDeatils">
+
+                            <div class="form-body" style="margin:10px;margin-top: 20px;">
+
+                                <div class="row p-t-20">
+
+
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label><b>Referenece No</b></label>
+                                            <div>{{itemDeatils.RefNo}} </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2" ng-show="itemDeatils.VesselsName!=null || itemDeatils.VesselsName!=''">
+                                        <div class="form-group">
+                                            <label><b>Vessels Name</b></label>
+                                            <div>{{itemDeatils.VesselsName}} </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2" ng-show="itemDeatils.Agent!=null || itemDeatils.Agent!=''">
+                                        <div class="form-group">
+                                            <label><b>Agent Name</b></label>
+                                            <div>{{itemDeatils.Agent}} </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group" ng-show="itemDeatils.atd!=null || itemDeatils.atd!=''">
+                                            <label><b>ATD</b></label>
+                                            <div>{{itemDeatils.atd |date:'dd-MM-yyyy HH:mm:ss'}} </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label><b>Status</b></label>
+                                            <br />
+                                            <div class="badge badge-danger" ng-show="itemDeatils.StatusCode=='invalid'">{{itemDeatils.Status}}</div>
+                                            <div class="badge badge-success" style="font-size: 15px;" ng-show="itemDeatils.StatusCode=='valid'">{{itemDeatils.Status}}</div>
+                                            <span class="badge badge-warning" ng-show="itemDeatils.StatusCode=='cntrO'">{{itemDeatils.Status}}</span>
+                                            <span class="badge badge-info" ng-show="itemDeatils.StatusCode=='cntrF'">{{itemDeatils.Status}}</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="row">
+                                    <div class="col-md-12 mb-1">
+                                        <a ng-click="CranePrint(itemDeatils.RefNo)"><span class="btn btn-primary  cursor-pointer pull-right" title="Print">Print</span></a>
+                                        <a ng-click="ExportToExcelCrane(itemDeatils.RefNo)"><span class="btn btn-primary mr-2  cursor-pointer pull-right" title="Export To Excel">Export To Excel</span> </a>
+                                          @if (User.IsInRole("Admin") || User.IsInRole("Operations"))
+                                          {
+                                            <a ng-click="ShowAddCraneModel()" ng-if="itemDeatils.StatusCode!='valid'"><span class="btn btn-secondary mr-2  cursor-pointer pull-right" tilte="Add Crane"> Add Crane </span></a>
+                                            }
+                                       
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div id="tblrep" class="card table-card scrollbar">
+                                        <table class="table datatable-show-all text-center" id="table-id2">
+                                            <thead>
+                                                <tr class="table-card-head">
+                                                    <th>SR#</th>
+                                                    <th>Crane No <!--Short Name--></th>
+                                                    <th>Crane Hrs</th>
+                                                    <th>Crane Delay</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @*class="clickable-style"*@ @*ng-click="GetTask(item.RefNo)"*@
+
+                                                <tr class="clickable-style" ng-repeat="item in VesselCraneDetails | filter:search">
+                                                    <td>{{$index+1}}</td>
+                                                    <td>{{item.ShortName}}</td>
+                                                    <td>{{item.CraneHrs}}</td>
+                                                    <td>
+                                                        <div ng-repeat="item2 in item.CraneDelayHrsList">
+                                                            <span>{{$index+1}})  Code:{{item2.DelayHrsCode}} &nbsp;&nbsp; {{item2.DelayHrs}}Hrs<br /> Description: {{item2.Description}} <br /> </span>
+                                                        </div>
+
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-danger" ng-show="item.StatusCode=='invalid'">{{item.Status}}</span>
+                                                        <span class="badge badge-success" style="font-size: 15px;" ng-show="item.StatusCode=='valid'">{{item.Status}}</span>
+                                                    </td>
+
+                                                    <td>
+                                                  
+                                                        <a ng-show="item.StatusCode=='valid'">
+                                                            <i class="icon-checkmark4" style="font-size: large; cursor: not-allowed" title="Validate"></i>
+                                                        </a>
+                                                  @if (User.IsInRole("Admin") || User.IsInRole("Operations"))
+                                                  {
+                                                    <a ng-show="item.StatusCode=='invalid'">
+                                                        <i class="icon-pencil7 cursor-pointer list-icons-item" title="Edit Crane Details" ng-click="ShowCraneDetailsEditModel(item)"></i>
+                                                    </a>
+                                                        <a>
+                                                            <i class="icon-bin2 cursor-pointer" ng-show="item.StatusCode!='valid'" data-toggle="modal" data-target="#myModal" title="Delete Crane" ng-click="DeleteRecord(item.Id,item,'Crane')"></i>
+                                                        </a>
+                                                  }
+                                                  else
+                                                  {
+                                                    <a ng-show="item.StatusCode!='valid'">
+                                                        <i class="icon-cross3" style="font-size: large; cursor: not-allowed" title="Validate"></i>
+                                                    </a>
+                                                  }
+
+
+                                                    </td>
+
+
+
+
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        @*<button ng-click="LoadMore('VistIndex')" ng-show="floatButton" class="floatBottom btn btn-primary pull-right">Load More</button>*@
+                                    </div>
+                                </div>
+
+
+                            </div><!--form Body End-->
+
+                        </form> <!--Form Close-->
+                        <!--Alertify Modal Crane Details End-->
+                        <!--Alertify Modal Cranes Edit Start-->
+                        <form style="display:none;width: auto;position: relative;margin: 0px auto;" id="CraneDeatilsEdit" name="CraneDeatilsEdit">
+
+                            <div class="form-body" style="margin:10px;margin-top: 20px;">
+                                <div class="row p-t-20 border m-2">
+                                    <div class="col-md-2"  style="margin-top: 25px;">
+                                        <h3 class="control-label">Crane Status</h3>  
+                                    </div>
+                                    <div class="col-md-6"   style="margin-top: 25px;">
+                                        @*<div class="badge badge-danger float-right mr-5">{{CraneDeatils.Status}}</div>*@
+                                        <span class="badge badge-danger" ng-show="CraneDeatils.StatusCode=='invalid'">{{CraneDeatils.Status}}</span>
+                                        <span class="badge badge-success" style="font-size: 15px;" ng-show="CraneDeatils.StatusCode=='valid'">{{CraneDeatils.Status}}</span>
+                                    </div>
+                                    <div class="col-md-4"  style="margin-top: 25px;">
+                                        <button class="btn btn-primary pull-right  cursor-pointer" ng-click="UpdateCraneEditModel(CraneDeatils)">Save &amp; Validate</button>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Reference No</label>
+                                            <input type="text" id="RefNo" class="form-control input" placeholder="Reference No" ng-model="CraneDeatils.RefNo" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group has-danger was-validated">
+                                            <label class="control-label">Crane No <!--Short Name--></label><span class="required">*</span>
+                                            <input type="text" id="ShortName" class="form-control input" placeholder="Crane No" ng-model="CraneDeatils.ShortName" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group has-danger was-validated">
+                                            <label class="control-label">Cranes Hrs</label><span class="required">*</span>
+                                            <input type="text" id="CraneHrs" class="form-control input" placeholder="Crane Hours" ng-model="CraneDeatils.CraneHrs" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 dropdown-divider"></div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Delay Code</label><span class="required">*</span>
+                                            <select id="DelayId" class="input displaySelect" ng-model="Delay.Id" ng-change="SetDescription(Delay.Id)">
+                                                <option data-placeholder="true"></option>
+
+                                                <option ng-repeat="item in GetCraneDelayHrsType" value="{{item.Id}}">{{item.DelayHrsCode}}</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4" @*ng-if="Delay.Id!=null && Delay.Id!=''"*@>
+                                        <div class="form-group has-danger was-validated">
+                                            <label class="control-label">Description</label><span class="required">*</span>
+
+                                            <input type="text" id="CraneDescription"  class="form-control inputDelay" placeholder="Crane Hours" ng-model="Delay.Description">
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2" @*ng-if="Delay.Description!=null && Delay.Description!=''"*@>
+                                        <div class="form-group has-danger was-validated">
+                                            <label class="control-label">Delay Hrs</label><span class="required">*</span>
+                                            <input type="text" id="CraneHrs" class="form-control inputDelay" placeholder="Crane Hours" ng-model="Delay.Hrs">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-primary pull-right mr-3 cursor-pointer" ng-click="AddDelayHrs(Delay)" style="margin-top: 25px;">Add DelayHrs</button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    
+                                    <div id="tblrep" class="card table-card scrollbar">
+                                        <table class="table datatable-show-all text-center" id="table-id2">
+                                            <thead>
+                                                <tr class="table-card-head">
+                                                    <th>SR#</th>
+                                                    <th>Delay Code</th>
+                                                    <th>Delay Hrs</th>
+                                                    <th>Description</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @*class="clickable-style"*@ @*ng-click="GetTask(item.RefNo)"*@
+
+                                                <tr class="clickable-style" ng-repeat="item in GetCraneDelayHrsbyCraneId | filter:search">
+                                                    <td>{{$index+1}}</td>
+                                                    <td>
+                                                        <input type="text" class="form-control" disabled ng-model="item.DelayHrsCode" />
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" ng-model="item.DelayHrs" />
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" ng-model="item.Description" />
+                                                    </td>
+                                                    <td>
+                                                        <i class="icon-floppy-disk" ng-click="UpdateCraneDealyHrs(item)" title="Update Delay Hrs"></i>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                  
+                                </div>
+
+
+
+                            </div><!--form Body End-->
+
+                        </form> <!--Form Close-->
+                        <!--Alertify Modal Cranes Edit End-->
+                        <!--Alertify Modal Add Cranes  Start-->
+                        <form style="display:none;width: auto;position: relative;margin: 0px auto;" id="CraneDeatilsAdd" name="CraneDeatilsAdd" class="was-validated">
+
+                            <div class="form-body" style="margin:10px;margin-top: 20px;">
+
+                                <div class="row p-t-20 border m-2">
+
+                                    <div class="col-md-12 mt-1">
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Reference No</label>
+                                            <input type="text" id="AddRefNo" class="form-control input" placeholder="Reference No" ng-model="itemDeatils.RefNo" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Crane No@*Short Name*@</label><span class="required">*</span>
+                                            <input type="text" id="AddShortName" class="form-control input" placeholder="Crane No" ng-model="AddCraneDeatils.ShortName" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label">Cranes Hrs</label><span class="required">*</span>
+                                            <input type="text" id="AddCraneHrs" class="form-control input" placeholder="Crane Hours" ng-model="AddCraneDeatils.CraneHrs" required>
+                                        </div>
+                                    </div>
+                                  
+                                    <!--Button for Add Crane  -->
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <button type="reset" class="btn btn-primary pull-right mr-3 cursor-pointer" ng-disabled="CraneDeatilsAdd.$invalid"  ng-click="AddCraneDetails(AddCraneDeatils)" style="margin-top: 25px;">Add</button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div><!--form Body End-->
+
+                        </form> <!--Form Close-->
+                        <!--Alertify Modal Add Cranes Details End-->
+
+                        <!--Simple Delete Modal Strat-->
+                        <div class="modal fade" id="myModal" style="z-index:100000!important">
+                            <div class="modal-dialog" style="width:300px">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header border">
+                                        <h4 class="modal-title">Confrim</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <p>Are you sure to delete?</p>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" ng-click="DeleteMethod(Id, item, RemoveFor)">Yes</button>
+                                        <button type="button" class="btn btn-success" data-dismiss="modal">No</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--Simple Delete Modal End-->
+                    </div><!--Table Row End-->
+                    <!--pagination Code Start-->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Select Rows</label>
+                                <select data-placeholder="Select Rows" name="state" id="maxRows" class="form-control select-clear" data-fouc>
+                                    <option></option>
+                                    <option value="5000">All Rows</option>
+                                    <option value="4">4</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="70">70</option>
+                                    <option value="100">100</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class='pagination-container col-md-9' style="position: absolute;
+    right: 0px; text-align: end;">
+                            <nav>
+                                <ul class="pagination">
+
+                                    <li data-page="prev">
+                                        <span> < <span class="sr-only">(current)</span></span>
+                                    </li>
+                                    <!--	Here the JS Function Will Add the Rows -->
+                                    <li data-page="next" id="prev">
+                                        <span> > <span class="sr-only">(current)</span></span>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <!--pagination Code End-->
+
+                </div>
+                <!--Ng-Controller Awating Action  Div End-->
+            </div>
+            <!--Awating Action Tab Content Tab 1 End -->
+            <!--JIP Exception Status Tab Content Tab 2 start -->
+            <div id="tab2" class="tabcontent">
+                <!--NG-controller Class Awating Action Start-->
+                <div ng-init="init2()">
+                    <div class="page-header border-bottom-0">
+                        <div class="page-header-content header-elements-md-inline">
+                            <div class="page-title d-flex">
+                                <h4>
+
+                                    <i class="icon-file-check mr-2"></i>Validate Vessels Sailed
+                                </h4>
+
+                            </div>
+
+                            <div class="mt-3">
+                                <button ng-click="ExportToExcel2('2',search)" class="btn btn-secondary mr-2 ml-5">Export To Excel</button>
+
+
+                                <input type="button" class="btn btn-secondary  pull-right" value="Filters" data-toggle="collapse" data-target="#demo" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <!-- /page header -->
+                    <!--Search Filter Code Start-->
+                <div class="card collapse"  id="demo">
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div class="row">
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Reference No</label>
+                                        <input type="text" id="Tab1RefNo" class="form-control" placeholder="Reference No" ng-model="search.RefNo" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Vessel Name</label>
+                                        <input type="text" id="Tab1VesselName" class="form-control" placeholder="Vessel Name" ng-model="search.VesselsName" />
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Agent Name</label>
+                                        <input type="text" class="form-control" id="Tab1Service" placeholder="Agent Name" ng-model="search.Agent" />
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Hatch Cover</label>
+                                        <input type="text" class="form-control" id="Tab1HatchCover" placeholder="Hatch Cover" ng-model="search.HatchCover" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Line Operator </label>
+                                        <input type="text" class="form-control" id="Tab1LineOperatorName" placeholder="Line Operator " ng-model="search.LineOperatorName" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Sail Direction</label>
+                                        <input type="text" class="form-control" id="Tab1SailDirection" placeholder="Sail Direction" ng-model="search.SailDirection" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>VS Class Name</label>
+                                        <input type="text" class="form-control" id="Tab1VS_Class_Name" placeholder="VS Class Name" ng-model="search.VS_Class_Name" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Srv Name</label>
+                                        <input type="text" class="form-control" id="Tab1SrvName" placeholder="Srv Name" ng-model="search.SrvName" />
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>From</label>
+                                        @*<input type="date" class="form-control" placeholder="From" ng-model="data.FromDate" />*@
+                                        <div id="sandbox-container">
+                                            <div class="input-group date">
+                                                <input type="text" class="form-control" id="Tab1FromDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>To</label>
+                                        @*<input type="date" class="form-control" placeholder="To" ng-model="data.ToDate" />*@
+                                        <div id="sandbox-container">
+                                            <div class="input-group date">
+                                                <input type="text" class="form-control" id="Tab1ToDate" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="mi-insert-invitation"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mt-1">
+                                        <input type="button" class="btn btn-theme-gray pull-right mt-3" value="Reset" ng-click="Reset('valid')" />
+                                        <input type="button" class="btn btn-primary pull-right  mr-2 mt-3" value="Search" ng-click="VistIndexSearch(2)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <!--Search Filter Code End-->
+
+                    <div class="row">
+
+                        <div id="tblrep" class="card table-card scrollbar">
+                            <table class="table datatable-show-all text-center" id="table-id1">
+                                <thead>
+                                    <tr class="table-card-head">
+                                        <th>SR#</th>
+                                        <th>Reference No</th>
+                                        <th>Vessel Name</th>
+                                        <th>Agent Name</th>
+                                        <th>Hatch Cover</th>
+                                        <th>Line Operator </th>
+                                        <th>SailDirection</th>
+                                        <th>Vessel Class Name</th>
+                                        <th>ATD</th>
+                                        <th>SrvName</th>
+                                        <th>UpdatedBy</th>
+                                        <th>UpdatedAt</th>
+                                        <th style="width: 10%;">Deatils</th>
+                                        <th style="width: 7%;">Action</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @*class="clickable-style"*@ @*ng-click="GetTask(item.RefNo)"*@
+                                    <tr ng-repeat="item in VesselSailedDetailsValid | filter:search">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.RefNo}}</td>
+                                        <td>{{item.VesselsName}}</td>
+                                        <td>{{item.Agent}}</td>
+                                        <td>{{item.HatchCover}}</td>
+                                        <td>{{item.LineOperatorName}}</td>
+                                        <td>{{item.SailDirection}}</td>
+                                        <td>{{item.VS_Class_Name}}</td>
+                                        <td>{{item.atd |date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                                        <td>{{item.SrvName}}</td>
+                                        <td>{{item.UpdatedBy}}</td>
+                                        <td>{{item.UpdatedAt |date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                                        <td>
+                                            <a>
+                                                <!--Crane-->
+                                                <img src="~/Content/images/crane2.png" id="{{$index+1}}" ng-click="ShowCraneDetailsModel(item)" ng-mouseover="changeicon($index+1,'move','crane')" ng-mouseleave="changeicon($index+1,'leave','crane')" class="onhover list-icons-item" width="25" title="Crane Details" />
+                                            </a>
+                                            <a>
+                                                <i class="icon-ship onhover list-icons-item" title="Vessel Details" style="font-size:x-large" ng-click="ShowAwatingForm(item)"></i>
+                                            </a>
+                                            <a ng-click="Container(item.RefNo)" @*href="DWH/CntrIndex?RefNo={{item.RefNo}}" target="_blank"*@>
+                                                <!--Container-->
+                                                <img src="~/Content/images/container.png" id="{{$index+1+'a'}}" ng-mouseover="changeicon($index+1+'a','move','container')" ng-mouseleave="changeicon($index+1+'a','leave','container')" class="onhover list-icons-item" width="25" title="Container Details" />
+                                            </a>
+                                       
+                                       
+                                          
+                                        </td>
+
+                                        <td>
+                                            <a ng-click="DWHVesselPrint(item.Id)"><i class="icon-printer" title="Print"></i></a>
+                                            <a ng-click="DWHVesselPdf(item.Id)"><i class="icon-file-pdf" title="PDF"></i></a>
+
+                                            <a ng-click="VesselExportToExcel(item.Id,2)"><i class="icon-file-excel" title="Export To Excel"></i></a>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-danger" ng-show="item.StatusCode=='invalid'">{{item.Status}}</span>
+                                            <span class="badge badge-success" style="font-size: 15px;" ng-show="item.StatusCode=='valid'">{{item.Status}}</span>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <button ng-click="LoadMore('valid')" ng-show="floatButton2" class="floatBottom btn btn-primary pull-right">Load More</button>
+                        </div>
+
+                    </div>
+                    <!--pagination Code Start-->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Select Rows</label>
+                                <select data-placeholder="Select Rows" name="state" id="maxRows1" class="form-control select-clear" data-fouc>
+                                    <option></option>
+                                    <option value="5000">All Rows</option>
+                                    <option value="4">4</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="70">70</option>
+                                    <option value="100">100</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class='pagination-container col-md-9' style="position: absolute;right: 0px; text-align: end;">
+                            <nav>
+                                <ul class="pagination1">
+
+                                    <li data-page="prev">
+                                        <span> < <span class="sr-only">(current)</span></span>
+                                    </li>
+                                    <!--	Here the JS Function Will Add the Rows -->
+                                    <li data-page="next" id="prev">
+                                        <span> > <span class="sr-only">(current)</span></span>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <!--pagination Code End-->
+                    <!--Modal Code Start-->
+                    <!--Modal Code End-->
+                </div>
+                <!--Ng-Controller Saveed Action  Div End-->
+            </div>
+            <!--JIP Exception Status Tab Content Tab 2 End -->
+        </div>
+    </div>
+
+</div>
+
+<script>
+    //DAte Time
+
+  
+    $('.date').bootstrapMaterialDatePicker({
+        format: 'DD/MM/YYYY HH:mm',
+        //maxDate: maxdate,
+      //  endDate: moment(new Date()).format('DD/MM/YYYY HH:mm'),
+        switchOnClick : true,
+        nowButton: true,
+        //currentDate: moment(),
+    });
+
+</script>
+<script>
+
+    function CheckDatesValidation(CheckId, validation, fromId, message) {
+
+       
+        if (validation == '>')
+        {
+            if ($('#'+CheckId).val() < $('#'+fromId).val())
+            {
+             
+               // toastr.error(message);
+               
+             //   var notification = alertify.notify(message, 'error', 5, function () { console.log('dismissed'); });
+                $('#1'+CheckId).html('<span style="color:red">' + message + '</span>');
+            }
+            else
+            {
+                $('#1' + CheckId).html('');
+            }
+         
+        }
+        if (validation == '<')
+        {
+            if ($('#' + CheckId).val() > $('#' + fromId).val()) {
+                //  toastr.error(message);
+                
+             
+                $('#1' + CheckId).html('<span style="color:red">' + message + '</span>');
+                
+            
+                // var notification = alertify.notify(message, 'error', 5, function () { console.log('dismissed'); });
+               
+            }
+            else
+            {
+                $('#1' + CheckId).html('');
+            }
+        }
+     //   return false;
+
+    }
+
+</script>
+<script src="@Url.Content("~/Scripts/crypto-js.min.js")"></script>
+<script src="~/Scripts/DatePicker/CustomIntilizeJS.js"></script>
+
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/PaganationScriptCustom.js"></script>
+<script src="~/Scripts/AlertifyCdn/jquery-confirm.min.js"></script>
+<script src="~/Scripts/AlertifyCdn/alertify.min.js"></script>
+
+<script>
+
+    //Pagination Code
+    $(document).ready(function () {
+        getPagination('#table-id');
+        getPaginationJIPStatusAwating('#table-id1');
+
+        var odx = new SlimSelect({
+            select: '#DelayId',
+            placeholder: 'Select Code',
+            showSearch: true,
+            //allowDeselectOption: true,
+            //hideSelectedOption: true
+            //deselectLabel: '<span class="red">✖</span>',
+        });
+        
+        var CUSTDFF_VSLINSCHEDULE = new SlimSelect({
+            select: '#CUSTDFF_VSLINSCHEDULE',
+            placeholder: 'IN SCHEDULE',
+            showSearch: false,
+            //allowDeselectOption: true,
+            //hideSelectedOption: true
+            //deselectLabel: '<span class="red">✖</span>',
+        });
+    });
+
+
+    //Hide Side Menu
+    window.onload = function () {
+        document.getElementById('minisidebar').className = 'sidebar-xs';
+    };
+
+    // Tab menu Code
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+
+
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+
+    }
+    // Tab Menu Code End
+</script>
+

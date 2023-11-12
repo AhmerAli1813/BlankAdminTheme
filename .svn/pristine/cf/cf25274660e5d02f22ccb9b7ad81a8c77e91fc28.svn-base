@@ -1,0 +1,1700 @@
+﻿'use strict';
+app.controller('DWHCtrl',
+    [
+        "$scope",
+        "$rootScope",
+        "$timeout",
+        "$q",
+        "urlService",
+        "newGridService",
+        "$window",
+        "$interval",
+        function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window, $interval) {
+
+            var url = urlService.getUrlPrams();
+           
+            $scope.floatButton = true;
+            $scope.floatButton2 = true;
+            $('.float').attr('disabled', 'disabled');
+            $scope.Records = 30;
+            $scope.RecordsPlus = 60;
+           // var xx = 0;
+            //$interval(function () {
+            //    $scope.init('Back');
+            //    $scope.init2('Back');
+            //    xx=xx+1;
+            //    var date = new Date().toLocaleTimeString();
+            //    console.log('interval count: ' + xx + ' Time : ' + date);
+            //}, 6000000);
+
+            //Int For Not Validate  Awating Action  Start
+            $scope.init = function (RType) {
+             
+                    if (RType == null)
+                    {
+                        $scope.ajaxGet('api/DWHApi/GetVesselsSailedDetails', { StatusId: '1', Records: $scope.Records, Limit: true }, function (resp) {
+
+                            console.log("inValid Vessel Sailed Details", resp);
+                            if (resp.Success) {
+                                $scope.VesselSailedDetails = resp.VesselSailedDetailsList;
+                                $scope.VesselSailedDetailsExtra = resp.VesselSailedDetailsList;
+                                //After Load
+                                if (resp.Limit == true) {
+                                    if (resp.Records == false) {
+                                        toastr.info('No more records found!');
+                                        $scope.floatButton = false;
+
+                                    }
+                                    else {
+                                        $scope.floatButton = true;
+                                        $(".float").removeAttr("disabled");
+                                    }
+                                }
+
+                            }
+                        });
+                        $scope.GetCraneDelayHrsType();
+                    }
+                    if (RType == 'Back') {
+                        $scope.ajaxGetBackground('api/DWHApi/GetVesselsSailedDetails', { StatusId: 1, Records: $scope.Records, Limit: true }, function (resp) {
+
+                            console.log("inValid Vessel Sailed Details", resp);
+                            if (resp.Success) {
+                                $scope.VesselSailedDetails = resp.VesselSailedDetailsList;
+                                $scope.VesselSailedDetailsExtra = resp.VesselSailedDetailsList;
+                                //After Load
+                                if (resp.Limit == true) {
+                                    if (resp.Records == false) {
+                                        toastr.info('No more records found!');
+                                        $scope.floatButton = false;
+
+                                    }
+                                    else {
+                                        $scope.floatButton = true;
+                                        $(".float").removeAttr("disabled");
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+            }
+            //init For Not Validate  Awating Action End
+
+            //init2 for  valid Vessel Details
+            $scope.init2 = function (RType)
+            {
+                if (RType == null) {
+                    $scope.ajaxGet('api/DWHApi/GetVesselsSailedDetails', { StatusId: 2, Records: $scope.Records, Limit: true }, function (resp) {
+
+                        console.log("Valid Vessel Sailed Details", resp);
+                        if (resp.Success) {
+                            $scope.VesselSailedDetailsValid = resp.VesselSailedDetailsList;
+
+                            $scope.VesselSailedDetailsValidExtra = resp.VesselSailedDetailsList;
+                            //After Load
+                            if (resp.Limit == true) {
+                                if (resp.Records == false) {
+                                    toastr.info('No more records found!');
+                                    $scope.floatButton2 = false;
+
+                                }
+                                else {
+                                    $scope.floatButton2 = true;
+                                    $(".float").removeAttr("disabled");
+                                }
+                            }
+
+                        }
+                    });
+                }
+                if (RType == 'Back') {
+                    $scope.ajaxGetBackground('api/DWHApi/GetVesselsSailedDetails', { StatusId: 2, Records: $scope.Records, Limit: true }, function (resp) {
+
+                        console.log("Valid Vessel Sailed Details", resp);
+                        if (resp.Success) {
+                            $scope.VesselSailedDetailsValid = resp.VesselSailedDetailsList;
+                            $scope.VesselSailedDetailsValidExtra = resp.VesselSailedDetailsList;
+
+                            //After Load
+                            if (resp.Limit == true) {
+                                if (resp.Records == false) {
+                                    toastr.info('No more records found!');
+                                    $scope.floatButton2 = false;
+
+                                }
+                                else {
+                                    $scope.floatButton2 = true;
+                                    $(".float").removeAttr("disabled");
+                                }
+                            }
+
+                        }
+                    });
+                }
+            }
+
+            //GetCraneDelayHrsType
+            $scope.GetCraneDelayHrsType =function() {
+                $scope.ajaxGetBackground('api/DWHApi/GetCraneDelayHrsType', null, function (resp) {
+                    console.log("GetCraneDelayHrsType", resp);
+                    if (resp.Success) {
+                        $scope.GetCraneDelayHrsType = resp.CraneDwlayHrsType;
+                    }
+                });
+            }
+            //GetCraneDelayHrsByCrane Id
+            $scope.GetCraneDelayHrsByCraneId = function (data)
+            {
+                $scope.ajaxGetBackground('api/DWHApi/GetCraneDelayHrsbyCraneId', { CraneId: data }, function (resp) {
+                    console.log("GetCraneDelayHrsbyCraneId", resp);
+                    if (resp.Success) {
+                        $scope.GetCraneDelayHrsbyCraneId = resp.CraneDelayHrsList;
+                    }
+                });
+            }
+            //  init For Container Details Start
+            $scope.CntrInit = function (RType) {
+
+                console.log('URL DATA' + url.filter, url);
+                if (url.filter != 'undefined' && url.filter == 'true')
+                {
+                    $scope.ajaxGet('api/DWHApi/GetContainerListByRefNo', { RefNo: url.RefNo, Cntr: url.Cntr, category: url.category, goods_and_ctr_wt_kg: url.goods_and_ctr_wt_kg, oprname: url.oprname, LineOprName: url.LineOprName, commodity: url.commodity, destination: url.destination, bl_nbr: url.bl_nbr, Origin: url.Origin, InspStages: url.InspStages, move_kind: url.move_kind, nominal_length: url.nominal_length, nominal_height: url.nominal_height, AEO: url.AEO, is_oog: url.is_oog, is_bundle: url.is_bundle, CustomInspType: url.CustomInspType, ISO: url.ISO, IsTransit: url.IsTransit, ITTTo: url.ITTTo, XrayStatus: url.XrayStatus }, function (resp) {
+
+                        console.log("Vessel Containers Details", resp);
+                        if (resp.Success) {
+                            $scope.VesselContainersDetails = resp.ContainerDetailsList;
+                            $scope.resp = resp;
+
+                            $scope.VesselContainersDetailsExtra = resp.ContainerDetailsList;
+                            //After Load
+                          
+                                    $scope.floatButton = false;
+                        }
+                    });
+                }
+                else
+                {
+                    if (RType == null) {
+                        $scope.ajaxGet('api/DWHApi/GetContainerListByRefNo', { RefNo: url.RefNo, Records: $scope.Records, Limit: true }, function (resp) {
+
+                            console.log("Vessel Containers Details", resp);
+                            if (resp.Success) {
+                                $scope.VesselContainersDetails = resp.ContainerDetailsList;
+                                $scope.resp = resp;
+                                setTimeout(function () { $scope.CntrInit('Back'); }, 20000);
+                                $scope.VesselContainersDetailsExtra = resp.ContainerDetailsList;
+                                //After Load
+                                if (resp.Limit == true) {
+                                    if (resp.Records == false) {
+                                        toastr.info('No more records found!');
+                                        $scope.floatButton = false;
+
+                                    }
+                                    else {
+                                        $scope.floatButton = true;
+                                        $(".float").removeAttr("disabled");
+                                    }
+                                }
+
+                            }
+                        });
+
+                       
+                    }
+
+                    if (RType == 'Back') {
+                        $scope.ajaxGetBackground('api/DWHApi/GetContainerListByRefNo', { RefNo: url.RefNo }, function (resp) {
+
+                            console.log("Vessel Containers Details", resp);
+                            if (resp.Success) {
+                                $scope.VesselContainersDetails = resp.ContainerDetailsList;
+                                $scope.resp = resp;
+                                $scope.VesselContainersDetailsExtra = resp.ContainerDetailsList;
+                                //After Load
+                     
+                                        $scope.floatButton = false;
+                            }
+                        });
+                    }
+                }
+              
+                
+              
+            }
+            //  init For Container Details End
+
+            // Crane Model For Details Start
+            $scope.ShowCraneDetailsModel = function (VesselDetails)
+            {
+                $scope.itemDeatils = VesselDetails;
+
+                var CraneFormDeatils;
+                CraneFormDeatils = CraneFormDeatils || $('#CraneFormDeatils').show()[0];
+                alertify.myAlert || alertify.dialog('myAlert', function () {
+                    return {
+                        main: function (content) {
+                            this.setContent(content);
+                        },
+                        setup: function () {
+                            return {
+                                focus: {
+                                    element: function () {
+                                        return this.elements.body.querySelector(this.get('selector'));
+                                    },
+                                    select: true
+                                },
+                                options: {
+                                    basic: false,
+                                    maximizable: true,
+                                    resizable: true,
+                                    modal: false,
+                                    padding: false,
+                                    transition: 'zoom',
+                                    buttons:[{text: "Ok", key:27/*Esc*/}],
+                                    //pinnable: true,
+                                    // title:'Details'
+                                    title: '<p style="text-align:center !important;margin:-10px auto;color:#00529C;font-size:21px;font-weight:Bold;">    <img src="Content/images/crane2.png"  width="25" title="Crane Details" /> Crane Details</p>',
+                                }
+                            };
+                        }
+                    };
+
+                });
+                alertify.myAlert(document.getElementById("CraneFormDeatils")).resizeTo('70%', 400);
+
+
+                $scope.ajaxGetBackground('api/DWHApi/GetCranesList', {RefNo:$scope.itemDeatils.RefNo}, function (resp) {
+                    console.log("Vessel Cranes List",resp);
+                    if (resp.Success) {
+                        $scope.VesselCraneDetails = resp.VesselCraneList;
+                      
+
+                    }
+                });
+            }
+            //Crane Model For Details ENd
+
+            //Set Description According To DelayCode Start
+            $scope.SetDescription = function (data) {
+                console.log(data);
+                if(data==null)
+                {
+                      $(".inputDelay").attr('disabled', 'disabled');
+                }
+                else
+                {
+                    $(".inputDelay").removeAttr("disabled");
+                }
+                $scope.des = $scope.GetCraneDelayHrsType.filter(x=>x.Id == data);
+     
+                $scope.des.forEach(function (element1, i1) {
+
+                  //  Pending_data.push([element1.Year, element1.Pending]);
+                    console.log(element1.Description);
+                    $scope.Delay.Description = element1.Description;
+
+                });
+                
+            }
+            //Set Description According To DelayCode End
+
+            //AddDelayHrs & Description From Crane Id Start
+            $scope.AddDelayHrs = function (data)
+            {
+                if (data==null)
+                {
+                    toastr.error("Please select delay code!", "Error Message");
+                    return false;
+                }
+                data.CraneId = $scope.CraneDeatils.Id;
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                data.CreatedAt = dat + " " + time;
+                console.log('data Update', data);
+         
+                $scope.ajaxPost('api/DWHApi/AddCraneDelayHrsbyCraneId', data, function (resp) {
+                    console.log("AddCraneDelayHrsbyCraneId", resp);
+                    if (resp.Success) 
+                    {
+                        toastr.success("Delay Hrs information added successfully");
+                        $scope.Delay = null;
+
+                        $scope.GetCraneDelayHrsByCraneId(resp.CraneId);
+                        $scope.ajaxGetBackground('api/DWHApi/GetCranesList', { RefNo: $scope.itemDeatils.RefNo }, function (resp) {
+                            console.log("Vessel Cranes List", resp);
+                            if (resp.Success) {
+                                $scope.VesselCraneDetails = resp.VesselCraneList;
+
+
+                            }
+                        });
+                      
+                       
+                    }
+                });
+            }
+            //AddDelayHrs &  Description From Crane Id End
+
+            //UpdateDelayHrs &  Description  start
+            $scope.UpdateCraneDealyHrs =function(data)
+            {
+                if (data.Id==null)
+                {
+                    toastr.error("Please select delay hrs code!", "Error Message");
+                    return false;
+                }
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                data.UpdatedAt = dat + " " + time;
+                console.log('data Update', data);
+
+                $scope.ajaxPost('api/DWHApi/UpdateCraneDelayHrsbyId', data, function (resp) {
+                    console.log("UpdateCraneDelayHrsbyId", resp);
+                    if (resp.Success) {
+                        $scope.GetCraneDelayHrsByCraneId($scope.CraneDeatils.Id);
+                        toastr.success("Delay Hrs information Updated Successfully");
+                        $scope.ajaxGetBackground('api/DWHApi/GetCranesList', { RefNo: $scope.itemDeatils.RefNo }, function (resp) {
+                            console.log("Vessel Cranes List", resp);
+                            if (resp.Success) {
+                                $scope.VesselCraneDetails = resp.VesselCraneList;
+
+
+                            }
+                        });
+
+                    }
+                });
+            }
+            //UpdateDelayHrs &  Description  End
+            //Crane Edit Model For Details Start
+            $scope.ShowCraneDetailsEditModel = function (CraneDetails)
+            {
+                $(".inputDelay").attr('disabled', 'disabled');
+                $scope.CraneDeatils = CraneDetails;
+                $scope.GetCraneDelayHrsByCraneId(CraneDetails.Id);
+                var CraneDeatilsEdit;
+                CraneDeatilsEdit = CraneDeatilsEdit || $('#CraneDeatilsEdit').show()[0];
+                alertify.alert(document.getElementById("CraneDeatilsEdit")).set('label', '').set('resizable', true).set('maximizable', true).resizeTo('70%', 400).set('autoReset', true).set({ 'pinnable': true, 'modal': false }).set('basic', false).set('padding', false).set('closable', true).set('title', '<p style="text-align:center !important;margin:0px auto;color:#00529C;font-size:21px;font-weight:Bold;">Crane Delay Information</p>', { transition: 'flipx' }).setting({
+                    onok: function () {
+                        //Example To Excute Crade Edit Api
+                        //$scope.ajaxGet('api/DWHApi/GetContainerListByRefNo', { RefNo: 180236 }, function (resp) {
+
+                        //    console.log("Vessel Containers Details", resp);
+                        //    if (resp.Success) {
+                              
+                        //        alertify.success('Great');
+                        //    }
+                        //});
+                        this.close();
+                    },//OnOk Function End
+                    'defaultFocusOff': true,
+                });
+
+            }
+            //Crane Edit Model For Details End
+
+           
+            //Crane Details Update Model Start
+            $scope.UpdateCraneEditModel = function (data)
+            {
+                
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                data.UpdatedAt = dat + " " + time;
+                console.log('data Update', data);
+                //  return false;
+                $scope.ajaxPost('api/DWHApi/UpdateCraneRecord',data, function (resp) {
+                    console.log("UpdateCraneRecordRequest", resp);
+                    if (resp.Success) {
+                        //Close Edit Crane Dialog on Success
+                        alertify.alert(document.getElementById('CraneDeatilsEdit')).set('transition', 'flipx').close();
+                        toastr.success(data.ShortName, 'Crane Details Updated Successfully');
+                        $scope.ShowCraneDetailsModel($scope.itemDeatils);
+                    }
+                });
+                
+            }
+            //Crane Details Update Model  End
+
+            function convertFromStringToDate(responseDate) {
+
+                let dateComponents = responseDate.split(' ');
+                let datePieces = dateComponents[0].split("/");
+                let timePieces = dateComponents[1].split(":");
+                return (new Date(datePieces[2], (datePieces[1] - 1), datePieces[0],
+                                     timePieces[0], timePieces[1]))
+            }
+            //Date Function
+            function convertFromStringToDate2(responseDate) {
+
+                let dateComponents = responseDate.split(' ');
+                let datePieces = dateComponents[0].split("/");
+                let timePieces = dateComponents[1].split(":");
+                return (new Date(datePieces[2], (datePieces[1] - 1), datePieces[0],
+                                     timePieces[0], timePieces[1]))
+            }
+
+            //Vessel Details Update Method Start
+            $scope.UpdateVesselEditModel = function (data) {
+               
+                  if ($('#off_port_arr').val() >= $('#ata').val())
+                {
+                     toastr.error("ATA should not be greater than ATB");
+                     $('#1off_port_arr').html('<span style="color:red">' + 'ATA should not be greater than ATB' + '</span>');
+                
+                     return false;
+                }
+              if ($('#start_work').val() <= $('#ata').val())
+                 {
+                  toastr.error("Start Work should be greater than ATB");
+                  $('#1start_work').html('<span style="color:red">' + 'Start Work should be greater than ATB' + '</span>');
+                    return false;
+                }
+                if ($('#time_discharge_complete').val() <= $('#start_work').val()) {
+                    toastr.error("Time Discharge Complete should be greater than Start Work");
+                    $('#1time_discharge_complete').html('<span style="color:red">' + 'Time Discharge Complete should be greater than Start Work' + '</span>');
+                    return false;
+                }
+                if ($('#end_work').val() <= $('#start_work').val()) {
+                    toastr.error("End Work should be greater than Start Work");
+                    $('#1end_work').html('<span style="color:red">' + 'End Work should be greater than Start Work' + '</span>');
+                    return false;
+                }
+                if ($('#atd').val() <= $('#ata').val()) {
+                    toastr.error("ATD should be greater than ATB");
+                    $('#1atd').html('<span style="color:red">' + 'ATD should be greater than ATB' + '</span>');
+                    return false;
+                }
+                //Validation Checking End
+
+                if (document.getElementById('off_port_arr').value != "" && document.getElementById('off_port_arr').value != "Invalid date") {
+                    
+                    data.off_port_arr = moment(convertFromStringToDate(document.getElementById('off_port_arr').value)).format('YYYY-MM-DDTHH:mm');
+                    
+                }
+                if (document.getElementById('ata').value != "" && document.getElementById('ata').value != "Invalid date") {
+
+                    data.ata = moment(convertFromStringToDate(document.getElementById('ata').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('PilotOnBoard').value != "" && document.getElementById('PilotOnBoard').value != "Invalid date") {
+
+                    data.PilotOnBoard = moment(convertFromStringToDate(document.getElementById('PilotOnBoard').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('start_work').value != "" && document.getElementById('start_work').value != "Invalid date") {
+
+                    data.start_work = moment(convertFromStringToDate(document.getElementById('start_work').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('time_discharge_complete').value != "" && document.getElementById('time_discharge_complete').value != "Invalid date") {
+
+                    data.time_discharge_complete = moment(convertFromStringToDate(document.getElementById('time_discharge_complete').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('end_work').value != "" && document.getElementById('end_work').value != "Invalid date") {
+
+                    data.end_work = moment(convertFromStringToDate(document.getElementById('end_work').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+                if (document.getElementById('PilotOffBoard').value != "" && document.getElementById('PilotOffBoard').value != "Invalid date") {
+
+                    data.PilotOffBoard = moment(convertFromStringToDate(document.getElementById('PilotOffBoard').value)).format('YYYY-MM-DDTHH:mm');;
+
+                }
+                if (document.getElementById('atd').value != "" && document.getElementById('atd').value != "Invalid date") {
+
+                    data.atd = moment(convertFromStringToDate(document.getElementById('atd').value)).format('YYYY-MM-DDTHH:mm');
+
+                }
+
+
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                data.UpdatedAt = dat + " " + time;
+                data.StatusId=1
+                
+                console.log('data Update', data);
+
+                
+
+                $scope.ajaxPost('api/DWHApi/UpdateVeseelRecord', { VesselData: data }, function (resp) {
+                    console.log("UpdateVeseelRecordRequest", resp);
+                    if (resp.Success) {
+                        //Close Edit Crane Dialog on Success
+                        alertify.closeAll();
+                        toastr.success( 'Vessel Details Updated and Validate Successfully'," Reference No:"+data.RefNo);
+                        $scope.init('Back');
+                    }
+                    else
+                    {
+                        toastr.error('error');
+                        if (document.getElementById("off_port_arr").value != "" && document.getElementById("off_port_arr").value != "Invalid date") {
+                            data.off_port_arr = moment(data.off_port_arr).format('DD/MM/YYYY HH:mm');
+                        }
+
+
+                        if (document.getElementById("start_work").value != "" && document.getElementById("start_work").value != "Invalid date") {
+                            data.start_work = moment(data.start_work).format('DD/MM/YYYY HH:mm');
+                        }
+
+
+                        if (document.getElementById("start_work").value != "" && document.getElementById("start_work").value != "Invalid date") {
+                            data.end_work = moment(data.end_work).format('DD/MM/YYYY HH:mm');
+                        }
+
+                        if (document.getElementById("start_work").value != "" && document.getElementById("start_work").value != "Invalid date") {
+                            data.ata = moment(data.ata).format('DD/MM/YYYY HH:mm');
+                        }
+
+                        if (document.getElementById("start_work").value != "" && document.getElementById("start_work").value != "Invalid date") {
+                            data.atd = moment(data.atd).format('DD/MM/YYYY HH:mm');
+                        }
+
+                        if (document.getElementById("start_work").value != "" && document.getElementById("start_work").value != "Invalid date") {
+                            data.PilotOnBoard = moment(data.PilotOnBoard).format('DD/MM/YYYY HH:mm');
+                        }
+
+                        if (document.getElementById("start_work").value != "" && document.getElementById("start_work").value != "Invalid date") {
+                            data.PilotOffBoard = moment(data.PilotOffBoard).format('DD/MM/YYYY HH:mm');
+                        }
+
+                        if (document.getElementById("start_work").value != "" && document.getElementById("start_work").value != "Invalid date") {
+                            data.time_discharge_complete = moment(data.time_discharge_complete).format('DD/MM/YYYY HH:mm');
+                        }
+                    }
+                });
+
+            }
+            //Vessel Details Update Method End
+
+            //Container Edit Model For Details Start
+            $scope.ShowContainerDetailsEditModel = function (CntrDeatils) {
+                $scope.CntrDeatils = CntrDeatils;
+                if ($scope.CntrDeatils.category == 'IMPRT') {
+                    $scope.EditCatImprtValueClass = 'form-group was-validated';
+                }
+                else {
+                    $scope.EditCatImprtValueClass = 'form-group';
+                }
+                if ($scope.CntrDeatils.category == 'EXPRT') {
+                    $scope.EditCatExprtValueClass = 'form-group was-validated';
+                }
+                else {
+                    $scope.EditCatExprtValueClass = 'form-group';
+                }
+                if ($scope.CntrDeatils.hazardous == 'true') {
+                    $scope.EditHazrazValueClass = 'form-group was-validated';
+                }
+                if ($scope.CntrDeatils.hazardous == 'false' || CntrDeatils.hazardous == null) {
+                    $scope.EditHazrazValueClass = 'form-group';
+                }
+
+                    $(".input").removeAttr('disabled');
+                    $scope.DisplaySelect = true;
+           
+                    if ($scope.CntrDeatils.fetchTime != null && $scope.CntrDeatils.fetchTime != "Invalid date")
+                {
+                    $scope.CntrDeatils.fetchTime = moment($scope.CntrDeatils.fetchTime).format('DD/MM/YYYY HH:mm');
+                }
+                else
+                {
+                    document.getElementById("fetchTime").value = null;
+                }
+                    if ($scope.CntrDeatils.PutTime != null && $scope.CntrDeatils.PutTime != "Invalid date") {
+                    $scope.CntrDeatils.PutTime = moment($scope.CntrDeatils.PutTime).format('DD/MM/YYYY HH:mm');
+                }
+                else {
+                    document.getElementById("PutTime").value = null;
+                }
+                //if ($scope.CntrDeatils.PutTime != null) {
+                //    $scope.CntrDeatils.PutTime = moment($scope.CntrDeatils.PutTime).format('DD/MM/YYYY HH:mm');
+                //}
+                //else {
+                //    document.getElementById("time_in").value = null;
+                //}
+                    if ($scope.CntrDeatils.time_in != null && $scope.CntrDeatils.time_in != "Invalid date") {
+                    $scope.CntrDeatils.time_in = moment($scope.CntrDeatils.time_in).format('DD/MM/YYYY HH:mm');
+                }
+                else {
+                    document.getElementById("time_in").value = "";
+                }
+                    if ($scope.CntrDeatils.time_out != null && $scope.CntrDeatils.time_out != "Invalid date")
+                    {
+                    $scope.CntrDeatils.time_out = moment($scope.CntrDeatils.time_out).format('DD/MM/YYYY HH:mm');
+                }
+                else {
+                    document.getElementById("time_out").value = "";
+                } 
+                //if ($scope.CntrDeatils.unit_gkey != null) {
+                //    $scope.CntrDeatils.unit_gkey = moment($scope.CntrDeatils.unit_gkey).format('DD/MM/YYYY HH:mm');
+                //}
+                //else {
+                //    document.getElementById("unit_gkey").value = null;
+                //}
+
+                
+                var ContainerDeatilsEdit;
+                ContainerDeatilsEdit = ContainerDeatilsEdit || $('#ContainerDetailsEdit').show()[0];
+                alertify.alert(document.getElementById("ContainerDetailsEdit")).set('label', '').set('resizable', true).set('maximizable', true).resizeTo('80%', 500).set('basic', false).set('padding', false).set({ 'pinnable': true, 'modal': false }).set('closable', true).set('title', '<p style="text-align:center !important;margin:0px auto;color:#00529C;font-size:21px;font-weight:Bold;"><img src="/Content/images/container.png" class="onhover mr-2" width="25" title="Container Details"> Container Details</p>', { transition: 'flipx' }).setting({
+                    onok: function () {
+                        //Example To Excute Crade Edit Api
+                        //$scope.ajaxGet('api/DWHApi/GetContainerListByRefNo', { RefNo: 180236 }, function (resp) {
+
+                        //    console.log("Vessel Containers Details", resp);
+                        //    if (resp.Success) {
+
+                        //        alertify.success('Great');
+                        //    }
+                        //});
+                        //this.close();
+                    },//OnOk Function End
+                    'defaultFocusOff': true,
+                });
+
+            }
+            //Container Edit Model For Details End
+
+            //Container ReadOnly  Model For Details Start
+            $scope.ShowContainerDetailsReadOnlyModel = function (CntrDeatils) {
+                $scope.CntrDeatils = CntrDeatils;
+
+                $scope.DisplaySelect = false;
+                $(".input").attr('disabled', 'disabled');
+
+                if ($scope.CntrDeatils.fetchTime != null && $scope.CntrDeatils.fetchTime != "Invalid date") {
+                    $scope.CntrDeatils.fetchTime = moment($scope.CntrDeatils.fetchTime).format('DD/MM/YYYY HH:mm');
+                }
+                else {
+                    document.getElementById("fetchTime").value = null;
+                }
+                if ($scope.CntrDeatils.PutTime != null && $scope.CntrDeatils.PutTime != "Invalid date") {
+                    $scope.CntrDeatils.PutTime = moment($scope.CntrDeatils.PutTime).format('DD/MM/YYYY HH:mm');
+                }
+                else {
+                    document.getElementById("PutTime").value = null;
+                }
+                //if ($scope.CntrDeatils.PutTime != null) {
+                //    $scope.CntrDeatils.PutTime = moment($scope.CntrDeatils.PutTime).format('DD/MM/YYYY HH:mm');
+                //}
+                //else {
+                //    document.getElementById("time_in").value = null;
+                //}
+                if ($scope.CntrDeatils.time_in != null && $scope.CntrDeatils.time_in != "Invalid date") {
+                    $scope.CntrDeatils.time_in = moment($scope.CntrDeatils.time_in).format('DD/MM/YYYY HH:mm');
+                }
+                else {
+                    document.getElementById("time_in").value = "";
+                }
+                if ($scope.CntrDeatils.time_out != null && $scope.CntrDeatils.time_out != "Invalid date") {
+                    $scope.CntrDeatils.time_out = moment($scope.CntrDeatils.time_out).format('DD/MM/YYYY HH:mm');
+                }
+                else {
+                    document.getElementById("time_out").value = "";
+                }
+
+
+                var ContainerDeatilsEdit;
+                ContainerDeatilsEdit = ContainerDeatilsEdit || $('#ContainerDetailsEdit').show()[0];
+                alertify.alert(document.getElementById("ContainerDetailsEdit")).set('label', '').set('resizable', true).set('maximizable', true).resizeTo('80%', 500).set('basic', false).set('padding', false).set({ 'pinnable': true, 'modal': false }).set('closable', true).set('title', '<p style="text-align:center !important;margin:0px auto;color:#00529C;font-size:21px;font-weight:Bold;"><img src="/Content/images/container.png" class="onhover mr-2" width="25" title="Container Details"> Container Details</p>', { transition: 'flipx' }).setting({
+                    onok: function () {
+                        //Example To Excute Crade Edit Api
+                        //$scope.ajaxGet('api/DWHApi/GetContainerListByRefNo', { RefNo: 180236 }, function (resp) {
+
+                        //    console.log("Vessel Containers Details", resp);
+                        //    if (resp.Success) {
+
+                        //        alertify.success('Great');
+                        //    }
+                        //});
+                        //this.close();
+                    },//OnOk Function End
+                    'defaultFocusOff': true,
+                });
+
+            }
+            //Container ReadOnly Model  For Details End
+
+            //Container Details Update Post Method Start
+            $scope.UpdateContainerDetailsMethod = function (data) {
+
+                if (document.getElementById("fetchTime").value != "" && document.getElementById("fetchTime").value != "Invalid date") {
+                    console.log(convertFromStringToDate(document.getElementById('fetchTime').value));
+                    data.fetchTime = moment(convertFromStringToDate(document.getElementById('fetchTime').value)).format('YYYY-MM-DDTHH:mm');
+                }
+                if (document.getElementById("PutTime").value != "" && document.getElementById("PutTime").value != "Invalid date") {
+
+                    data.PutTime = moment(convertFromStringToDate(document.getElementById('PutTime').value)).format('YYYY-MM-DDTHH:mm');
+                }
+                if (document.getElementById("time_in").value != "" && document.getElementById("time_in").value != "Invalid date") {
+
+                    data.time_in = moment(convertFromStringToDate(document.getElementById('time_in').value)).format('YYYY-MM-DDTHH:mm');
+                }
+                if (document.getElementById("time_out").value != "" && document.getElementById("time_out").value != "Invalid date") {
+
+                    data.time_out = moment(convertFromStringToDate(document.getElementById('time_out').value)).format('YYYY-MM-DDTHH:mm');
+                }
+
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                data.UpdatedAt = dat + " " + time;
+                data.StatusId = 2;
+                console.log('data Update', data);
+
+                // return false;
+                $scope.ajaxPost('api/DWHApi/UpdateContainerDetails', { ContainerData: data }, function (resp) {
+                    console.log("UpdateVeseelRecordRequest", resp);
+                    if (resp.Success) {
+                        //Close Edit Crane Dialog on Success
+                        alertify.closeAll();
+                        toastr.success('Container Details Updated and Validate Successfully', " Cntr #" + data.Cntr);
+                        $scope.CntrInit();
+                    }
+                    else
+                    {
+
+                        if (document.getElementById("fetchTime").value != "" && document.getElementById("fetchTime").value != "Invalid date") {
+
+                            data.fetchTime = moment(document.getElementById('fetchTime').value).format('DD/MM/YYYY HH:mm');
+                        }
+                        if (document.getElementById("PutTime").value != "" && document.getElementById("PutTime").value != "Invalid date") {
+
+                            data.PutTime = moment(document.getElementById('PutTime').value).format('DD/MM/YYYY HH:mm');
+                        }
+                        if (document.getElementById("time_in").value != "" && document.getElementById("time_in").value != "Invalid date") {
+
+                            data.time_in = moment(document.getElementById('time_in').value).format('DD/MM/YYYY HH:mm');
+                        }
+                        if (document.getElementById("time_out").value != "" && document.getElementById("time_out").value != "Invalid date") {
+
+                            data.time_out = moment(document.getElementById("time_out").value).format('DD/MM/YYYY HH:mm');
+                             
+                        }
+                       
+                    }
+                });
+
+            }
+            //Container Details Update Post Method End
+
+
+            //Show Add Crane Details Model Start
+            $scope.ShowAddCraneModel =function()
+            {
+                var CraneDeatilsAdd;
+           
+                CraneDeatilsAdd = CraneDeatilsAdd || $('#CraneDeatilsAdd').show()[0];
+                alertify.confirm(document.getElementById("CraneDeatilsAdd")).set('label', '').set('autoReset', true).set('resizable', false).set('maximizable', false).set('basic', false).set('padding', false).set('closable', true).set('title', '<p style="text-align:center !important;margin:0px auto;color:#00529C;font-size:21px;font-weight:Bold;">Add Crane Details</p>', { transition: 'flipx' }).setting({
+                    onok: function () {
+                        //Example To Excute Crade Edit Api
+                        //$scope.ajaxGet('api/DWHApi/GetContainerListByRefNo', { RefNo: 180236 }, function (resp) {
+
+                        //    console.log("Vessel Containers Details", resp);
+                        //    if (resp.Success) {
+
+                        //        alertify.success('Great');
+                        //    }
+                        //});
+                        this.close();
+                    },//OnOk Function End
+                    'defaultFocusOff': true,
+                });
+                $('#AddRefNo').val($scope.itemDeatils.RefNo);
+            }
+            //Show Add Crane Details Model Start
+
+            //Add Crane Details Method Start
+
+            //Add Crane Details Method End
+            $scope.AddCraneDetails= function (data)
+            {
+                if (data == null)
+                {
+                  toastr.error("Please enter all details!","Error Message");
+                }
+                data.RefNo = $scope.itemDeatils.RefNo;
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                data.CreatedAt = dat + " " + time;
+                data.UpdatedAt = dat + " " + time;
+                data.StatusId = 1;
+                $scope.ajaxPost('api/DWHApi/AddCraneDetails', { AddCraneData: data }, function (resp) {
+                    console.log("AddCraneDetails", resp);
+                    if (resp.Success) {
+                        //Close Edit Crane Dialog on Success
+                       
+                        toastr.success('Crane Details Added Successfully', " Reference No:" + data.RefNo);
+                        //GET Request to Refresh Crane Details
+                        $scope.ajaxGetBackground('api/DWHApi/GetCranesList', { RefNo: $scope.itemDeatils.RefNo }, function (resp) {
+                            console.log("Vessel Cranes List", resp);
+                            if (resp.Success) {
+                                $scope.VesselCraneDetails = resp.VesselCraneList;
+                                alertify.confirm(document.getElementById('CraneDeatilsAdd')).set('transition', 'flipx').close();
+
+                            }
+                        });
+
+                    }
+                });
+
+            }
+            //Alertify Modal Vessel Edit Show 
+
+            //Show Add Container Details Start
+            $scope.ShowAddContainerModel=function(data)
+            {
+                
+                alertify.confirm().restore();
+                var AddContainerDetails;
+                AddContainerDetails = AddContainerDetails || $('#AddContainerDetails').show()[0];
+                alertify.confirm(document.getElementById("AddContainerDetails")).set('label', '').set('resizable', true).set('maximizable', true).resizeTo('80%', 500).set('basic', false).set('padding', false).set({ 'pinnable': true, 'modal': false }).set('closable', true).set('title', '<p style="text-align:center !important;margin:0px auto;color:#00529C;font-size:21px;font-weight:Bold;"><img src="/Content/images/container.png" class="onhover mr-2" width="25" title="Container Details"> Add Container Details</p>', { transition: 'flipx' }).setting({
+                    onok: function () {
+                        //Example To Excute Crade Edit Api
+                        //$scope.ajaxGet('api/DWHApi/GetContainerListByRefNo', { RefNo: 180236 }, function (resp) {
+
+                        //    console.log("Vessel Containers Details", resp);
+                        //    if (resp.Success) {
+
+                        //        alertify.success('Great');
+                        //    }
+                        //});
+                        //this.close();
+                    },//OnOk Function End
+                    'defaultFocusOff': true,
+                });
+                document.getElementById('addrelationship_role').value = 'PRIMARY';
+            }
+            //Show Add Container Details End
+
+            //Method Add Container Details Start 
+            $scope.AddContainerDetailsMethod=function(data)
+            {
+               
+                if (document.getElementById("addfetchTime").value != "" && document.getElementById("addfetchTime").value != "Invalid date") {
+                  
+                    data.fetchTime = moment(convertFromStringToDate(document.getElementById('addfetchTime').value)).format('YYYY-MM-DDTHH:mm');
+                }
+                if (document.getElementById("addPutTime").value != "" && document.getElementById("addPutTime").value != "Invalid date") {
+
+                    data.PutTime = moment(convertFromStringToDate(document.getElementById('addPutTime').value)).format('YYYY-MM-DDTHH:mm');
+                }
+                if (document.getElementById("addtime_in").value != "" && document.getElementById("addtime_in").value != "Invalid date") {
+
+                    data.time_in = moment(convertFromStringToDate(document.getElementById('addtime_in').value)).format('YYYY-MM-DDTHH:mm');
+                }
+                if (document.getElementById("addtime_out").value != "" && document.getElementById("addtime_out").value != "Invalid date") {
+
+                    data.time_out = moment(convertFromStringToDate(document.getElementById('addtime_out').value)).format('YYYY-MM-DDTHH:mm');
+                }
+             
+
+                data.RefNo = $scope.resp.RefNo;
+                
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                data.CreatedAt = dat + " " + time;
+                data.UpdatedAt = dat + " " + time;
+                data.StatusId = 1;
+                $scope.ajaxPost('api/DWHApi/AddContainerDetails', { AddContainerData: data }, function (resp) {
+                    console.log("AddContainerDetails", resp);
+                    if (resp.Success) {
+                        //Close Add Container Dialog on Success
+                        alertify.confirm(document.getElementById('AddContainerDetails')).set('transition', 'flipx').close();
+                        alertify.confirm().close();
+                        toastr.success('Container Details Added Successfully', " Reference No:" + data.RefNo);
+                        //GET Request to Refresh Crane Details
+                        $("#AddContainerDetails")[0].reset();
+                        $scope.CntrInit('Back');
+
+                    }
+                    else
+                    {
+                        if (data.fetchTime != null && data.fetchTime != "Invalid date") {
+                            data.fetchTime = moment(data.fetchTime).format('DD/MM/YYYY HH:mm');
+                        }
+
+                        if (data.PutTime != null && data.PutTime != "Invalid date") {
+                            data.PutTime = moment(data.PutTime).format('DD/MM/YYYY HH:mm');
+                        }
+
+
+                        if (data.time_in != null && data.time_in != "Invalid date") {
+                            data.time_in = moment(data.time_in).format('DD/MM/YYYY HH:mm');
+                        }
+
+                        if (data.time_out != null && data.time_out != "Invalid date") {
+                            data.time_out = moment(data.time_out).format('DD/MM/YYYY HH:mm');
+                        }
+                    }
+                });
+            }
+            //Method Add Container Details End
+            $scope.ShowAwatingForm = function (data)
+            {
+                if (data.StatusCode != 'valid') {
+                    $(".input").removeAttr('disabled');
+
+                }
+                if (data.StatusCode == 'valid') {
+                    $(".input").attr('disabled', 'disabled');
+
+                }
+                if (_currentUser.UserType.includes('Finance'))
+                {
+                    $(".input").attr('disabled', 'disabled');
+                }
+
+                $scope.itemDeatils = data;
+
+                //if ($scope.itemDeatils.Vessel_Berthings_ETD != null)
+                //{
+                //    $scope.itemDeatils.Vessel_Berthings_ETD = moment($scope.itemDeatils.Vessel_Berthings_ETD).format('DD/MM/YYYY HH:mm');
+                //}
+                //else
+                //{
+                //    document.getElementById("Vessel_Berthings_ETD").value = null;
+                //}
+
+                if ($scope.itemDeatils.off_port_arr != null) {
+                    $scope.itemDeatils.off_port_arr = moment($scope.itemDeatils.off_port_arr).format('DD/MM/YYYY HH:mm');
+                   
+                }
+                //else {
+                //    document.getElementById("off_port_arr").value = null;
+                //}
+
+                if ($scope.itemDeatils.start_work != null) {
+                    $scope.itemDeatils.start_work = moment($scope.itemDeatils.start_work).format('DD/MM/YYYY HH:mm');
+                }
+                //else {
+                //    document.getElementById("start_work").value = null;
+                //}
+
+                if ($scope.itemDeatils.end_work != null) {
+                    $scope.itemDeatils.end_work = moment($scope.itemDeatils.end_work).format('DD/MM/YYYY HH:mm');
+                }
+                //else {
+                //    document.getElementById("end_work").value = null;
+                //}
+                if ($scope.itemDeatils.ata != null) {
+                    $scope.itemDeatils.ata = moment($scope.itemDeatils.ata).format('DD/MM/YYYY HH:mm');
+                }
+                //else {
+                //    document.getElementById("ata").value = null;
+                //}
+                if ($scope.itemDeatils.atd != null) {
+                    $scope.itemDeatils.atd = moment($scope.itemDeatils.atd).format('DD/MM/YYYY HH:mm');
+                }
+                //else {
+                //    document.getElementById("atd").value = null;
+                //}
+                if ($scope.itemDeatils.PilotOnBoard != null) {
+                    $scope.itemDeatils.PilotOnBoard = moment($scope.itemDeatils.PilotOnBoard).format('DD/MM/YYYY HH:mm');
+                }
+                //else {
+                //    document.getElementById("PilotOnBoard").value = null;
+                //}
+                if ($scope.itemDeatils.PilotOffBoard != null) {
+                    $scope.itemDeatils.PilotOffBoard = moment($scope.itemDeatils.PilotOffBoard).format('DD/MM/YYYY HH:mm');
+                }
+                //else {
+                //    document.getElementById("PilotOffBoard").value = null;
+                //}
+                if ($scope.itemDeatils.time_discharge_complete != null) {
+                    $scope.itemDeatils.time_discharge_complete = moment($scope.itemDeatils.time_discharge_complete).format('DD/MM/YYYY HH:mm');
+                }
+                //else {
+                //    document.getElementById("time_discharge_complete").value = null;
+                //}
+
+                console.log('Single Vessel Value',$scope.itemDeatils);
+                var form2;
+                form2 = form2 || $('#form2').show()[0];
+
+                // alertify.confirm(document.getElementById("form2")).set('resizable', false).set('maximizable', false).set('basic', false).set('padding', false).set('closable', true).set('title', '<p style="text-align:center !important;margin:0px auto;color:#00529C;font-size:21px;font-weight:Bold;">Container Details</p>', { transition: 'flipx' });
+                
+                alertify.minimalDialog || alertify.dialog('minimalDialog', function () {
+                    return {
+                        main: function (content) {
+                            this.setContent(content);
+                        },
+                        setup:function(){
+                            return {
+                                focus:{
+                                    element:function(){
+                                        return this.elements.body.querySelector(this.get('selector'));
+                                    },
+                                    select:true
+                                },
+                                options:{
+                                    basic:false,
+                                    maximizable:true,
+                                    resizable: true,
+                                    modal:false,
+                                    padding: false,
+                                    transition:'zoom',
+                                    //pinnable: true,
+                                    // title:'Details'
+                                    title: '<p style="text-align:center !important;margin:-10px auto;color:#00529C;font-size:21px;font-weight:Bold;"><i class="icon-ship" title="Vessel Details" style="font-size:x-large"></i>Vessels  Details</p>',
+                                }
+                            };
+                        }
+                    };
+                });
+                alertify.minimalDialog(document.getElementById("form2")).resizeTo('80%', 500);
+            }
+
+
+
+           
+
+          
+
+            //Show Vessel Status Update Modal Start
+            $scope.ShowUpdateStatusModal = function()
+            {
+                
+                var AddContainerDetails;
+                AddContainerDetails = AddContainerDetails || $('#CntrAction').show()[0];
+                alertify.alert(document.getElementById("CntrAction")).set('label', '').set('resizable', true).set('maximizable', true).resizeTo('50%', 359).set('basic', false).set('padding', false).set({ 'pinnable': true, 'modal': false }).set('closable', true).set('title', '<p style="text-align:center !important;margin:0px auto;color:#00529C;font-size:21px;font-weight:Bold;"><img src="/Content/images/container.png" class="onhover mr-2" width="25" title="Container Details">Container Details</p>', { transition: 'flipx' }).setting({
+                    onok: function () {
+                        //Example To Excute Crade Edit Api
+                        //$scope.ajaxGet('api/DWHApi/GetContainerListByRefNo', { RefNo: 180236 }, function (resp) {
+
+                        //    console.log("Vessel Containers Details", resp);
+                        //    if (resp.Success) {
+
+                        //        alertify.success('Great');
+                        //    }
+                        //});
+                        //this.close();
+                    },//OnOk Function End
+                    'defaultFocusOff': true,
+                });
+            }
+            //Show Vessel Status Update Modal End 
+            //Update Vessel Status Start
+            $scope.UpdateVesselStatus=function (RefNo,Remarks,StatusId,search)
+            {
+                console.log(RefNo, Remarks);
+               
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                var urlwithfilter = document.URL;
+                if (search != null)
+                {
+                    urlwithfilter = urlwithfilter + "&filter=true" + "&Cntr=" + search.Cntr + "&category=" + search.category + "&goods_ctr_wt_kg_vgm=" + search.goods_ctr_wt_kg_vgm + "&oprname=" + search.oprname + "&LineOprName=" + search.LineOprName + "&commodity=" + search.commodity + "&destination=" + search.destination + "&bl_nbr=" + search.bl_nbr + "&Origin=" + search.Origin + "&InspStages=" + search.InspStages + "&move_kind=" + search.move_kind + "&nominal_length=" + search.nominal_length + "&nominal_height" + search.nominal_height + "&AEO=" + search.AEO + "&is_oog=" + search.is_oog + "&is_bundle=" + search.is_bundle + "&CustomInspType=" + search.CustomInspType + "&ISO=" + search.ISO + "&IsTransit=" + search.IsTransit + "&ITTTo=" + search.ITTTo + "&XrayStatus=" + search.XrayStatus;
+                }
+                console.log(urlwithfilter);
+      
+                $scope.ajaxPost('api/DWHApi/UpdateVesselStatus', { RefNo: RefNo, Remarks: Remarks, StatusId: StatusId, UpdatedAt: dat + " " + time, url: urlwithfilter }, function (resp) {
+                    console.log("UpdateVesselStatus", resp);
+                    if (resp.Success)
+                    {
+                        $window.open("/DWH", "_self");
+                    }
+                });
+            }
+            //Update Vessel Status End
+
+            // Change Crane Icon
+            $scope.changeicon = function (id,type,changefor)
+            {
+                if (changefor == 'crane')
+                {
+                    if (type == 'move') {
+                        $('#' + id).attr("src", "Content/images/crane1.png");
+                    }
+                    if (type == 'leave') {
+                        $('#' + id).attr("src", "Content/images/crane2.png");
+                    }
+                }
+                if (changefor == 'container') {
+                    if (type == 'move') {
+                        $('#' + id).attr("src", "Content/images/container2.png");
+                    }
+                    if(type=='leave') 
+                    {
+                        $('#' + id).attr("src", "Content/images/container.png");
+                    }
+                }
+
+               
+               
+            }
+
+            // for encrypt refNo 
+            $scope.Container = function (Id) {
+                $scope.ajaxGet('api/DWHApi/EncryptId', { Id: Id }, function (response) {
+                    
+                    console.log(response);
+                    $window.open("DWH/CntrIndex?RefNo="+response,"_blank");
+
+                });
+            }
+            // for Encrytp Print page 
+            $scope.DWHVesselPrint = function (Id) {
+                $scope.ajaxGet('api/DWHApi/EncryptId', { Id: Id }, function (response) {
+                    console.log(response);
+                    $window.open("/Reports/DWHVesselPrint?Id=" + response, "_blank");
+                });
+            }
+            //for vessel pdf
+            $scope.DWHVesselPdf = function (Id) {
+                $scope.ajaxGet('api/UsersApi/Encrypt', { Id: Id }, function (resp) {
+                    console.log(resp);
+                    $window.open('/Reports/DWHVesselReport?Id=' + resp, '_blank');
+                });
+
+            }
+            // for Crane Print 
+            $scope.CranePrint = function (Id) {
+                $scope.ajaxGet('api/DWHApi/EncryptId', { Id: Id }, function (response){
+                    console.log(response);
+                    $window.open("/Reports/DWHCranePrint?RefNo=" + response, "_blank");
+                });
+            }
+            //for Container Print
+            $scope.ContainerPrint = function (Cntr, RefNo) {
+
+                $scope.ajaxGet('api/DWHApi/EncryptId', { Id: Cntr }, function (response) {
+
+                    $scope.ajaxGet('api/DWHApi/EncryptId', { Id: RefNo }, function (refponse) {
+
+                        $window.open("/Reports/DWHContainerPrint?Id=" + response + "&RefNo=" + refponse, "_blank");
+
+                    });
+
+                 
+                });
+            }
+            //for container Pdf 
+            
+            $scope.DWHContainerPdf = function (Cntr, RefNo) {
+                $scope.ajaxGet('api/DWHApi/EncryptId', { Id: Cntr }, function (responseId) {
+
+                    $scope.ajaxGet('api/DWHApi/EncryptId', { Id: RefNo }, function (refponse) {
+
+                        $window.open("/Reports/DWHContainerReport?Id=" + responseId + "&RefNo=" + refponse, "_blank");
+
+                    });
+
+
+                });
+
+            }
+
+
+            //Search for date Method Start
+            $scope.VistIndexSearch = function (data) {
+                var DateFrom;
+                var DateTo;
+                if (data == '1')
+                {
+
+                    if ($('#TabFromDate').val() != "") {
+                        DateFrom = moment(stringToDate($('#TabFromDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+                    } else {
+                        return false;
+                    }
+                    if ($('#TabToDate').val() != "") {
+                        DateTo = moment(stringToDate($('#TabToDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT23:59:59');
+
+                    } else { return false;}
+                }
+                if (data == '2') {
+
+                    if ($('#Tab1FromDate').val() != "") {
+                        DateFrom = moment(stringToDate($('#Tab1FromDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+                    } else { return false; }
+                    if ($('#Tab1ToDate').val() != "") {
+                        DateTo = moment(stringToDate($('#Tab1ToDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT23:59:59');
+
+                    } else { return false; }
+
+                }
+              
+               
+                $scope.ajaxGetBackground('api/DWHApi/GetVesselsSailedDetails', { StatusId: data, DateFrom: DateFrom, DateTo: DateTo }, function (resp) {
+
+                   
+                    if (resp.Success) {
+                        if (data == '1') {
+                            console.log("inValid Vessel Sailed Details", resp);
+                            $scope.VesselSailedDetails = resp.VesselSailedDetailsList;
+                        }
+                        if (data == '2') {
+                            console.log("Valid Vessel Sailed Details", resp);
+                            $scope.VesselSailedDetailsValid = resp.VesselSailedDetailsList;
+                        }
+                    }//response success End
+                });
+
+            }
+
+
+            //Search for date Method End
+
+            //reset 
+            $scope.Reset = function (data) {
+
+
+                if (data == "Invalid") {
+                   
+                    $scope.VesselSailedDetails = $scope.VesselSailedDetailsExtra;
+                    document.getElementById("TabFromDate").value = null;
+                    document.getElementById("TabToDate").value = null;
+                    $scope.search1 = "";
+
+                   
+
+                }
+                if (data == "valid") {
+                    document.getElementById("Tab1FromDate").value = null;
+                    document.getElementById("Tab1ToDate").value = null;
+                    $scope.search = "";
+
+                    $scope.VesselSailedDetailsValid = $scope.VesselSailedDetailsValidExtra;
+                }
+                
+                //if (data == "cntr") {
+
+                    
+                //}
+             
+            }
+            //reset
+            $scope.ResetCntr = function () {
+                $scope.search = "";
+                $scope.VesselContainersDetails = $scope.VesselContainersDetailsExtra;
+            }
+
+            //String To Date Method Start
+
+            function stringToDate(_date, format, delimiter) {
+                var formatLowerCase = format.toLowerCase();
+                var formatItems = formatLowerCase.split(delimiter);
+                var dateItems = _date.split(delimiter);
+                var monthIndex = formatItems.indexOf("mm");
+                var dayIndex = formatItems.indexOf("dd");
+                var yearIndex = formatItems.indexOf("yyyy");
+                var month = parseInt(dateItems[monthIndex]);
+                month -= 1;
+                var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+                return formatedDate;
+            }
+
+            //String To Date Method End
+            $scope.Id = null;
+            $scope.item = null;
+            $scope.RemoveFor = null;
+            $scope.DeleteRecord = function (Id, item, RemoveFor) {
+                $scope.Id = Id;
+                $scope.item = item;
+                $scope.RemoveFor = RemoveFor;
+                //$('#myModal').modal('show');
+              
+                setTimeout(function () { $('#myModal').modal('hide'); }, 5000);
+                //$scope.DeleteMethod(Id, item, RemoveFor);
+                //alertify.confirm('Confirm', 'Are you sure to delete?<br> <div class="mb-4"> <button class="btn btn-danger pull-right" onclick="alertify.confirm().autoOk(1)">Yes</button><button class="btn btn-primary pull-right mr-2" onclick="alertify.confirm().destroy()">No</button></div>', function () { $scope.DeleteMethod(Id, item, RemoveFor); }
+                //, function () { alertify.confirm().close(); }).autoCancel(5).set('overflow', false);
+
+
+            }//Delete Records
+
+            //Delete Record Method
+            $scope.DeleteMethod = function (Id, item, RemoveFor)
+            {
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                var data = {
+                    Id: Id,
+                    RemoveFor: RemoveFor,
+                    UpdatedAt: dat + " " + time,
+                };
+                $scope.ajaxPost('api/DWHApi/DWHRemoveDetails', data, function (response) {
+                    if (response.Success) {
+                        $('#myModal').modal('hide');
+                        if (RemoveFor == 'Crane') {
+                            //GET Request to Refresh Crane Details
+                            $scope.ajaxGetBackground('api/DWHApi/GetCranesList', { RefNo: $scope.itemDeatils.RefNo }, function (resp) {
+                                console.log("Vessel Cranes List", resp);
+                                if (resp.Success) {
+                                    $scope.VesselCraneDetails = resp.VesselCraneList;
+                                    if ($scope.itemDeatils.StatusCode == 'invalid') {
+                                        $scope.init('Back');
+                                    }
+                                    if ($scope.itemDeatils.StatusCode == 'valid') {
+
+                                        $scope.init2('Back');
+                                    }
+                                  
+                                    toastr.success('Crane Details Deleted Successfully!', "Short Name:" + item.ShortName);
+                                }
+                            });
+
+                        }
+                        if (RemoveFor == 'Cntr') {
+                            toastr.success('Container Details Deleted Successfully!', "Cntr No:" + item.Cntr);
+                            //GET Request to Refresh Crane Details
+                            $scope.CntrInit('Back');
+                        }
+                    }
+                });
+                alertify.confirm().destroy();
+            }
+
+          
+            //Update Container Status Start
+            $scope.UpdateContainerStatusMethod = function ()
+            {
+                var dat = moment(new Date()).format('YYYY-MM-DD');
+                var time = new Date().toLocaleTimeString();
+
+                $scope.ajaxPost('api/DWHApi/CloseContainersVerification', { RefNo: $scope.resp.RefNo, UpdatedAt: dat + " " + time }, function (resp) {
+                    console.log("CloseContainersVerification", resp);
+                    if (resp.Success) {
+                        toastr.success('Vessel Containers Validated and Closed', 'Cntr # ' + $scope.resp.RefNo);
+                        $window.open('/DWH','_self');
+                    }
+                });
+            }
+            //Update Container Status End
+          
+            //LoadMore code Start
+            $scope.LoadMore = function (PageName)
+            {
+               
+                $scope.Records = $scope.RecordsPlus+10 + $scope.Records;
+
+                if (PageName == "Invalid")
+                {
+                    $scope.init('Back');
+                    $scope.floatButton = true;
+                }
+                if (PageName == "valid")
+                {
+                    $scope.init2('Back');
+                    $scope.floatButton = true;
+                }
+                if (PageName == "Cntr")
+                {
+                    $scope.CntrInit('Back');
+                    $scope.floatButton = true;
+                }
+
+            }
+            //Load More End
+            //Excel Section Start 
+            //Excel Href For Cranes Details
+            $scope.ExportToExcelCrane= function(RefNo)
+            {
+               
+                $scope.ajaxGet('api/DWHApi/EncryptId', { Id: RefNo }, function (refponse) {
+
+                    $window.open('Reports/DWHExportCraneExcel?RefNo=' + refponse, '_blank');
+
+                });
+
+
+            }
+
+            //Excel Href Foe Vessel
+            $scope.VesselExportToExcel = function (Id, statusid) {
+
+
+              
+                $scope.ajaxGet('api/DWHApi/EncryptId', { Id: Id }, function (response) {
+
+                    $scope.ajaxGet('api/DWHApi/EncryptId', { Id: statusid }, function (refponse) {
+                      
+                        $window.open('Reports/DWHVesselExportToExcel?Id=' + response + "&StatusId=" + refponse, '_blank');
+
+                    });
+                });
+            }
+
+
+
+            $scope.CntrExcel = function (Cntr, RefNo) {
+
+                $scope.ajaxGet('api/DWHApi/EncryptId', { Id: Cntr }, function (response) {
+
+                    $scope.ajaxGet('api/DWHApi/EncryptId', { Id: RefNo }, function (refponse) {
+                     
+                        $window.open('/Reports/CntrExportToExcel?Id=' + response + "&RefNo=" + refponse, '_blank');
+                    });
+                });
+            }
+           $scope.ExportToExcel1 = function (statusid,data) {
+                var DateFrom;
+                var DateTo;
+                //var url1 = "/Reports/DWHVesselExportToExcel?StatusId=";
+
+                if ($('#TabFromDate').val() != "") {
+                    DateFrom = moment(stringToDate($('#TabFromDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+                    //url = url + "&DateFrom=" + DateFrom;
+                }
+
+                if ($('#TabToDate').val() != "") {
+                    DateTo = moment(stringToDate($('#TabToDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT23:59:59');
+                  //  url = url + "&DateTo=" + DateTo;
+                }
+               
+                var refno;
+                if (data != null && data != "undefined") {
+                    refno = data.RefNo;
+                }
+                var vesselsName;
+                if (data != null && data != "undefined") {
+                    vesselsName = data.VesselsName;
+                }
+                var agent;
+                if (data != null && data != "undefined") {
+                    agent = data.Agent;
+                }
+                var hatchcover;
+                if (data != null && data != "undefined") {
+                    hatchcover = data.HatchCover;
+                }
+                var lineoperatorname;
+                if (data != null && data != "undefined") {
+                    lineoperatorname = data.LineOperatorName;
+                }
+                var saildirection;
+                if (data != null && data != "undefined") {
+                    saildirection = data.SailDirection;
+                }
+                var VSClassName;
+                if (data != null && data != "undefined") {
+                    VSClassName = data.VS_Class_Name;
+                }
+                var srvname;
+                if (data != null && data != "undefined") {
+                    srvname = data.SrvName;
+                }
+                $scope.ajaxGet('api/DWHApi/EncryptId', { Id: statusid }, function (refponse) {
+                 
+                    $window.open('/Reports/DWHVesselExportToExcel?StatusId=' + refponse + "&DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&RefNo=" + refno + "&VesselsName=" + vesselsName + "&Agent=" + agent + "&HatchCover=" + hatchcover + "&LineOperatorName=" + lineoperatorname + "&SailDirection=" + saildirection + "&VS_Class_Name=" + VSClassName + "&SrvName=" + srvname, '_blank');
+                });
+           }
+
+
+
+
+
+            $scope.ExportToExcel2 = function (statusid,data ) {
+                var DateFrom;
+                var DateTo;
+
+                    if ($('#Tab1FromDate').val() != "") {
+                        DateFrom = moment(stringToDate($('#Tab1FromDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+                       // url = url + "&DateFrom=" + DateFrom;
+                    }
+                    if ($('#Tab1ToDate').val() != "") {
+                        DateTo = moment(stringToDate($('#Tab1ToDate').val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT23:59:59');
+                      //  url = url + "&DateTo=" + DateTo;
+                    }
+                    var refno;
+                    if (data != null && data != "undefined") {
+                        refno = data.RefNo;
+                    }
+                    var vesselsName;
+                    if (data != null && data != "undefined") {
+                        vesselsName = data.VesselsName;
+                    }
+                    var agent;
+                    if (data != null && data != "undefined") {
+                        agent = data.Agent;
+                    }
+                    var hatchcover;
+                    if (data != null && data != "undefined") {
+                        hatchcover = data.HatchCover;
+                    }
+                    var lineoperatorname;
+                    if (data != null && data != "undefined") {
+                        lineoperatorname = data.LineOperatorName;
+                    }
+                    var saildirection;
+                    if (data != null && data != "undefined") {
+                        saildirection = data.SailDirection;
+                    }
+                    var VSClassName;
+                    if (data != null && data != "undefined") {
+                        VSClassName = data.VS_Class_Name;
+                    }
+                    var srvname;
+                    if (data != null && data != "undefined") {
+                        srvname = data.SrvName;
+                    }
+                    $scope.ajaxGet('api/DWHApi/EncryptId', { Id: statusid }, function (refponse) {
+
+                        $window.open('/Reports/DWHVesselExportToExcel?StatusId=' + refponse + "&DateFrom=" + DateFrom + "&DateTo=" + DateTo + "&RefNo=" + refno + "&VesselsName=" + vesselsName + "&Agent=" + agent + "&HatchCover=" + hatchcover + "&LineOperatorName=" + lineoperatorname + "&SailDirection=" + saildirection + "&VS_Class_Name=" + VSClassName + "&SrvName=" + srvname, '_blank');
+                    });
+               
+
+            }
+
+            $scope.ExpotToExcelContainer = function (RefNo,data) {
+            
+                var Cntr;
+                if (data != null && data != "undefined") {
+                    Cntr = data.Cntr;
+                }
+                var category;
+                if (data != null && data != "undefined") {
+                    category = data.category;
+                }
+                var goods_and_ctr_wt_kg;
+                if (data != null && data != "undefined") {
+                    goods_and_ctr_wt_kg = data.goods_and_ctr_wt_kg;
+                }
+                var oprname;
+                if (data != null && data != "undefined") {
+                    oprname = data.oprname;
+                }
+                var LineOprName;
+                if (data != null && data != "undefined") {
+                    LineOprName = data.LineOprName;
+                }
+                var commodity;
+                if (data != null && data != "undefined") {
+                    commodity = data.commodity;
+                }
+                var destination;
+                if (data != null && data != "undefined") {
+                    destination = data.destination;
+                }
+                var bl_nbr;
+                if (data != null && data != "undefined") {
+                    bl_nbr = data.bl_nbr;
+                }
+                var InspStages;
+                if (data != null && data != "undefined") {
+                    InspStages = data.InspStages;
+                }
+                var Origin;
+                if (data != null && data != "undefined") {
+                    Origin = data.Origin;
+                }
+
+                $scope.ajaxGet('api/DWHApi/EncryptId', { Id: RefNo }, function (refponse) {
+                   
+                    $window.open('/Reports/CntrExportToExcel?RefNo=' + refponse + "&Cntr=" + Cntr + "&category=" + category + "&goods_and_ctr_wt_kg=" + goods_and_ctr_wt_kg +
+             "&oprname=" + oprname + "&LineOprName=" + LineOprName + "&commodity=" + commodity + "&destination=" + destination + "&bl_nbr=" + bl_nbr + "&InspStages=" + InspStages + "&Origin=" +Origin, '_blank');
+                    });
+       
+            }
+
+            $scope.bordercolorCat = "border border-danger rounded";
+            $scope.bordercolorlength = "border border-danger rounded";
+            $scope.bordercolorheight = "border border-danger rounded";
+
+            $scope.colorchange =function (data)
+            {
+                if (data == "cat")
+                {
+                    $scope.bordercolorCat = "border border-success rounded";
+                }
+                if (data == "length") {
+                    $scope.bordercolorlength = "border border-success rounded";
+                }
+                if (data == "height")
+                {
+                    $scope.bordercolorheight = "border border-success rounded";
+                }
+               
+               
+            }
+
+            $scope.HazrazValueClass = 'form-group';
+            $scope.CatImprtValueClass = 'form-group';
+            $scope.CatExprtValueClass = 'form-group';
+            
+
+            $scope.EditHazrazValueClass = 'form-group';
+            $scope.EditCatImprtValueClass = 'form-group';
+            $scope.EditCatExprtValueClass = 'form-group';
+
+            $scope.BHazardValidation = function (data,Vfor)
+            {
+                if (data == 'true' && Vfor=='Hazard') {
+                    $scope.EditHazrazValueClass = 'form-group was-validated';
+                    $scope.HazrazValueClass = 'form-group was-validated';
+                }
+                if (data == 'false' && Vfor == 'Hazard') {
+                    $scope.EditHazrazValueClass = 'form-group';
+                    $scope.HazrazValueClass = 'form-group';
+                }
+              
+            }
+
+            $scope.BCatValidation = function (data, Vfor) {
+              
+                if (data == 'IMPRT' && Vfor == 'cat') {
+                    $scope.CatImprtValueClass = 'form-group was-validated';
+                }
+                else {
+                    $scope.EditCatImprtValueClass = 'form-group';
+                    $scope.CatImprtValueClass = 'form-group';
+                }
+                if (data == 'EXPRT' && Vfor == 'cat') {
+                    $scope.EditCatExprtValueClass = 'form-group was-validated';
+                    $scope.CatExprtValueClass = 'form-group was-validated';
+                }
+                else {
+                    $scope.EditCatExprtValueClass = 'form-group';
+                    $scope.CatExprtValueClass = 'form-group';
+                }
+
+            }
+            $scope.usetwoMethod4Validation = function (data,For)
+            {
+                $scope.BCatValidation(data, For);
+                $scope.colorchange(For);
+            }
+
+            $scope.BEditHazardValidation = function (data, Vfor) {
+                if (data == 'true') {
+                    $scope.EditHazrazValueClass = 'form-group was-validated';
+                  
+                }
+                if (data == 'false') {
+                    $scope.EditHazrazValueClass = 'form-group';
+                  
+                }
+
+            }
+
+            $scope.BEditCatValidation = function (data) {
+
+                if (data == 'IMPRT') {
+                    $scope.EditCatImprtValueClass = 'form-group was-validated';
+                }
+                else {
+                    $scope.EditCatImprtValueClass = 'form-group';
+                 
+                }
+                if (data == 'EXPRT') {
+                    $scope.EditCatExprtValueClass = 'form-group was-validated';
+                   
+                }
+                else {
+                    $scope.EditCatExprtValueClass = 'form-group';
+                   
+                }
+
+            }
+
+
+}]); // Main Controler Bracket End

@@ -1,0 +1,195 @@
+﻿@model DPWVessel.Model.Features.DWH.CloseContainersVerificationResponse
+
+
+@{
+    ViewBag.Title = "Container Conformation";
+    Layout = "~/Views/Shared/_EmailLayout.cshtml";
+}
+<style>
+    .btn-secondary {
+        color: #fff;
+        background-color: #00be5e;
+    }
+    .Link{
+        color:blue;
+        float:right;
+        font-size:15px;
+        margin:20px 0px;
+    }
+    .btn {
+        text-decoration: none;
+        position: relative;
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: 3px .875rem;
+        font-size: .8125rem;
+        line-height: 1.5385;
+        border-radius: 14px;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    .wordbreak{
+        word-break:break-word
+    }
+    .badge-warning {
+        background-color: #ff7043;
+    }
+
+    .badge-secondary {
+        background-color: #777;
+    }
+
+    .badge-danger {
+        background-color: #f44336;
+    }
+
+    .badge-success {
+        background-color: #4caf50;
+    }
+
+    .badge-primary {
+        background-color: #2196f3;
+    }
+
+    .badge {
+        color: #fff;
+        font-size: 15px !important;
+        width: 90px;
+        display: inline-block;
+        padding: .3125rem .375rem;
+        font-weight: bolder;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .125rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    .table1 tr th {
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .table1 tr td {
+        font-size: 12px;
+    }
+
+    .table1 tr {
+        margin-top: 5px;
+    }
+
+    .table1 {
+        width: 100%;
+    }
+
+    .table-border table {
+        border: 1px solid lightgray !important;
+    }
+
+    .table-border tr {
+        border: 1px solid lightgray !important;
+        text-align: center;
+    }
+
+    .table-border td {
+        border: 1px solid lightgray !important;
+        text-align: center;
+    }
+
+    .table-border th {
+        border: 1px solid lightgray !important;
+        text-align: center !important;
+    }
+</style>
+
+<h3 style="background-color: #00be5e;color: #fff;padding: 5px;">Finance Confirmation!!!</h3>
+<div style="border:1px solid;padding:5px;margin-bottom:10px">
+    <table class="table1 table-border">
+        <tbody>
+            <tr>
+                <td colspan="6" style="padding-bottom: 10px;margin-top:3px"> <span style="font-size:18px;font-weight:bolder;text-decoration:underline"> Vessel Details:</span></td>
+            </tr>
+            <tr style="border:1px solid;padding:1px;margin-bottom:1px;text-align:center">
+                <th>
+                   Reference No
+                </th>
+                <td>
+                   @Model.RefNo
+                </td>
+                <th>
+                   Vessel Name
+                </th>
+                <td>
+                   @Model.VesselName
+                </td>
+               
+               
+                
+            </tr>
+            <tr>
+                <th>Line Operator</th>
+                <td>@Model.LineOperator</td>
+                <th>SrvName</th>
+                <td>@Model.SrvName</td>
+            </tr>
+            <tr>
+                <th>VS Class Name</th>
+                <td>@Model.VSClassName</td>
+                <th>Atd</th>
+                <td>
+                    @if (Model.Atd != null)
+                    {
+                        @Model.Atd.Value.ToString("dd-MMM-yyyy HH:mm:ss");
+                    }
+                </td>
+            </tr>
+            <tr style="border:1px solid;padding:1px;margin-bottom:1px;text-align:center">
+                <th>Updated At</th>
+                <td>
+
+                    @if (Model.UpdatedAt != null)
+                    {
+                        @Model.UpdatedAt.Value.ToString("dd-MMM-yyyy HH:mm:ss");
+                    }
+                </td>
+                <th>
+                    Updated By
+                </th>
+                <td>
+                    @Model.UserName
+                </td>
+            </tr>
+            <tr  style="border:1px solid;padding:1px;margin-bottom:1px;text-align:center">
+                <th>
+                   Details
+                </th>
+                <td colspan="3" style="text-align:left">
+                    <div class="wordbreak">Vessel Container Review Closed by Finance Department.</div> 
+                </td>
+            </tr>
+           
+</tbody>
+    </table>
+
+
+    @*<a href="@Model.url" class="btn btn-primary" style="float: right;position: relative;top: 22px;color:white;border-color: #013765;background-color: #013765;font-size: small;font-weight: bold;">
+            Click Here
+    
+    </a>*@
+</div>
+
+
+@*<p>
+        <small>To review click: </small><a href="https://fueltrack.dpworld.sa/MeterReading" style="font-weight:bolder;color:red" target="_blank">here</a>
+    </p>*@
+
+@*<p style="color:blue">
+        If would like to know more about this action, please contact your administrator.
+    </p>*@

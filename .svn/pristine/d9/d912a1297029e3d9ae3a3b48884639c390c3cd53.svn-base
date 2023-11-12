@@ -1,0 +1,95 @@
+﻿ /*Paganation Code*/
+     .pagination {
+            display: inline-block;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .pagination > li {
+            display: inline;
+        }
+        .nav{
+            display:block;
+        }
+        .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+            z-index: 2;
+            color: #fff;
+            cursor: default;
+            background-color: #013765;
+            border-color: #013765;
+        }
+        .pagination > li > span:hover{
+            color:lightgrey;
+            cursor: grab;
+        }
+            .pagination > li > a, .pagination > li > span {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.428571429;
+                text-decoration: none;
+                background-color: #fff;
+                border: 1px solid #ddd;
+            }
+        .pagination > li:first-child > span {
+                margin-left: 0;
+                border-bottom-left-radius: 4px;
+                border-top-left-radius: 4px;
+            }
+
+         .customOption {
+            width: auto;
+            display: initial;
+            margin-left: 15px;
+            border: 2px solid #bdc3c7;
+            color: #34495e;
+            font-family: Lato,Helvetica,Arial,sans-serif;
+            font-size: 15px;
+            line-height: 1.467;
+            padding: 8px 12px;
+            height: 42px;
+            -webkit-appearance: listitem;
+            border-radius: 6px;
+            margin-bottom:10px;
+        }
+
+         /*Pagenation For Pagenation1 Class*/
+          .pagination1 {
+            display: inline-block;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .pagination1 > li {
+            display: inline;
+        }
+        .nav{
+            display:block;
+        }
+        .pagination1 > .active > a, .pagination1 > .active > span, .pagination1 > .active > a:hover, .pagination1 > .active > span:hover, .pagination1 > .active > a:focus, .pagination1 > .active > span:focus {
+            z-index: 2;
+            color: #fff;
+            cursor: default;
+            background-color: #013765;
+            border-color: #013765;
+        }
+        .pagination1 > li > span:hover{
+            color:lightgrey;
+            cursor: grab;
+        }
+            .pagination1 > li > a, .pagination1 > li > span {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.428571429;
+                text-decoration: none;
+                background-color: #fff;
+                border: 1px solid #ddd;
+            }
+        .pagination1 > li:first-child > span {
+                margin-left: 0;
+                border-bottom-left-radius: 4px;
+                border-top-left-radius: 4px;
+            }

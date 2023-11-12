@@ -1,0 +1,506 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="sparcsn4Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="sparcsn4Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="VOR_VesselVisit" EntityType="sparcsn4Model.VOR_VesselVisit" />
+    <EntitySet Name="vsl_vessel_berthings" EntityType="sparcsn4Model.vsl_vessel_berthings" />
+    <EntitySet Name="vsl_vessel_visit_details" EntityType="sparcsn4Model.vsl_vessel_visit_details" />
+    <EntitySet Name="vsl_vessels" EntityType="sparcsn4Model.vsl_vessels" />
+    <AssociationSet Name="FKA64180BB53740873" Association="sparcsn4Model.FKA64180BB53740873">
+      <End Role="vsl_vessel_visit_details" EntitySet="vsl_vessel_visit_details" />
+      <End Role="vsl_vessel_berthings" EntitySet="vsl_vessel_berthings" />
+    </AssociationSet>
+    <AssociationSet Name="FK5AC9D1F5C1BC1DC2" Association="sparcsn4Model.FK5AC9D1F5C1BC1DC2">
+      <End Role="vsl_vessels" EntitySet="vsl_vessels" />
+      <End Role="vsl_vessel_visit_details" EntitySet="vsl_vessel_visit_details" />
+    </AssociationSet>
+    <EntitySet Name="Datawarehouse_Container" EntityType="sparcsn4Model.Datawarehouse_Container" />
+    <EntitySet Name="VS_Agent" EntityType="sparcsn4Model.VS_Agent" />
+    <EntitySet Name="VS_FirstLastLift" EntityType="sparcsn4Model.VS_FirstLastLift" />
+    <EntitySet Name="VS_HatchCover" EntityType="sparcsn4Model.VS_HatchCover" />
+    <EntitySet Name="VS_VesselVisit_Smry" EntityType="sparcsn4Model.VS_VesselVisit_Smry" />
+    <EntitySet Name="ref_crane_delay_types" EntityType="sparcsn4Model.ref_crane_delay_types" />
+  </EntityContainer>
+  <EntityType Name="VOR_VesselVisit">
+    <Key>
+      <PropertyRef Name="phase" />
+      <PropertyRef Name="Visit_RefNo" />
+      <PropertyRef Name="LineOperatorCode" />
+      <PropertyRef Name="Vessel_Length" />
+      <PropertyRef Name="bollard_aft" />
+      <PropertyRef Name="bollard_fore" />
+      <PropertyRef Name="carrier_mode" />
+      <PropertyRef Name="L20" />
+      <PropertyRef Name="L40" />
+      <PropertyRef Name="L45" />
+      <PropertyRef Name="D20" />
+      <PropertyRef Name="D40" />
+      <PropertyRef Name="D45" />
+      <PropertyRef Name="bizu_gkey" />
+      <PropertyRef Name="argo_career_visit_gkey" />
+      <PropertyRef Name="visit_details_gkey" />
+    </Key>
+    <Property Name="phase" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Visit_RefNo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="vsl_vessels_Name" Type="String" MaxLength="35" FixedLength="false" Unicode="true" />
+    <Property Name="SailDirection" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="pos_slot" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="LineOperatorCode" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="LineOperatorName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="Vessel_Berthings_ETD" Type="DateTime" Precision="3" />
+    <Property Name="Vessel_Length" Type="Int64" Nullable="false" />
+    <Property Name="bollard_aft" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="bollard_fore" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="BowPosition" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="Bound" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="Vessel_Berthings_ETA" Type="DateTime" Precision="3" />
+    <Property Name="Vessel_Berthings_ATA" Type="DateTime" Precision="3" />
+    <Property Name="arr_aft_draft_cm" Type="Int64" />
+    <Property Name="Vessel_Berthings_ATD" Type="DateTime" Precision="3" />
+    <Property Name="Vessel_Berthings_PosName" Type="String" MaxLength="42" FixedLength="false" Unicode="true" />
+    <Property Name="ib_vyg" Type="String" MaxLength="17" FixedLength="false" Unicode="true" />
+    <Property Name="ob_vyg" Type="String" MaxLength="17" FixedLength="false" Unicode="true" />
+    <Property Name="carrier_mode" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="vsl_vessels_IsActive" Type="Boolean" />
+    <Property Name="VS_Class_ID" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="VS_Class_Name" Type="String" MaxLength="35" FixedLength="false" Unicode="true" />
+    <Property Name="TotalMoves" Type="Int32" />
+    <Property Name="L20" Type="Int32" Nullable="false" />
+    <Property Name="L40" Type="Int32" Nullable="false" />
+    <Property Name="L45" Type="Int32" Nullable="false" />
+    <Property Name="D20" Type="Int32" Nullable="false" />
+    <Property Name="D40" Type="Int32" Nullable="false" />
+    <Property Name="D45" Type="Int32" Nullable="false" />
+    <Property Name="BerthAfter" Type="Decimal" Precision="17" Scale="6" />
+    <Property Name="VslOpsHrs" Type="Decimal" Precision="17" Scale="6" />
+    <Property Name="ETA_DHrs" Type="Decimal" Precision="17" Scale="6" />
+    <Property Name="VslCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="LOA" Type="Decimal" Precision="26" Scale="6" />
+    <Property Name="off_port_arr" Type="DateTime" Precision="3" />
+    <Property Name="start_work" Type="DateTime" Precision="3" />
+    <Property Name="end_work" Type="DateTime" Precision="3" />
+    <Property Name="VslClassification" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="VslVistRemarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ata" Type="DateTime" Precision="3" />
+    <Property Name="atd" Type="DateTime" Precision="3" />
+    <Property Name="labor_on_board" Type="DateTime" Precision="3" />
+    <Property Name="pilot_on_board" Type="DateTime" Precision="3" />
+    <Property Name="pilot_off_board" Type="DateTime" Precision="3" />
+    <Property Name="FirstLineSecureDate" Type="DateTime" Precision="3" />
+    <Property Name="LastLineSecureDate" Type="DateTime" Precision="3" />
+    <Property Name="FirstLineReleaseDate" Type="DateTime" Precision="3" />
+    <Property Name="LastLineReleaseDate" Type="DateTime" Precision="3" />
+    <Property Name="bizu_gkey" Type="Int64" Nullable="false" />
+    <Property Name="radio_call_sign" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="PreviousPort" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="NextPort" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ETB" Type="DateTime" Precision="3" />
+    <Property Name="Inwindow" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="WindowHrs" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="changed" Type="DateTime" Precision="3" />
+    <Property Name="IMO" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="berthings_gkey" Type="Int64" />
+    <Property Name="argo_career_visit_gkey" Type="Int64" Nullable="false" />
+    <Property Name="visit_details_gkey" Type="Int64" Nullable="false" />
+    <Property Name="Vessel_class_gkey" Type="Int64" />
+    <Property Name="vessels_gkey" Type="Int64" />
+  </EntityType>
+  <EntityType Name="vsl_vessel_berthings">
+    <Key>
+      <PropertyRef Name="gkey" />
+    </Key>
+    <Property Name="gkey" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="seq" Type="Int64" Nullable="false" />
+    <Property Name="vvd_gkey" Type="Int64" />
+    <Property Name="quay" Type="Int64" Nullable="false" />
+    <Property Name="shift_time" Type="DateTime" Precision="3" />
+    <Property Name="arr_fwd_draft_cm" Type="Int64" />
+    <Property Name="arr_aft_draft_cm" Type="Int64" />
+    <Property Name="dep_fwd_draft_cm" Type="Int64" />
+    <Property Name="dep_aft_draft_cm" Type="Int64" />
+    <Property Name="ship_side_to" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="created" Type="DateTime" Precision="3" />
+    <Property Name="creator" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="changed" Type="DateTime" Precision="3" />
+    <Property Name="changer" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="gm" Type="Int64" />
+    <Property Name="mean_draft_cm" Type="Int64" />
+    <Property Name="trim_cm" Type="Int64" />
+    <Property Name="gantry_count" Type="Int64" />
+    <Property Name="berth_location_cm" Type="Int64" />
+    <Property Name="estimated_loads" Type="Int64" />
+    <Property Name="estimated_discharges" Type="Int64" />
+    <Property Name="ingress_vertex" Type="Int64" />
+    <Property Name="egress_vertex" Type="Int64" />
+    <Property Name="receive_status" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+    <Property Name="distance_from_dock_cm" Type="Int64" />
+    <Property Name="slip_fold_cm" Type="Int64" />
+    <Property Name="slip_width_cm" Type="Int64" />
+    <Property Name="strategy_ref" Type="Int64" />
+    <Property Name="call_type" Type="Int64" />
+    <Property Name="call_slave_id" Type="Int64" />
+    <Property Name="call_remarks" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+    <Property Name="bollard_aft" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="bollard_fore" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="bollard_aft_offset" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="bollard_fore_offset" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="estimated_other_moves" Type="Int64" />
+    <Property Name="discharge_seals_checked" Type="Boolean" />
+    <Property Name="load_seals_checked" Type="Boolean" />
+    <Property Name="berth_alloc_status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="eta" Type="DateTime" Precision="3" />
+    <Property Name="etd" Type="DateTime" Precision="3" />
+    <Property Name="ata" Type="DateTime" Precision="3" />
+    <Property Name="atd" Type="DateTime" Precision="3" />
+    <Property Name="cargo_cutoff" Type="DateTime" Precision="3" />
+    <Property Name="start_work" Type="DateTime" Precision="3" />
+    <Property Name="stop_work" Type="DateTime" Precision="3" />
+    <Property Name="time_begin_receive" Type="DateTime" Precision="3" />
+    <Property Name="pos_loctype" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="pos_locid" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="pos_loc_gkey" Type="Int64" />
+    <Property Name="pos_slot" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="pos_orientation" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+    <Property Name="pos_name" Type="String" MaxLength="42" FixedLength="false" Unicode="true" />
+    <Property Name="ops_pos_id" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="pos_bin" Type="Int64" />
+    <Property Name="pos_tier" Type="Int64" />
+    <Property Name="pos_anchor" Type="Geometry" />
+    <Property Name="pos_orientation_degrees" Type="Double" />
+    <Property Name="pos_slot_on_carriage" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_BOWPOS" Type="Int64" />
+    <Property Name="CUSTDFF_VSLINSCHEDULE" Type="Boolean" />
+    <Property Name="CUSTDFF_MAWANIWINDOW" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_WINDOWHRS" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="vsl_vessel_visit_details" Relationship="sparcsn4Model.FKA64180BB53740873" FromRole="vsl_vessel_berthings" ToRole="vsl_vessel_visit_details" />
+  </EntityType>
+  <EntityType Name="vsl_vessel_visit_details">
+    <Key>
+      <PropertyRef Name="vvd_gkey" />
+    </Key>
+    <Property Name="vvd_gkey" Type="Int64" Nullable="false" />
+    <Property Name="bizu_gkey" Type="Int64" Nullable="false" />
+    <Property Name="vessel_gkey" Type="Int64" Nullable="false" />
+    <Property Name="ib_vyg" Type="String" MaxLength="17" FixedLength="false" Unicode="true" />
+    <Property Name="ob_vyg" Type="String" MaxLength="17" FixedLength="false" Unicode="true" />
+    <Property Name="stacking_strategy" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="is_dray_off" Type="Boolean" Nullable="false" />
+    <Property Name="notes" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="in_customs_voy_nbr" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="out_customs_voy_nbr" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="is_no_client_access" Type="Boolean" Nullable="false" />
+    <Property Name="is_common_carrier" Type="Boolean" Nullable="false" />
+    <Property Name="published_eta" Type="DateTime" Precision="3" />
+    <Property Name="published_etd" Type="DateTime" Precision="3" />
+    <Property Name="begin_receive" Type="DateTime" Precision="3" />
+    <Property Name="empty_pickup" Type="DateTime" Precision="3" />
+    <Property Name="cargo_cutoff" Type="DateTime" Precision="3" />
+    <Property Name="haz_cutoff" Type="DateTime" Precision="3" />
+    <Property Name="reefer_cutoff" Type="DateTime" Precision="3" />
+    <Property Name="labor_on_board" Type="DateTime" Precision="3" />
+    <Property Name="labor_off_board" Type="DateTime" Precision="3" />
+    <Property Name="off_port_arr" Type="DateTime" Precision="3" />
+    <Property Name="off_port_dep" Type="DateTime" Precision="3" />
+    <Property Name="pilot_on_board" Type="DateTime" Precision="3" />
+    <Property Name="pilot_off_board" Type="DateTime" Precision="3" />
+    <Property Name="start_work" Type="DateTime" Precision="3" />
+    <Property Name="end_work" Type="DateTime" Precision="3" />
+    <Property Name="in_ves_captain" Type="String" MaxLength="35" FixedLength="false" Unicode="true" />
+    <Property Name="out_ves_captain" Type="String" MaxLength="35" FixedLength="false" Unicode="true" />
+    <Property Name="export_mnft_nbr" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="import_mnft_nbr" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="import_mnft_date" Type="DateTime" Precision="3" />
+    <Property Name="export_mnft_date" Type="DateTime" Precision="3" />
+    <Property Name="classification" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="flex_string01" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="flex_string02" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="flex_string03" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="flex_string04" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="flex_string05" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="flex_string06" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="flex_string07" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="flex_string08" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="flex_date01" Type="DateTime" Precision="3" />
+    <Property Name="flex_date02" Type="DateTime" Precision="3" />
+    <Property Name="flex_date03" Type="DateTime" Precision="3" />
+    <Property Name="flex_date04" Type="DateTime" Precision="3" />
+    <Property Name="flex_date05" Type="DateTime" Precision="3" />
+    <Property Name="flex_date06" Type="DateTime" Precision="3" />
+    <Property Name="flex_date07" Type="DateTime" Precision="3" />
+    <Property Name="flex_date08" Type="DateTime" Precision="3" />
+    <Property Name="est_load" Type="Int64" />
+    <Property Name="est_discharge" Type="Int64" />
+    <Property Name="est_restow" Type="Int64" />
+    <Property Name="est_shift" Type="Int64" />
+    <Property Name="est_bbk_load" Type="Int64" />
+    <Property Name="est_bbk_discharge" Type="Int64" />
+    <Property Name="CUSTDFF_HATCHCOVERMOVES" Type="Int64" />
+    <Property Name="CUSTDFF_ETB" Type="DateTime" Precision="3" />
+    <Property Name="CUSTDFF_ARRREMARKS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_DEPREMARKS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_CRANEDENSITY" Type="Double" />
+    <Property Name="CUSTDFF_CRANEINTENSITY" Type="Double" />
+    <Property Name="CUSTDFF_FIVEHIGHMOVE" Type="Int64" />
+    <Property Name="CUSTDFF_FIVEHIGHLOAD" Type="Int64" />
+    <Property Name="CUSTDFF_DUALCYCLE" Type="Int64" />
+    <Property Name="CUSTDFF_VESSELCAPACITY" Type="Int64" />
+    <Property Name="CUSTDFF_MAWANIREMARKS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_PTD" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="vsl_vessel_berthings" Relationship="sparcsn4Model.FKA64180BB53740873" FromRole="vsl_vessel_visit_details" ToRole="vsl_vessel_berthings" />
+    <NavigationProperty Name="vsl_vessels" Relationship="sparcsn4Model.FK5AC9D1F5C1BC1DC2" FromRole="vsl_vessel_visit_details" ToRole="vsl_vessels" />
+  </EntityType>
+  <EntityType Name="vsl_vessels">
+    <Key>
+      <PropertyRef Name="gkey" />
+    </Key>
+    <Property Name="gkey" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="reference_set" Type="Int64" Nullable="false" />
+    <Property Name="id" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="lloyds_id" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="35" FixedLength="false" Unicode="true" />
+    <Property Name="vesclass_gkey" Type="Int64" Nullable="false" />
+    <Property Name="owner_gkey" Type="Int64" Nullable="false" />
+    <Property Name="ves_captain" Type="String" MaxLength="35" FixedLength="false" Unicode="true" />
+    <Property Name="radio_call_sign" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="country_code" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+    <Property Name="is_active" Type="Boolean" Nullable="false" />
+    <Property Name="unit_system" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="temperature_unit" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="notes" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="created" Type="DateTime" Precision="3" />
+    <Property Name="creator" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="changed" Type="DateTime" Precision="3" />
+    <Property Name="changer" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="stowage_scheme" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="documentation_nbr" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="service_registry_nbr" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="life_cycle_state" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_VSLCAPACITY" Type="Int64" />
+    <Property Name="CUSTDFF_EMAIL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="vsl_vessel_visit_details" Relationship="sparcsn4Model.FK5AC9D1F5C1BC1DC2" FromRole="vsl_vessels" ToRole="vsl_vessel_visit_details" />
+  </EntityType>
+  <Association Name="FKA64180BB53740873">
+    <End Type="sparcsn4Model.vsl_vessel_visit_details" Role="vsl_vessel_visit_details" Multiplicity="0..1" />
+    <End Type="sparcsn4Model.vsl_vessel_berthings" Role="vsl_vessel_berthings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="vsl_vessel_visit_details">
+        <PropertyRef Name="vvd_gkey" />
+      </Principal>
+      <Dependent Role="vsl_vessel_berthings">
+        <PropertyRef Name="vvd_gkey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK5AC9D1F5C1BC1DC2">
+    <End Type="sparcsn4Model.vsl_vessels" Role="vsl_vessels" Multiplicity="1" />
+    <End Type="sparcsn4Model.vsl_vessel_visit_details" Role="vsl_vessel_visit_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="vsl_vessels">
+        <PropertyRef Name="gkey" />
+      </Principal>
+      <Dependent Role="vsl_vessel_visit_details">
+        <PropertyRef Name="vessel_gkey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Datawarehouse_Container">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="category" />
+      <PropertyRef Name="gkey" />
+      <PropertyRef Name="cv_gkey" />
+      <PropertyRef Name="declrd_ib_cv" />
+      <PropertyRef Name="restow_typ" />
+      <PropertyRef Name="hndlg_rsn" />
+      <PropertyRef Name="tare_kg" />
+      <PropertyRef Name="nominal_length" />
+      <PropertyRef Name="opr" />
+      <PropertyRef Name="requires_power" />
+      <PropertyRef Name="freight_kind" />
+      <PropertyRef Name="LineOpr" />
+      <PropertyRef Name="nominal_height" />
+      <PropertyRef Name="unit_gkey" />
+    </Key>
+    <Property Name="id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="Cntr" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="category" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="goods_and_ctr_wt_kg" Type="Double" />
+    <Property Name="gkey" Type="Int64" Nullable="false" />
+    <Property Name="cv_gkey" Type="Int64" Nullable="false" />
+    <Property Name="declrd_ib_cv" Type="Int64" Nullable="false" />
+    <Property Name="restow_typ" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="hndlg_rsn" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="tare_kg" Type="Double" Nullable="false" />
+    <Property Name="goods_ctr_wt_kg_vgm" Type="Double" />
+    <Property Name="move_kind" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="nominal_length" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="fetchTime" Type="DateTime" Precision="3" />
+    <Property Name="PutTime" Type="DateTime" Precision="3" />
+    <Property Name="transit_state" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="last_pos_slot" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="opr" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="requires_power" Type="Boolean" Nullable="false" />
+    <Property Name="freight_kind" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="oprname" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="LineOpr" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="LineOprName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="is_oog" Type="Boolean" />
+    <Property Name="is_bundle" Type="Boolean" />
+    <Property Name="relationship_role" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="nominal_height" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="time_in" Type="DateTime" Precision="3" />
+    <Property Name="time_out" Type="DateTime" Precision="3" />
+    <Property Name="unit_gkey" Type="Int64" Nullable="false" />
+    <Property Name="paid_thru_day" Type="DateTime" Precision="3" />
+    <Property Name="CUSTDFF_EMPTY_RETURN_DAYS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_IMPORT_DLVRY_DAYS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_MT_RETURN_LOC" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_VALIDITY_DT_IMPR_DLVRY" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_VALIDTITY_MT_RETURN" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_BROKERNAME" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CUSTDFF_BROKERNO" Type="Int64" />
+    <Property Name="CUSTDFF_DECLARATIONTYPE" Type="Int64" />
+    <Property Name="CUSTDFF_DLVRYORDERNO" Type="Int64" />
+    <Property Name="oog_back_cm" Type="Int64" />
+    <Property Name="oog_front_cm" Type="Int64" />
+    <Property Name="oog_left_cm" Type="Int64" />
+    <Property Name="oog_right_cm" Type="Int64" />
+    <Property Name="oog_top_cm" Type="Int64" />
+    <Property Name="damage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="commodity" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="destination" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="hazardous" Type="Boolean" />
+    <Property Name="imdg_types" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="hazard_un_nums" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="bl_nbr" Type="String" MaxLength="35" FixedLength="false" Unicode="true" />
+    <Property Name="temp_max_C" Type="Double" />
+    <Property Name="temp_min_C" Type="Double" />
+    <Property Name="temp_reqd_C" Type="Double" />
+    <Property Name="CUSTDFF_COMMODITYGRP" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ISO" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+    <Property Name="Origin" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="Shipper" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="Consignee" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="IsTransit" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="LoadBroker" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CustomStatus" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ITTTo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="IsFreeZone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ReinspReason" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="LoadPermitNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ITTFrom" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CustomInspType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ISN" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="BayanNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="DocRefNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="AEO" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="AppShift" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="TransportedTo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="InspStages" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="XrayStatus" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="VS_Agent">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="LineOprCode" />
+      <PropertyRef Name="LineoprGkey" />
+      <PropertyRef Name="Ref" />
+    </Key>
+    <Property Name="Agent" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="id" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="LineOprCode" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="LineOprName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="LineoprGkey" Type="Int64" Nullable="false" />
+    <Property Name="Ref" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="VS_FirstLastLift">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="short_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CraneHrs" Type="Decimal" Precision="17" Scale="6" />
+  </EntityType>
+  <EntityType Name="VS_HatchCover">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="HatchCoverMoves" Type="Int64" />
+  </EntityType>
+  <EntityType Name="VS_VesselVisit_Smry">
+    <Key>
+      <PropertyRef Name="RefNo" />
+      <PropertyRef Name="LineOperatorCode" />
+      <PropertyRef Name="Vessel_Length" />
+      <PropertyRef Name="carrier_mode" />
+      <PropertyRef Name="SrvCode" />
+      <PropertyRef Name="SrvName" />
+    </Key>
+    <Property Name="RefNo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="vslCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="vsl_vessels_Name" Type="String" MaxLength="35" FixedLength="false" Unicode="true" />
+    <Property Name="LineOperatorCode" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="LineOperatorName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+    <Property Name="SailDirection" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="pos_slot" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="Vessel_Berthings_ETD" Type="DateTime" Precision="3" />
+    <Property Name="Vessel_Length" Type="Int64" Nullable="false" />
+    <Property Name="Vessel_Berthings_PosName" Type="String" MaxLength="42" FixedLength="false" Unicode="true" />
+    <Property Name="ib_vyg" Type="String" MaxLength="17" FixedLength="false" Unicode="true" />
+    <Property Name="ob_vyg" Type="String" MaxLength="17" FixedLength="false" Unicode="true" />
+    <Property Name="carrier_mode" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="VS_Class_ID" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="VS_Class_Name" Type="String" MaxLength="35" FixedLength="false" Unicode="true" />
+    <Property Name="VslOpsHrs" Type="Decimal" Precision="17" Scale="6" />
+    <Property Name="Loa" Type="Decimal" Precision="26" Scale="6" />
+    <Property Name="off_port_arr" Type="DateTime" Precision="3" />
+    <Property Name="start_work" Type="DateTime" Precision="3" />
+    <Property Name="end_work" Type="DateTime" Precision="3" />
+    <Property Name="VslClassification" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="VslVistRemarks" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ata" Type="DateTime" Precision="3" />
+    <Property Name="atd" Type="DateTime" Precision="3" />
+    <Property Name="pilot_on_board" Type="DateTime" Precision="3" />
+    <Property Name="pilot_off_board" Type="DateTime" Precision="3" />
+    <Property Name="DelayHrs" Type="Decimal" Precision="38" Scale="11" />
+    <Property Name="BCDelays" Type="Decimal" Precision="38" Scale="11" />
+    <Property Name="PortRotationNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="BerthHrs" Type="Decimal" Precision="17" Scale="6" />
+    <Property Name="PreviousPort" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="NextPort" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CraneWorkHrs" Type="Decimal" Precision="38" Scale="6" />
+    <Property Name="SrvCode" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="SrvName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="lloyds_id" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="CustomRorationNo" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+    <Property Name="ADelays" Type="Decimal" Precision="38" Scale="11" />
+    <Property Name="BDelays" Type="Decimal" Precision="38" Scale="11" />
+    <Property Name="CDelays" Type="Decimal" Precision="38" Scale="11" />
+    <Property Name="CUSTDFF_VSLINSCHEDULE" Type="Boolean" />
+    <Property Name="time_discharge_complete" Type="DateTime" Precision="3" />
+    <Property Name="TotalCranes" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ref_crane_delay_types">
+    <Key>
+      <PropertyRef Name="gkey" />
+    </Key>
+    <Property Name="gkey" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="sparcs_code" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="reference_set" Type="Int64" Nullable="false" />
+    <Property Name="is_dispatch_stopped" Type="Boolean" />
+    <Property Name="is_for_shift" Type="Boolean" />
+    <Property Name="is_for_queue" Type="Boolean" />
+    <Property Name="is_for_n4rdt" Type="Boolean" />
+    <Property Name="is_stopped_by_new_work" Type="Boolean" />
+    <Property Name="is_stops_at_endtime" Type="Boolean" />
+    <Property Name="default_duration" Type="Int64" />
+    <Property Name="delay_category" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="created" Type="DateTime" Precision="3" />
+    <Property Name="creator" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="changed" Type="DateTime" Precision="3" />
+    <Property Name="changer" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="life_cycle_state" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+  </EntityType>
+</Schema>

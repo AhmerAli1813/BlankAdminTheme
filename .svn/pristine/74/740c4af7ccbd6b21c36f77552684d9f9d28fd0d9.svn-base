@@ -1,0 +1,77 @@
+﻿using DE.Infrastructure.Concept.Validation;
+using FluentValidation.Results;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DE.Infrastructure.Concept
+{
+    public class Response
+    {
+        public static Response EmptyResponse = new Response();
+        
+        public static Response GetInvalidResponse(string message = "An error occurred. Please try again later" )
+        {
+            Response resp = new Response();
+            var error = new ValidationError
+            {
+                Key = "",
+                Message = message,
+            };
+            resp._validationErrors.Add(error);
+            return resp;
+        }
+
+        private readonly List<ValidationError> _validationErrors = new List<ValidationError>();
+
+        public bool Success
+        {
+            get { return !_validationErrors.Any(); }
+        }
+
+        public IEnumerable<ValidationError> ValidationErrors
+        {
+            get { return _validationErrors.AsReadOnly(); }
+        }
+
+        public static string ContentType { get; set; }
+
+        public void AddValidationErrors(IEnumerable<ValidationFailure> failures)
+        {
+            foreach (var failure in failures)
+            {
+                AddValidationError(failure);
+            }
+        }
+
+        public void AddValidationError(ValidationFailure failure)
+        {
+            var error = new ValidationError
+            {
+                Key = failure.PropertyName,
+                Message = failure.ErrorMessage
+            };
+
+            _validationErrors.Add(error);
+        }
+
+        public void AssignValidationErrors(IEnumerable<ValidationError> errors)
+        {
+            foreach (var error in errors)
+                _validationErrors.Add(error);
+        }
+
+        public void AssignValidationErrors(IEnumerable<string> errors)
+        {
+            foreach (var error in errors)
+                _validationErrors.Add(new ValidationError { Message = error });
+        }
+
+        public static void BinaryWrite(object p)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
