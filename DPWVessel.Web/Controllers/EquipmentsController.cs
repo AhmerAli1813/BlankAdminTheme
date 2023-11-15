@@ -39,16 +39,13 @@ namespace DPWVessel.Web.Controllers
 
             return View();
         }
-        public ActionResult ResetPassword()
-        {
-            return View();
-        }
+       
         public ActionResult Edit()
         {
             return View();
         }
 
-        public ActionResult Step2()
+        public ActionResult Print()
         {
             return View();
         }

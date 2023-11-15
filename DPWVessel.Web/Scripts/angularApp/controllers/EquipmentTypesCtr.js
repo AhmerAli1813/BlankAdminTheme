@@ -31,17 +31,20 @@ app.controller('EquipmentTypesCtr',
           
             $scope.FilterEquipmentType = function (data) {
                 console.log("ddata", data);
-                data = {};
+                if (data == undefined) {
+                    data = {};
+                }
+                
                 var st = $("#startDate").val();
                 var et = $("#endDate").val();
                 if (st != "" && st != undefined) {
                     var StartDate = moment(stringToDate($("#startDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
-                    
+                    $("#startDate").val('');
 
                 }
                 if (et != "" && et != undefined) {
                     var EndDate = moment(stringToDate($("#endDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
-
+                    $("#endDate").val('');
                 }
                 console.log(data);                                                                                             
 
@@ -54,7 +57,7 @@ app.controller('EquipmentTypesCtr',
                         endDate: EndDate
                     }
                     , function (resp) {
-
+                        data = {}
                         console.log('Filter Data', resp);
                         if (resp.Success) {
                             $scope.EqtyList = resp.EquipmentTypesLists;
@@ -115,7 +118,7 @@ app.controller('EquipmentTypesCtr',
                 $window.open('/Equipment/Index?TypeId=' + sId, '_self');
             }
             
-            $scope.initEdit = function (data) {
+            $scope.initEdit = function () {
                 var id = urlService.getUrlPrams();
                 console.log(`Welcome edit init angular ID: ${id.Id}`)
                 $scope.ajaxGet('api/EquipmentTypesApi/getEquipmentTypesDetails', { id: id.Id }, function (resp) {

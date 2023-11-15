@@ -15,6 +15,7 @@ namespace DPWVessel.Model.Features.Equipments
         public int? equipmentTypeId { get; set; }
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
+       
         public GetAllEquipmentsRequsted()
         {
             startDate = DateTime.MinValue;
@@ -54,8 +55,8 @@ namespace DPWVessel.Model.Features.Equipments
         {
             EquipmentsRespone rep = new EquipmentsRespone();
             var row = _dbcontext.Equipments.Include(e=>e.EquipmentType).ToList();
-
-
+                
+               
             if (request.id > 0)
             {
                 row = row.Where(x => x.Id == request.id).ToList();
@@ -68,14 +69,18 @@ namespace DPWVessel.Model.Features.Equipments
             {
                 row = row.Where(x => x.Name == request.name).ToList();
             }
-            if (request.startDate != DateTime.MinValue )
+            
+            if (request.startDate != DateTime.MinValue)
             {
                 row = row.Where(x => x.CreatedAt >= request.startDate).ToList();
             }
             if (request.endDate != DateTime.MinValue)
             {
+                request.endDate = request.endDate.AddDays(1);
                 row = row.Where(x => x.CreatedAt <= request.endDate).ToList();
             }
+                        
+            
 
             rep.EquipmentsLists = row.Select(x => new EquipmentsList
             {

@@ -33,7 +33,7 @@
                     <div class="col-md-3">
 
                         <div class="form-group">
-                            <label>Student Id</label>
+                            <label>Id</label>
                             <input type="text" class="form-control" placeholder="Id" ng-model="s.id" />
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                 </thead>
                 <tbody>
 
-                    <tr ng-repeat="item in EqtyList  | filter :search">
+                    <tr ng-repeat="item in EqtyList  | filter :s">
                         <td>{{$index + 1}}</td>
                         <td>{{item.id}}</td>
                         <td>{{item.name}}</td>

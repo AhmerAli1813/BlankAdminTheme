@@ -63,6 +63,7 @@ namespace DPWVessel.Model.Features.EquipmentTypes
             }
             if (request.endDate != DateTime.MinValue)
             {
+                request.endDate = request.endDate.AddDays(1);
                 row = row.Where(x => x.CreatedAt <= request.endDate).ToList();
             }
 

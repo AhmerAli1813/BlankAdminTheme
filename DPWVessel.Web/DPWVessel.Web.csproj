@@ -2148,6 +2148,7 @@
     <Content Include="Views\Equipments\Add.cshtml" />
     <Content Include="Views\Equipments\Edit.cshtml" />
     <Content Include="Views\Equipments\Index.cshtml" />
+    <Content Include="Views\Equipments\Print.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

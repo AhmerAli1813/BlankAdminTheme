@@ -11,7 +11,7 @@ app.controller('EquipmentsCtr',
         "$filter",
         function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window, $filter) {
             //var url = urlService.getUrlPrams();
-
+       
             $scope.init = function ()
             {
                 console.log("Welcome Equipment Controller Anguler")
@@ -42,17 +42,21 @@ app.controller('EquipmentsCtr',
 
             $scope.FilterEquipments = function (data) {
                 console.log("ddata", data);
-                data = {};
+                if (data == undefined) {
+                    data = {};
+                }
                 var st = $("#startDate").val();
                 var et = $("#endDate").val();
                 if (st != "" && st != undefined) {
                     var StartDate = moment(stringToDate($("#startDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
-                  
+                   
+                  /*  $("#startDate").val('');*/
 
                 }
                 if (et != "" && et != undefined) {
                     var EndDate = moment(stringToDate($("#endDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
-                  
+                   
+                /*    $("#endDate").val('');*/
                 }
                 console.log(data);
               
@@ -66,7 +70,7 @@ app.controller('EquipmentsCtr',
                         endDate: EndDate
                     }
                     , function (resp) {
-
+                        data = {};
                     console.log('Filter Data', resp);
                     if (resp.Success) {
                         
@@ -136,7 +140,10 @@ app.controller('EquipmentsCtr',
             $scope.EditHref = function (Id) {
                 $window.open('/Equipments/Edit?Id=' + Id, '_self');
             }
-
+            $scope.PrintHref = function (Id) {
+                $window.open('/Equipments/Print?Id=' + Id, '_self');
+            }
+            
             $scope.initEdit = function () {
                 var Url = urlService.getUrlPrams();
                 GetEquipmentTypes();
