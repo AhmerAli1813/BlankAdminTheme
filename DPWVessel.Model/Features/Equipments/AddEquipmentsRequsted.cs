@@ -9,6 +9,7 @@ namespace DPWVessel.Model.Features.Equipments
     {
         public int id { get; set; }
         public string name { get; set; }
+        public int equipmentsTypeId { get; set; }
         public string createdBy { get; set; }
         public string updatedBy { get; set; }
     }
@@ -37,6 +38,7 @@ namespace DPWVessel.Model.Features.Equipments
                 Equipment model = new Equipment
                 {
                     Name = request.name,
+                    EquipmentTypeId = request.equipmentsTypeId,
                     CreatedAt = DateTime.Now,
                     CreatedBy = request.createdBy,
                     UpdatedAt = DateTime.Now,

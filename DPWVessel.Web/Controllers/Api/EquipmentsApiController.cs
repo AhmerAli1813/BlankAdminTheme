@@ -22,22 +22,14 @@ namespace DPWVessel.Web.Controllers.Api
         }
 
         [HttpGet]
-        public object GetEquipmentsList([FromUri] GetAllEquipmentsRequsted filtring)
+        public object GetEquipmentsList([FromUri] GetAllEquipmentsRequsted req)
         {
-            if (filtring != null)
-            {
-                
-                var resp2 = _requestExecutor.Execute(filtring);
-                return resp2;
-            }
-            var req = new GetAllEquipmentsRequsted();
             var resp = _requestExecutor.Execute(req);
             return resp;
         }
 
-
         [HttpPost]
-        public object AddEquipmentssRec(AddEquipmentsRequsted req)
+        public object AddEquipmentsRec(AddEquipmentsRequsted req)
         {
             req.createdBy = _sessionManager.CurrentUser.FullName;
             req.updatedBy = _sessionManager.CurrentUser.FullName;
@@ -45,7 +37,7 @@ namespace DPWVessel.Web.Controllers.Api
             return resp;
         }
         [HttpGet]
-        public object getEquipmentssDetails([FromUri] GetEquipmentsDetailRequest req)
+        public object getEquipmentsDetails([FromUri] GetEquipmentsDetailRequest req)
         {
 
             var resp = _requestExecutor.Execute(req);
@@ -53,13 +45,21 @@ namespace DPWVessel.Web.Controllers.Api
         }
 
         [HttpPost]
-        public object EquipmentssInformationUpdate(UpdateEquipmentsInformationRequest req)
+        public object EquipmentsInformationUpdate(UpdateEquipmentsInformationRequest req)
         {
             req.data.updatedBy = _sessionManager.CurrentUser.FullName;
             UpdateEquipmentsInformationResponse resp = new UpdateEquipmentsInformationResponse();
             resp = _requestExecutor.Execute(req);
             return resp;
         }
+        [HttpGet]
+        public object GetAllEquipmentsTypesOpt()
+        {
+            var req = new GetEquipmentTypesOptRequsted();
+            var resp = _requestExecutor.Execute(req);
+            return resp;
+        }
+        
         //Encrypt
         [HttpGet]
         public object Encrypt([FromUri] string Id)

@@ -143,8 +143,9 @@
     <Compile Include="Features\Equipments\GetEquipmentsDetailRequest.cs" />
     <Compile Include="Features\Equipments\UpdateEquipmentsInformationRequest.cs" />
     <Compile Include="Features\EquipmentTypes\AddEquipmentTypesRequsted.cs" />
-    <Compile Include="Features\EquipmentTypes\GetEquipmentTypesDetailRequest.cs" />
     <Compile Include="Features\EquipmentTypes\GetAllEquipmentTypesRequsted.cs" />
+    <Compile Include="Features\EquipmentTypes\GetEquipmentTypesDetailRequest.cs" />
+    <Compile Include="Features\Equipments\GetEquipmentTypesOptRequsted.cs" />
     <Compile Include="Features\EquipmentTypes\UpdateEquipmentTypesInformationRequest.cs" />
     <Compile Include="Features\Grid\DefaultValidator.cs" />
     <Compile Include="Features\Grid\GridAddRequest.cs" />

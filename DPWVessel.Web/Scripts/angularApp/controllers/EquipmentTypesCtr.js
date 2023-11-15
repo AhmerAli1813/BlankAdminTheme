@@ -18,7 +18,8 @@ app.controller('EquipmentTypesCtr',
             }
             function GetEquipmentTypes()
             {
-                $scope.ajaxGet('api/EquipmentTypesApi/GetEquipmentTypesList', null, function (resp) {
+                
+                $scope.ajaxGet('api/EquipmentTypesApi/GetEquipmentTypesList',null, function (resp) {
 
                     console.log(resp);
                     if (resp.Success) {
@@ -29,16 +30,37 @@ app.controller('EquipmentTypesCtr',
             }
           
             $scope.FilterEquipmentType = function (data) {
-                console.log('Filtering',data);
-                $scope.ajaxGet('api/EquipmentTypesApi/GetEquipmentTypesList',data, function (resp) {
-
+                console.log("ddata", data);
+                data = {};
+                var st = $("#startDate").val();
+                var et = $("#endDate").val();
+                if (st != "" && st != undefined) {
+                    var StartDate = moment(stringToDate($("#startDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
                     
-                    console.log('Filter Data ',resp);
-                    if (resp.Success) {
-                        $scope.EqtyList = resp.EquipmentTypesLists;
-                    }
 
-                });
+                }
+                if (et != "" && et != undefined) {
+                    var EndDate = moment(stringToDate($("#endDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+
+                }
+                console.log(data);                                                                                             
+
+
+                $scope.ajaxGet('api/EquipmentTypesApi/GetEquipmentTypesList',
+                    {
+                        id: data.id,
+                        name: data.name,
+                        startDate: StartDate,
+                        endDate: EndDate
+                    }
+                    , function (resp) {
+
+                        console.log('Filter Data', resp);
+                        if (resp.Success) {
+                            $scope.EqtyList = resp.EquipmentTypesLists;
+                        }
+
+                    });
             }
             $scope.AddEquipmentType = function (data) {
                 console.log(data);
@@ -89,7 +111,10 @@ app.controller('EquipmentTypesCtr',
             $scope.EditHref = function (sId) {
                 $window.open('/EquipmentTypes/Edit?Id=' + sId, '_self');
             }
-
+            $scope.EqListHref = function (sId) {
+                $window.open('/Equipment/Index?TypeId=' + sId, '_self');
+            }
+            
             $scope.initEdit = function (data) {
                 var id = urlService.getUrlPrams();
                 console.log(`Welcome edit init angular ID: ${id.Id}`)
@@ -103,7 +128,18 @@ app.controller('EquipmentTypesCtr',
                 })
 
             }
-
+            function stringToDate(_date, format, delimiter) {
+                var formatLowerCase = format.toLowerCase();
+                var formatItems = formatLowerCase.split(delimiter);
+                var dateItems = _date.split(delimiter);
+                var monthIndex = formatItems.indexOf("mm");
+                var dayIndex = formatItems.indexOf("dd");
+                var yearIndex = formatItems.indexOf("yyyy");
+                var month = parseInt(dateItems[monthIndex]);
+                month -= 1;
+                var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+                return formatedDate;
+            }
                 
             
         }

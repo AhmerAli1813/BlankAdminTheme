@@ -21,15 +21,9 @@ namespace DPWVessel.Web.Controllers.Api
         }
 
         [HttpGet]
-        public object GetEquipmentTypesList([FromUri] GetAllEquipmentTypeRequsted filtring)
+        public object GetEquipmentTypesList([FromUri] GetAllEquipmentTypeRequsted req)
         {
-            if (filtring != null)
-            {
-                
-                var resp2 = _requestExecutor.Execute(filtring);
-                return resp2;
-            }
-            var req = new GetAllEquipmentTypeRequsted();
+            
             var resp = _requestExecutor.Execute(req);
             return resp;
         }

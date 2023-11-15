@@ -14,10 +14,9 @@ namespace DPWVessel.Model.Features.Equipments
     {
         public int id { get; set; }
         public string name { get; set; }
-        public DateTime createdAt { get; set; }
-        public string createdBy { get; set; }
-        public DateTime updatedAt { get; set; }
-        public string updatedBy { get; set; }
+        public int? equipmentTypeId { get; set; }
+        
+
     }
 
     public class GetEquipmentsRequestHandel : IRequestHandler<GetEquipmentsDetailRequest, GetEquipmentsDetailResponse>
@@ -38,11 +37,8 @@ namespace DPWVessel.Model.Features.Equipments
 
                 resp.id = req.Id;
                 resp.name = req.Name;
-                resp.createdAt = req.CreatedAt;
-                resp.createdBy = req.CreatedBy;
-                resp.updatedAt = req.UpdatedAt;
-                resp.updatedBy = req.UpdatedBy;
-
+                resp.equipmentTypeId = req.EquipmentTypeId;
+             
                 
             }
             return resp;

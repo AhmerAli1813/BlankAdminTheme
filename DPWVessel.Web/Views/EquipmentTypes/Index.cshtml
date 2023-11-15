@@ -6,20 +6,21 @@
 <div ng-controller="EquipmentTypesCtr" ng-init="init()">
     <!--for Page Title-->
     <div class="page-title">
-            <div class="flex">
-                <div class="Flex-coumn"><h4><i class="fas fa-file-alt"></i>  EquipmentTypes</h4></div>
-                <div class="Flex-coumn">
-                    <button type="button" class="Customebtn btnSuccess pull-right mr-10"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#Filters"
-                           aria-expanded="false"
-                           aria-controls="Filters"><span>Filters</span>
-                    </button>
-                    <a type="button" href="@Url.Action("Add","EquipmentTypes")" class="Customebtn btnPrimary mr-10 pull-right"><span>Add</span></a>
-                </div>
+        <div class="flex">
+            <div class="Flex-coumn"><h4><i class="fas fa-file-alt"></i>  EquipmentTypes</h4></div>
+            <div class="Flex-coumn">
+                <button type="button" class="Customebtn btnSuccess pull-right mr-10"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#Filters"
+                        aria-expanded="false"
+                        aria-controls="Filters">
+                    <span>Filters</span>
+                </button>
+                <a type="button" href="@Url.Action("Add","EquipmentTypes")" class="Customebtn btnPrimary mr-10 pull-right"><span>Add</span></a>
             </div>
-            <hr />
         </div>
+        <hr />
+    </div>
     <!--End-->
     <!--Filter Collapse-->
     <div class="card collapse" id="Filters">
@@ -33,24 +34,39 @@
 
                         <div class="form-group">
                             <label>Student Id</label>
-                            <input type="text" class="form-control" placeholder="Id" ng-model="search.id" />
+                            <input type="text" class="form-control" placeholder="Id" ng-model="s.id" />
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" placeholder="Name" ng-model="search.name" />
+                            <input type="text" class="form-control" placeholder="Name" ng-model="s.name" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="input-group date">
+                            <label>Start Date</label>
+                            <input type="text" class="form-control" style="width: 100%; " id="startDate" ng-model="s.startDate" placeholder="dd/mm/yyyy">
+                            <span style="position: absolute; right: 0; top:50%" class="input-group-addon h-auto"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label>End Date</label>
+                            <input type="text" class="form-control" style="width: 100%;" id="endDate" ng-model="s.endDate" placeholder="dd/mm/yyyy">
+                            <span style="position: absolute; right: 0; top:50%" class="input-group-addon h-auto"><i class="fa fa-calendar"></i></span>
                         </div>
                     </div>
                     <div class="col-md-12 float-right">
                         <div class="form-group">
-                            <button type="button"  onclick="reload()" class="Customebtn btnSecondary mr-10 pull-right mt-20"><span>Reset</span></button>
-                            <button type="button" ng-click="FilterEquipmentType(search)" class="Customebtn btnPrimary  mr-10 pull-right mt-20"><span>Serach</span></button>
+                            <button type="button" onclick="reload()" class="Customebtn btnSecondary mr-10 pull-right mt-20"><span>Reset</span></button>
+                            <button type="button" ng-click="FilterEquipmentType(s)" class="Customebtn btnPrimary  mr-10 pull-right mt-20"><span>Serach</span></button>
                         </div>
                     </div>
                 </div>
             </form>
-            
+
         </div>
     </div>
     <!--Filter Collapse End-->
@@ -79,15 +95,15 @@
                         <td>{{$index + 1}}</td>
                         <td>{{item.id}}</td>
                         <td>{{item.name}}</td>
-                        <td>{{item.createdAt}}</td>
+                        <td>{{item.createdAt | date: 'dd/MM/yyyy'}}</td>
                         <td>{{item.createdBy}}</td>
-                        <td>{{item.updatedAt}}</td>
+                        <td>{{item.updatedAt | date: 'dd/MM/yyyy'}}</td>
                         <td>{{item.updatedBy}}</td>
 
                         <td>
                             <div class="list-icons">
                                 <a ng-click="EditHref(item.id)" class="list-icons-item color-gray"><i class="icon-pencil7" title="Edit"></i></a>
-                                <!--<a ng-click="ResetHref(item.Id)" class="list-icons-item text-default"><i class="icon-key" title="Change Password"></i></a> -->
+                                <a ng-click="EqListHref(item.Id)" class="list-icons-item text-default"><i class="icon-key" title="Equitments"></i></a>
                             </div>
                         </td>
 
@@ -98,30 +114,46 @@
                 </tbody>
             </table>
             @*<nav aria-label="..." class="pull-right">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                    </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item " aria-current="page">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>*@
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item " aria-current="page">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>*@
         </div>
     </div>
     <!--Table End-->
 </div>
 
+<script src="~/Scripts/DatePicker/jquery.min.js"></script>
+<script src="~/Scripts/DatePicker/bootstrap-datepicker.js"></script>
 <script>
-        function reload() {
-            console.log('SerachForm Clear')
-            location.reload();
-           
-        }
-   
+    function reload() {
+        console.log('SerachForm Clear')
+        location.reload();
+
+    }
+    $('#startDate').datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+        forceParse: true,
+    });
+    $('#endDate').datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+        forceParse: true,
+    });
+
 </script>

@@ -8,12 +8,17 @@ namespace DPWVessel.Model.Features.EquipmentTypes
 {
     public class GetAllEquipmentTypeRequsted : IRequest<EquipmentTypesRespone>
     {
-        public int id { get; set; }
+        public int? id { get; set; }
         public string name { get; set; }
-        public DateTime createdAt { get; set; }
-        public string createdBy { get; set; }
-        public DateTime updatedAt { get; set; }
-        public string updatedBy { get; set; }
+        public DateTime startDate { get; set; }
+        public DateTime endDate { get; set; }
+        public GetAllEquipmentTypeRequsted()
+        {
+            startDate = DateTime.MinValue;
+            endDate = DateTime.MinValue;   
+        }
+
+
 
     }
     public class EquipmentTypesRespone : Response
@@ -52,7 +57,14 @@ namespace DPWVessel.Model.Features.EquipmentTypes
             {
                 row = row.Where(x => x.Name == request.name).ToList();
             }
-            
+            if (request.startDate != DateTime.MinValue)
+            {
+                row = row.Where(x => x.CreatedAt >= request.startDate).ToList();
+            }
+            if (request.endDate != DateTime.MinValue)
+            {
+                row = row.Where(x => x.CreatedAt <= request.endDate).ToList();
+            }
 
             rep.EquipmentTypesLists = row.Select(x => new EquipmentTypesList
             {

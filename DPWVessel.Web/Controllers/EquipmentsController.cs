@@ -28,9 +28,10 @@ namespace DPWVessel.Web.Controllers
 
         }
         // GET: EquipmentTypes
+        [HttpGet]
         public ActionResult Index()
         {
-
+           
             return View();
         }
         public ActionResult Add()

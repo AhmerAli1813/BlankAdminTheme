@@ -8,38 +8,76 @@ app.controller('EquipmentsCtr',
         "urlService",
         "newGridService",
         "$window",
-        function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window) {
+        "$filter",
+        function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window, $filter) {
             //var url = urlService.getUrlPrams();
 
             $scope.init = function ()
             {
                 console.log("Welcome Equipment Controller Anguler")
                 GetEquipments();
+                GetEquipmentTypes();
             }
             function GetEquipments()
             {
-                $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList', null, function (resp) {
-
+                var TypeId = urlService.getUrlPrams();
+                $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList',null , function (resp) {
+                    
                     console.log(resp);
                     if (resp.Success) {
-                        $scope.EqtyList = resp.EquipmentsLists;
+                        $scope.EqList = resp.EquipmentsLists;
                     }
 
                 });
             }
-          
-            $scope.FilterEquipments = function (data) {
-                console.log('Filtering',data);
-                $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList',data, function (resp) {
-
-                    
-                    console.log('Filter Data ',resp);
+            function GetEquipmentTypes() {
+                $scope.ajaxGet('api/EquipmentsApi/GetAllEquipmentsTypesOpt', null, function (resp) {
+                    console.log("GetAll Equipments Types Opt",resp);
                     if (resp.Success) {
-                        $scope.EqtyList = resp.EquipmentsLists;
+                        $scope.EqtyList = resp.EquipmentTypesOpt;
                     }
 
                 });
             }
+
+            $scope.FilterEquipments = function (data) {
+                console.log("ddata", data);
+                data = {};
+                var st = $("#startDate").val();
+                var et = $("#endDate").val();
+                if (st != "" && st != undefined) {
+                    var StartDate = moment(stringToDate($("#startDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+                  
+
+                }
+                if (et != "" && et != undefined) {
+                    var EndDate = moment(stringToDate($("#endDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+                  
+                }
+                console.log(data);
+              
+
+                $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList',
+                    {
+                        id: data.id,
+                        name: data.name,
+                        equipmentTypeId: data.equipmentTypeId,
+                        startDate: StartDate,
+                        endDate: EndDate
+                    }
+                    , function (resp) {
+
+                    console.log('Filter Data', resp);
+                    if (resp.Success) {
+                        
+                        $scope.EqList = resp.EquipmentsLists;
+                        console.log('Filter scope EqList', $scope.EqList);
+                    }
+
+                });
+            }
+        
+         
             $scope.AddEquipments = function (data) {
                 console.log(data);
                 if (data == null || data == undefined || data == '') {
@@ -50,7 +88,11 @@ app.controller('EquipmentsCtr',
                     toastr.error('Please Enter Name');
                     return false;
                 }
-              
+                if (data.equipmentsTypeId == null || data.equipmentsTypeId == undefined || data.equipmentsTypeId == '') {
+                    toastr.error('Please Select  euipments types ');
+                    return false;
+                }
+                
                 $scope.ajaxPost('api/EquipmentsApi/AddEquipmentsRec', data, function (response) {
                     console.log(response)
                     if (response.IsTure == false) {
@@ -64,18 +106,23 @@ app.controller('EquipmentsCtr',
 
                 });
             }
-            $scope.EditEquipments = function (Data) {
-                console.log(Data);
-                if (Data == null || Data == undefined || Data == '') {
+            $scope.EditEquipments = function (data) {
+                console.log(data);
+                //data.equipmentsTypeId = document.getElementById("equipmentsTypeId").value;
+                if (data == null || data == undefined || data == '') {
                     toastr.error('All filed is reqried');
                     return false;
                 }
-                if (Data.name == null || Data.name == undefined || Data.name == '') {
+                if (data.name == null || data.name == undefined || data.name == '') {
                     toastr.error('Please Enter Name');
                     return false;
                 }
-              
-                $scope.ajaxPost('api/EquipmentsApi/EquipmentsInformationUpdate', { data: Data }, function (response) {
+                if (data.equipmentTypeId == null || data.equipmentTypeId == undefined || data.equipmentTypeId == '') {
+                    toastr.error('Please Select  euipments types ');
+                    return false;
+                }
+                console.log(data,'---');
+                $scope.ajaxPost('api/EquipmentsApi/EquipmentsInformationUpdate', { data: data }, function (response) {
                     console.log(response)
                     if (response.IsTure == true) {
                         toastr.success("Updated Successfully");
@@ -86,18 +133,19 @@ app.controller('EquipmentsCtr',
                     }
                 });
             }
-            $scope.EditHref = function (sId) {
-                $window.open('/Equipments/Edit?Id=' + sId, '_self');
+            $scope.EditHref = function (Id) {
+                $window.open('/Equipments/Edit?Id=' + Id, '_self');
             }
 
-            $scope.initEdit = function (data) {
-                var id = urlService.getUrlPrams();
-                console.log(`Welcome edit init angular ID: ${id.Id}`)
-                $scope.ajaxGet('api/EquipmentsApi/getEquipmentsDetails', { id: id.Id }, function (resp) {
+            $scope.initEdit = function () {
+                var Url = urlService.getUrlPrams();
+                GetEquipmentTypes();
+                console.log(`Welcome edit init angular ID: ${Url.Id}`)
+                $scope.ajaxGet('api/EquipmentsApi/getEquipmentsDetails', { id: Url.Id }, function (resp) {
                     if (resp.Success) {
                         console.log("IntRequest");
                         console.log(resp);
-                        $scope.item = resp;
+                        $scope.eq = resp;
                         
                     }
                 })
@@ -105,7 +153,18 @@ app.controller('EquipmentsCtr',
             }
 
                 
-            
+            function stringToDate(_date, format, delimiter) {
+                var formatLowerCase = format.toLowerCase();
+                var formatItems = formatLowerCase.split(delimiter);
+                var dateItems = _date.split(delimiter);
+                var monthIndex = formatItems.indexOf("mm");
+                var dayIndex = formatItems.indexOf("dd");
+                var yearIndex = formatItems.indexOf("yyyy");
+                var month = parseInt(dateItems[monthIndex]);
+                month -= 1;
+                var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+                return formatedDate;
+            }
         }
 
      ]

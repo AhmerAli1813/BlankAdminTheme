@@ -1,6 +1,7 @@
 ﻿using DE.Infrastructure.Concept;
 using DPWVessel.Model.EntityModel;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace DPWVessel.Model.Features.EquipmentTypes
@@ -14,8 +15,10 @@ namespace DPWVessel.Model.Features.EquipmentTypes
     {
         public int id { get; set; }
         public string name { get; set; }
+        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime createdAt { get; set; }
         public string createdBy { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime updatedAt { get; set; }
         public string updatedBy { get; set; }
     }

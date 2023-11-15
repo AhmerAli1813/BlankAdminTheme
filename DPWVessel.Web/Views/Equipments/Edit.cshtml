@@ -3,10 +3,10 @@
 @{
     ViewBag.Title = "Update EquipmentTypes";
 }
-<div ng-controller="EquipmentTypesCtr" ng-init="initEdit()">
+<div ng-controller="EquipmentsCtr" ng-init="initEdit()">
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-primary">Edit EquipmentTypes Information</h3>
+            <h3 class="text-primary">Edit Equipment Information</h3>
         </div>
         <div class="col-md-7 align-self-center">
         </div>
@@ -21,18 +21,27 @@
                             <form>
                                 <div class="col-md-8">
                                     <div class="row">
-                                        <input type="hidden" id="id" class="form-control" placeholder="" ng-model="item.id">
+                                        <input type="hidden" id="id" class="form-control" placeholder="" ng-model="eq.id">
                                         <div class="col-md-4 form-group">
                                             <label class="control-label">Name</label><span class="required-starig text-danger">*</span>
-                                            <input type="text" id="name" class="form-control" placeholder="" ng-model="item.name">
+                                            <input type="text" id="name" class="form-control" placeholder="" ng-model="eq.name">
 
                                         </div>
-                                      
 
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Equiments Type  </label>
+                                                
+                                                <select class="form-select" ng-model="eq.equipmentTypeId">
+                                                    <option class="form-control"> Select Equiments Types</option>
+                                                    <option class="form-control" id="equipmentTypeId" ng-repeat="item in EqtyList" value="{{item.id}}" ng-selected="item.id==eq.equipmentTypeId"> {{item.name }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <button type="button" ng-click="EditEquipmentType(item)" class="Customebtn btnPrimary mr-10 pull-right"><span>Save</span></button>
+                                                <button type="button" ng-click="EditEquipments(eq)" class="Customebtn btnPrimary mr-10 pull-right"><span>Save</span></button>
                                             </div>
                                         </div>
                                     </div>
