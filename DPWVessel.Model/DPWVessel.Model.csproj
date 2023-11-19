@@ -141,6 +141,7 @@
     <Compile Include="Features\Equipments\AddEquipmentsRequsted.cs" />
     <Compile Include="Features\Equipments\GetAllEquipmentsRequsted.cs" />
     <Compile Include="Features\Equipments\GetEquipmentsDetailRequest.cs" />
+    <Compile Include="Features\Equipments\GetEquipmentsPrintRequsted.cs" />
     <Compile Include="Features\Equipments\UpdateEquipmentsInformationRequest.cs" />
     <Compile Include="Features\EquipmentTypes\AddEquipmentTypesRequsted.cs" />
     <Compile Include="Features\EquipmentTypes\GetAllEquipmentTypesRequsted.cs" />

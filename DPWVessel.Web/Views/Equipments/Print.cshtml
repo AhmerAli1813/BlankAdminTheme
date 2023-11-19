@@ -1,18 +1,105 @@
-﻿@using DPWVessel.Model.Resources
-@using DPWVessel.Model.EntityModel.Enums
-@{
-    ViewBag.Title = "Print report";
-}
-<div ng-controller="EquipmentsCtr">
-    <div class="row page-titles">
-        <div class="col-md-5 align-self-center">
-            <h3 class="text-primary"> Print Report</h3>
-        </div>
-        <div class="col-md-7 align-self-center">
+﻿@{Layout = null; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Your Company">
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="~/Content/css/fontawesome .css" rel="stylesheet" />
+
+    <!-- Your custom CSS -->
+    <link href="~/Content/css/your-custom-styles.css" rel="stylesheet">
+
+    <title>Your Print Report</title>
+</head>
+<body>
+
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <!-- Left Side: Company Logo -->
+            <div class="col-md-4">
+                <img src="~/Content/images/DPWorldIcon.png" class="img-fluid" alt="Company Logo">
+            </div>
+
+            <!-- Center: Report Name -->
+            <div class="col-md-4 text-center">
+                <h2 class="mb-4">Equiplment list</h2>
+            </div>
+
+            <!-- Right Side: Date/Time and Buttons -->
+            <div class="col-md-4 text-end">
+                <p id="currentDate"></p>
+                <p id="currentTime"></p>
+                <button class="btn btn-primary" onclick="printPage()"><i class="fa fa-print"></i> Print</button>
+                <button class="btn btn-success" onclick="exportToExcel(@Model.id)"><i class="fa fa-file-excel"></i> Export to Excel</button>
+            </div>
+        </div>
+
+        <!-- Table for Data -->
+        <div class="row mt-3">
+            <div class="col">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Type Name</th>
+                            <th>Name</th>
+                            <th>Create At</th>
+                            <th>Create By</th>
+                      
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                                <td>@Model.id</td>
+                                <td>@Model.equipmentTypeName</td>
+                                <td>@Model.name</td>
+                                <td>@Model.createdAt</td>
+                                <td>@Model.createdBy</td>
+                               
+                            </tr>
+                      
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <div class="container-fluid">
-      
-    </div>
-</div>
+
+    <!-- Bootstrap JS and Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Function to update date and time
+        function updateDateTime() {
+            var currentDateElement = document.getElementById('currentDate');
+            var currentTimeElement = document.getElementById('currentTime');
+
+            var currentDate = new Date().toLocaleDateString();
+            var currentTime = new Date().toLocaleTimeString();
+
+            currentDateElement.textContent = 'Date: ' + currentDate;
+            currentTimeElement.textContent = 'Time: ' + currentTime;
+        }
+
+        // Function to print the page
+        function printPage() {
+            window.print();
+        }
+         function exportToExcel(id) {
+        // Redirect to the PrintExportToExcel action with the id parameter
+        location.href = '@Url.Action("PrintExportToExcel", "Equipments")?Id=' + id;
+    }
+        // Call the function when the page is loaded or reloaded
+        window.onload = function () {
+            updateDateTime();
+            printPage();
+        };
+    </script>
+
+</body>
+</html>

@@ -28,7 +28,7 @@ namespace DPWVessel.Web.Controllers.Api
     }
     public class AccountApiController : BaseApiController
     {
-        private readonly IRequestExecutor _requestExecutor;
+        private new readonly IRequestExecutor _requestExecutor;
         private readonly ApplicationSignInManager _signInManager;
         private readonly ApplicationUserManager _userManager;
         private readonly dpw_VesselEntities _dbContext;

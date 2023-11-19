@@ -46,14 +46,14 @@
                     <div class="col-md-3">
                         <div class="input-group date">
                             <label>Start Date</label>
-                            <input type="text" class="form-control" style="width: 100%; " id="startDate" ng-model="search.createdAt | date: 'dd/MM/yyyy'" placeholder="dd/mm/yyyy">
+                            <input type="text" class="form-control" style="width: 100%; " id="startDate" ng-model="search.createdAt" placeholder="dd/mm/yyyy">
                             <span style="position: absolute; right: 0; top:50%" class="input-group-addon h-auto"><i class="fa fa-calendar"></i></span>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="input-group">
                             <label>End Date</label>
-                            <input type="text" class="form-control" style="width: 100%;" id="endDate" ng-model="search.updateAt | date: 'dd/MM/yyyy'" placeholder="dd/mm/yyyy">
+                            <input type="text" class="form-control" style="width: 100%;" id="endDate" ng-model="search.updateAt" placeholder="dd/mm/yyyy">
                             <span style="position: absolute; right: 0; top:50%" class="input-group-addon h-auto"><i class="fa fa-calendar"></i></span>
                         </div>
                     </div>
@@ -71,6 +71,8 @@
                         <div class="form-group">
                             <button type="button" onclick="reload()" class="Customebtn btnSecondary mr-10 pull-right mt-20"><span>Reset</span></button>
                             <button type="button" ng-click="FilterEquipments(search)" class="Customebtn btnPrimary  mr-10 pull-right mt-20"><span>Serach</span></button>
+                            <button type="button" ng-click="ToExportExcel(search)" class="Customebtn btnPrimary  mr-10 pull-right mt-20"><span>Export into Excel</span></button>
+                          @*  <button id="ExportXL" name="ExportXL" type="button" value="Export to Excel" onclick="location.href='@Url.Action("ExportToExcel", "Equipments")'" >Export</button>*@
                         </div>
                     </div>
                 </div>
@@ -116,7 +118,7 @@
                         <td>
                             <div class="list-icons">
                                 <a ng-click="EditHref(item.id)" class="list-icons-item color-gray"><i class="icon-pencil7" title="Edit"></i></a>
-                               <a ng-click="PrintHref(item.Id)" class="list-icons-item text-default"><i class="icon-printer" title="Print Report"></i></a> 
+                               <a ng-click="PrintHref(item.id)" class="list-icons-item text-default"><i class="icon-printer" title="Print Report"></i></a> 
                             </div>
                         </td>
 

@@ -80,7 +80,39 @@ app.controller('EquipmentsCtr',
 
                 });
             }
-        
+            $scope.ToExportExcel = function (data) {
+                console.log("ddata", data);
+                if (data == undefined) {
+                    data = {};
+                }
+                var st = $("#startDate").val();
+                var et = $("#endDate").val();
+                if (st != "" && st != undefined) {
+                    var StartDate = moment(stringToDate($("#startDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+
+                    /*  $("#startDate").val('');*/
+
+                }
+                if (et != "" && et != undefined) {
+                    var EndDate = moment(stringToDate($("#endDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+
+                    /*    $("#endDate").val('');*/
+                }
+                console.log(data);
+
+
+                var queryString = $.param({
+                    id: data.id,
+                    name: data.name,
+                    equipmentTypeId: data.equipmentTypeId,
+                    startDate: StartDate,
+                    endDate: EndDate
+                });
+
+                $window.open('/Equipments/ToExportExcelEquipment?' + queryString, '_self');
+
+            }
+            
          
             $scope.AddEquipments = function (data) {
                 console.log(data);
