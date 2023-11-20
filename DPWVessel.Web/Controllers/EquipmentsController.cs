@@ -61,14 +61,14 @@ namespace DPWVessel.Web.Controllers
             var data = resp.EquipmentsLists.Select(item => new Dictionary<string, object>
                         {
                             { "Id #", item.id },
-                            {"Type Id" ,item.equipmentTypeId },
-                            { "Name", item.name },
+                            {"Type Id*" ,item.equipmentTypeId },
+                            { "Name*", item.name },
                             { "Type Name", item.equipmentTypeName },
                             { "Created At", item.createdAt },
                             { "Created By", item.createdBy }
                         }).ToList();
 
-            var headers = new[] { "Id #", "Type Id", "Name", "Type Name", "Created At", "Created By" };
+            var headers = new[] { "Id #", "Type Id*", "Name*", "Type Name", "Created At", "Created By" };
 
 
             var excelBytes = excelExport.ExportToExcel(data, headers);
@@ -111,15 +111,15 @@ namespace DPWVessel.Web.Controllers
             var data = new Dictionary<string, object>
             {
                 { "Id #", resp.id },
-                {"Type Id" ,resp.equipmentTypeId },
+                {"Type Id*" ,resp.equipmentTypeId },
                 { "Name", resp.name },
-                { "Type Name", resp.equipmentTypeName },
+                { "Type Name*", resp.equipmentTypeName },
                 { "Created At", resp.createdAt },
                 { "Created By", resp.createdBy }
             };
 
             var excelExport = new ExcelExportServices(); // Create your instance of execlExportServices
-            var headers = new[] { "Id #", "Type Id", "Name", "Type Name", "Created At", "Created By" };
+            var headers = new[] { "Id #", "Type Id*", "Name*", "Type Name", "Created At", "Created By" };
 
 
 
@@ -150,14 +150,25 @@ namespace DPWVessel.Web.Controllers
                             {
                                 int Id = Convert.ToInt32(worksheet.Cells[i, 1].Value);
                                 int typeId = Convert.ToInt32(worksheet.Cells[i, 2].Value);
-                                string Name = worksheet.Cells[i, 3].Value.ToString();
+                                object NameValue = worksheet.Cells[i, 3].Value;
+                                string Name;
+                                if (NameValue==null|| string.IsNullOrWhiteSpace(NameValue.ToString()))
+                                {
+                                    Name = null;
+                                }
+                                else
+                                {
+                                    Name = NameValue.ToString();
+
+                                }
+                                
                                 string UserName = _sessionManager.CurrentUser.UserName;
 
                                 var t =  _dbContext.Equipments.Find(Id);
 
                                 if (t != null)
                                 {
-                                    if( typeId > 0)
+                                    if( typeId > 0 && Name !=null)
                                     {
 
                                         ureq.data.id = Id;
@@ -169,7 +180,7 @@ namespace DPWVessel.Web.Controllers
                                 }
                                 else
                                 {
-                                    if (typeId > 0)
+                                    if (typeId > 0 && Name != null)
                                     {
 
                                         req.equipmentsTypeId = typeId;
