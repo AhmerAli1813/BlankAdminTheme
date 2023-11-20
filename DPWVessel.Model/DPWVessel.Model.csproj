@@ -160,7 +160,7 @@
     <Compile Include="Features\Grid\GridUpdateRequest.cs" />
     <Compile Include="Features\Grid\TestRequest.cs" />
     <Compile Include="Features\Shared\ExcelImportService.cs" />
-    <Compile Include="Features\Shared\ExeclExportServices.cs" />
+    <Compile Include="Features\Shared\ExcelExportServices.cs" />
     <Compile Include="Features\Shared\GetStringConstantEnumerationRequest.cs" />
     <Compile Include="Features\Shared\GetEnumDropdownRequest.cs" />
     <Compile Include="Features\Students\AddStudentsRequsted.cs" />

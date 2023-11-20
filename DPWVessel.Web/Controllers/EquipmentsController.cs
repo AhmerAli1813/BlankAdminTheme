@@ -56,14 +56,13 @@ namespace DPWVessel.Web.Controllers
         {
             var resp = _requestExecutor.Execute(req);
 
-            var excelExport = new ExeclExportServices();
+            var excelExport = new ExcelExportServices();
             // Replace ViewModel with the actual type of your equipment
             var data = resp.EquipmentsLists.Select(item => new Dictionary<string, object>
                         {
                             { "Id #", item.id },
-                              {"Type Id" ,item.equipmentTypeId },
+                            {"Type Id" ,item.equipmentTypeId },
                             { "Name", item.name },
-
                             { "Type Name", item.equipmentTypeName },
                             { "Created At", item.createdAt },
                             { "Created By", item.createdBy }
@@ -119,7 +118,7 @@ namespace DPWVessel.Web.Controllers
                 { "Created By", resp.createdBy }
             };
 
-            var excelExport = new ExeclExportServices(); // Create your instance of execlExportServices
+            var excelExport = new ExcelExportServices(); // Create your instance of execlExportServices
             var headers = new[] { "Id #", "Type Id", "Name", "Type Name", "Created At", "Created By" };
 
 
@@ -131,7 +130,7 @@ namespace DPWVessel.Web.Controllers
             return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
         }
         [HttpPost]
-        public async Task<ActionResult> Upload(HttpPostedFileBase file)
+        public ActionResult Upload(HttpPostedFileBase file)
         {
 
 
@@ -147,32 +146,39 @@ namespace DPWVessel.Web.Controllers
                             int totalRows = worksheet.Dimension.Rows;
                             AddEquipmentsRequsted req = new AddEquipmentsRequsted();
                             UpdateEquipmentsInformationRequest ureq = new UpdateEquipmentsInformationRequest();
-
                             for (int i = 2; i <= totalRows; i++)
                             {
                                 int Id = Convert.ToInt32(worksheet.Cells[i, 1].Value);
+                                int typeId = Convert.ToInt32(worksheet.Cells[i, 2].Value);
                                 string Name = worksheet.Cells[i, 3].Value.ToString();
                                 string UserName = _sessionManager.CurrentUser.UserName;
 
-                                var t = await _dbContext.Equipments.FindAsync(Id);
+                                var t =  _dbContext.Equipments.Find(Id);
 
                                 if (t != null)
                                 {
-                                    ureq.data.id = Id;
-                                    ureq.data.equipmentTypeId = Convert.ToInt32(worksheet.Cells[i, 2].Value);
-                                    ureq.data.name = Name;
-                                    ureq.data.updatedBy = UserName;
+                                    if( typeId > 0)
+                                    {
 
-                                    await _requestExecutor.ExecuteAsync(ureq);
+                                        ureq.data.id = Id;
+                                        ureq.data.equipmentTypeId = typeId;
+                                        ureq.data.name = Name;
+                                        ureq.data.updatedBy = UserName;
+                                        _requestExecutor.Execute(ureq);
+                                    }
                                 }
                                 else
                                 {
-                                    req.equipmentsTypeId = Convert.ToInt32(worksheet.Cells[i, 2].Value);
-                                    req.name = Name;
-                                    req.createdBy = UserName;
-                                    req.updatedBy = UserName;
+                                    if (typeId > 0)
+                                    {
 
-                                    await _requestExecutor.ExecuteAsync(req);
+                                        req.equipmentsTypeId = typeId;
+                                        req.name = Name;
+                                        req.createdBy = UserName;
+                                        req.updatedBy = UserName;
+
+                                        _requestExecutor.Execute(req);
+                                    }
                                 }
                             }
                         }

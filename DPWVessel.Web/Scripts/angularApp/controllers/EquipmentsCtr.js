@@ -30,7 +30,17 @@ app.controller('EquipmentsCtr', [
             });
         }
      
-   
+        function initDataTable() {
+            // Assuming you have a table with id 'equipmentTable'
+            $('#equipmentTable').DataTable({
+                // Add DataTable options here
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "searching": true,
+                // Add more options as needed
+            });
+        }
 
 
             function GetEquipmentTypes() {
@@ -79,9 +89,7 @@ app.controller('EquipmentsCtr', [
                         
                         $scope.EqList = resp.EquipmentsLists;
                         console.log('Filter scope EqList', $scope.EqList);
-                        $timeout(function () {
-                            initDataTable();
-                        });
+                        
                     }
 
                 });
@@ -153,7 +161,11 @@ app.controller('EquipmentsCtr', [
                     console.log(response.data.Istrue)
                     toastr.success("Records Save successfully");
                     $('#ImportExcelModal').modal('hide');
-                    window.reload();
+                    
+                    $timeout(()=>{
+                        window.reload();
+                    }, 2000)
+                    
 
                 }, function (error) {
                     // Handle error
@@ -166,17 +178,7 @@ app.controller('EquipmentsCtr', [
 
 
 
-        function initDataTable() {
-            // Assuming you have a table with id 'equipmentTable'
-            $('#equipmentTable').DataTable({
-                // Add DataTable options here
-                "paging": true,
-                "ordering": true,
-                "info": true,
-                "searching": true,
-                // Add more options as needed
-            });
-        }
+
             
             $scope.AddEquipments = function (data) {
                 console.log(data);
@@ -192,7 +194,6 @@ app.controller('EquipmentsCtr', [
                     toastr.error('Please Select  euipments types ');
                     return false;
                 }
-                
                 $scope.ajaxPost('api/EquipmentsApi/AddEquipmentsRec', data, function (response) {
                     console.log(response)
                     if (response.IsTure == false) {

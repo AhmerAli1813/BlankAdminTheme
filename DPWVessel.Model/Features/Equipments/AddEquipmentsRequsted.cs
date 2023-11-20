@@ -31,7 +31,7 @@ namespace DPWVessel.Model.Features.Equipments
         public AddEquipmentsResponse Execute(AddEquipmentsRequsted request)
         {
             AddEquipmentsResponse rep = new AddEquipmentsResponse();
-            var NameValidation = _dbcontext.Equipments.Where(x => x.Name == request.name).Count();
+            var NameValidation = _dbcontext.Equipments.Where(x => x.Name == request.name && x.EquipmentTypeId == request.equipmentsTypeId).Count();
             if (NameValidation <= 0)
             {
 

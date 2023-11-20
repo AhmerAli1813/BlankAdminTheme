@@ -7,7 +7,7 @@ namespace DPWVessel.Model.Features.Equipments
 {
     public class UpdateEquipmentsInformationRequest : IRequest<UpdateEquipmentsInformationResponse>
     {
-        public EquipmentData data { get; set; }
+        public EquipmentData data { get; set; } = new EquipmentData();
     }
     public class UpdateEquipmentsInformationResponse : Response
     {
