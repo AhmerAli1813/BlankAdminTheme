@@ -74,7 +74,6 @@
     <Compile Include="CodeContracts\ObjectToDictionaryHelper.cs" />
     <Compile Include="CodeContracts\ParameterExtension.cs" />
     <Compile Include="Concept\InstantResponse.cs" />
-    <Compile Include="Helpers\ExportToExcel.cs" />
     <Compile Include="Helpers\Parameters.cs" />
     <Compile Include="Helpers\PayloadBuilder.cs" />
     <Compile Include="Helpers\QueryableModel.cs" />

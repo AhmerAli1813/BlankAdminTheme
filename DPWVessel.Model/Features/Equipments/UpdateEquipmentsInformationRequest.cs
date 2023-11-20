@@ -3,7 +3,7 @@ using DPWVessel.Model.EntityModel;
 using System;
 using System.Linq;
 
-namespace DPWVessel.Model.Features.EquipmentTypes
+namespace DPWVessel.Model.Features.Equipments
 {
     public class UpdateEquipmentsInformationRequest : IRequest<UpdateEquipmentsInformationResponse>
     {
@@ -21,7 +21,7 @@ namespace DPWVessel.Model.Features.EquipmentTypes
         public int? equipmentTypeId { get; set; }
         public string updatedBy { get; set; }
     }
-    public class UpdateEquipmentInformationRequestHandel : IRequestHandler<UpdateEquipmentsInformationRequest,UpdateEquipmentsInformationResponse>
+    public class UpdateEquipmentInformationRequestHandel : IRequestHandler<UpdateEquipmentsInformationRequest, UpdateEquipmentsInformationResponse>
     {
         private dpw_VesselEntities _dbcontext;
 

@@ -2,7 +2,6 @@
 using DPWVessel.Model.EntityModel;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 
@@ -15,7 +14,7 @@ namespace DPWVessel.Model.Features.Equipments
         public int? equipmentTypeId { get; set; }
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
-       
+
         public GetAllEquipmentsRequsted()
         {
             startDate = DateTime.MinValue;
@@ -26,7 +25,7 @@ namespace DPWVessel.Model.Features.Equipments
     }
     public class EquipmentsRespone : Response
     {
-        
+
         public List<EquipmentsList> EquipmentsLists { get; set; }
     }
     public class EquipmentsList
@@ -35,13 +34,13 @@ namespace DPWVessel.Model.Features.Equipments
         public string name { get; set; }
         public int? equipmentTypeId { get; set; }
         public string equipmentTypeName { get; set; }
-        
-        public DateTime createdAt { get; set; } 
+
+        public DateTime createdAt { get; set; }
         public string createdBy { get; set; }
-        
+
         public DateTime updatedAt { get; set; }
         public string updatedBy { get; set; }
-        
+
     }
     public class EquipmentsListRequstedHandel : IRequestHandler<GetAllEquipmentsRequsted, EquipmentsRespone>
     {
@@ -54,9 +53,9 @@ namespace DPWVessel.Model.Features.Equipments
         public EquipmentsRespone Execute(GetAllEquipmentsRequsted request)
         {
             EquipmentsRespone rep = new EquipmentsRespone();
-            var row = _dbcontext.Equipments.Include(e=>e.EquipmentType).ToList();
-                
-               
+            var row = _dbcontext.Equipments.Include(e => e.EquipmentType).ToList();
+
+
             if (request.id > 0)
             {
                 row = row.Where(x => x.Id == request.id).ToList();
@@ -69,7 +68,7 @@ namespace DPWVessel.Model.Features.Equipments
             {
                 row = row.Where(x => x.Name == request.name).ToList();
             }
-            
+
             if (request.startDate != DateTime.MinValue)
             {
                 row = row.Where(x => x.CreatedAt >= request.startDate).ToList();
@@ -79,8 +78,8 @@ namespace DPWVessel.Model.Features.Equipments
                 request.endDate = request.endDate.AddDays(1);
                 row = row.Where(x => x.CreatedAt <= request.endDate).ToList();
             }
-                        
-            
+
+
 
             rep.EquipmentsLists = row.Select(x => new EquipmentsList
             {
@@ -92,7 +91,7 @@ namespace DPWVessel.Model.Features.Equipments
                 createdBy = x.CreatedBy,
                 updatedAt = x.UpdatedAt,
                 updatedBy = x.UpdatedBy
-            }).OrderByDescending(x=>x.id).ToList();
+            }).OrderByDescending(x => x.id).ToList();
 
             return rep;
         }

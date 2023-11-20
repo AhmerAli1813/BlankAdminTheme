@@ -23,7 +23,7 @@ namespace DPWVessel.Web.Controllers.Api
         [HttpGet]
         public object GetEquipmentTypesList([FromUri] GetAllEquipmentTypeRequsted req)
         {
-            
+
             var resp = _requestExecutor.Execute(req);
             return resp;
         }

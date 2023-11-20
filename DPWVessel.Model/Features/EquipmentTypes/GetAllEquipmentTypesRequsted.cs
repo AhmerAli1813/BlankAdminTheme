@@ -15,7 +15,7 @@ namespace DPWVessel.Model.Features.EquipmentTypes
         public GetAllEquipmentTypeRequsted()
         {
             startDate = DateTime.MinValue;
-            endDate = DateTime.MinValue;   
+            endDate = DateTime.MinValue;
         }
 
 
@@ -75,7 +75,7 @@ namespace DPWVessel.Model.Features.EquipmentTypes
                 createdBy = x.CreatedBy,
                 updatedAt = x.UpdatedAt,
                 updatedBy = x.UpdatedBy
-            }).OrderByDescending(x=>x.id).ToList();
+            }).OrderByDescending(x => x.id).ToList();
 
             return rep;
         }

@@ -1,13 +1,14 @@
 ﻿using DE.Infrastructure.Concept;
-using DE.Infrastructure.Helpers;
 using DPWVessel.Model.EntityModel;
 using DPWVessel.Model.Features.Equipments;
+using DPWVessel.Model.Features.Shared;
 using DPWVessel.Web.Core.Session;
 using Microsoft.AspNet.Identity.Owin;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -37,7 +38,7 @@ namespace DPWVessel.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-           
+
             return View();
         }
         public ActionResult Add()
@@ -45,29 +46,31 @@ namespace DPWVessel.Web.Controllers
 
             return View();
         }
-       
+
         public ActionResult Edit()
         {
             return View();
         }
-        
+
         public ActionResult ToExportExcelEquipment(GetAllEquipmentsRequsted req)
         {
             var resp = _requestExecutor.Execute(req);
 
-            var excelExport = new ExcelExport();
+            var excelExport = new ExeclExportServices();
             // Replace ViewModel with the actual type of your equipment
             var data = resp.EquipmentsLists.Select(item => new Dictionary<string, object>
                         {
                             { "Id #", item.id },
+                              {"Type Id" ,item.equipmentTypeId },
                             { "Name", item.name },
+
                             { "Type Name", item.equipmentTypeName },
                             { "Created At", item.createdAt },
                             { "Created By", item.createdBy }
                         }).ToList();
 
-            var headers = new[] { "Id #", "Name", "Type Name", "Created At", "Created By" };
-            
+            var headers = new[] { "Id #", "Type Id", "Name", "Type Name", "Created At", "Created By" };
+
 
             var excelBytes = excelExport.ExportToExcel(data, headers);
 
@@ -76,21 +79,21 @@ namespace DPWVessel.Web.Controllers
 
             return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
         }
-        
-        [HttpGet]
-        public ActionResult ExportToExcel(GetAllEquipmentsRequsted req)
 
-        {
-            var resp = _requestExecutor.Execute(req);
-            using (var excel = new ExcelPackage())
-            {
-                var workSheet = excel.Workbook.Worksheets.Add("Worksheet Name");
-                workSheet.Cells[1, 1].LoadFromCollection(resp.EquipmentsLists, PrintHeaders: true, TableStyle: OfficeOpenXml.Table.TableStyles.Medium6);
-                workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
-                return File(excel.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Reports.xlsx");
-            }
+        //[HttpGet]
+        //public ActionResult ExportToExcel(GetAllEquipmentsRequsted req)
 
-        }
+        //{
+        //    var resp = _requestExecutor.Execute(req);
+        //    using (var excel = new ExcelPackage())
+        //    {
+        //        var workSheet = excel.Workbook.Worksheets.Add("Worksheet Name");
+        //        workSheet.Cells[1, 1].LoadFromCollection(resp.EquipmentsLists, PrintHeaders: true, TableStyle: OfficeOpenXml.Table.TableStyles.Medium6);
+        //        workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
+        //        return File(excel.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Reports.xlsx");
+        //    }
+
+        //}
         public ActionResult Print(int Id)
         {
             GetEquipmentsPrintRequsted req = new GetEquipmentsPrintRequsted();
@@ -109,15 +112,16 @@ namespace DPWVessel.Web.Controllers
             var data = new Dictionary<string, object>
             {
                 { "Id #", resp.id },
+                {"Type Id" ,resp.equipmentTypeId },
                 { "Name", resp.name },
                 { "Type Name", resp.equipmentTypeName },
                 { "Created At", resp.createdAt },
                 { "Created By", resp.createdBy }
             };
 
-            var excelExport = new ExcelExport(); // Replace ViewModel with the actual type of your equipment
+            var excelExport = new ExeclExportServices(); // Create your instance of execlExportServices
+            var headers = new[] { "Id #", "Type Id", "Name", "Type Name", "Created At", "Created By" };
 
-            var headers = new[] { "Id #", "Name", "Type Name", "Created At", "Created By" };
 
 
             var excelBytes = excelExport.ExportToExcel(data, headers);
@@ -126,6 +130,69 @@ namespace DPWVessel.Web.Controllers
 
             return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
         }
+        [HttpPost]
+        public async Task<ActionResult> Upload(HttpPostedFileBase file)
+        {
+
+
+            if (file != null && file.ContentLength > 0)
+            {
+                try
+                {
+                    using (var stream = file.InputStream)
+                    {
+                        using (ExcelPackage package = new ExcelPackage(stream))
+                        {
+                            ExcelWorksheet worksheet = package.Workbook.Worksheets["Sheet1"];
+                            int totalRows = worksheet.Dimension.Rows;
+                            AddEquipmentsRequsted req = new AddEquipmentsRequsted();
+                            UpdateEquipmentsInformationRequest ureq = new UpdateEquipmentsInformationRequest();
+
+                            for (int i = 2; i <= totalRows; i++)
+                            {
+                                int Id = Convert.ToInt32(worksheet.Cells[i, 1].Value);
+                                string Name = worksheet.Cells[i, 3].Value.ToString();
+                                string UserName = _sessionManager.CurrentUser.UserName;
+
+                                var t = await _dbContext.Equipments.FindAsync(Id);
+
+                                if (t != null)
+                                {
+                                    ureq.data.id = Id;
+                                    ureq.data.equipmentTypeId = Convert.ToInt32(worksheet.Cells[i, 2].Value);
+                                    ureq.data.name = Name;
+                                    ureq.data.updatedBy = UserName;
+
+                                    await _requestExecutor.ExecuteAsync(ureq);
+                                }
+                                else
+                                {
+                                    req.equipmentsTypeId = Convert.ToInt32(worksheet.Cells[i, 2].Value);
+                                    req.name = Name;
+                                    req.createdBy = UserName;
+                                    req.updatedBy = UserName;
+
+                                    await _requestExecutor.ExecuteAsync(req);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { msg = ex.Message, Istrue = false });
+                }
+            }
+            else
+            {
+                // Handle the case when no file is selected
+                return Json(new { msg = "Error file is not selected", Isture = false });
+            }
+
+            // Assuming the operation was successful
+            return Json(new { msg = "Records processed successfully.", Istrue = true });
+        }
+
 
         [HttpGet]
         public ActionResult ImportUserData()

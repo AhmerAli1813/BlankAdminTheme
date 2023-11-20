@@ -9,7 +9,8 @@ app.controller('EquipmentsCtr',
         "newGridService",
         "$window",
         "$filter",
-        function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window, $filter) {
+        "$http", 
+        function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window, $filter,$http) {
             //var url = urlService.getUrlPrams();
        
             $scope.init = function ()
@@ -112,8 +113,56 @@ app.controller('EquipmentsCtr',
                 $window.open('/Equipments/ToExportExcelEquipment?' + queryString, '_self');
 
             }
+            $scope.ToImportExcel = function () {
+                
+                var fileInput = $("#ExcelFile")[0]; // Get the file input element
+                var files = fileInput.files; // Get the selected files
+
+                if (!files.length) {
+                    toastr.error("Please choose a file");
+                    return false;
+                }
+
+                var file = files[0]; // Get the first selected file
+
+                // Check the file extension
+                var fileName = file.name;
+                var extension = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+
+                if (extension !== 'xlsx' && extension !== 'xls') {
+                    toastr.error('Please select an Excel file with the extension .xlsx or .xls.');
+                    return false;
+                }
+
+                var formData = new FormData();
+                formData.append('file', file);
+
+                $http.post('/Equipments/upload', formData, {
             
-         
+                    transformRequest: angular.identity,
+                    headers: { 'Content-Type': undefined }
+                }).then(function (response) {
+                    // Handle success
+                    console.log(response);
+                    console.log(response.data.msg);    // Access the 'msg' property
+                    console.log(response.data.Istrue)
+                    toastr.success("Records Save successfully");
+                    $('#ImportExcelModal').modal('hide');
+                    window.reload();
+
+                }, function (error) {
+                    // Handle error
+                    console.log(response.data.msg);    // Access the 'msg' property
+                    console.log(response.data.Istrue);
+                    $('#ImportExcelModal').modal('hide');
+                });
+           
+            };
+
+
+
+
+            
             $scope.AddEquipments = function (data) {
                 console.log(data);
                 if (data == null || data == undefined || data == '') {
@@ -124,7 +173,7 @@ app.controller('EquipmentsCtr',
                     toastr.error('Please Enter Name');
                     return false;
                 }
-                if (data.equipmentsTypeId == null || data.equipmentsTypeId == undefined || data.equipmentsTypeId == '') {
+                if (data.equipmentTypeId == null || data.equipmentTypeId == undefined || data.equipmentTypeId == '' || data.equipmentTypeId == 0) {
                     toastr.error('Please Select  euipments types ');
                     return false;
                 }
@@ -153,7 +202,7 @@ app.controller('EquipmentsCtr',
                     toastr.error('Please Enter Name');
                     return false;
                 }
-                if (data.equipmentTypeId == null || data.equipmentTypeId == undefined || data.equipmentTypeId == '') {
+                if (data.equipmentTypeId == null || data.equipmentTypeId == undefined || data.equipmentTypeId == '' || data.equipmentTypeId == 0) {
                     toastr.error('Please Select  euipments types ');
                     return false;
                 }
@@ -175,7 +224,6 @@ app.controller('EquipmentsCtr',
             $scope.PrintHref = function (Id) {
                 $window.open('/Equipments/Print?Id=' + Id, '_self');
             }
-            
             $scope.initEdit = function () {
                 var Url = urlService.getUrlPrams();
                 GetEquipmentTypes();
@@ -191,7 +239,6 @@ app.controller('EquipmentsCtr',
 
             }
 
-                
             function stringToDate(_date, format, delimiter) {
                 var formatLowerCase = format.toLowerCase();
                 var formatItems = formatLowerCase.split(delimiter);

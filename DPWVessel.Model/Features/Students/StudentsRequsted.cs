@@ -62,7 +62,7 @@ namespace DPWVessel.Model.Features.Students
                 Name = x.SName,
                 RollNo = x.RollNo,
                 Age = x.Age
-            }).OrderByDescending(x=>x.Id).ToList();
+            }).OrderByDescending(x => x.Id).ToList();
 
             return rep;
         }

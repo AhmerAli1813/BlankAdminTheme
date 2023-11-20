@@ -33,7 +33,7 @@
                                                 <label>Equiments Type  </label>
                                                 
                                                 <select class="form-select" ng-model="eq.equipmentTypeId">
-                                                    <option class="form-control"> Select Equiments Types</option>
+                                                    <option class="form-control" value="0"> Select Equiments Types</option>
                                                     <option class="form-control" id="equipmentTypeId" ng-repeat="item in EqtyList" value="{{item.id}}" ng-selected="item.id==eq.equipmentTypeId"> {{item.name }}</option>
                                                 </select>
                                             </div>

@@ -46,7 +46,7 @@ namespace DPWVessel.Model.Features.EquipmentTypes
                 resp.updatedAt = req.UpdatedAt;
                 resp.updatedBy = req.UpdatedBy;
 
-                
+
             }
             return resp;
 

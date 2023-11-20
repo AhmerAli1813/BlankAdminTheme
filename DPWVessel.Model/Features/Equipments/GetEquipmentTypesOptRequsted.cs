@@ -1,6 +1,5 @@
 ﻿using DE.Infrastructure.Concept;
 using DPWVessel.Model.EntityModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +9,7 @@ namespace DPWVessel.Model.Features.EquipmentTypes
     {
         public int id { get; set; }
         public string name { get; set; }
-   
+
     }
     public class GetEquipmentTypesOptRespone : Response
     {
@@ -20,7 +19,7 @@ namespace DPWVessel.Model.Features.EquipmentTypes
     {
         public int id { get; set; }
         public string name { get; set; }
-       
+
     }
     public class GetEquipmentTypesOptRequstedHandel : IRequestHandler<GetEquipmentTypesOptRequsted, GetEquipmentTypesOptRespone>
     {
@@ -40,7 +39,7 @@ namespace DPWVessel.Model.Features.EquipmentTypes
             {
                 id = x.Id,
                 name = x.Name,
-            }).OrderByDescending(x=>x.id).ToList();
+            }).OrderByDescending(x => x.id).ToList();
 
             return rep;
         }

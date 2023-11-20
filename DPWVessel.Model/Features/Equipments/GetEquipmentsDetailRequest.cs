@@ -1,6 +1,5 @@
 ﻿using DE.Infrastructure.Concept;
 using DPWVessel.Model.EntityModel;
-using System;
 using System.Linq;
 
 namespace DPWVessel.Model.Features.Equipments
@@ -15,7 +14,7 @@ namespace DPWVessel.Model.Features.Equipments
         public int id { get; set; }
         public string name { get; set; }
         public int? equipmentTypeId { get; set; }
-        
+
 
     }
 
@@ -38,8 +37,8 @@ namespace DPWVessel.Model.Features.Equipments
                 resp.id = req.Id;
                 resp.name = req.Name;
                 resp.equipmentTypeId = req.EquipmentTypeId;
-             
-                
+
+
             }
             return resp;
 

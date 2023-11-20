@@ -41,6 +41,9 @@
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.3, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.3\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
       <Private>True</Private>
@@ -57,10 +60,12 @@
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -154,6 +159,8 @@
     <Compile Include="Features\Grid\GridRemoveRequest.cs" />
     <Compile Include="Features\Grid\GridUpdateRequest.cs" />
     <Compile Include="Features\Grid\TestRequest.cs" />
+    <Compile Include="Features\Shared\ExcelImportService.cs" />
+    <Compile Include="Features\Shared\ExeclExportServices.cs" />
     <Compile Include="Features\Shared\GetStringConstantEnumerationRequest.cs" />
     <Compile Include="Features\Shared\GetEnumDropdownRequest.cs" />
     <Compile Include="Features\Students\AddStudentsRequsted.cs" />

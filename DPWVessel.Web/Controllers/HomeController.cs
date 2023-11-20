@@ -10,7 +10,7 @@ namespace DPWVessel.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        private UserInformation _user;
+        //private UserInformation _user;
         private readonly IRequestExecutor _requestExecutor;
         private readonly ISessionManager _sessionManager;
 
