@@ -12,20 +12,26 @@ app.controller('UsersCtr',
             var url = urlService.getUrlPrams();
    
             $scope.init = function () {
+            $scope.ajaxGet('api/UsersApi/GetUsersListRequest', null, function (resp) {
+                console.log(resp);
+                if (resp.Success) {
+                    $scope.UserList = resp.UsersList;
+                    GetRoles();
+                    $scope.AppList();
 
-                $scope.ajaxGet('api/UsersApi/GetUsersListRequest', null, function (resp) {
-                    
-                    console.log(resp);
-                    if (resp.Success) {
-                        $scope.UserList = resp.UsersList;
-                        GetRoles();
-                        $scope.AppList();
-                    }
-                });
-
-            
-             
-            }
+                    // Initialize the DataTable
+                    $timeout(function () {
+                        $('#userTable').DataTable({
+                            "paging": true,
+                            "ordering": true,
+                            "info": true,
+                            "searching": true,
+                            // Add other DataTable options as needed
+                        });
+                    });
+                }
+            });
+        }
             $scope.AppList =function (data)
             {
                 

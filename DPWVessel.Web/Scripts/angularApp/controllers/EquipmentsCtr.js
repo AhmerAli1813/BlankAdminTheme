@@ -1,36 +1,38 @@
-﻿'use strict';
-app.controller('EquipmentsCtr',
-    [
-        "$scope",
-        "$rootScope",
-        "$timeout",
-        "$q",
-        "urlService",
-        "newGridService",
-        "$window",
-        "$filter",
-        "$http", 
-        function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window, $filter,$http) {
-            //var url = urlService.getUrlPrams();
-       
-            $scope.init = function ()
-            {
-                console.log("Welcome Equipment Controller Anguler")
-                GetEquipments();
-                GetEquipmentTypes();
-            }
-            function GetEquipments()
-            {
-                var TypeId = urlService.getUrlPrams();
-                $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList',null , function (resp) {
-                    
-                    console.log(resp);
-                    if (resp.Success) {
-                        $scope.EqList = resp.EquipmentsLists;
-                    }
+﻿
+'use strict';
 
-                });
-            }
+app.controller('EquipmentsCtr', [
+    "$scope",
+    "$rootScope",
+    "$timeout",
+    "$q",
+    "urlService",
+    "newGridService",
+    "$window",
+    "$filter",
+    "$http",
+    function ($scope, $rootScope, $timeout, $q, urlService, newGridService, $window, $filter, $http) {
+        $scope.init = function () {
+            console.log("Welcome Equipment Controller Angular");
+            GetEquipments();
+            GetEquipmentTypes();
+        }
+
+        function GetEquipments() {
+            $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList', null, function (resp) {
+                console.log(resp);
+                if (resp.Success) {
+                    $scope.EqList = resp.EquipmentsLists;
+                    $timeout(function () {
+                        initDataTable();
+                    });
+                }
+            });
+        }
+     
+   
+
+
             function GetEquipmentTypes() {
                 $scope.ajaxGet('api/EquipmentsApi/GetAllEquipmentsTypesOpt', null, function (resp) {
                     console.log("GetAll Equipments Types Opt",resp);
@@ -77,6 +79,9 @@ app.controller('EquipmentsCtr',
                         
                         $scope.EqList = resp.EquipmentsLists;
                         console.log('Filter scope EqList', $scope.EqList);
+                        $timeout(function () {
+                            initDataTable();
+                        });
                     }
 
                 });
@@ -161,7 +166,17 @@ app.controller('EquipmentsCtr',
 
 
 
-
+        function initDataTable() {
+            // Assuming you have a table with id 'equipmentTable'
+            $('#equipmentTable').DataTable({
+                // Add DataTable options here
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "searching": true,
+                // Add more options as needed
+            });
+        }
             
             $scope.AddEquipments = function (data) {
                 console.log(data);

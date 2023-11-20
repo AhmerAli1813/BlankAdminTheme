@@ -16,6 +16,7 @@ app.controller('EquipmentTypesCtr',
                 console.log("Welcome EquipmentType Controller Anguler")
                 GetEquipmentTypes();
             }
+
             function GetEquipmentTypes()
             {
                 
@@ -24,11 +25,25 @@ app.controller('EquipmentTypesCtr',
                     console.log(resp);
                     if (resp.Success) {
                         $scope.EqtyList = resp.EquipmentTypesLists;
+                        $timeout(function () {
+                            initDataTable();
+                        });
                     }
 
                 });
             }
-          
+            function initDataTable() {
+                // Assuming you have a table with id 'equipmentTable'
+                $('#equipmenttypeTable').DataTable({
+                    // Add DataTable options here
+                    "paging": true,
+                    "ordering": true,
+                    "info": true,
+                    "searching": true,
+                    // Add more options as needed
+                });
+            }
+
             $scope.FilterEquipmentType = function (data) {
                 console.log("ddata", data);
                 if (data == undefined) {
