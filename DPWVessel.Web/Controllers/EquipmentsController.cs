@@ -201,6 +201,7 @@ namespace DPWVessel.Web.Controllers
                                 }
                             }
                         }
+                        DeleteTempFile(tempFileName);
                     }
                     catch (Exception ex)
                     {
