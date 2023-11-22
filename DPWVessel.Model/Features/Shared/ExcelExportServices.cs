@@ -75,7 +75,33 @@ namespace DPWVessel.Model.Features.Shared
         {
             return ExportToExcel(new List<Dictionary<string, object>> { data }, headers);
         }
+        public byte[] ExportToExcel(string[] headers)
+        {
+            using (var package = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
 
+                // Add headers
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    worksheet.Cells[1, i + 1].Value = headers[i];
+                    Color colFromHex = ColorTranslator.FromHtml("#013447");
+                    worksheet.Cells[1, i + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheet.Cells[1, i + 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, i + 1].Style.Font.Bold = true;
+                    worksheet.Cells[1, i + 1].Style.Font.Size = 12;
+                    worksheet.Cells[1, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[1, i + 1].Style.Font.Color.SetColor(Color.White);
+                }
+
+                // Add data
+         
+
+                worksheet.Cells.AutoFitColumns();
+
+                return package.GetAsByteArray();
+            }
+        }
         private bool IsNumeric(object value)
         {
             return value is int || value is decimal || value is float || value is double;

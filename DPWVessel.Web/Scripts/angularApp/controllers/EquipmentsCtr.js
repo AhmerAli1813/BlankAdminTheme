@@ -125,56 +125,81 @@ app.controller('EquipmentsCtr', [
 
                 $window.open('/Equipments/ToExportExcelEquipment?' + queryString, '_self');
 
-            }
-            $scope.ToImportExcel = function () {
-                
-                var fileInput = $("#ExcelFile")[0]; // Get the file input element
-                var files = fileInput.files; // Get the selected files
-
-                if (!files.length) {
-                    toastr.error("Please choose a file");
-                    return false;
-                }
-
-                var file = files[0]; // Get the first selected file
-
-                // Check the file extension
-                var fileName = file.name;
-                var extension = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
-
-                if (extension !== 'xlsx' && extension !== 'xls') {
-                    toastr.error('Please select an Excel file with the extension .xlsx or .xls.');
-                    return false;
-                }
-
-                var formData = new FormData();
-                formData.append('file', file);
-
-                $http.post('/Equipments/upload', formData, {
-            
-                    transformRequest: angular.identity,
-                    headers: { 'Content-Type': undefined }
-                }).then(function (response) {
-                    // Handle success
-                    console.log(response);
-                    console.log(response.data.msg);    // Access the 'msg' property
-                    console.log(response.data.Istrue)
-                    toastr.success("Records Save successfully");
-                    $('#ImportExcelModal').modal('hide');
-                    
-                    $timeout(()=>{
-                        window.reload();
-                    }, 2000)
-                    
-
-                }, function (error) {
-                    // Handle error
-                    console.log(response.data.msg);    // Access the 'msg' property
-                    console.log(response.data.Istrue);
-                    $('#ImportExcelModal').modal('hide');
-                });
+        }
+        $scope.ToExportExcelTemplate = function (data) {
            
-            };
+            $window.open('/Equipments/ExcelTemplate');
+
+        }
+        $scope.ToImportExcel = function () {
+            var fileInput = $("#ExcelFile")[0]; // Get the file input element
+            var files = fileInput.files; // Get the selected files
+
+            if (!files.length) {
+                toastr.error("Please choose a file");
+                return false;
+            }
+
+            var file = files[0]; // Get the first selected file
+
+            // Check the file extension
+            var fileName = file.name;
+            var extension = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+
+            if (extension !== 'xlsx' && extension !== 'xls') {
+                toastr.error('Please select an Excel file with the extension .xlsx or .xls.');
+                return false;
+            }
+
+            var formData = new FormData();
+            formData.append('file', file);
+
+            $.ajax({
+                url: '/Equipments/Upload',
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                error: function (err) {
+                    console.log(err);
+                }
+            }).done(function (res) {
+                console.log(res);
+                if (res.Isture == false) {
+                    toastr.error(res.msg);
+                    if (res.msg2 === 'File') {
+                        // Convert byte array to Uint8Array
+                        var bytes = new Uint8Array(res.ErrorByt);
+
+                        // Create a Blob from the Excel file bytes
+                        var blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+                        // Create a link element and trigger a click to download the file
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        var currentDate = new Date().toLocaleDateString();
+
+
+                        link.download = `ErrorFileEquipments_${currentDate}.xlsx`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                    }
+                }
+                else {
+                    toastr.success(res.msg);
+
+                    
+                }
+               
+                $timeout(() => {
+                    window.reload();
+                }, 2500)
+                
+                console.log(res);
+            });
+        };
 
 
 

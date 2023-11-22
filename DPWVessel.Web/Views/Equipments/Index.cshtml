@@ -17,6 +17,8 @@
                     <span>Filters</span>
                 </button>
                 <a type="button" href="@Url.Action("Add","Equipments")" class="Customebtn btnPrimary mr-10 pull-right"><span>Add</span></a>
+                <a type="button" data-bs-toggle="modal" data-bs-target="#ImportExcelModal" class="Customebtn btnSuccess mr-10 pull-right"><span>Import</span></a>
+                <a type="button" ng-click="ToExportExcel(search)" class="Customebtn btnSecondary mr-10 pull-right"><span>Export To Excel</span></a>
             </div>
         </div>
         <hr />
@@ -71,8 +73,8 @@
                         <div class="form-group">
                             <button type="button" onclick="reload()" class="Customebtn btnSecondary mr-10 pull-right mt-20"><span>Reset</span></button>
                             <button type="button" ng-click="FilterEquipments(search)" class="Customebtn btnPrimary  mr-10 pull-right mt-20"><span>Serach</span></button>
-                            <button type="button" ng-click="ToExportExcel(search)" class="Customebtn btnSecondary  mr-10 pull-right mt-20"><span>Export into Excel</span></button>
-                            <button type="button"data-bs-toggle="modal" data-bs-target="#ImportExcelModal" class="Customebtn btnSuccess  mr-10 pull-right mt-20"><span>Import From Excel</span></button>
+                            @*<button type="button" ng-click="ToExportExcel(search)" class="Customebtn btnSecondary  mr-10 pull-right mt-20"><span>Export into Excel</span></button>
+                            <button type="button"data-bs-toggle="modal" data-bs-target="#ImportExcelModal" class="Customebtn btnSuccess  mr-10 pull-right mt-20"><span>Import From Excel</span></button>*@
                             
                             @*  <button id="ExportXL" name="ExportXL" type="button" value="Export to Excel" onclick="location.href='@Url.Action("ExportToExcel", "Equipments")'" >Export</button>*@
                         </div>
@@ -147,19 +149,20 @@
                 </nav>*@
         </div>
     </div>
-    <div class="modal fade" id="ImportExcelModal" aria-labelledby="ImportExcelModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" style="display: none;" aria-hidden="true">
+    <div class="modal fade"  id="ImportExcelModal" aria-labelledby="ImportExcelModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" style="display: none;" aria-hidden="true">
         <div class="modal-dialog ">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ImportExcelModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header text-light" style="background: #013447; ">
+                    <h5 class="modal-title" id="ImportExcelModalLabel">Equipments import </h5>
+                    <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <label for="ExcelFile">Select Excel File</label>
                     <input type="file" id="ExcelFile" ng-model="file.ExcelFile" class="form-control"/>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="Customebtn btnSecondary" data-bs-dismiss="modal"><span>Close</span></button>
+                    <button type="button" class="Customebtn btnSecondary" onclick="ClearExcelForm()" data-bs-dismiss="modal"><span>Cancel</span></button>
+                    <button type="button" class="Customebtn btnSuccess" ng-click="ToExportExcelTemplate()" ><span>Download Excel template </span></button>
                     <button type="button" class="Customebtn btnPrimary" ng-click="ToImportExcel(file)"><span>Import</span></button>
                 </div>
             </div>
@@ -189,5 +192,8 @@
         todayHighlight: true,
         forceParse: true,
     });
+    function ClearExcelForm() {
+        $("#ExcelFile").val('')
+    }
 
 </script>
