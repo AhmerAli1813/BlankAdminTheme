@@ -32,6 +32,12 @@ app.controller('EquipmentsCtr', [
      
         function initDataTable() {
             // Assuming you have a table with id 'equipmentTable'
+            var table = $('#equipmentTable').DataTable();
+
+            // Destroy existing DataTable instance
+            table.destroy();
+
+            // Create a new DataTable instance
             $('#equipmentTable').DataTable({
                 // Add DataTable options here
                 "paging": true,
@@ -41,6 +47,8 @@ app.controller('EquipmentsCtr', [
                 // Add more options as needed
             });
         }
+
+
 
 
             function GetEquipmentTypes() {
@@ -72,27 +80,31 @@ app.controller('EquipmentsCtr', [
                 /*    $("#endDate").val('');*/
                 }
                 console.log(data);
-              
+                if (EndDate < StartDate) {
+                    toastr.error("Start date always greate then ya equal to end Date ")
 
-                $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList',
-                    {
-                        id: data.id,
-                        name: data.name,
-                        equipmentTypeId: data.equipmentTypeId,
-                        startDate: StartDate,
-                        endDate: EndDate
-                    }
-                    , function (resp) {
-                        data = {};
-                    console.log('Filter Data', resp);
-                    if (resp.Success) {
-                        
-                        $scope.EqList = resp.EquipmentsLists;
-                        console.log('Filter scope EqList', $scope.EqList);
-                        
-                    }
+                } else {
 
-                });
+                    $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList',
+                        {
+                            id: data.id,
+                            name: data.name,
+                            equipmentTypeId: data.equipmentTypeId,
+                            startDate: StartDate,
+                            endDate: EndDate
+                        }
+                        , function (resp) {
+                            data = {};
+                            console.log('Filter Data', resp);
+                            if (resp.Success) {
+
+                                $scope.EqList = resp.EquipmentsLists;
+                                console.log('Filter scope EqList', $scope.EqList);
+
+                            }
+
+                        });
+                }
             }
             $scope.ToExportExcel = function (data) {
                 console.log("ddata", data);

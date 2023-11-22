@@ -128,23 +128,35 @@
                                     </span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="@Url.Action("Index","EquipmentTypes")" class="nav-link">
-                                    <i class="fas fa-user"></i>
-                                    <span>
-                                        EquipmentTypes
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="@Url.Action("Index","Equipments")" class="nav-link">
+
+                            <li class="nav-item nav-item-submenu">
+                                <a href="#" class="nav-link">
                                     <i class="fas fa-user"></i>
                                     <span>
                                         Equipments
                                     </span>
                                 </a>
-                            </li>
+                                <ul class="nav nav-group-sub collapse" data-submenu-title="Data Warehouse">
 
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Index","EquipmentTypes")" class="nav-link">
+                                            <i class="fas fa-user"></i>
+                                            <span>
+                                                EquipmentTypes
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Index","Equipments")" class="nav-link">
+                                            <i class="fas fa-user"></i>
+                                            <span>
+                                                Equipments
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
                         }
 
                         <!-- /page kits -->

@@ -33,31 +33,19 @@ namespace DPWVessel.Web.Controllers
 
         }
         // GET: Users
-        public ActionResult Index()
-        {
+        public ActionResult Index() => View();
+        
+        public ActionResult ResetPassword() => View();
+        
+        public ActionResult Edit() => View();
+        
 
-            return View();
-        }
-        public ActionResult ResetPassword()
-        {
-            return View();
-        }
-        public ActionResult Edit()
-        {
-            return View();
-        }
-
-        public ActionResult Step2()
-        {
-            return View();
-        }
+        public ActionResult Step2() => View();
+        
 
         [HttpGet]
-        public ActionResult ImportUserData()
-        {
-
-            return View();
-        }
+        public ActionResult ImportUserData() => View();
+        
 
         [HttpPost]
         public async Task<ActionResult> ImportUserData(ImportExcel importExcel)
@@ -110,7 +98,7 @@ namespace DPWVessel.Web.Controllers
                     }
                 }
             }
-            catch (Exception exp)
+            catch
             {
                 ViewBag.Message3 = "File upload failed!!";
                 return View();

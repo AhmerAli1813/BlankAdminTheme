@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -37,21 +36,11 @@ namespace DPWVessel.Web.Controllers
         }
         // GET: EquipmentTypes
         [HttpGet]
-        public ActionResult Index()
-        {
-
-            return View();
-        }
-        public ActionResult Add()
-        {
-
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
-            return View();
-        }
+        public ActionResult Index() => View();
+    
+        public ActionResult Add() => View();
+        public ActionResult Edit() => View();
+        
 
         public ActionResult ToExportExcelEquipment(GetAllEquipmentsRequsted req)
         {
@@ -86,7 +75,7 @@ namespace DPWVessel.Web.Controllers
         {
             var excelExport = new ExcelExportServices();
 
-            var headers = new[] {"Name*", "Type Name*" };
+            var headers = new[] { "Name*", "Type Name*" };
 
 
             var excelBytes = excelExport.ExportToExcel(headers);
@@ -135,10 +124,7 @@ namespace DPWVessel.Web.Controllers
 
             return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
         }
-       
 
-
-      
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase File)
         {
@@ -148,31 +134,95 @@ namespace DPWVessel.Web.Controllers
             if (File != null && File.ContentLength > 0)
             {
                 //ExcelExtension contains array of excel extension types
-                  //save the uploaded excel file to temp location
-                    SaveExcelTemp(File, out tempFileName);
-                    //validate the excel sheet
-                    if (ValidateExcel(tempFileName, out errorMessage, out ErrorFile))
+                //save the uploaded excel file to temp location
+                SaveExcelTemp(File, out tempFileName);
+                List<string> expectedHeaders = new List<string> { "Name*", "Type Name*" };
+                //validate the excel sheet
+                if (ValidateExcel(tempFileName, out errorMessage, out ErrorFile, expectedHeaders))
+                {
+                    if (errorMessage == "")
                     {
-                            if(errorMessage == "")
+                        errorMessage = "Save Records  Successfully";
+                    }
+                    //save the data
+                    //SaveExcelDataToDatabase(tempFileName);
+                    try
+                    {
+                        using (var stream = System.IO.File.OpenRead(tempFileName))
+                        {
+                            using (ExcelPackage package = new ExcelPackage(stream))
                             {
-                                errorMessage = "Save Records  Successfully";
+                                ExcelWorksheet worksheet = package.Workbook.Worksheets["Sheet1"];
+                                List<int> invalidRows = new List<int>();
+
+                                if (worksheet.Dimension != null)
+                                {
+                                    int totalRows = worksheet.Dimension.Rows;
+
+                                    for (int i = 2; i <= totalRows; i++)
+                                    {
+                                        object nameValue = worksheet.Cells[i, 1].Value;
+                                        string name = (nameValue == null || string.IsNullOrWhiteSpace(nameValue.ToString())) ? null : nameValue.ToString();
+
+                                        object nameTypeValue = worksheet.Cells[i, 2].Value;
+                                        string nameType = (nameTypeValue == null || string.IsNullOrWhiteSpace(nameTypeValue.ToString())) ? null : nameTypeValue.ToString();
+
+                                        int typeId = _dbContext.EquipmentTypes
+                                            .Where(x => x.Name == nameType)
+                                            .Select(x => x.Id)
+                                            .FirstOrDefault();
+
+                                        string userName = _sessionManager.CurrentUser.FullName;
+
+                                        if (typeId > 0 && name != null)
+                                        {
+                                            AddEquipmentsRequsted req = new AddEquipmentsRequsted
+                                            {
+                                                equipmentsTypeId = typeId,
+                                                name = name,
+                                                createdBy = userName,
+                                                updatedBy = userName
+                                            };
+
+                                            _requestExecutor.Execute(req);
+                                        }
+                                        else
+                                        {
+                                            invalidRows.Add(i);
+                                        }
+                                    }
+
+                                    if (invalidRows.Any())
+                                    {
+                                        byte[] invalidRecordsFile = SaveInvalidRecordsToExcel(worksheet, invalidRows);
+
+                                        return Json(new { ErrorByt = invalidRecordsFile, msg2 = "File", msg = "Some records are not inserted", Isture = false });
+                                    }
+                                }
                             }
-                        //save the data
-                        SaveExcelDataToDatabase(tempFileName);
-                        DeleteTempFile(tempFileName);
-                      return Json(new { ErrorByt = ErrorFile, msg2 = "File", msg = errorMessage, Isture = true });
-                    
-                        //spreadsheet is valid, show success message or any logic here
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                    //set error message to shown in front end
-                   
-                    DeleteTempFile(tempFileName);
-                    return Json(new { ErrorByt=ErrorFile, msg2 = "File",  msg = errorMessage, Isture = false });
-                  
+                        // Handle the exception appropriately
+                        // You might want to log the exception or return an error response
+                        return Json(new { ErrorByt = ErrorFile, msg2 = "File", msg = "Exception:" + ex.Message, Isture = true });
                     }
-                
+                    DeleteTempFile(tempFileName);
+                    
+                    return Json(new { ErrorByt = ErrorFile, msg2 = "File", msg = errorMessage, Isture = true });
+
+                    //spreadsheet is valid, show success message or any logic here
+                }
+                else
+                {
+                    //set error message to shown in front end
+
+                    DeleteTempFile(tempFileName);
+                    return Json(new { ErrorByt = ErrorFile, msg2 = "File", msg = errorMessage, Isture = false });
+
+                }
+
             }
             else
             {
@@ -180,7 +230,41 @@ namespace DPWVessel.Web.Controllers
                 return Json(new { msg = "file is not uploaded", Isture = false });
             }
 
-           
+
+        }
+
+        private byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows)
+        {
+            using (var package = new ExcelPackage())
+            {
+                var invalidSheet = package.Workbook.Worksheets.Add("InvalidRecords");
+
+                // Copy headers from the original sheet to the new sheet
+                for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
+                {
+                    invalidSheet.Cells[1, col].Value = worksheet.Cells[1, col].Value;
+                }
+
+                // Mark invalid rows with red color and add a comment
+                foreach (int row in invalidRows)
+                {
+                    for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
+                    {
+                        var sourceCell = worksheet.Cells[row, col];
+                        var invalidCell = invalidSheet.Cells[row, col];
+
+                        invalidCell.Value = sourceCell.Value;
+
+                        var fill = invalidCell.Style.Fill;
+                        fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(System.Drawing.Color.Red);
+
+                        invalidCell.AddComment("Record not inserted", "");
+                    }
+                }
+
+                return package.GetAsByteArray();
+            }
         }
 
         private void SaveExcelDataToDatabase(string tempFileName)
@@ -192,61 +276,52 @@ namespace DPWVessel.Web.Controllers
                     using (ExcelPackage package = new ExcelPackage(stream))
                     {
                         ExcelWorksheet worksheet = package.Workbook.Worksheets["Sheet1"];
+                        List<int> invalidRows = new List<int>();
+
                         if (worksheet.Dimension != null)
                         {
                             int totalRows = worksheet.Dimension.Rows;
 
                             for (int i = 2; i <= totalRows; i++)
                             {
-                                object NameValue = worksheet.Cells[i, 1].Value;
-                                string Name;
-                                
-                                if (NameValue == null || string.IsNullOrWhiteSpace(NameValue.ToString()))
-                                {
-                                    Name = null;
-                                }
-                                else
-                                {
-                                    Name = NameValue.ToString();
-                                }
-                                object NameTypeValue = worksheet.Cells[i, 2].Value;
-                                string NameType = null; // Initialize with a default value
+                                object nameValue = worksheet.Cells[i, 1].Value;
+                                string name = (nameValue == null || string.IsNullOrWhiteSpace(nameValue.ToString())) ? null : nameValue.ToString();
 
-                                if (NameTypeValue == null || string.IsNullOrWhiteSpace(NameTypeValue.ToString()))
-                                {
-                                    NameTypeValue = null;
-                                }
-                                else
-                                {
-                                    NameType = NameTypeValue.ToString();
-                                }
+                                object nameTypeValue = worksheet.Cells[i, 2].Value;
+                                string nameType = (nameTypeValue == null || string.IsNullOrWhiteSpace(nameTypeValue.ToString())) ? null : nameTypeValue.ToString();
 
-                                int TypeId = _dbContext.EquipmentTypes
-                                    .Where(x => x.Name == NameType)
+                                int typeId = _dbContext.EquipmentTypes
+                                    .Where(x => x.Name == nameType)
                                     .Select(x => x.Id)
                                     .FirstOrDefault();
 
-                                string UserName = _sessionManager.CurrentUser.FullName;
-                                if(TypeId > 0 && Name != null)
+                                string userName = _sessionManager.CurrentUser.FullName;
+
+                                if (typeId > 0 && name != null)
                                 {
-                                    AddEquipmentsRequsted req = new AddEquipmentsRequsted();
-                                    req.equipmentsTypeId = TypeId;
-                                    req.name = Name;
-                                    req.createdBy = UserName;
-                                    req.updatedBy = UserName;
+                                    AddEquipmentsRequsted req = new AddEquipmentsRequsted
+                                    {
+                                        equipmentsTypeId = typeId,
+                                        name = name,
+                                        createdBy = userName,
+                                        updatedBy = userName
+                                    };
 
                                     _requestExecutor.Execute(req);
-                             
                                 }
-                                
+                                else
+                                {
+                                    invalidRows.Add(i);
+                                }
+                            }
 
-
-
-
+                            if (invalidRows.Any())
+                            {
+                                byte[] invalidRecordsFile = SaveInvalidRecordsToExcel(worksheet, invalidRows);
+                                // Do something with the invalidRecordsFile, like saving it to disk or sending it as a response
+                                TempData["InvlidRecors"] = invalidRecordsFile;
                             }
                         }
-                        
-                        
                     }
                 }
             }
@@ -255,10 +330,9 @@ namespace DPWVessel.Web.Controllers
                 // Handle the exception appropriately
                 // You might want to log the exception or return an error response
                 Console.WriteLine(ex.Message);
-            
             }
-            
         }
+
 
         private void SaveExcelTemp(HttpPostedFileBase file, out string tempFileName)
         {
@@ -309,7 +383,7 @@ namespace DPWVessel.Web.Controllers
             return result;
         }
 
-        private bool ValidateExcel(string tempFileName, out string errorMessage, out byte[] ErrorFile)
+        private bool ValidateExcel(string tempFileName, out string errorMessage, out byte[] ErrorFile, List<string> expectedHeaders)
         {
             bool result = true;
             string error = string.Empty;
@@ -327,6 +401,7 @@ namespace DPWVessel.Web.Controllers
             }
             else
             {
+
                 // Check if the spreadsheet has rows (empty spreadsheet uploaded)
                 if (totalRows == 0 || totalRows == -1)
                 {
@@ -344,6 +419,11 @@ namespace DPWVessel.Web.Controllers
                 {
                     result = false;
                     error = "Spreadsheet does not contain enough data rows.";
+                }
+                else if (CheckExcelHeaderFormat(worksheet, expectedHeaders)==false)
+                {
+                    result = false;
+                    error = "Spread sheet column header indexing mismatch.";
                 }
                 // Check if the total columns equal the headers defined (less columns)
                 else if (totalCols > 0 && !ValidateColumns(worksheet, totalCols))
@@ -372,9 +452,9 @@ namespace DPWVessel.Web.Controllers
             }
 
             errorMessage = error;
-           // worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+            // worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
             ErrorFile = excelPackage.GetAsByteArray();
-           // excelPackage.Save();
+            // excelPackage.Save();
 
             return result;
         }
@@ -444,8 +524,26 @@ namespace DPWVessel.Web.Controllers
             return result;
         }
 
+        public bool CheckExcelHeaderFormat(ExcelWorksheet worksheet , List<string> expectedHeaders)
+        {
+            bool result = true;
 
-        private bool ValidateRows(ExcelWorksheet worksheet, int totalRows, int totalCols)
+        
+
+            List<string> actualHeaders = GetColumnHeaders(worksheet);
+
+            for (int i = 0; i < expectedHeaders.Count; i++)
+            {
+                if (i >= actualHeaders.Count || !string.Equals(expectedHeaders[i], actualHeaders[i], StringComparison.OrdinalIgnoreCase))
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+        }
+            private bool ValidateRows(ExcelWorksheet worksheet, int totalRows, int totalCols)
         {
             bool result = true;
 
@@ -457,8 +555,8 @@ namespace DPWVessel.Web.Controllers
 
                     switch (j)
                     {
-                       
-                       
+
+
                         // name
                         case 1:
                             {
@@ -471,7 +569,7 @@ namespace DPWVessel.Web.Controllers
                                 result &= ValidateText(cell, "Type Name*");
                                 break;
                             }
-                     
+
                     }
                 }
             }
@@ -479,7 +577,7 @@ namespace DPWVessel.Web.Controllers
             return result;
         }
 
-      
+
 
         private bool ValidateText(ExcelRange cell, string columnName)
         {
