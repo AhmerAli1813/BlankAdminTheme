@@ -5,10 +5,8 @@ using DPWVessel.Model.Features.Shared;
 using DPWVessel.Web.Core.Session;
 using Microsoft.AspNet.Identity.Owin;
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -136,28 +134,43 @@ namespace DPWVessel.Web.Controllers
                 //ExcelExtension contains array of excel extension types
                 //save the uploaded excel file to temp location
                 SaveExcelTemp(File, out tempFileName);
-                List<string> expectedHeaders = new List<string> { "Name*", "Type Name*" };
-                //validate the excel sheet
-                if (ValidateExcel(tempFileName, out errorMessage, out ErrorFile, expectedHeaders))
+                ExcelImportService ImportService = new ExcelImportService();
+                //Here ExpectedHeaders , Here you given header of your excel file which are correct formate in case user change sequence of excel column then given error  
+                List<string> ExpectedHeaders = new List<string> { "Name*", "Type Name*" };
+
+                Dictionary<int, Func<ExcelRange, string, bool>> validationMethods = new Dictionary<int, Func<ExcelRange, string, bool>>
+                        {
+                            { 1, ImportService.ValidateText },             //Dictionary<int, Func<ExcelRange, string, bool>>: This declares a dictionary where keys
+                            { 2, ImportService.ValidateText },            //are integers(column indices) and values are functions taking an ExcelRange and a string
+                          //{ 3, ValidateEmailAddress },                 //and returning a bool.
+                          //{ 4, ValidateNumber }                       //{ 1, ValidateText },: This is an entry in the dictionary where the key is 1(column index)
+                                                                       //and the value is the ValidateText function.This is a comment indicating that it associates
+                                                                      //column index 1 with the ValidateText function.
+                                                                     //Here Your given index of excel column index into int and given validationMethodName: This
+                                                                    // is a comment explaining that the code associates Excel column indices with validation method names.
+                                                                   // Add more mappings as needed
+                        };
+
+                //validate the excel sheet here is excel format is valid then you can Insert Records
+                if (ImportService.ValidateExcel(tempFileName, out errorMessage, out ErrorFile, ExpectedHeaders, validationMethods))
                 {
                     if (errorMessage == "")
                     {
                         errorMessage = "Save Records  Successfully";
                     }
-                    //save the data
-                    //SaveExcelDataToDatabase(tempFileName);
+
                     try
                     {
                         using (var stream = System.IO.File.OpenRead(tempFileName))
                         {
                             using (ExcelPackage package = new ExcelPackage(stream))
                             {
-                                
+
                                 var workbook = package.Workbook;
 
                                 // Get the names of all sheets in the workbook
                                 var sheetNames = workbook.Worksheets.Select(sheet => sheet.Name).ToList();
-                                if(sheetNames.Count > 0)
+                                if (sheetNames.Count > 0)
                                 {
                                     string FirstSheetName = sheetNames[0];
                                     ExcelWorksheet worksheet = package.Workbook.Worksheets[FirstSheetName];
@@ -192,7 +205,7 @@ namespace DPWVessel.Web.Controllers
                                                     updatedBy = userName
                                                 };
 
-                                               var resp = _requestExecutor.Execute(req);
+                                                var resp = _requestExecutor.Execute(req);
                                                 errorMessage = resp.message;
                                             }
                                             else
@@ -203,7 +216,7 @@ namespace DPWVessel.Web.Controllers
 
                                         if (invalidRows.Any())
                                         {
-                                            byte[] invalidRecordsFile = SaveInvalidRecordsToExcel(worksheet, invalidRows);
+                                            byte[] invalidRecordsFile = ImportService.SaveInvalidRecordsToExcel(worksheet, invalidRows);
 
                                             return Json(new { ErrorByt = invalidRecordsFile, msg2 = "File", msg = "Some records are not inserted", Isture = false });
                                         }
@@ -211,10 +224,10 @@ namespace DPWVessel.Web.Controllers
                                 }
                                 else
                                 {
-                                    return Json(new { ErrorByt = ErrorFile, msg2 = "File", msg = "No Sheet takings " , Isture = false });
+                                    return Json(new { ErrorByt = ErrorFile, msg2 = "File", msg = "No Sheet takings ", Isture = false });
                                 }
-                            
-                               
+
+
                             }
                         }
                         DeleteTempFile(tempFileName);
@@ -249,45 +262,7 @@ namespace DPWVessel.Web.Controllers
 
 
         }
-        private byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows)
-        {
-            using (var package = new ExcelPackage())
-            {
-                var invalidSheet = package.Workbook.Worksheets.Add("InvalidRecords");
-                Color colFromHex = ColorTranslator.FromHtml("#013447");
-                // Copy headers from the original sheet to the new sheet
-                for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
-                {
-                    invalidSheet.Cells[1, col].Value = worksheet.Cells[1, col].Value;
-                    invalidSheet.Cells[1, col].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    invalidSheet.Cells[1, col].Style.Fill.BackgroundColor.SetColor(colFromHex);
-                    invalidSheet.Cells[1, col].Style.Font.Bold = true;
-                    invalidSheet.Cells[1, col].Style.Font.Size = 12;
-                    invalidSheet.Cells[1, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    invalidSheet.Cells[1, col].Style.Font.Color.SetColor(Color.White);
-                }
 
-                // Mark invalid rows with red color and add a comment
-                foreach (int row in invalidRows)
-                {
-                    for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
-                    {
-                        var sourceCell = worksheet.Cells[row, col];
-                        var invalidCell = invalidSheet.Cells[row, col];
-
-                        invalidCell.Value = sourceCell.Value;
-
-                        var fill = invalidCell.Style.Fill;
-                        fill.PatternType = ExcelFillStyle.Solid;
-                        fill.BackgroundColor.SetColor(Color.Red);
-
-                        invalidCell.AddComment("Record not inserted", "");
-                    }
-                }
-                invalidSheet.Cells.AutoFitColumns();
-                return package.GetAsByteArray();
-            }
-        }
         private void DeleteTempFile(string tempFileName)
         {
             try
@@ -318,229 +293,5 @@ namespace DPWVessel.Web.Controllers
             tempFileName = Path.Combine(Server.MapPath("~/Content/svgs"), file.FileName);
             file.SaveAs(tempFileName);
         }
-        private bool ValidateColumns(ExcelWorksheet worksheet, int totalColumns)
-        {
-            bool result = true;
-
-            // Get the column headers dynamically
-            List<string> listColumnHeaders = GetColumnHeaders(worksheet);
-
-            // Check if the number of columns in the worksheet matches the expected number of columns
-            if (totalColumns != listColumnHeaders.Count)
-            {
-                result = false;
-                // Add an appropriate error message
-                // You might want to customize this message based on your requirements
-                // For example, you can specify which headers are missing or extraneous
-                // error = "Spread sheet column header value mismatch.";
-            }
-
-            return result;
-        }
-        private bool ValidateExcel(string tempFileName, out string errorMessage, out byte[] ErrorFile, List<string> expectedHeaders)
-        {
-            bool result = true;
-            string error = string.Empty;
-            string filePath = GetTempFilePath(tempFileName);
-            FileInfo fileInfo = new FileInfo(filePath);
-            ExcelPackage excelPackage = new ExcelPackage(fileInfo);
-            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.First();
-            int totalRows = worksheet.Dimension == null ? -1 : worksheet.Dimension.End.Row; //worksheet total rows
-            int totalCols = worksheet.Dimension == null ? -1 : worksheet.Dimension.End.Column; // total columns
-            if (worksheet.Dimension == null)
-            {
-                // Handle the case where the worksheet is empty
-                result = false;
-                error = "Empty worksheet uploaded.";
-            }
-            else
-            {
-
-                // Check if the spreadsheet has rows (empty spreadsheet uploaded)
-                if (totalRows == 0 || totalRows == -1)
-                {
-                    result = false;
-                    error = "Empty spreadsheet uploaded.";
-                }
-                // Check if there is only one row (header row) and no data rows
-                else if (totalRows == 1 && worksheet.Cells[1, 1, 1, totalCols].All(c => c.Text == null || string.IsNullOrWhiteSpace(c.Text)))
-                {
-                    result = false;
-                    error = "Spreadsheet contains only a header row without any data.";
-                }
-                // Check if there are more than or equal to 2 rows
-                else if (totalRows < 2)
-                {
-                    result = false;
-                    error = "Spreadsheet does not contain enough data rows.";
-                }
-                else if (CheckExcelHeaderFormat(worksheet, expectedHeaders))
-                {
-                    result = false;
-                    error = "Spread sheet column header indexing mismatch.";
-                }
-                // Check if the total columns equal the headers defined (less columns)
-                else if (totalCols > 0 && !ValidateColumns(worksheet, totalCols))
-                {
-                    result = false;
-                    error = "Spread sheet column header value mismatch.";
-                }
-
-                if (result)
-                {
-                    // Validate header columns
-                    result &= ValidateColumns(worksheet, totalCols);
-
-                    if (result)
-                    {
-                        // Validate data rows, skip the header row (data rows start from 2)
-                        result &= ValidateRows(worksheet, totalRows, totalCols);
-                    }
-
-                    if (!result)
-                    {
-                        error = "There are some errors in the uploaded file. Please correct them and upload again.";
-                    }
-                }
-
-            }
-
-            errorMessage = error;
-            worksheet.Cells.AutoFitColumns();
-            ErrorFile = excelPackage.GetAsByteArray();
-            // excelPackage.Save();
-
-            return result;
-        }
-        private string GetTempFilePath(string tempFileName)
-        {
-            // Assuming the tempFileName is a relative path, combine it with the application's temporary folder
-            return Path.Combine(Server.MapPath("~/Content/svgs"), tempFileName);
-        }
-        private bool SetError(ExcelRange cell, string errorComment)
-        {
-            if (cell.Comment == null)
-            {
-                // Set the error comment
-                cell.AddComment(errorComment, "");
-            }
-            else
-            {
-                // Update the existing comment
-                cell.Comment.Text = errorComment;
-            }
-
-            var fill = cell.Style.Fill;
-            fill.PatternType = ExcelFillStyle.Solid;
-            fill.BackgroundColor.SetColor(Color.Red);
-            cell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                       return false;
-        }
-        private List<string> GetColumnHeaders(ExcelWorksheet worksheet)
-        {
-            List<string> columnHeaders = new List<string>();
-
-            int totalColumns = worksheet.Dimension == null ? -1 : worksheet.Dimension.End.Column;
-
-            for (int i = 1; i <= totalColumns; i++)
-            {
-                var cell = worksheet.Cells[1, i];
-
-                if (cell.Value != null)
-                {
-                    // Add the header value to the list
-                    columnHeaders.Add(cell.Value.ToString());
-                }
-            }
-
-            return columnHeaders;
-        }
-        private List<string> GetColumnHeaders(ExcelWorksheet worksheet, int totalColumns)
-        {
-            List<string> columnHeaders = new List<string>();
-
-            for (int i = 1; i <= totalColumns; i++)
-            {
-                var cell = worksheet.Cells[1, i];
-
-                if (cell.Value != null)
-                {
-                    // Add the header value to the list
-                    columnHeaders.Add(cell.Value.ToString());
-                }
-            }
-
-            return columnHeaders;
-        }
-        public bool CheckExcelHeaderFormat(ExcelWorksheet worksheet, List<string> expectedHeaders)
-        {
-            bool result = false;
-            List<string> actualHeaders = GetColumnHeaders(worksheet);
-
-            for (int i = 0; i < expectedHeaders.Count; i++)
-            {
-                if (i >= actualHeaders.Count || !string.Equals(expectedHeaders[i], actualHeaders[i], StringComparison.OrdinalIgnoreCase))
-                {
-                    result = true;
-                    break;
-                }
-            }
-
-            return result;
-        }
-        private bool ValidateRows(ExcelWorksheet worksheet, int totalRows, int totalCols)
-        {
-            bool result = true;
-
-            for (int i = 2; i <= totalRows; i++) //data rows start from 2`
-            {
-                for (int j = 1; j <= totalCols; j++)
-                {
-                    var cell = worksheet.Cells[i, j];
-
-                    switch (j)
-                    {
-
-
-                        // name
-                        case 1:
-                            {
-                                result &= ValidateText(cell, "Name*");
-                                break;
-                            }
-                        //Type  name
-                        case 2:
-                            {
-                                result &= ValidateText(cell, "Type Name*");
-                                break;
-                            }
-
-                    }
-                }
-            }
-
-            return result;
-        }
-        private bool ValidateText(ExcelRange cell, string columnName)
-        {
-            bool result = true;
-            string error = string.Format("{0} is empty", columnName);
-
-            if (cell.Value != null)
-            {
-                //check if cell value has a value
-                if (string.IsNullOrWhiteSpace(cell.Value.ToString()))
-                {
-                    result = SetError(cell, error);
-                }
-            }
-            else
-            {
-                result = SetError(cell, error);
-            }
-
-            return result;
-        }
-
     }
 }
