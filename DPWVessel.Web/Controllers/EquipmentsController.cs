@@ -44,7 +44,7 @@ namespace DPWVessel.Web.Controllers
         {
             var resp = _requestExecutor.Execute(req);
 
-            var excelExport = new ExcelExportServices();
+            var excelExport = new ExcelServices();
             // Replace ViewModel with the actual type of your equipment
             var data = resp.EquipmentsLists.Select(item => new Dictionary<string, object>
                         {
@@ -71,7 +71,7 @@ namespace DPWVessel.Web.Controllers
         public ActionResult ExcelTemplate()
 
         {
-            var excelExport = new ExcelExportServices();
+            var excelExport = new ExcelServices();
 
             var headers = new[] { "Name*", "Type Name*" };
 
@@ -111,7 +111,7 @@ namespace DPWVessel.Web.Controllers
                 { "Created By", resp.createdBy }
             };
 
-            var excelExport = new ExcelExportServices(); // Create your instance of execlExportServices
+            var excelExport = new ExcelServices(); // Create your instance of execlExportServices
             var headers = new[] { "Id #", "Type Id*", "Name*", "Type Name", "Created At", "Created By" };
 
 
@@ -134,7 +134,7 @@ namespace DPWVessel.Web.Controllers
                 //ExcelExtension contains array of excel extension types
                 //save the uploaded excel file to temp location
                 SaveExcelTemp(File, out tempFileName);
-                ExcelImportService ImportService = new ExcelImportService();
+                ExcelServices ImportService = new ExcelServices();
                 //Here ExpectedHeaders , Here you given header of your excel file which are correct formate in case user change sequence of excel column then given error  
                 List<string> ExpectedHeaders = new List<string> { "Name*", "Type Name*" };
 

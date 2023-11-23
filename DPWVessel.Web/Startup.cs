@@ -59,6 +59,7 @@ namespace DPWVessel.Web
             FluentScheduler.JobManager.Start();
         }
 
+    
         private static void ConfireHangfire(IAppBuilder app, IContainer container)
         {
             Hangfire.GlobalConfiguration.Configuration.UseActivator(new AutofacJobActivator(container));

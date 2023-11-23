@@ -28,6 +28,7 @@ namespace DPWVessel.Web.Core.Jobs
             return _lifetimeScope.Resolve(jobType);
         }
 
+        [Obsolete]
         public override JobActivatorScope BeginScope()
         {
             return new AutofacScope(_lifetimeScope.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag));

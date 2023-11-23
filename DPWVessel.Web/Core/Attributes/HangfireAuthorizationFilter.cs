@@ -4,6 +4,7 @@ using System.Web;
 
 namespace DPWVessel.Web.Core.Attributes
 {
+
     public class HangfireAuthorizationFilter : IAuthorizationFilter
     {
         public bool Authorize(IDictionary<string, object> owinEnvironment)
