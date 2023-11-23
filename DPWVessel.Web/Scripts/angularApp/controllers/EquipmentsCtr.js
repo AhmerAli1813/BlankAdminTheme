@@ -17,7 +17,6 @@ app.controller('EquipmentsCtr', [
             GetEquipments();
             GetEquipmentTypes();
         }
-
         function GetEquipments() {
             $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList', null, function (resp) {
                 console.log(resp);
@@ -29,7 +28,6 @@ app.controller('EquipmentsCtr', [
                 }
             });
         }
-     
         function initDataTable() {
             // Assuming you have a table with id 'equipmentTable'
             var table = $('#equipmentTable').DataTable();
@@ -47,99 +45,94 @@ app.controller('EquipmentsCtr', [
                 // Add more options as needed
             });
         }
+        function GetEquipmentTypes() {
+            $scope.ajaxGet('api/EquipmentsApi/GetAllEquipmentsTypesOpt', null, function (resp) {
+                console.log("GetAll Equipments Types Opt", resp);
+                if (resp.Success) {
+                    $scope.EqtyList = resp.EquipmentTypesOpt;
+                }
 
-
-
-
-            function GetEquipmentTypes() {
-                $scope.ajaxGet('api/EquipmentsApi/GetAllEquipmentsTypesOpt', null, function (resp) {
-                    console.log("GetAll Equipments Types Opt",resp);
-                    if (resp.Success) {
-                        $scope.EqtyList = resp.EquipmentTypesOpt;
-                    }
-
-                });
+            });
+        }
+        $scope.FilterEquipments = function (data) {
+            console.log("ddata", data);
+            if (data == undefined) {
+                data = {};
             }
+            var st = $("#startDate").val();
+            var et = $("#endDate").val();
+            if (st != "" && st != undefined) {
+                var StartDate = moment(stringToDate($("#startDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
 
-            $scope.FilterEquipments = function (data) {
-                console.log("ddata", data);
-                if (data == undefined) {
-                    data = {};
-                }
-                var st = $("#startDate").val();
-                var et = $("#endDate").val();
-                if (st != "" && st != undefined) {
-                    var StartDate = moment(stringToDate($("#startDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
-                   
-                  /*  $("#startDate").val('');*/
+                /*  $("#startDate").val('');*/
 
-                }
-                if (et != "" && et != undefined) {
-                    var EndDate = moment(stringToDate($("#endDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
-                   
+            }
+            if (et != "" && et != undefined) {
+                var EndDate = moment(stringToDate($("#endDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+
                 /*    $("#endDate").val('');*/
-                }
-                console.log(data);
-                if (EndDate < StartDate) {
-                    toastr.error("Start date always greate then ya equal to end Date ")
-
-                } else {
-
-                    $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList',
-                        {
-                            id: data.id,
-                            name: data.name,
-                            equipmentTypeId: data.equipmentTypeId,
-                            startDate: StartDate,
-                            endDate: EndDate
-                        }
-                        , function (resp) {
-                            data = {};
-                            console.log('Filter Data', resp);
-                            if (resp.Success) {
-
-                                $scope.EqList = resp.EquipmentsLists;
-                                console.log('Filter scope EqList', $scope.EqList);
-
-                            }
-
-                        });
-                }
             }
-            $scope.ToExportExcel = function (data) {
-                console.log("ddata", data);
-                if (data == undefined) {
-                    data = {};
-                }
-                var st = $("#startDate").val();
-                var et = $("#endDate").val();
-                if (st != "" && st != undefined) {
-                    var StartDate = moment(stringToDate($("#startDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+            console.log(data);
+            if (EndDate < StartDate) {
+                toastr.error("Start date always greate then ya equal to end Date ")
 
-                    /*  $("#startDate").val('');*/
+            } else {
 
-                }
-                if (et != "" && et != undefined) {
-                    var EndDate = moment(stringToDate($("#endDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+                $scope.ajaxGet('api/EquipmentsApi/GetEquipmentsList',
+                    {
+                        id: data.id,
+                        name: data.name,
+                        equipmentTypeId: data.equipmentTypeId,
+                        startDate: StartDate,
+                        endDate: EndDate
+                    }
+                    , function (resp) {
+                        data = {};
+                        console.log('Filter Data', resp);
+                        if (resp.Success) {
 
-                    /*    $("#endDate").val('');*/
-                }
-                console.log(data);
+                            $scope.EqList = resp.EquipmentsLists;
+                            console.log('Filter scope EqList', $scope.EqList);
+
+                        }
+
+                    });
+            }
+        }
+        $scope.ToExportExcel = function (data) {
+            console.log("ddata", data);
+            if (data == undefined) {
+                data = {};
+            }
+            var st = $("#startDate").val();
+            var et = $("#endDate").val();
+            if (st != "" && st != undefined) {
+                var StartDate = moment(stringToDate($("#startDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+
+                /*  $("#startDate").val('');*/
+
+            }
+            if (et != "" && et != undefined) {
+                var EndDate = moment(stringToDate($("#endDate").val(), "dd/MM/yyyy", "/")).format('YYYY-MM-DDT00:00:00');
+
+                /*    $("#endDate").val('');*/
+            }
+            console.log(data);
 
 
-                var queryString = $.param({
-                    id: data.id,
-                    name: data.name,
-                    equipmentTypeId: data.equipmentTypeId,
-                    startDate: StartDate,
-                    endDate: EndDate
-                });
+            var queryString = $.param({
+                id: data.id,
+                name: data.name,
+                equipmentTypeId: data.equipmentTypeId,
+                startDate: StartDate,
+                endDate: EndDate
+            });
 
-                $window.open('/Equipments/ToExportExcelEquipment?' + queryString, '_self');
+            $window.open('/Equipments/ToExportExcelEquipment?' + queryString, '_self');
 
         }
         $scope.ToExportExcelTemplate = function (data) {
-           
+
             $window.open('/Equipments/ExcelTemplate');
 
         }
@@ -202,109 +195,102 @@ app.controller('EquipmentsCtr', [
                 else {
                     toastr.success(res.msg);
 
-                    
+
                 }
-               
+
                 $timeout(() => {
                     window.reload();
                 }, 2500)
-                
+
                 console.log(res);
             });
         };
-
-
-
-
-            
-            $scope.AddEquipments = function (data) {
-                console.log(data);
-                if (data == null || data == undefined || data == '') {
-                    toastr.error('All filed is reqried');
-                    return false;
-                }
-                if (data.name == null || data.name == undefined || data.name == '') {
-                    toastr.error('Please Enter Name');
-                    return false;
-                }
-                if (data.equipmentTypeId == null || data.equipmentTypeId == undefined || data.equipmentTypeId == '' || data.equipmentTypeId == 0) {
-                    toastr.error('Please Select  euipments types ');
-                    return false;
-                }
-                $scope.ajaxPost('api/EquipmentsApi/AddEquipmentsRec', data, function (response) {
-                    console.log(response)
-                    if (response.IsTure == false) {
-                        toastr.error(response.message)
-                    } else { 
-                   
-                        toastr.success('Records registered successful');
-                        $timeout(() => { $window.location.href = '/Equipments' }, 2000);
-                        //$timeout($window.location.href = '/account/RegisterUser', 5000);
-                    }
-
-                });
+        $scope.AddEquipments = function (data) {
+            console.log(data);
+            if (data == null || data == undefined || data == '') {
+                toastr.error('All filed is reqried');
+                return false;
             }
-            $scope.EditEquipments = function (data) {
-                console.log(data);
-                //data.equipmentsTypeId = document.getElementById("equipmentsTypeId").value;
-                if (data == null || data == undefined || data == '') {
-                    toastr.error('All filed is reqried');
-                    return false;
-                }
-                if (data.name == null || data.name == undefined || data.name == '') {
-                    toastr.error('Please Enter Name');
-                    return false;
-                }
-                if (data.equipmentTypeId == null || data.equipmentTypeId == undefined || data.equipmentTypeId == '' || data.equipmentTypeId == 0) {
-                    toastr.error('Please Select  euipments types ');
-                    return false;
-                }
-                console.log(data,'---');
-                $scope.ajaxPost('api/EquipmentsApi/EquipmentsInformationUpdate', { data: data }, function (response) {
-                    console.log(response)
-                    if (response.IsTure == true) {
-                        toastr.success("Updated Successfully");
-                        $timeout($window.location.href = '/Equipments/Index', 2000);
-                    }
-                    else {
-                        toastr.error(response.message);
-                    }
-                });
+            if (data.name == null || data.name == undefined || data.name == '') {
+                toastr.error('Please Enter Name');
+                return false;
             }
-            $scope.EditHref = function (Id) {
-                $window.open('/Equipments/Edit?Id=' + Id, '_self');
+            if (data.equipmentTypeId == null || data.equipmentTypeId == undefined || data.equipmentTypeId == '' || data.equipmentTypeId == 0) {
+                toastr.error('Please Select  euipments types ');
+                return false;
             }
-            $scope.PrintHref = function (Id) {
-                $window.open('/Equipments/Print?Id=' + Id, '_self');
-            }
-            $scope.initEdit = function () {
-                var Url = urlService.getUrlPrams();
-                GetEquipmentTypes();
-                console.log(`Welcome edit init angular ID: ${Url.Id}`)
-                $scope.ajaxGet('api/EquipmentsApi/getEquipmentsDetails', { id: Url.Id }, function (resp) {
-                    if (resp.Success) {
-                        console.log("IntRequest");
-                        console.log(resp);
-                        $scope.eq = resp;
-                        
-                    }
-                })
+            $scope.ajaxPost('api/EquipmentsApi/AddEquipmentsRec', data, function (response) {
+                console.log(response)
+                if (response.IsTure == false) {
+                    toastr.error(response.message)
+                } else {
 
-            }
+                    toastr.success('Records registered successful');
+                    $timeout(() => { $window.location.href = '/Equipments' }, 2000);
+                    //$timeout($window.location.href = '/account/RegisterUser', 5000);
+                }
 
-            function stringToDate(_date, format, delimiter) {
-                var formatLowerCase = format.toLowerCase();
-                var formatItems = formatLowerCase.split(delimiter);
-                var dateItems = _date.split(delimiter);
-                var monthIndex = formatItems.indexOf("mm");
-                var dayIndex = formatItems.indexOf("dd");
-                var yearIndex = formatItems.indexOf("yyyy");
-                var month = parseInt(dateItems[monthIndex]);
-                month -= 1;
-                var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
-                return formatedDate;
-            }
+            });
         }
+        $scope.EditEquipments = function (data) {
+            console.log(data);
+            //data.equipmentsTypeId = document.getElementById("equipmentsTypeId").value;
+            if (data == null || data == undefined || data == '') {
+                toastr.error('All filed is reqried');
+                return false;
+            }
+            if (data.name == null || data.name == undefined || data.name == '') {
+                toastr.error('Please Enter Name');
+                return false;
+            }
+            if (data.equipmentTypeId == null || data.equipmentTypeId == undefined || data.equipmentTypeId == '' || data.equipmentTypeId == 0) {
+                toastr.error('Please Select  euipments types ');
+                return false;
+            }
+            console.log(data, '---');
+            $scope.ajaxPost('api/EquipmentsApi/EquipmentsInformationUpdate', { data: data }, function (response) {
+                console.log(response)
+                if (response.IsTure == true) {
+                    toastr.success("Updated Successfully");
+                    $timeout($window.location.href = '/Equipments/Index', 2000);
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            });
+        }
+        $scope.EditHref = function (Id) {
+            $window.open('/Equipments/Edit?Id=' + Id, '_self');
+        }
+        $scope.PrintHref = function (Id) {
+            $window.open('/Equipments/Print?Id=' + Id, '_self');
+        }
+        $scope.initEdit = function () {
+            var Url = urlService.getUrlPrams();
+            GetEquipmentTypes();
+            console.log(`Welcome edit init angular ID: ${Url.Id}`)
+            $scope.ajaxGet('api/EquipmentsApi/getEquipmentsDetails', { id: Url.Id }, function (resp) {
+                if (resp.Success) {
+                    console.log("IntRequest");
+                    console.log(resp);
+                    $scope.eq = resp;
 
-     ]
-);
+                }
+            })
+
+        }
+        function stringToDate(_date, format, delimiter) {
+            var formatLowerCase = format.toLowerCase();
+            var formatItems = formatLowerCase.split(delimiter);
+            var dateItems = _date.split(delimiter);
+            var monthIndex = formatItems.indexOf("mm");
+            var dayIndex = formatItems.indexOf("dd");
+            var yearIndex = formatItems.indexOf("yyyy");
+            var month = parseInt(dateItems[monthIndex]);
+            month -= 1;
+            var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+            return formatedDate;
+        }
+    }  
+
+]);

@@ -5,8 +5,10 @@ using DPWVessel.Model.Features.Shared;
 using DPWVessel.Web.Core.Session;
 using Microsoft.AspNet.Identity.Owin;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -37,11 +39,9 @@ namespace DPWVessel.Web.Controllers
         // GET: EquipmentTypes
         [HttpGet]
         public ActionResult Index() => View();
-    
+
         public ActionResult Add() => View();
         public ActionResult Edit() => View();
-        
-
         public ActionResult ToExportExcelEquipment(GetAllEquipmentsRequsted req)
         {
             var resp = _requestExecutor.Execute(req);
@@ -152,53 +152,69 @@ namespace DPWVessel.Web.Controllers
                         {
                             using (ExcelPackage package = new ExcelPackage(stream))
                             {
-                                ExcelWorksheet worksheet = package.Workbook.Worksheets["Sheet1"];
-                                List<int> invalidRows = new List<int>();
+                                
+                                var workbook = package.Workbook;
 
-                                if (worksheet.Dimension != null)
+                                // Get the names of all sheets in the workbook
+                                var sheetNames = workbook.Worksheets.Select(sheet => sheet.Name).ToList();
+                                if(sheetNames.Count > 0)
                                 {
-                                    int totalRows = worksheet.Dimension.Rows;
+                                    string FirstSheetName = sheetNames[0];
+                                    ExcelWorksheet worksheet = package.Workbook.Worksheets[FirstSheetName];
+                                    List<int> invalidRows = new List<int>();
 
-                                    for (int i = 2; i <= totalRows; i++)
+                                    if (worksheet.Dimension != null)
                                     {
-                                        object nameValue = worksheet.Cells[i, 1].Value;
-                                        string name = (nameValue == null || string.IsNullOrWhiteSpace(nameValue.ToString())) ? null : nameValue.ToString();
+                                        int totalRows = worksheet.Dimension.Rows;
 
-                                        object nameTypeValue = worksheet.Cells[i, 2].Value;
-                                        string nameType = (nameTypeValue == null || string.IsNullOrWhiteSpace(nameTypeValue.ToString())) ? null : nameTypeValue.ToString();
-
-                                        int typeId = _dbContext.EquipmentTypes
-                                            .Where(x => x.Name == nameType)
-                                            .Select(x => x.Id)
-                                            .FirstOrDefault();
-
-                                        string userName = _sessionManager.CurrentUser.FullName;
-
-                                        if (typeId > 0 && name != null)
+                                        for (int i = 2; i <= totalRows; i++)
                                         {
-                                            AddEquipmentsRequsted req = new AddEquipmentsRequsted
+                                            object nameValue = worksheet.Cells[i, 1].Value;
+                                            string name = (nameValue == null || string.IsNullOrWhiteSpace(nameValue.ToString())) ? null : nameValue.ToString();
+
+                                            object nameTypeValue = worksheet.Cells[i, 2].Value;
+                                            string nameType = (nameTypeValue == null || string.IsNullOrWhiteSpace(nameTypeValue.ToString())) ? null : nameTypeValue.ToString();
+
+                                            int typeId = _dbContext.EquipmentTypes
+                                                .Where(x => x.Name == nameType)
+                                                .Select(x => x.Id)
+                                                .FirstOrDefault();
+
+                                            string userName = _sessionManager.CurrentUser.FullName;
+
+                                            if (typeId > 0 && name != null)
                                             {
-                                                equipmentsTypeId = typeId,
-                                                name = name,
-                                                createdBy = userName,
-                                                updatedBy = userName
-                                            };
+                                                AddEquipmentsRequsted req = new AddEquipmentsRequsted
+                                                {
+                                                    equipmentsTypeId = typeId,
+                                                    name = name,
+                                                    createdBy = userName,
+                                                    updatedBy = userName
+                                                };
 
-                                            _requestExecutor.Execute(req);
+                                               var resp = _requestExecutor.Execute(req);
+                                                errorMessage = resp.message;
+                                            }
+                                            else
+                                            {
+                                                invalidRows.Add(i);
+                                            }
                                         }
-                                        else
+
+                                        if (invalidRows.Any())
                                         {
-                                            invalidRows.Add(i);
+                                            byte[] invalidRecordsFile = SaveInvalidRecordsToExcel(worksheet, invalidRows);
+
+                                            return Json(new { ErrorByt = invalidRecordsFile, msg2 = "File", msg = "Some records are not inserted", Isture = false });
                                         }
-                                    }
-
-                                    if (invalidRows.Any())
-                                    {
-                                        byte[] invalidRecordsFile = SaveInvalidRecordsToExcel(worksheet, invalidRows);
-
-                                        return Json(new { ErrorByt = invalidRecordsFile, msg2 = "File", msg = "Some records are not inserted", Isture = false });
                                     }
                                 }
+                                else
+                                {
+                                    return Json(new { ErrorByt = ErrorFile, msg2 = "File", msg = "No Sheet takings " , Isture = false });
+                                }
+                            
+                               
                             }
                         }
                         DeleteTempFile(tempFileName);
@@ -210,7 +226,7 @@ namespace DPWVessel.Web.Controllers
                         return Json(new { ErrorByt = ErrorFile, msg2 = "File", msg = "Exception:" + ex.Message, Isture = true });
                     }
                     DeleteTempFile(tempFileName);
-                    
+
                     return Json(new { ErrorByt = ErrorFile, msg2 = "File", msg = errorMessage, Isture = true });
 
                     //spreadsheet is valid, show success message or any logic here
@@ -233,17 +249,22 @@ namespace DPWVessel.Web.Controllers
 
 
         }
-
         private byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows)
         {
             using (var package = new ExcelPackage())
             {
                 var invalidSheet = package.Workbook.Worksheets.Add("InvalidRecords");
-
+                Color colFromHex = ColorTranslator.FromHtml("#013447");
                 // Copy headers from the original sheet to the new sheet
                 for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
                 {
                     invalidSheet.Cells[1, col].Value = worksheet.Cells[1, col].Value;
+                    invalidSheet.Cells[1, col].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    invalidSheet.Cells[1, col].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    invalidSheet.Cells[1, col].Style.Font.Bold = true;
+                    invalidSheet.Cells[1, col].Style.Font.Size = 12;
+                    invalidSheet.Cells[1, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    invalidSheet.Cells[1, col].Style.Font.Color.SetColor(Color.White);
                 }
 
                 // Mark invalid rows with red color and add a comment
@@ -257,84 +278,38 @@ namespace DPWVessel.Web.Controllers
                         invalidCell.Value = sourceCell.Value;
 
                         var fill = invalidCell.Style.Fill;
-                        fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                        fill.BackgroundColor.SetColor(System.Drawing.Color.Red);
+                        fill.PatternType = ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(Color.Red);
 
                         invalidCell.AddComment("Record not inserted", "");
                     }
                 }
-
+                invalidSheet.Cells.AutoFitColumns();
                 return package.GetAsByteArray();
             }
         }
-
-        private void SaveExcelDataToDatabase(string tempFileName)
+        private void DeleteTempFile(string tempFileName)
         {
             try
             {
-                using (var stream = System.IO.File.OpenRead(tempFileName))
+                // Check if the file exists before attempting to delete
+                if (System.IO.File.Exists(tempFileName))
                 {
-                    using (ExcelPackage package = new ExcelPackage(stream))
-                    {
-                        ExcelWorksheet worksheet = package.Workbook.Worksheets["Sheet1"];
-                        List<int> invalidRows = new List<int>();
-
-                        if (worksheet.Dimension != null)
-                        {
-                            int totalRows = worksheet.Dimension.Rows;
-
-                            for (int i = 2; i <= totalRows; i++)
-                            {
-                                object nameValue = worksheet.Cells[i, 1].Value;
-                                string name = (nameValue == null || string.IsNullOrWhiteSpace(nameValue.ToString())) ? null : nameValue.ToString();
-
-                                object nameTypeValue = worksheet.Cells[i, 2].Value;
-                                string nameType = (nameTypeValue == null || string.IsNullOrWhiteSpace(nameTypeValue.ToString())) ? null : nameTypeValue.ToString();
-
-                                int typeId = _dbContext.EquipmentTypes
-                                    .Where(x => x.Name == nameType)
-                                    .Select(x => x.Id)
-                                    .FirstOrDefault();
-
-                                string userName = _sessionManager.CurrentUser.FullName;
-
-                                if (typeId > 0 && name != null)
-                                {
-                                    AddEquipmentsRequsted req = new AddEquipmentsRequsted
-                                    {
-                                        equipmentsTypeId = typeId,
-                                        name = name,
-                                        createdBy = userName,
-                                        updatedBy = userName
-                                    };
-
-                                    _requestExecutor.Execute(req);
-                                }
-                                else
-                                {
-                                    invalidRows.Add(i);
-                                }
-                            }
-
-                            if (invalidRows.Any())
-                            {
-                                byte[] invalidRecordsFile = SaveInvalidRecordsToExcel(worksheet, invalidRows);
-                                // Do something with the invalidRecordsFile, like saving it to disk or sending it as a response
-                                TempData["InvlidRecors"] = invalidRecordsFile;
-                            }
-                        }
-                    }
+                    System.IO.File.Delete(tempFileName);
+                    Console.WriteLine($"Temporary file {tempFileName} deleted successfully.");
+                }
+                else
+                {
+                    Console.WriteLine($"Temporary file {tempFileName} does not exist.");
                 }
             }
             catch (Exception ex)
             {
                 // Handle the exception appropriately
                 // You might want to log the exception or return an error response
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error deleting temporary file: {ex.Message}");
             }
         }
-
-
         private void SaveExcelTemp(HttpPostedFileBase file, out string tempFileName)
         {
             // Implementation of the method to save the Excel file to a temporary location
@@ -343,27 +318,6 @@ namespace DPWVessel.Web.Controllers
             tempFileName = Path.Combine(Server.MapPath("~/Content/svgs"), file.FileName);
             file.SaveAs(tempFileName);
         }
-
-        private List<string> GetColumnHeaders(ExcelWorksheet worksheet)
-        {
-            List<string> columnHeaders = new List<string>();
-
-            int totalColumns = worksheet.Dimension == null ? -1 : worksheet.Dimension.End.Column;
-
-            for (int i = 1; i <= totalColumns; i++)
-            {
-                var cell = worksheet.Cells[1, i];
-
-                if (cell.Value != null)
-                {
-                    // Add the header value to the list
-                    columnHeaders.Add(cell.Value.ToString());
-                }
-            }
-
-            return columnHeaders;
-        }
-
         private bool ValidateColumns(ExcelWorksheet worksheet, int totalColumns)
         {
             bool result = true;
@@ -383,7 +337,6 @@ namespace DPWVessel.Web.Controllers
 
             return result;
         }
-
         private bool ValidateExcel(string tempFileName, out string errorMessage, out byte[] ErrorFile, List<string> expectedHeaders)
         {
             bool result = true;
@@ -421,7 +374,7 @@ namespace DPWVessel.Web.Controllers
                     result = false;
                     error = "Spreadsheet does not contain enough data rows.";
                 }
-                else if (CheckExcelHeaderFormat(worksheet, expectedHeaders)==false)
+                else if (CheckExcelHeaderFormat(worksheet, expectedHeaders))
                 {
                     result = false;
                     error = "Spread sheet column header indexing mismatch.";
@@ -453,31 +406,55 @@ namespace DPWVessel.Web.Controllers
             }
 
             errorMessage = error;
-            // worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+            worksheet.Cells.AutoFitColumns();
             ErrorFile = excelPackage.GetAsByteArray();
             // excelPackage.Save();
 
             return result;
         }
-
-
         private string GetTempFilePath(string tempFileName)
         {
             // Assuming the tempFileName is a relative path, combine it with the application's temporary folder
             return Path.Combine(Server.MapPath("~/Content/svgs"), tempFileName);
         }
-
-
         private bool SetError(ExcelRange cell, string errorComment)
         {
+            if (cell.Comment == null)
+            {
+                // Set the error comment
+                cell.AddComment(errorComment, "");
+            }
+            else
+            {
+                // Update the existing comment
+                cell.Comment.Text = errorComment;
+            }
+
             var fill = cell.Style.Fill;
-            fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-            fill.BackgroundColor.SetColor(System.Drawing.Color.Red);
-            cell.AddComment(errorComment, "");
-
-            return false;
+            fill.PatternType = ExcelFillStyle.Solid;
+            fill.BackgroundColor.SetColor(Color.Red);
+            cell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                       return false;
         }
+        private List<string> GetColumnHeaders(ExcelWorksheet worksheet)
+        {
+            List<string> columnHeaders = new List<string>();
 
+            int totalColumns = worksheet.Dimension == null ? -1 : worksheet.Dimension.End.Column;
+
+            for (int i = 1; i <= totalColumns; i++)
+            {
+                var cell = worksheet.Cells[1, i];
+
+                if (cell.Value != null)
+                {
+                    // Add the header value to the list
+                    columnHeaders.Add(cell.Value.ToString());
+                }
+            }
+
+            return columnHeaders;
+        }
         private List<string> GetColumnHeaders(ExcelWorksheet worksheet, int totalColumns)
         {
             List<string> columnHeaders = new List<string>();
@@ -495,56 +472,23 @@ namespace DPWVessel.Web.Controllers
 
             return columnHeaders;
         }
-
-        private bool ValidateHeaderColumns(ExcelWorksheet worksheet, int totalColumns)
+        public bool CheckExcelHeaderFormat(ExcelWorksheet worksheet, List<string> expectedHeaders)
         {
-            bool result = true;
-
-            // Get the column headers dynamically
-            List<string> listColumnHeaders = GetColumnHeaders(worksheet, totalColumns);
-
-            for (int i = 1; i <= totalColumns; i++)
-            {
-                var cell = worksheet.Cells[1, i]; //header columns are in the first row
-
-                if (cell.Value != null)
-                {
-                    //column header has a value
-                    if (!listColumnHeaders.Contains(cell.Value.ToString()))
-                    {
-                        result &= SetError(cell, "Invalid header. Please correct.");
-                    }
-                }
-                else
-                {
-                    //empty header
-                    result &= SetError(cell, "Empty header. Remove the column.");
-                }
-            }
-
-            return result;
-        }
-
-        public bool CheckExcelHeaderFormat(ExcelWorksheet worksheet , List<string> expectedHeaders)
-        {
-            bool result = true;
-
-        
-
+            bool result = false;
             List<string> actualHeaders = GetColumnHeaders(worksheet);
 
             for (int i = 0; i < expectedHeaders.Count; i++)
             {
                 if (i >= actualHeaders.Count || !string.Equals(expectedHeaders[i], actualHeaders[i], StringComparison.OrdinalIgnoreCase))
                 {
-                    result = false;
+                    result = true;
                     break;
                 }
             }
 
             return result;
         }
-            private bool ValidateRows(ExcelWorksheet worksheet, int totalRows, int totalCols)
+        private bool ValidateRows(ExcelWorksheet worksheet, int totalRows, int totalCols)
         {
             bool result = true;
 
@@ -577,9 +521,6 @@ namespace DPWVessel.Web.Controllers
 
             return result;
         }
-
-
-
         private bool ValidateText(ExcelRange cell, string columnName)
         {
             bool result = true;
@@ -600,36 +541,6 @@ namespace DPWVessel.Web.Controllers
 
             return result;
         }
-        private void DeleteTempFile(string tempFileName)
-        {
-            try
-            {
-                // Check if the file exists before attempting to delete
-                if (System.IO.File.Exists(tempFileName))
-                {
-                    System.IO.File.Delete(tempFileName);
-                    Console.WriteLine($"Temporary file {tempFileName} deleted successfully.");
-                }
-                else
-                {
-                    Console.WriteLine($"Temporary file {tempFileName} does not exist.");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle the exception appropriately
-                // You might want to log the exception or return an error response
-                Console.WriteLine($"Error deleting temporary file: {ex.Message}");
-            }
-        }
-
-        [HttpGet]
-        public ActionResult ImportUserData()
-        {
-
-            return View();
-        }
-
 
     }
 }

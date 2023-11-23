@@ -34,18 +34,18 @@ namespace DPWVessel.Web.Controllers
         }
         // GET: Users
         public ActionResult Index() => View();
-        
+
         public ActionResult ResetPassword() => View();
-        
+
         public ActionResult Edit() => View();
-        
+
 
         public ActionResult Step2() => View();
-        
+
 
         [HttpGet]
         public ActionResult ImportUserData() => View();
-        
+
 
         [HttpPost]
         public async Task<ActionResult> ImportUserData(ImportExcel importExcel)

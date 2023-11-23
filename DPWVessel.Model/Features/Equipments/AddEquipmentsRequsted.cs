@@ -49,13 +49,13 @@ namespace DPWVessel.Model.Features.Equipments
                 _dbcontext.Equipments.Add(model);
                 _dbcontext.SaveChanges();
                 rep.IsTure = true;
-                rep.message = "Save";
+                rep.message = "All Records Save successfully";
                 return rep;
             }
             else
             {
                 rep.IsTure = false;
-                rep.message = $"Equipment Types : {request.name} already taken";
+                rep.message += $"Equipment Types : {request.name} already taken ?";
                 return rep;
             }
 
