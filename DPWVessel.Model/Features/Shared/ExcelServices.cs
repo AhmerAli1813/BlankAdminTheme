@@ -74,7 +74,6 @@ namespace DPWVessel.Model.Features.Shared
                 return package.GetAsByteArray();
             }
         }
-
         public byte[] ExportToExcel(Dictionary<string, object> data, string[] headers)
         {
             return ExportToExcel(new List<Dictionary<string, object>> { data }, headers);
@@ -148,7 +147,7 @@ namespace DPWVessel.Model.Features.Shared
                     result = false;
                     error = "Spreadsheet does not contain enough data rows.";
                 }
-                
+
                 // Check if the total columns equal the headers defined (less columns)
                 else if (totalCols > 0 && !ValidateColumns(worksheet, totalCols))
                 {
@@ -382,12 +381,18 @@ namespace DPWVessel.Model.Features.Shared
 
             return result;
         }
+        public bool IsNumeric(object value)
+        {
+            return value is int || value is decimal || value is float || value is double;
+        }
+
         public byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows)
         {
             using (var package = new ExcelPackage())
             {
                 var invalidSheet = package.Workbook.Worksheets.Add("InvalidRecords");
                 Color colFromHex = ColorTranslator.FromHtml("#013447");
+
                 // Copy headers from the original sheet to the new sheet
                 for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
                 {
@@ -400,9 +405,11 @@ namespace DPWVessel.Model.Features.Shared
                     invalidSheet.Cells[1, col].Style.Font.Color.SetColor(Color.White);
                 }
 
-                // Mark invalid rows with red color and add a comment
+                // Mark invalid rows with red color and add comments
                 foreach (int row in invalidRows)
                 {
+                    bool rowIsValid = true;
+
                     for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
                     {
                         var sourceCell = worksheet.Cells[row, col];
@@ -412,20 +419,106 @@ namespace DPWVessel.Model.Features.Shared
 
                         var fill = invalidCell.Style.Fill;
                         fill.PatternType = ExcelFillStyle.Solid;
-                        fill.BackgroundColor.SetColor(Color.Red);
-                        invalidCell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                        invalidCell.AddComment("Record not inserted", "");
+                        if (string.IsNullOrWhiteSpace(sourceCell.Text))
+                        {
+                            fill.BackgroundColor.SetColor(Color.Red);
+                            invalidCell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                            //invalidCell.Value = "???";
+                            // Check if the comment already exists before adding it
+                            //var existingComment = invalidCell.Comment;
+                            //if (existingComment == null)
+                            //{
+                            //    invalidCell.AddComment("Please Insert Correct Value: Empty Value is not accepted", "System");
+                            //}
+                            //else
+                            //{
+                            //    existingComment.Text = "Please Insert Correct Value: Empty Value is not accepted";
+                            //    existingComment.Author = "System";
+                            //}
+
+                            rowIsValid = false;
+                        }
+                        else
+                        {
+                            // If the cell has a value, do not fill the background color
+                            fill.BackgroundColor.SetColor(Color.White);
+                            invalidCell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
+                        }
+                    }
+
+                    if (rowIsValid)
+                    {
+                        invalidSheet.Cells[invalidSheet.Dimension.End.Row + 1, 1, invalidSheet.Dimension.End.Row + 1, invalidSheet.Dimension.End.Column].Value
+                            = invalidSheet.Cells[row, 1, row, invalidSheet.Dimension.End.Column].Value;
                     }
                 }
+
+                // Add comments for rows with no empty values
+                for (int row = 2; row <= invalidSheet.Dimension.End.Row; row++) // Start from 2 to skip the header row
+                {
+                    bool rowHasEmptyValue = false;
+
+                    for (int col = 1; col <= invalidSheet.Dimension.End.Column; col++)
+                    {
+                        var cell = invalidSheet.Cells[row, col];
+
+                        if (string.IsNullOrWhiteSpace(cell.Text))
+                        {
+                            rowHasEmptyValue = true;
+                            break;
+                        }
+                    }
+
+                    if (!rowHasEmptyValue)
+                    {
+                        // Add or update comment for complete row with no empty value
+                        // Check if the comment already exists before adding it
+                        var existingComment = invalidSheet.Cells[row, 1].Comment;
+                        //if (existingComment == null)
+                        //{
+                        //    invalidSheet.Cells[row, 1].AddComment("Some Wrong Value inserted", "System");
+                        //}
+                        //else
+                        //{
+                        //    existingComment.Text = "Some Wrong Value inserted";
+                        //    existingComment.Author = "System";
+                        //}
+                    }
+                }
+
+                // Delete empty rows
+                for (int row = invalidSheet.Dimension.Start.Row; row <= invalidSheet.Dimension.End.Row; row++)
+                {
+                    bool rowIsEmpty = true;
+                    for (int col = invalidSheet.Dimension.Start.Column; col <= invalidSheet.Dimension.End.Column; col++)
+                    {
+                        var cell = invalidSheet.Cells[row, col];
+                        if (!string.IsNullOrWhiteSpace(cell.Text))
+                        {
+                            rowIsEmpty = false;
+                            break;
+                        }
+                    }
+
+                    if (rowIsEmpty)
+                    {
+                        invalidSheet.DeleteRow(row);
+                        row--; // Adjust the row index after deletion
+                    }
+                }
+
                 invalidSheet.Cells.AutoFitColumns();
                 return package.GetAsByteArray();
             }
         }
-        private bool IsNumeric(object value)
-        {
-            return value is int || value is decimal || value is float || value is double;
-        }
+
+
+
+
+
+
 
     }
 

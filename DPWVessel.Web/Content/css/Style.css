@@ -926,3 +926,20 @@ label, tbody, .btn {
 a[type="button"] {
     color: white !important;
 }
+#Files {
+    margin-top: 20px;
+}
+
+.fileItem {
+    margin-bottom: 10px;
+}
+
+.removeButton {
+    cursor: pointer;
+    color: #dc3545 !important;
+   
+    position: absolute;
+    top: 0;
+    right: 0;
+
+}

@@ -1,0 +1,69 @@
+﻿@using DPWVessel.Model.Resources
+@{
+    ViewBag.Title = "upload files";
+}
+
+
+
+
+<div ng-controller="UploadFilesCtr">
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Upload File</h3>
+        </div>
+        <div class="col-md-7 align-self-center">
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-outline-primary">
+                    <div class="card-body">
+
+                        <div class="form-body">
+                            <form>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                @*onchange="angular.element(this).scope().handleFileUpload(this)"*@
+                                                <input type="file" class="form-control" id="File" multiple onchange="angular.element(this).scope().handleFileUpload(this)" ng-model="selectedFiles">
+                                            </div>
+
+
+
+                                        </div>
+                                        <div id="fileList" class="row " style="margin-top:30px !important;">
+                                            <div ng-repeat="file in fileList" class="col-md-4 mb-3">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <span class=" text-light cursor-pointer float-end" ng-click="removeFile($index)"><i class="fa  fa-trash"></i></span>
+                                                    </div>
+                                                    <img class="card-img-top" ng-src="{{file.url}}" alt="{{file.name}}">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">{{file.name}}</h6>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <button type="button" ng-click="AddUploadFiles()" class="Customebtn btnPrimary mr-10 pull-right"><span>Save</span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

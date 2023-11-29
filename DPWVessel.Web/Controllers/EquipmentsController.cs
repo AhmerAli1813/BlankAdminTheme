@@ -262,7 +262,117 @@ namespace DPWVessel.Web.Controllers
 
 
         }
+        [HttpPost]
+        public ActionResult uploadAltra(HttpPostedFileBase File)
+        {
+            string tempFileName = string.Empty;
+            string errorMessage = string.Empty;
 
+            if (File != null && File.ContentLength > 0)
+            {
+                //ExcelExtension contains array of excel extension types
+                //save the uploaded excel file to temp location
+                SaveExcelTemp(File, out tempFileName);
+                ExcelServices ImportService = new ExcelServices();
+
+                try
+                {
+                    using (var stream = System.IO.File.OpenRead(tempFileName))
+                    {
+                        using (ExcelPackage package = new ExcelPackage(stream))
+                        {
+
+                            var workbook = package.Workbook;
+
+                            // Get the names of all sheets in the workbook
+                            var sheetNames = workbook.Worksheets.Select(sheet => sheet.Name).ToList();
+                            if (sheetNames.Count > 0)
+                            {
+                                string FirstSheetName = sheetNames[0];
+                                ExcelWorksheet worksheet = package.Workbook.Worksheets[FirstSheetName];
+                                List<int> invalidRows = new List<int>();
+
+                                // Check if the sheet is empty
+                                if (worksheet.Dimension == null || worksheet.Dimension.Rows < 2 || worksheet.Dimension.Columns < 2)
+                                {
+                                    return Json(new { msg = "Empty or incomplete sheet uploaded", Isture = false });
+                                }
+
+                                // Check header sequence
+                                string expectedHeader1 = "Name*";
+                                string expectedHeader2 = "Type Name*";
+                                if (worksheet.Cells[1, 1].Text != expectedHeader1 || worksheet.Cells[1, 2].Text != expectedHeader2)
+                                {
+                                    return Json(new { msg = "Invalid header sequence.", Isture = false });
+                                }
+
+                                int totalRows = worksheet.Dimension.Rows;
+
+                                for (int i = 2; i <= totalRows; i++)
+                                {
+                                    object nameValue = worksheet.Cells[i, 1].Value;
+                                    string name = (nameValue == null || string.IsNullOrWhiteSpace(nameValue.ToString())) ? null : nameValue.ToString();
+
+                                    object nameTypeValue = worksheet.Cells[i, 2].Value;
+                                    string nameType = (nameTypeValue == null || string.IsNullOrWhiteSpace(nameTypeValue.ToString())) ? null : nameTypeValue.ToString();
+
+                                    int typeId = _dbContext.EquipmentTypes
+                                        .Where(x => x.Name == nameType)
+                                        .Select(x => x.Id)
+                                        .FirstOrDefault();
+
+                                    string userName = _sessionManager.CurrentUser.FullName;
+
+                                    if (typeId > 0 && name != null)
+                                    {
+                                        AddEquipmentsRequsted req = new AddEquipmentsRequsted
+                                        {
+                                            equipmentsTypeId = typeId,
+                                            name = name,
+                                            createdBy = userName,
+                                            updatedBy = userName
+                                        };
+
+                                        var resp = _requestExecutor.Execute(req);
+                                        errorMessage = resp.message;
+                                    }
+                                    else
+                                    {
+                                        invalidRows.Add(i);
+                                    }
+                                }
+
+                                if (invalidRows.Any())
+                                {
+                                    byte[] invalidRecordsFile = ImportService.SaveInvalidRecordsToExcel(worksheet, invalidRows);
+
+                                    return Json(new { ErrorByt = invalidRecordsFile, msg2 = "File", msg = "Some records are not inserted", Isture = false });
+                                }
+                            }
+                            else
+                            {
+                                return Json(new { msg = "Empty Sheet Uploaded", Isture = false });
+                            }
+                        }
+                    }
+                    DeleteTempFile(tempFileName);
+                }
+                catch (Exception ex)
+                {
+                    // Handle the exception appropriately
+                    // You might want to log the exception or return an error response
+                    return Json(new { msg = "Exception:" + ex.Message, Isture = false });
+                }
+                DeleteTempFile(tempFileName);
+
+                return Json(new { msg2 = "File", msg = errorMessage, Isture = true });
+            }
+            else
+            {
+                //file is not uploaded, show error message
+                return Json(new { msg = "file is not uploaded", Isture = false });
+            }
+        }
         private void DeleteTempFile(string tempFileName)
         {
             try

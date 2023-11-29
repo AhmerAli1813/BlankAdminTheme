@@ -144,6 +144,12 @@
     <Compile Include="EntityModel\Student.cs">
       <DependentUpon>DbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityModel\sysdiagram.cs">
+      <DependentUpon>DbModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityModel\UploadFile.cs">
+      <DependentUpon>DbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityModel\UsersApplication.cs">
       <DependentUpon>DbModel.tt</DependentUpon>
     </Compile>
@@ -181,6 +187,10 @@
     <Compile Include="Features\Students\GetStudentsDetailRequest.cs" />
     <Compile Include="Features\Students\StudentsInformationUpdateRequest.cs" />
     <Compile Include="Features\Students\StudentsRequsted.cs" />
+    <Compile Include="Features\UploadFiles\AddUploadFilesRequsted.cs" />
+    <Compile Include="Features\UploadFiles\GetAllUploadFilesRequsted.cs" />
+    <Compile Include="Features\UploadFiles\GetUploadFilesDetailRequest.cs" />
+    <Compile Include="Features\UploadFiles\UpdateUploadFilesInformationRequest.cs" />
     <Compile Include="Features\UsersApplications\UsersApplicationsListRequest.cs" />
     <Compile Include="Features\Users\GetApplicationsListRequest.cs" />
     <Compile Include="Features\Users\GetUsersListRequest.cs" />

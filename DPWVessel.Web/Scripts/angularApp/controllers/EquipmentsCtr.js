@@ -160,7 +160,7 @@ app.controller('EquipmentsCtr', [
             formData.append('file', file);
 
             $.ajax({
-                url: '/Equipments/Upload',
+                url: '/Equipments/uploadAltra',
                 type: 'POST',
                 contentType: false,
                 processData: false,

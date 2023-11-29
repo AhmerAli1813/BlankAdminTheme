@@ -170,6 +170,48 @@ app.factory('ajaxService', ["urlService", "$http", "$q", function(urlService, $h
 			}
 			return d.promise;
 		},
-        UploadSignature: function (signData, IsReplace, FileName, baseScope) {			var d = $q.defer();			if (signData!=null) {								var fileData = signData;				var fileName = 'Form-Signature.png';				if (IsReplace==true) {					fileName = FileName;				}				var folderName = "DPWVesselOPS";				var isReplace = IsReplace;				var data =				{					folder: folderName,					filename: fileName,					verifyToken: CryptoJS.MD5(folderName + fileName).toString(),					filedata: fileData,					IsReplace: isReplace				};				baseScope.activeService++;				var promise = $http.post(urlService.getImageServiceUrl(), data,					{						headers: { 'Accept': 'application/json' }					});				promise.then(					function (response) {						baseScope.activeService--;						//console.log('resolving');						d.resolve(response.data);					}, function (response) {						baseScope.activeService--;						//console.log('rejecting');						toastr.error(response.status + " : " + response.statusText)						d.reject(response);					}				)			}			else {				d.reject('no file chosen');			}			return d.promise;		}
+        UploadSignature: function (signData, IsReplace, FileName, baseScope) {
+			var d = $q.defer();
+			if (signData!=null) {
+				
+				var fileData = signData;
+				var fileName = 'Form-Signature.png';
+				if (IsReplace==true) {
+					fileName = FileName;
+				}
+				var folderName = "DPWVesselOPS";
+				var isReplace = IsReplace;
+				var data =
+				{
+					folder: folderName,
+					filename: fileName,
+					verifyToken: CryptoJS.MD5(folderName + fileName).toString(),
+					filedata: fileData,
+					IsReplace: isReplace
+				};
+				baseScope.activeService++;
+				var promise = $http.post(urlService.getImageServiceUrl(), data,
+					{
+						headers: { 'Accept': 'application/json' }
+					});
+
+				promise.then(
+					function (response) {
+						baseScope.activeService--;
+						//console.log('resolving');
+						d.resolve(response.data);
+					}, function (response) {
+						baseScope.activeService--;
+						//console.log('rejecting');
+						toastr.error(response.status + " : " + response.statusText)
+						d.reject(response);
+					}
+				)
+			}
+			else {
+				d.reject('no file chosen');
+			}
+			return d.promise;
+		}
 	}
 }]);

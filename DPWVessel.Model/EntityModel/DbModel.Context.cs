@@ -36,5 +36,7 @@ namespace DPWVessel.Model.EntityModel
         public virtual DbSet<SiteUser> SiteUsers { get; set; }
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<UsersApplication> UsersApplications { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<UploadFile> UploadFiles { get; set; }
     }
 }

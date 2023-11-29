@@ -1,0 +1,67 @@
+﻿@using DPWVessel.Model.Resources
+@using DPWVessel.Model.EntityModel.Enums
+
+@{
+    ViewBag.Title = "Update EquipmentTypes";
+}
+<div ng-controller="UploadFilesCtr" ng-init="initEdit()">
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Edit Upload File Information</h3>
+        </div>
+        <div class="col-md-7 align-self-center">
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-outline-primary">
+                    <div class="card-body">
+
+                        <div class="form-body">
+                            <form>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <input type="hidden" id="id" class="form-control" placeholder="" ng-model="item.id">
+                                        <dl>
+
+
+                                            <dt>Name:</dt>
+                                            <dd>{{item.name}}</dd>
+
+                                        </dl>
+
+                                        <input type="file" class="form-control" id="File" ng-model="e.selectedFile" ng-change="updateFileDetails()" onchange="angular.element(this).scope().updateFileDetails(this)" />
+                                        <input type="hidden" ng-model="item.id" />
+                                        <div id="fileList" class="row " style="margin-top:30px !important;">
+                                            <div ng-repeat="file in fileList" class="col-md-4 mb-3">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <span class=" text-light cursor-pointer float-end" ng-click="removeFile($index)"><i class="fa  fa-trash"></i></span>
+                                                    </div>
+                                                    <img class="card-img-top" ng-src="{{file.url}}" alt="{{file.name}}">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">{{file.name}}</h6>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <button type="button" ng-click="EditUploadFiles(item)" class="Customebtn btnPrimary mr-10 pull-right"><span>Update</span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

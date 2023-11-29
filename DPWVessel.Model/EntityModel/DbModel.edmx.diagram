@@ -24,6 +24,8 @@
         <AssociationConnector Association="dpw_VesselModel.FK__Equipment__Equip__5DCAEF64" />
         <AssociationConnector Association="dpw_VesselModel.UserId" />
         <AssociationConnector Association="dpw_VesselModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="dpw_VesselModel.sysdiagram" Width="1.5" PointX="7.75" PointY="7.75" />
+        <EntityTypeShape EntityType="dpw_VesselModel.UploadFile" Width="1.5" PointX="0.75" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
