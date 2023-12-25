@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,60 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 
-namespace DPWVessel.Model.Features.Shared
+namespace EasyMe.Web.Controllers
 {
+    //How passing data in ExporttoExcel here I'm telling you
 
+    //var data = new Dictionary<string, object>
+    //                    {
+    //                        {"Id", 1004 },
+    //                       //Multiple column respective records this is using for single not list item 
+    //                    };
+    //var data = YourObjecPassinghere.Select(item => new Dictionary<string, object>
+    //                    {
+    //                        { "Id #", item.id },
+    //                     
+    //                    }).ToList();
+    /// <summary>
+    /// Exports data to an Excel file with support for multiple dropdown menus.
+    /// </summary>
+    //how Passing data  in data 
+    /// <param name="data">
+    // //var data = new Dictionary<string, object>
+    //                    {
+    //                        {"Id", 1004 },
+    //                       //Multiple column respective records this is using for single not list item 
+    //                    };
+    //var data = YourObjecPassinghere.Select(item => new Dictionary<string, object>
+    //                    {
+    //                        { "Id #", item.id },
+    //                     
+    //                    }).ToList();
+    //</param>
+    //how passing headers 
+    /// <param name="headers">
+    ///  var headers = new[] { "Id","so on .........." };
+    /// An array of strings representing the column headers.
+    /// </param>
+    /// In case You can passing dropdown 
+    /// <param name="dropdownItems">
+    /// A dictionary containing dropdown menu names as keys and their respective items as values.
+    /// remember one thing , DropDown menu 1 also passing in header and data if header does not find DropDown menu 1 then given Excpection
+    ///        var dropdownItems = new Dictionary<string, string[]>
+    //                                        {
+    //                                            { "DropDown menu 1", new[] { "item 1", "itme 2",  "other" } },
+    //                                            { "DropDown menu 2", new[] { "item 1", "itme 2",  "other" } },
+    //                                            { "DropDown menu 3", new[] { "item 1", "itme 2",  "other" } },
+    //                                              // so on... 
+    //                                        };
+    ///// </param>
+    /// <returns>Byte array representing the Excel file content.</returns>
+    //and how to Download file  this ExcelServices ,
+    //ExcelServices given return byte[] array then you download
+    //using like this
+    //var excelBytes = excelExport.ExportToExcel(data, headers, dropdownItems);
+    //string filename = $"Temp_YourFileName_{DateTime.Now.ToString("dd-MM-yyy")}.xlsx";
+    //return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
     public class ExcelServices
     {
         public byte[] ExportToExcel(List<Dictionary<string, object>> data, string[] headers)
@@ -104,6 +156,99 @@ namespace DPWVessel.Model.Features.Shared
 
                 return package.GetAsByteArray();
             }
+        }
+        public byte[] ExportToExcel(List<Dictionary<string, object>> data, string[] headers, Dictionary<string, string[]> dropdownItems)
+        {
+            using (var package = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Temp File" +
+                    "");
+
+                // Add headers
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    worksheet.Cells[1, i + 1].Value = headers[i];
+                    Color colFromHex = ColorTranslator.FromHtml("#013447");
+                    worksheet.Cells[1, i + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheet.Cells[1, i + 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    worksheet.Cells[1, i + 1].Style.Font.Bold = true;
+                    worksheet.Cells[1, i + 1].Style.Font.Size = 12;
+                    worksheet.Cells[1, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[1, i + 1].Style.Font.Color.SetColor(Color.White);
+                }
+
+                //// Find the index of the specified column name in the headers
+                //var dropdownColumnIndex = Array.IndexOf(headers, dropdownColumnName);
+
+                //// Check if the specified column name exists in the headers
+                //if (dropdownColumnIndex != -1)
+                //{
+                //    var dropdownRange = $"{ExcelColumnFromNumber(dropdownColumnIndex + 1)}2:{ExcelColumnFromNumber(dropdownColumnIndex + 1)}{data.Count + 1}";
+
+                //    var validation = worksheet.DataValidations.AddListValidation(dropdownRange);
+
+                //    foreach (var item in dropdownItems)
+                //    {
+                //        validation.Formula.Values.Add(item);
+                //    }
+                //}
+                //else
+                //{
+                //    // Handle the case where the specified column name is not found in the headers
+                //    // You can throw an exception, log a message, or handle it as needed
+                //    Console.WriteLine($"Column '{dropdownColumnName}' not found in headers.");
+                //}
+                // Add dropdown list data validations for each dropdown
+                foreach (var dropdown in dropdownItems)
+                {
+                    AddDropdownValidation(worksheet, data.Count, dropdown.Key, dropdown.Value);
+                }
+
+                // Add data
+                for (int row = 0; row < data.Count; row++)
+                {
+                    var rowData = data[row];
+                    for (int col = 0; col < headers.Length; col++)
+                    {
+                        if (rowData.TryGetValue(headers[col], out object value))
+                        {
+                            if (value is DateTime dateValue)
+                            {
+                                // Format date values
+                                worksheet.Cells[row + 2, col + 1].Value = dateValue.ToString("dd-MM-yyyy");
+                                worksheet.Cells[row + 2, col + 1].Style.Numberformat.Format = "dd-MM-yyyy";
+                            }
+                            else
+                            {
+                                worksheet.Cells[row + 2, col + 1].Value = value;
+                            }
+
+                            // Set alignment based on data type
+                            if (IsNumeric(value))
+                            {
+                                worksheet.Cells[row + 2, col + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                            }
+                            else
+                            {
+                                worksheet.Cells[row + 2, col + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                            }
+                        }
+                        else
+                        {
+                            // Handle missing data or provide a default value
+                            worksheet.Cells[row + 2, col + 1].Value = DBNull.Value;
+                        }
+                    }
+                }
+
+                worksheet.Cells.AutoFitColumns();
+
+                return package.GetAsByteArray();
+            }
+        }
+        public byte[] ExportToExcel(Dictionary<string, object> data, string[] headers, Dictionary<string, string[]> dropdownItems)
+        {
+            return ExportToExcel(new List<Dictionary<string, object>> { data }, headers,dropdownItems);
         }
         public bool ValidateExcel(string tempFileName, out string errorMessage, out byte[] ErrorFile, List<string> expectedHeaders, Dictionary<int, Func<ExcelRange, string, bool>> validationMethods)
         {
@@ -381,11 +526,11 @@ namespace DPWVessel.Model.Features.Shared
 
             return result;
         }
-        public bool IsNumeric(object value)
+        private bool IsNumeric(object value)
         {
-            return value is int || value is decimal || value is float || value is double;
+            return value is sbyte || value is byte || value is short || value is ushort || value is int ||
+                   value is uint || value is long || value is ulong || value is float || value is double || value is decimal;
         }
-
         public byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows)
         {
             using (var package = new ExcelPackage())
@@ -514,10 +659,36 @@ namespace DPWVessel.Model.Features.Shared
             }
         }
 
+        private string ExcelColumnFromNumber(int columnNumber)
+        {
+            int dividend = columnNumber;
+            string columnName = string.Empty;
 
+            while (dividend > 0)
+            {
+                int modulo = (dividend - 1) % 26;
+                columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
+                dividend = (int)((dividend - modulo) / 26);
+            }
 
+            return columnName;
+        }
 
+        private void AddDropdownValidation(ExcelWorksheet worksheet, int rowCount, string columnName, string[] dropdownItems)
+        {
+            var columnNumber = Array.IndexOf(worksheet.Cells[1, 1, 1, worksheet.Dimension.Columns].Select(c => c.Text).ToArray(), columnName) + 1;
 
+            if (columnNumber > 0)
+            {
+                var dropdownRange = $"{ExcelColumnFromNumber(columnNumber)}2:{ExcelColumnFromNumber(columnNumber)}{rowCount + 1}";
+                var validation = worksheet.DataValidations.AddListValidation(dropdownRange);
+
+                foreach (var item in dropdownItems)
+                {
+                    validation.Formula.Values.Add(item);
+                }
+            }
+        }
 
 
     }
