@@ -1,4 +1,6 @@
-﻿using OfficeOpenXml;
+﻿using Microsoft.Ajax.Utilities;
+using NLog.Targets;
+using OfficeOpenXml;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using OfficeOpenXml.Style;
 using System;
@@ -40,7 +42,34 @@ namespace EasyMe.Web.Controllers
     //                    }).ToList();
     //</param>
     //how passing headers 
-    /// <param name="headers">
+    /// How you add Custom styling of every header cloumn here I'm telling you 
+
+    /// <param name="columnStyling">
+    ///  var headers = new[] { "Id","so on .........." };
+    /// An array of strings representing the column headers repespective Cell.
+    /// var columnStyles = new Dictionary<string, Action<ExcelRange>>
+    //{
+    //here You passing header Column Name and add styling 
+    //    { "header1", cell => 
+    //        {
+    //            cell.Style.Fill.BackgroundColor.SetColor(Color.Red);
+    //            cell.Style.Font.Color.SetColor(Color.Yellow);
+    //            cell.Style.Border.BorderAround(ExcelBorderStyle.Medium, Color.Green);
+    //            // Add more styling properties as needed
+    //        }
+    //    },
+    //    // Add styles for other headers
+    //};
+
+    //var excelBytes = excelExport.ExportToExcel(data, headers, dropdownItems, columnStyles);
+
+    /// </param>
+    /// In case You can passing dropdown 
+    /// <param name="dropdownItems">
+    /// A dictionary containing dropdown menu names as keys and their respective items as values.
+    /// remember one thing , DropDown menu 1 also passing in header and data if header does not find DropDown menu 1 then given Excpection
+    ///        var dropdownItems = new Dictionary<string, string[]>
+    ///         /// <param name="headers">
     ///  var headers = new[] { "Id","so on .........." };
     /// An array of strings representing the column headers.
     /// </param>
@@ -63,25 +92,27 @@ namespace EasyMe.Web.Controllers
     //var excelBytes = excelExport.ExportToExcel(data, headers, dropdownItems);
     //string filename = $"Temp_YourFileName_{DateTime.Now.ToString("dd-MM-yyy")}.xlsx";
     //return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
-    public class ExcelServices
+    public sealed class ExcelServices
     {
+        private string FunctionErrorMessage { get; set; }
+        public string TempFileName { get; set; } = "Sheet1";
+        //Overloaded method one start here  with list of Data and headers
+        #region Export To Excel Method 
         public byte[] ExportToExcel(List<Dictionary<string, object>> data, string[] headers)
         {
             using (var package = new ExcelPackage())
             {
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(TempFileName);
 
                 // Add headers
                 for (int i = 0; i < headers.Length; i++)
                 {
                     worksheet.Cells[1, i + 1].Value = headers[i];
-                    Color colFromHex = ColorTranslator.FromHtml("#013447");
-                    worksheet.Cells[1, i + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    worksheet.Cells[1, i + 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
-                    worksheet.Cells[1, i + 1].Style.Font.Bold = true;
-                    worksheet.Cells[1, i + 1].Style.Font.Size = 12;
-                    worksheet.Cells[1, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheet.Cells[1, i + 1].Style.Font.Color.SetColor(Color.White);
+
+                    // Apply default styling
+                    ApplyDefaultHeaderStyle(worksheet.Cells[1, i + 1]);
+
+                    
                 }
 
                 // Add data
@@ -130,23 +161,24 @@ namespace EasyMe.Web.Controllers
         {
             return ExportToExcel(new List<Dictionary<string, object>> { data }, headers);
         }
+        //Overloaded method one end here
+        //Overloaded method two only headers start  here 
         public byte[] ExportToExcel(string[] headers)
         {
             using (var package = new ExcelPackage())
             {
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(TempFileName);
 
+                // Add headers
                 // Add headers
                 for (int i = 0; i < headers.Length; i++)
                 {
                     worksheet.Cells[1, i + 1].Value = headers[i];
-                    Color colFromHex = ColorTranslator.FromHtml("#013447");
-                    worksheet.Cells[1, i + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    worksheet.Cells[1, i + 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
-                    worksheet.Cells[1, i + 1].Style.Font.Bold = true;
-                    worksheet.Cells[1, i + 1].Style.Font.Size = 12;
-                    worksheet.Cells[1, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheet.Cells[1, i + 1].Style.Font.Color.SetColor(Color.White);
+
+                    // Apply default styling
+                    ApplyDefaultHeaderStyle(worksheet.Cells[1, i + 1]);
+
+
                 }
 
                 // Add data
@@ -157,48 +189,24 @@ namespace EasyMe.Web.Controllers
                 return package.GetAsByteArray();
             }
         }
+        //Overloaded method two end here
+        //Overloaded method three list of data .header , dropdown start here
         public byte[] ExportToExcel(List<Dictionary<string, object>> data, string[] headers, Dictionary<string, string[]> dropdownItems)
         {
             using (var package = new ExcelPackage())
             {
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Temp File" +
-                    "");
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(TempFileName);
 
+       
                 // Add headers
                 for (int i = 0; i < headers.Length; i++)
                 {
                     worksheet.Cells[1, i + 1].Value = headers[i];
-                    Color colFromHex = ColorTranslator.FromHtml("#013447");
-                    worksheet.Cells[1, i + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    worksheet.Cells[1, i + 1].Style.Fill.BackgroundColor.SetColor(colFromHex);
-                    worksheet.Cells[1, i + 1].Style.Font.Bold = true;
-                    worksheet.Cells[1, i + 1].Style.Font.Size = 12;
-                    worksheet.Cells[1, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheet.Cells[1, i + 1].Style.Font.Color.SetColor(Color.White);
+                    // Apply default styling
+                    ApplyDefaultHeaderStyle(worksheet.Cells[1, i + 1]);
                 }
 
-                //// Find the index of the specified column name in the headers
-                //var dropdownColumnIndex = Array.IndexOf(headers, dropdownColumnName);
 
-                //// Check if the specified column name exists in the headers
-                //if (dropdownColumnIndex != -1)
-                //{
-                //    var dropdownRange = $"{ExcelColumnFromNumber(dropdownColumnIndex + 1)}2:{ExcelColumnFromNumber(dropdownColumnIndex + 1)}{data.Count + 1}";
-
-                //    var validation = worksheet.DataValidations.AddListValidation(dropdownRange);
-
-                //    foreach (var item in dropdownItems)
-                //    {
-                //        validation.Formula.Values.Add(item);
-                //    }
-                //}
-                //else
-                //{
-                //    // Handle the case where the specified column name is not found in the headers
-                //    // You can throw an exception, log a message, or handle it as needed
-                //    Console.WriteLine($"Column '{dropdownColumnName}' not found in headers.");
-                //}
-                // Add dropdown list data validations for each dropdown
                 foreach (var dropdown in dropdownItems)
                 {
                     AddDropdownValidation(worksheet, data.Count, dropdown.Key, dropdown.Value);
@@ -248,8 +256,187 @@ namespace EasyMe.Web.Controllers
         }
         public byte[] ExportToExcel(Dictionary<string, object> data, string[] headers, Dictionary<string, string[]> dropdownItems)
         {
-            return ExportToExcel(new List<Dictionary<string, object>> { data }, headers,dropdownItems);
+            return ExportToExcel(new List<Dictionary<string, object>> { data }, headers, dropdownItems);
         }
+        //Overloaded method three end here
+        //Overloaded method four data.header,dropdown,columnstyling start here
+        public byte[] ExportToExcel(List<Dictionary<string, object>> data, string[] headers, Dictionary<string, string[]> dropdownItems, Dictionary<string, Action<ExcelRange>> columnStyling)
+        {
+            using (var package = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(TempFileName);
+
+                // Add headers
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    worksheet.Cells[1, i + 1].Value = headers[i];
+
+                    // Apply default styling
+                    ApplyDefaultHeaderStyle(worksheet.Cells[1, i + 1]);
+
+                    // Apply custom styling if specified
+                    if (columnStyling.ContainsKey(headers[i]))
+                    {
+                        columnStyling[headers[i]].Invoke(worksheet.Cells[1, i + 1]);
+                    }
+                }
+
+                // Add dropdown list data validations for each dropdown
+                foreach (var dropdown in dropdownItems)
+                {
+                    AddDropdownValidation(worksheet, data.Count, dropdown.Key, dropdown.Value);
+                }
+
+                // Add data
+                for (int row = 0; row < data.Count; row++)
+                {
+                    var rowData = data[row];
+                    for (int col = 0; col < headers.Length; col++)
+                    {
+                        if (rowData.TryGetValue(headers[col], out object value))
+                        {
+                            if (value is DateTime dateValue)
+                            {
+                                // Format date values
+                                worksheet.Cells[row + 2, col + 1].Value = dateValue.ToString("dd-MM-yyyy");
+                                worksheet.Cells[row + 2, col + 1].Style.Numberformat.Format = "dd-MM-yyyy";
+                            }
+                            else
+                            {
+                                worksheet.Cells[row + 2, col + 1].Value = value;
+                            }
+
+                            // Set alignment based on data type
+                            if (IsNumeric(value))
+                            {
+                                worksheet.Cells[row + 2, col + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                            }
+                            else
+                            {
+                                worksheet.Cells[row + 2, col + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                            }
+                        }
+                        else
+                        {
+                            // Handle missing data or provide a default value
+                            worksheet.Cells[row + 2, col + 1].Value = DBNull.Value;
+                        }
+                    }
+                }
+
+                worksheet.Cells.AutoFitColumns();
+
+                return package.GetAsByteArray();
+            }
+        }
+        public byte[] ExportToExcel(Dictionary<string, object> data, string[] headers, Dictionary<string, string[]> dropdownItems, Dictionary<string, Action<ExcelRange>> columnStyling)
+        {
+            return ExportToExcel(new List<Dictionary<string, object>> { data }, headers, dropdownItems, columnStyling);
+        }
+        //Overloaded method four end here
+        //Overloaded method five start , data ,header , custom styling here
+        public byte[] ExportToExcel(List<Dictionary<string, object>> data, string[] headers, Dictionary<string, Action<ExcelRange>> columnStyling)
+        {
+            using (var package = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(TempFileName);
+
+                // Add headers
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    worksheet.Cells[1, i + 1].Value = headers[i];
+
+                    // Apply default styling
+                    ApplyDefaultHeaderStyle(worksheet.Cells[1, i + 1]);
+
+                    // Apply custom styling if specified
+                    if (columnStyling.ContainsKey(headers[i]))
+                    {
+                        columnStyling[headers[i]].Invoke(worksheet.Cells[1, i + 1]);
+                    }
+                }
+
+             
+
+                // Add data
+                for (int row = 0; row < data.Count; row++)
+                {
+                    var rowData = data[row];
+                    for (int col = 0; col < headers.Length; col++)
+                    {
+                        if (rowData.TryGetValue(headers[col], out object value))
+                        {
+                            if (value is DateTime dateValue)
+                            {
+                                // Format date values
+                                worksheet.Cells[row + 2, col + 1].Value = dateValue.ToString("dd-MM-yyyy");
+                                worksheet.Cells[row + 2, col + 1].Style.Numberformat.Format = "dd-MM-yyyy";
+                            }
+                            else
+                            {
+                                worksheet.Cells[row + 2, col + 1].Value = value;
+                            }
+
+                            // Set alignment based on data type
+                            if (IsNumeric(value))
+                            {
+                                worksheet.Cells[row + 2, col + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                            }
+                            else
+                            {
+                                worksheet.Cells[row + 2, col + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                            }
+                        }
+                        else
+                        {
+                            // Handle missing data or provide a default value
+                            worksheet.Cells[row + 2, col + 1].Value = DBNull.Value;
+                        }
+                    }
+                }
+
+                worksheet.Cells.AutoFitColumns();
+
+                return package.GetAsByteArray();
+            }
+        }
+        public byte[] ExportToExcel(Dictionary<string, object> data, string[] headers, Dictionary<string, Action<ExcelRange>> columnStyling)
+        {
+            return ExportToExcel(new List<Dictionary<string, object>> { data }, headers, columnStyling);
+        }
+        //Overloaded method five end here 
+        //Overloaded method six start  headers and custom styling here
+        public byte[] ExportToExcel( string[] headers, Dictionary<string, Action<ExcelRange>> columnStyling)
+        {
+            using (var package = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(TempFileName);
+
+                // Add headers
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    worksheet.Cells[1, i + 1].Value = headers[i];
+
+                    // Apply default styling
+                    ApplyDefaultHeaderStyle(worksheet.Cells[1, i + 1]);
+
+                    // Apply custom styling if specified
+                    if (columnStyling.ContainsKey(headers[i]))
+                    {
+                        columnStyling[headers[i]].Invoke(worksheet.Cells[1, i + 1]);
+                    }
+                }
+
+             
+
+                worksheet.Cells.AutoFitColumns();
+
+                return package.GetAsByteArray();
+            }
+        }
+        #endregion
+        //Overloaded method six end here
+        #region Validation Excel Method
         public bool ValidateExcel(string tempFileName, out string errorMessage, out byte[] ErrorFile, List<string> expectedHeaders, Dictionary<int, Func<ExcelRange, string, bool>> validationMethods)
         {
             bool result = true;
@@ -345,25 +532,7 @@ namespace EasyMe.Web.Controllers
 
             return result;
         }
-        private bool SetError(ExcelRange cell, string errorComment)
-        {
-            if (cell.Comment == null)
-            {
-                // Set the error comment
-                cell.AddComment(errorComment, "");
-            }
-            else
-            {
-                // Update the existing comment
-                cell.Comment.Text = errorComment;
-            }
-
-            var fill = cell.Style.Fill;
-            fill.PatternType = ExcelFillStyle.Solid;
-            fill.BackgroundColor.SetColor(Color.Red);
-            cell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
-            return false;
-        }
+   
         private List<string> GetColumnHeaders(ExcelWorksheet worksheet)
         {
             List<string> columnHeaders = new List<string>();
@@ -442,12 +611,55 @@ namespace EasyMe.Web.Controllers
 
             return result;
         }
-
+        #endregion
+        #region Extra Column Validation
         //validation of excel rows column data ....?
+        private bool SetError(ExcelRange cell, string errorComment)
+        {
+
+
+            var fill = cell.Style.Fill;
+            fill.PatternType = ExcelFillStyle.Solid;
+            fill.BackgroundColor.SetColor(Color.Red);
+            cell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            return false;
+        }
+        private bool SetError(ExcelRange cell)
+        {
+
+
+            var fill = cell.Style.Fill;
+            fill.PatternType = ExcelFillStyle.Solid;
+            fill.BackgroundColor.SetColor(Color.Red);
+           // cell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            cell.Style.Font.Color.SetColor(Color.White);
+            return false;
+        }
+        private string SetErrorMessage( string errorMessage)
+        {
+            // Set the background color to indicate an error
+            //cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            //cell.Style.Fill.BackgroundColor.SetColor(Color.Red);
+            //cell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            //cell.Style.Font.Color.SetColor(Color.White);
+
+            FunctionErrorMessage += errorMessage;
+            return errorMessage; // Return the error message
+        } private string SetErrorMessage(ExcelRange cell, string errorMessage)
+        {
+            // Set the background color to indicate an error
+            //cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            //cell.Style.Fill.BackgroundColor.SetColor(Color.Red);
+            //cell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            //cell.Style.Font.Color.SetColor(Color.White);
+
+            FunctionErrorMessage += errorMessage;
+            return errorMessage; // Return the error message
+        }
         public bool ValidateText(ExcelRange cell, string columnName)
         {//this validation is used for in case user send empty row
             bool result = true;
-            string error = string.Format("{0} is empty", columnName);
+            string error = string.Format("{0} is azxzz empty", columnName);
 
             if (cell.Value != null)
             {
@@ -473,11 +685,13 @@ namespace EasyMe.Web.Controllers
             {
                 if (!ValidateEmail(cell.Value.ToString())) //ValidateEmail => true, if email format is correct
                 {
-                    result = SetError(cell, "Email address format is invalid.");
+                    result = SetError(cell);
+                    FunctionErrorMessage = string.Format("{0} Email address format is invalid ", columnName);
                 }
                 else if (cell.Value.ToString().Length > 150)
                 {
-                    result = SetError(cell, "Email address too long. Max characters 150.");
+                    result = SetError(cell);
+                    FunctionErrorMessage = string.Format("Email: {0} address too long. Max characters 150. ", columnName);
                 }
             }
 
@@ -496,19 +710,30 @@ namespace EasyMe.Web.Controllers
         {
             bool result = true;
             double value = 0.0;
-            string error = string.Format("{0} format is incorrect.", columnName);
+
+
+
             result = ValidateText(cell, columnName);
 
             if (result)
             {
                 if (!double.TryParse(cell.Value.ToString(), out value))
                 {
-                    result = SetError(cell, error);
+                    FunctionErrorMessage = string.Format("{0} is not Number ", columnName);
+                    var fill = cell.Style.Fill;
+                    fill.PatternType = ExcelFillStyle.Solid;
+                    fill.BackgroundColor.SetColor(Color.Red);
+                    cell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                   
+                    result = false;
                 }
             }
 
+
             return result;
         }
+
+
         public bool ValidateDate(ExcelRange cell, string columnName)
         {
             bool result = true;
@@ -520,7 +745,8 @@ namespace EasyMe.Web.Controllers
             {
                 if (!DateTime.TryParse(cell.Value.ToString(), out date))
                 {
-                    result = SetError(cell, error);
+                    result = SetError(cell);
+                    FunctionErrorMessage = string.Format("Date : {0} format is incorrect.", columnName);
                 }
             }
 
@@ -531,132 +757,13 @@ namespace EasyMe.Web.Controllers
             return value is sbyte || value is byte || value is short || value is ushort || value is int ||
                    value is uint || value is long || value is ulong || value is float || value is double || value is decimal;
         }
-        public byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows)
+        private string RemoveAsterisk(string value)
         {
-            using (var package = new ExcelPackage())
+            if (value != null && value.Contains("*"))
             {
-                var invalidSheet = package.Workbook.Worksheets.Add("InvalidRecords");
-                Color colFromHex = ColorTranslator.FromHtml("#013447");
-
-                // Copy headers from the original sheet to the new sheet
-                for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
-                {
-                    invalidSheet.Cells[1, col].Value = worksheet.Cells[1, col].Value;
-                    invalidSheet.Cells[1, col].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    invalidSheet.Cells[1, col].Style.Fill.BackgroundColor.SetColor(colFromHex);
-                    invalidSheet.Cells[1, col].Style.Font.Bold = true;
-                    invalidSheet.Cells[1, col].Style.Font.Size = 12;
-                    invalidSheet.Cells[1, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    invalidSheet.Cells[1, col].Style.Font.Color.SetColor(Color.White);
-                }
-
-                // Mark invalid rows with red color and add comments
-                foreach (int row in invalidRows)
-                {
-                    bool rowIsValid = true;
-
-                    for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
-                    {
-                        var sourceCell = worksheet.Cells[row, col];
-                        var invalidCell = invalidSheet.Cells[row, col];
-
-                        invalidCell.Value = sourceCell.Value;
-
-                        var fill = invalidCell.Style.Fill;
-                        fill.PatternType = ExcelFillStyle.Solid;
-
-                        if (string.IsNullOrWhiteSpace(sourceCell.Text))
-                        {
-                            fill.BackgroundColor.SetColor(Color.Red);
-                            invalidCell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                            //invalidCell.Value = "???";
-                            // Check if the comment already exists before adding it
-                            //var existingComment = invalidCell.Comment;
-                            //if (existingComment == null)
-                            //{
-                            //    invalidCell.AddComment("Please Insert Correct Value: Empty Value is not accepted", "System");
-                            //}
-                            //else
-                            //{
-                            //    existingComment.Text = "Please Insert Correct Value: Empty Value is not accepted";
-                            //    existingComment.Author = "System";
-                            //}
-
-                            rowIsValid = false;
-                        }
-                        else
-                        {
-                            // If the cell has a value, do not fill the background color
-                            fill.BackgroundColor.SetColor(Color.White);
-                            invalidCell.Style.Border.BorderAround(ExcelBorderStyle.Thin);
-
-                        }
-                    }
-
-                    if (rowIsValid)
-                    {
-                        invalidSheet.Cells[invalidSheet.Dimension.End.Row + 1, 1, invalidSheet.Dimension.End.Row + 1, invalidSheet.Dimension.End.Column].Value
-                            = invalidSheet.Cells[row, 1, row, invalidSheet.Dimension.End.Column].Value;
-                    }
-                }
-
-                // Add comments for rows with no empty values
-                for (int row = 2; row <= invalidSheet.Dimension.End.Row; row++) // Start from 2 to skip the header row
-                {
-                    bool rowHasEmptyValue = false;
-
-                    for (int col = 1; col <= invalidSheet.Dimension.End.Column; col++)
-                    {
-                        var cell = invalidSheet.Cells[row, col];
-
-                        if (string.IsNullOrWhiteSpace(cell.Text))
-                        {
-                            rowHasEmptyValue = true;
-                            break;
-                        }
-                    }
-
-                    if (!rowHasEmptyValue)
-                    {
-                        // Add or update comment for complete row with no empty value
-                        // Check if the comment already exists before adding it
-                        var existingComment = invalidSheet.Cells[row, 1].Comment;
-                        //if (existingComment == null)
-                        //{
-                        //    invalidSheet.Cells[row, 1].AddComment("Some Wrong Value inserted", "System");
-                        //}
-                        //else
-                        //{
-                        //    existingComment.Text = "Some Wrong Value inserted";
-                        //    existingComment.Author = "System";
-                        //}
-                    }
-                }
-
-                // Delete empty rows
-                for (int row = invalidSheet.Dimension.Start.Row; row <= invalidSheet.Dimension.End.Row; row++)
-                {
-                    bool rowIsEmpty = true;
-                    for (int col = invalidSheet.Dimension.Start.Column; col <= invalidSheet.Dimension.End.Column; col++)
-                    {
-                        var cell = invalidSheet.Cells[row, col];
-                        if (!string.IsNullOrWhiteSpace(cell.Text))
-                        {
-                            rowIsEmpty = false;
-                            break;
-                        }
-                    }
-
-                    if (rowIsEmpty)
-                    {
-                        invalidSheet.DeleteRow(row);
-                        row--; // Adjust the row index after deletion
-                    }
-                }
-
-                invalidSheet.Cells.AutoFitColumns();
-                return package.GetAsByteArray();
+                value = value.Replace("*", "");
             }
+            return value;
         }
 
         private string ExcelColumnFromNumber(int columnNumber)
@@ -689,8 +796,677 @@ namespace EasyMe.Web.Controllers
                 }
             }
         }
+        private void ApplyDefaultHeaderStyle(ExcelRange cell)
+        {
+            // Default styling
+            Color colFromHex = ColorTranslator.FromHtml("#013447");
+            cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            cell.Style.Fill.BackgroundColor.SetColor(colFromHex);
+            cell.Style.Font.Bold = true;
+            cell.Style.Font.Size = 12;
+            cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            cell.Style.Font.Color.SetColor(Color.White);
+
+            // Additional default styling properties
+            cell.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.Black);
+
+            // Get the existing text of the cell
+            var text = cell.Text;
+            if (text.Contains("*"))
+            {
+                // Find the index of the asterisk (*) in the text
+                int asteriskIndex = text.IndexOf('*');
+
+                // Clear existing text formatting
+                cell.RichText.Clear();
+
+                // Add text before asterisk with white color
+                cell.RichText.Add(text.Substring(0, asteriskIndex)).Color = Color.White;
+
+                // Add asterisk with red color
+                cell.RichText.Add("*").Color = Color.Red;
+
+                // Add text after asterisk with white color
+                cell.RichText.Add(text.Substring(asteriskIndex + 1)).Color = Color.White;
+            }
+
+        }
+        #endregion
+
+        #region SaveInvalidRecordsToExcel Method Start here 
+        public byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows)
+        {
+            using (var package = new ExcelPackage())
+            {
+                var invalidSheet = package.Workbook.Worksheets.Add(TempFileName);
+                Color colFromHex = ColorTranslator.FromHtml("#013447");
+
+                // Copy headers from the original sheet to the new sheet, and add 'Remark' header
+                for (int col = 1; col <= worksheet.Dimension.End.Column + 1; col++)
+                {
+                    if (col <= worksheet.Dimension.End.Column)
+                    {
+                        invalidSheet.Cells[1, col].Value = worksheet.Cells[1, col].Value;
+                    }
+                    else
+                    {
+                        invalidSheet.Cells[1, col].Value = "Remark";
+                    }
+
+                    invalidSheet.Cells[1, col].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    invalidSheet.Cells[1, col].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    invalidSheet.Cells[1, col].Style.Font.Bold = true;
+                    invalidSheet.Cells[1, col].Style.Font.Size = 12;
+                    invalidSheet.Cells[1, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    invalidSheet.Cells[1, col].Style.Font.Color.SetColor(Color.White);
+                }
+
+                // Mark invalid rows with red color and add comments
+                foreach (int row in invalidRows)
+                {
+                    bool rowIsValid = true;
+
+                    for (int col = 1; col <= worksheet.Dimension.End.Column + 1; col++)
+                    {
+                        var sourceCell = col <= worksheet.Dimension.End.Column ? worksheet.Cells[row, col] : null;
+                        var invalidCell = invalidSheet.Cells[row, col];
+
+                        if (col <= worksheet.Dimension.End.Column)
+                        {
+                            invalidCell.Value = sourceCell.Value;
+
+                            var fill = invalidCell.Style.Fill;
+                            fill.PatternType = ExcelFillStyle.Solid;
+
+                            if (string.IsNullOrWhiteSpace(sourceCell.Text))
+                            {
+                                fill.BackgroundColor.SetColor(Color.Red);
+                                
+
+                                // Get the current value in the 'Remark' column
+                                var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+
+                                // Set the 'Remark' column value
+                                invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Value = string.IsNullOrEmpty(currentRemark)
+                                    ? $"{worksheet.Cells[1, col].Text} is empty."
+                                    : $"{currentRemark}, {worksheet.Cells[1, col].Text} is empty.";
+
+                                rowIsValid = false;
+                            }
+                            else
+                            {
+                                // If the cell has a value, do not fill the background color
+                                fill.BackgroundColor.SetColor(Color.White);
+                                
+                            }
+                        }
+                        else
+                        {
+                            // Only set the 'Remark' column value if there is an issue in the row
+                            if (!rowIsValid)
+                            {
+                                // Get the current value in the 'Remark' column
+                                var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+
+                                // Set the 'Remark' column value
+                                invalidSheet.Cells[row, col].Value = string.IsNullOrEmpty(currentRemark)
+                                    ? "No issues"
+                                    : $"{currentRemark}";
+                            }
+                        }
+                    }
+
+                    if (rowIsValid)
+                    {
+                        invalidSheet.Cells[invalidSheet.Dimension.End.Row + 1, 1, invalidSheet.Dimension.End.Row + 1, invalidSheet.Dimension.End.Column].Value
+                            = invalidSheet.Cells[row, 1, row, invalidSheet.Dimension.End.Column].Value;
+                    }
+                }
 
 
+
+
+                // Delete empty rows
+                for (int row = invalidSheet.Dimension.Start.Row; row <= invalidSheet.Dimension.End.Row; row++)
+                {
+                    bool rowIsEmpty = true;
+                    for (int col = invalidSheet.Dimension.Start.Column; col <= invalidSheet.Dimension.End.Column; col++)
+                    {
+                        var cell = invalidSheet.Cells[row, col];
+                        if (!string.IsNullOrWhiteSpace(cell.Text))
+                        {
+                            rowIsEmpty = false;
+                            break;
+                        }
+                    }
+
+                    if (rowIsEmpty)
+                    {
+                        invalidSheet.DeleteRow(row);
+                        row--; // Adjust the row index after deletion
+                    }
+                }
+
+                invalidSheet.Cells.AutoFitColumns();
+                return package.GetAsByteArray();
+            }
+        }
+        public byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows, Dictionary<int, Func<ExcelRange, string, bool>> validationMethods)
+        {
+            string errorMsg = string.Empty ;
+            using (var package = new ExcelPackage())
+            {
+                var invalidSheet = package.Workbook.Worksheets.Add(TempFileName);
+                Color colFromHex = ColorTranslator.FromHtml("#013447");
+
+                for (int col = 1; col <= worksheet.Dimension.End.Column + 1; col++)
+                {
+                    if (col <= worksheet.Dimension.End.Column)
+                    {
+                        invalidSheet.Cells[1, col].Value = worksheet.Cells[1, col].Value;
+                    }
+                    else
+                    {
+                        invalidSheet.Cells[1, col].Value = "Remark";
+                    }
+
+                    invalidSheet.Cells[1, col].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    invalidSheet.Cells[1, col].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    invalidSheet.Cells[1, col].Style.Font.Bold = true;
+                    invalidSheet.Cells[1, col].Style.Font.Size = 12;
+                    invalidSheet.Cells[1, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    invalidSheet.Cells[1, col].Style.Font.Color.SetColor(Color.White);
+                }
+
+                // Mark invalid rows with red color and Reamrk Value
+                foreach (int row in invalidRows)
+                {
+                    bool rowIsValid = true;
+
+                    for (int col = 1; col <= worksheet.Dimension.End.Column + 1; col++)
+                    {
+                        var sourceCell = col <= worksheet.Dimension.End.Column ? worksheet.Cells[row, col] : null;
+                        var invalidCell = invalidSheet.Cells[row, col];
+
+                        if (col <= worksheet.Dimension.End.Column)
+                        {
+                            invalidCell.Value = sourceCell.Value;
+
+                            var fill = invalidCell.Style.Fill;
+                            fill.PatternType = ExcelFillStyle.Solid;
+
+
+                            if (string.IsNullOrWhiteSpace(sourceCell.Text))
+                            {
+                                fill.BackgroundColor.SetColor(Color.Red);
+                                
+
+                                FunctionErrorMessage  += $"{RemoveAsterisk(worksheet.Cells[1, col].Text)} is empty";
+                                // Get the current value in the 'Remark' column
+                                var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+
+                                // Set the 'Remark' column value
+                                invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Value = string.IsNullOrEmpty(currentRemark)
+                                    ? FunctionErrorMessage
+                                    : $"{FunctionErrorMessage}";
+
+                                rowIsValid = false;
+                            }
+                            else
+                            {
+                                // If the cell has a value, do not fill the background color
+                                fill.BackgroundColor.SetColor(Color.White);
+                                
+                            }
+
+                            // Check if a validation method is provided for this column
+                            // Check if a validation method is provided for this column
+                            if (validationMethods.TryGetValue(col, out var validationMethod))
+                            {
+                                // Perform validation using the provided method
+                                if (!validationMethod(sourceCell, invalidCell.Text))
+                                {
+                                    
+
+                                     SetError(invalidCell);
+                                    // Get the current value in the 'Remark' column
+                                    var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+
+                                    // Set the 'Remark' column value for validation failure
+                                    invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Value = string.IsNullOrEmpty(currentRemark)
+                                        ? FunctionErrorMessage
+                                        : $"{FunctionErrorMessage}";
+
+                                    rowIsValid = false;
+                                }
+                                else
+                                {
+                                    // If the cell has a value, do not fill the background color
+                                    //fill.BackgroundColor.SetColor(Color.Red);
+                                    //
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            // Only set the 'Remark' column value if there is an issue in the row
+                            if (!rowIsValid)
+                            {
+                                var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+                                var error = SetErrorMessage(invalidCell,null);
+
+                                // Set the 'Remark' column value
+                                invalidSheet.Cells[row, col].Value = string.IsNullOrEmpty(currentRemark)
+                                    ? error
+                                    : $"{currentRemark} {error}";
+                            }
+                        }
+                    }
+                    FunctionErrorMessage = string.Empty;
+                    if (rowIsValid)
+                    {
+                        invalidSheet.Cells[invalidSheet.Dimension.End.Row + 1, 1, invalidSheet.Dimension.End.Row + 1, invalidSheet.Dimension.End.Column].Value
+                            = invalidSheet.Cells[row, 1, row, invalidSheet.Dimension.End.Column].Value;
+                    }
+                }
+
+
+
+
+                // Delete empty rows
+                for (int row = invalidSheet.Dimension.Start.Row; row <= invalidSheet.Dimension.End.Row; row++)
+                {
+                    bool rowIsEmpty = true;
+                    for (int col = invalidSheet.Dimension.Start.Column; col <= invalidSheet.Dimension.End.Column; col++)
+                    {
+                        var cell = invalidSheet.Cells[row, col];
+                        if (!string.IsNullOrWhiteSpace(cell.Text))
+                        {
+                            rowIsEmpty = false;
+                            break;
+                        }
+                    }
+
+                    if (rowIsEmpty)
+                    {
+                        invalidSheet.DeleteRow(row);
+                        row--; // Adjust the row index after deletion
+                    }
+                }
+
+                invalidSheet.Cells.AutoFitColumns();
+                return package.GetAsByteArray();
+            }
+        } 
+        public byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows, Dictionary<int, Func<ExcelRange, string, bool>> validationMethods, Dictionary<string, string[]> dropdownItems)
+        {
+            string errorMsg = string.Empty ;
+            using (var package = new ExcelPackage())
+            {
+                var invalidSheet = package.Workbook.Worksheets.Add(TempFileName);
+                Color colFromHex = ColorTranslator.FromHtml("#013447");
+
+                for (int col = 1; col <= worksheet.Dimension.End.Column + 1; col++)
+                {
+                    if (col <= worksheet.Dimension.End.Column)
+                    {
+                        invalidSheet.Cells[1, col].Value = worksheet.Cells[1, col].Value;
+                    }
+                    else
+                    {
+                        invalidSheet.Cells[1, col].Value = "Remark";
+                    }
+
+                    invalidSheet.Cells[1, col].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    invalidSheet.Cells[1, col].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    invalidSheet.Cells[1, col].Style.Font.Bold = true;
+                    invalidSheet.Cells[1, col].Style.Font.Size = 12;
+                    invalidSheet.Cells[1, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    invalidSheet.Cells[1, col].Style.Font.Color.SetColor(Color.White);
+                }
+
+                // Mark invalid rows with red color and Reamrk Value
+                foreach (int row in invalidRows)
+                {
+                    bool rowIsValid = true;
+
+                    for (int col = 1; col <= worksheet.Dimension.End.Column + 1; col++)
+                    {
+                        var sourceCell = col <= worksheet.Dimension.End.Column ? worksheet.Cells[row, col] : null;
+                        var invalidCell = invalidSheet.Cells[row, col];
+
+                        if (col <= worksheet.Dimension.End.Column)
+                        {
+                            invalidCell.Value = sourceCell.Value;
+
+                            var fill = invalidCell.Style.Fill;
+                            fill.PatternType = ExcelFillStyle.Solid;
+
+
+                            if (string.IsNullOrWhiteSpace(sourceCell.Text))
+                            {
+                                fill.BackgroundColor.SetColor(Color.Red);
+                                
+
+                                FunctionErrorMessage  += $"{RemoveAsterisk(worksheet.Cells[1, col].Text)} is empty, ";
+                                // Get the current value in the 'Remark' column
+                                var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+
+                                // Set the 'Remark' column value
+                                invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Value = string.IsNullOrEmpty(currentRemark)
+                                    ? FunctionErrorMessage
+                                    : $"{FunctionErrorMessage}";
+
+                                rowIsValid = false;
+                            }
+                            else
+                            {
+                                // If the cell has a value, do not fill the background color
+                                fill.BackgroundColor.SetColor(Color.White);
+                                
+                            }
+
+                            // Check if a validation method is provided for this column
+                            // Check if a validation method is provided for this column
+                            if (validationMethods.TryGetValue(col, out var validationMethod))
+                            {
+                                // Perform validation using the provided method
+                                if (!validationMethod(sourceCell, invalidCell.Text))
+                                {
+                                    
+
+                                     SetError(invalidCell);
+                                    // Get the current value in the 'Remark' column
+                                    var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+
+                                    // Set the 'Remark' column value for validation failure
+                                    invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Value = string.IsNullOrEmpty(currentRemark)
+                                        ? FunctionErrorMessage
+                                        : $"{FunctionErrorMessage}";
+
+                                    rowIsValid = false;
+                                }
+                                else
+                                {
+                                    // If the cell has a value, do not fill the background color
+                                    //fill.BackgroundColor.SetColor(Color.Red);
+                                    //
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            // Only set the 'Remark' column value if there is an issue in the row
+                            if (!rowIsValid)
+                            {
+                                var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+                                var error = SetErrorMessage(invalidCell,null);
+
+                                // Set the 'Remark' column value
+                                invalidSheet.Cells[row, col].Value = string.IsNullOrEmpty(currentRemark)
+                                    ? error
+                                    : $"{currentRemark},-shhs--";
+                            }
+                        }
+                    }
+                    FunctionErrorMessage = string.Empty;
+                    if (rowIsValid)
+                    {
+                        invalidSheet.Cells[invalidSheet.Dimension.End.Row + 1, 1, invalidSheet.Dimension.End.Row + 1, invalidSheet.Dimension.End.Column].Value
+                            = invalidSheet.Cells[row, 1, row, invalidSheet.Dimension.End.Column].Value;
+                    }
+                }
+                #region dropdown code is not working
+                //foreach (var dropdown in dropdownItems)
+                //{
+                //    // Assuming dropdown.Key represents the column name
+                //    var columnName = dropdown.Key;
+                //    var dropdownValues = dropdown.Value;
+
+                //    // Assuming invalidRows.Count represents the number of invalid rows
+                //    var rowCount = invalidRows.Count;
+
+                //    // Find the column index based on the column name
+                //    var colIndex = worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column]
+                //        .First(c => c.Text == columnName).Start.Column;
+
+                //    // Clear all existing data validations in the specified column
+                //    worksheet.DataValidations.RemoveAll(v => v.Address.Start.Column == colIndex);
+
+                //    // Set the data validation for each cell in the specified column
+                //    for (int row = 2; row <= rowCount + 1; row++)
+                //    {
+                //        var validationCell = worksheet.Cells[row, colIndex];
+
+                //        // Set data validation formula for the cell
+                //        validationCell.Formula = $"{columnName}{row}";
+
+                //        // Set dropdown values for the validation formula
+                //        var validation = validationCell.DataValidation.AddListDataValidation();
+                //        foreach (var item in dropdownValues)
+                //        {
+                //            validation.Formula.Values.Add(item);
+                //        }
+
+                //        // Set error message for invalid entries
+                //        validation.ShowErrorMessage = true;
+                //        validation.ErrorTitle = "Invalid Entry";
+                //        validation.Error = "Please select a value from the dropdown list.";
+                //    }
+                //}
+
+
+                #endregion
+
+                // Delete empty rows
+                for (int row = invalidSheet.Dimension.Start.Row; row <= invalidSheet.Dimension.End.Row; row++)
+                {
+                    bool rowIsEmpty = true;
+                    for (int col = invalidSheet.Dimension.Start.Column; col <= invalidSheet.Dimension.End.Column; col++)
+                    {
+                        var cell = invalidSheet.Cells[row, col];
+                        if (!string.IsNullOrWhiteSpace(cell.Text))
+                        {
+                            rowIsEmpty = false;
+                            break;
+                        }
+                    }
+
+                    if (rowIsEmpty)
+                    {
+                        invalidSheet.DeleteRow(row);
+                        row--; // Adjust the row index after deletion
+                    }
+                }
+
+                invalidSheet.Cells.AutoFitColumns();
+                return package.GetAsByteArray();
+            }
+        }  
+        public byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows, Dictionary<int, Func<ExcelRange, string, bool>> validationMethods, Dictionary<string, string[]> dropdownItems, Dictionary<int, string> excludedRows)
+        {
+            string errorMsg = string.Empty ;
+            using (var package = new ExcelPackage())
+            {
+                var invalidSheet = package.Workbook.Worksheets.Add(TempFileName);
+                Color colFromHex = ColorTranslator.FromHtml("#013447");
+
+                for (int col = 1; col <= worksheet.Dimension.End.Column + 1; col++)
+                {
+                    if (col <= worksheet.Dimension.End.Column)
+                    {
+                        invalidSheet.Cells[1, col].Value = worksheet.Cells[1, col].Value;
+                    }
+                    else
+                    {
+                        invalidSheet.Cells[1, col].Value = "Remark";
+                    }
+
+                    invalidSheet.Cells[1, col].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    invalidSheet.Cells[1, col].Style.Fill.BackgroundColor.SetColor(colFromHex);
+                    invalidSheet.Cells[1, col].Style.Font.Bold = true;
+                    invalidSheet.Cells[1, col].Style.Font.Size = 12;
+                    invalidSheet.Cells[1, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    invalidSheet.Cells[1, col].Style.Font.Color.SetColor(Color.White);
+                }
+                int remarkColumnIndex = worksheet.Dimension.End.Column + 1;
+                // Mark invalid rows with red color and Reamrk Value
+                foreach (int row in invalidRows)
+                {
+                    bool rowIsValid = true;
+
+                    for (int col = 1; col <= worksheet.Dimension.End.Column + 1; col++)
+                    {
+                        var sourceCell = col <= worksheet.Dimension.End.Column ? worksheet.Cells[row, col] : null;
+                        var invalidCell = invalidSheet.Cells[row, col];
+
+                        if (col <= worksheet.Dimension.End.Column)
+                        {
+                            invalidCell.Value = sourceCell.Value;
+
+                            var fill = invalidCell.Style.Fill;
+                            fill.PatternType = ExcelFillStyle.Solid;
+
+                            if (string.IsNullOrWhiteSpace(sourceCell.Text))
+                            {
+                                fill.BackgroundColor.SetColor(Color.Red);
+                                if (FunctionErrorMessage == string.Empty)
+                                {
+                                    FunctionErrorMessage = $"{RemoveAsterisk(worksheet.Cells[1, col].Text)} is empty ";
+                                }
+                                else{
+                                    FunctionErrorMessage += $", {RemoveAsterisk(worksheet.Cells[1, col].Text)} is empty";
+                                }
+                               
+
+                                var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+                                invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Value = string.IsNullOrEmpty(currentRemark)
+                                    ? FunctionErrorMessage
+                                    : $",{FunctionErrorMessage}";
+
+                                rowIsValid = false;
+                            }
+                            else
+                            {
+                                fill.BackgroundColor.SetColor(Color.White);
+                            }
+
+                            if (validationMethods.TryGetValue(col, out var validationMethod))
+                            {
+                                if (!validationMethod(sourceCell, invalidCell.Text))
+                                {
+                                    SetError(invalidCell);
+
+                                    var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+                                    invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Value = string.IsNullOrEmpty(currentRemark)
+                                        ? FunctionErrorMessage
+                                        : $"{FunctionErrorMessage}";
+
+                                    rowIsValid = false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!rowIsValid)
+                            {
+                                //var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+                                //var error = SetErrorMessage(invalidCell, null);
+
+                                //invalidSheet.Cells[row, col].Value = string.IsNullOrEmpty(currentRemark)
+                                //    ? error
+                                //    : $"{currentRemark} , ---";
+                            }
+                        }
+                    }
+
+                    // Handle excluded rows
+                    if (excludedRows.ContainsKey(row) && !string.IsNullOrEmpty(excludedRows[row]))
+                    {
+                        invalidSheet.Cells[row, remarkColumnIndex].Value =  excludedRows[row];
+                        rowIsValid = false;
+                    }
+
+                    FunctionErrorMessage = string.Empty;
+
+                    // Copy the row only if it is valid
+                    if (rowIsValid)
+                    {
+                        invalidSheet.Cells[invalidSheet.Dimension.End.Row + 1, 1, invalidSheet.Dimension.End.Row + 1, invalidSheet.Dimension.End.Column].Value
+                            = invalidSheet.Cells[row, 1, row, invalidSheet.Dimension.End.Column].Value;
+                    }
+                }
+
+                #region dropdown code is not working
+                //foreach (var dropdown in dropdownItems)
+                //{
+                //    // Assuming dropdown.Key represents the column name
+                //    var columnName = dropdown.Key;
+                //    var dropdownValues = dropdown.Value;
+
+                //    // Assuming invalidRows.Count represents the number of invalid rows
+                //    var rowCount = invalidRows.Count;
+
+                //    // Find the column index based on the column name
+                //    var colIndex = worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column]
+                //        .First(c => c.Text == columnName).Start.Column;
+
+                //    // Clear all existing data validations in the specified column
+                //    worksheet.DataValidations.RemoveAll(v => v.Address.Start.Column == colIndex);
+
+                //    // Set the data validation for each cell in the specified column
+                //    for (int row = 2; row <= rowCount + 1; row++)
+                //    {
+                //        var validationCell = worksheet.Cells[row, colIndex];
+
+                //        // Set data validation formula for the cell
+                //        validationCell.Formula = $"{columnName}{row}";
+
+                //        // Set dropdown values for the validation formula
+                //        var validation = validationCell.DataValidation.AddListDataValidation();
+                //        foreach (var item in dropdownValues)
+                //        {
+                //            validation.Formula.Values.Add(item);
+                //        }
+
+                //        // Set error message for invalid entries
+                //        validation.ShowErrorMessage = true;
+                //        validation.ErrorTitle = "Invalid Entry";
+                //        validation.Error = "Please select a value from the dropdown list.";
+                //    }
+                //}
+
+
+                #endregion
+
+                // Delete empty rows
+                for (int row = invalidSheet.Dimension.Start.Row; row <= invalidSheet.Dimension.End.Row; row++)
+                {
+                    bool rowIsEmpty = true;
+                    for (int col = invalidSheet.Dimension.Start.Column; col <= invalidSheet.Dimension.End.Column; col++)
+                    {
+                        var cell = invalidSheet.Cells[row, col];
+                        if (!string.IsNullOrWhiteSpace(cell.Text))
+                        {
+                            rowIsEmpty = false;
+                            break;
+                        }
+                    }
+
+                    if (rowIsEmpty)
+                    {
+                        invalidSheet.DeleteRow(row);
+                        row--; // Adjust the row index after deletion
+                    }
+                }
+
+                invalidSheet.Cells.AutoFitColumns();
+                return package.GetAsByteArray();
+            }
+        }
+        #endregion
     }
 
 }
