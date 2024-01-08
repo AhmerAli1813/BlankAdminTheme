@@ -403,5 +403,282 @@ namespace DPWVessel.Web.Controllers
             tempFileName = Path.Combine(Server.MapPath("~/Content/svgs"), file.FileName);
             file.SaveAs(tempFileName);
         }
+        
+        #region Function Import single Trip Report , Tempelate file Download
+        //Import single Trip Report From Excel start cd:a
+        #region New code
+        [HttpPost]
+        public object ImportXlSingleTripReport()
+        {
+            var File = Request.Files[0];
+
+            string tempFileName = string.Empty;
+            //string errorMessage = string.Empty;
+
+            if (File != null && File.ContentLength > 0)
+            {
+                //ExcelExtension contains array of excel extension types
+                //save the uploaded excel file to temp location
+                SaveExcelTemp(File, out tempFileName);
+                ExcelServices ImportService = new ExcelServices();
+                Dictionary<int, string> excludedRows = new Dictionary<int, string>();
+
+                try
+                {
+                    using (var stream = System.IO.File.OpenRead(tempFileName))
+                    {
+
+                        #region old
+                        using (ExcelPackage package = new ExcelPackage(stream))
+                        {
+
+                            var workbook = package.Workbook;
+
+                            // Get the names of all sheets in the workbook
+                            var sheetNames = workbook.Worksheets.Select(sheet => sheet.Name).ToList();
+                            if (sheetNames.Count > 0)
+                            {
+                                string FirstSheetName = sheetNames[0];
+                                ExcelWorksheet worksheet = package.Workbook.Worksheets[FirstSheetName];
+                                List<int> invalidRows = new List<int>();
+
+                                if (worksheet.Dimension != null)
+                                {
+                                    int totalRows = worksheet.Dimension.Rows;
+
+                                    for (int i = 2; i <= totalRows; i++)
+                                    {
+                                        object empCodeValue = worksheet.Cells[i, 1].Value;
+                                        string empCode = (empCodeValue == null || string.IsNullOrWhiteSpace(empCodeValue.ToString())) ? "" : empCodeValue.ToString();
+
+                                        int ecode;
+                                        if (IsNumeric(empCode))
+                                        {
+                                            ecode = Convert.ToInt32(empCode);
+                                        }
+                                        else
+                                        {
+                                            ecode = 0;
+                                        }
+
+                                        object OTypeValue = worksheet.Cells[i, 3].Value;
+                                        string OType = (OTypeValue == null || string.IsNullOrWhiteSpace(OTypeValue.ToString())) ? null : OTypeValue.ToString().Trim();
+                                        object ENameValue = worksheet.Cells[i, 2].Value;
+                                        string Ename = (ENameValue == null || string.IsNullOrWhiteSpace(ENameValue.ToString())) ? "-" : ENameValue.ToString();
+
+                                        string[] allowedTypes = { "Terminate", "Resign", "Business", "other" };
+
+                                        bool shouldSetToNull = !allowedTypes.Contains(OType, StringComparer.OrdinalIgnoreCase);
+
+                                        if (shouldSetToNull)
+                                        {
+                                            worksheet.Cells[i, 3].Value = null;
+                                            OType = null;
+                                        }
+                                        object ReasonValue = worksheet.Cells[i, 4].Value;
+                                        string Reason = (ReasonValue == null || string.IsNullOrWhiteSpace(ReasonValue.ToString())) ? null : ReasonValue.ToString();
+
+
+                                        if (ecode >0 && OType != null && Reason != null)
+                                        {
+                                            //Request exceute here 
+                                            SingleTripRequest req = new SingleTripRequest();
+
+                                            req.SingleTripRequator.Employee_Code = empCode;
+                                            req.SingleTripRequator.EmpName = Ename;
+                                            req.SingleTripRequator.Type = "Single Trip";
+                                            req.SingleTripRequator.OptionalType = OType;
+                                            req.SingleTripRequator.Details = Reason;
+                                            req.SingleTripRequator.IsVaccationPlaner = true;
+                                            req.CreatedBy = _sessionManager.CurrentUser.FullName;
+                                                                                     
+                                            var resp = _requestExecutor.Execute(req);
+                                            if(resp.IsError == true)
+                                            {
+                                                invalidRows.Add(i);
+                                                excludedRows.Add(i, resp.ErrorRemark);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            invalidRows.Add(i);
+                                        }
+                                    }
+
+                                    if (invalidRows.Any())
+                                    {
+                                        Dictionary<int, Func<ExcelRange, string, bool>> validationMethods = new Dictionary<int, Func<ExcelRange, string, bool>>
+                                                                            {
+                                                                                { 1, ImportService.ValidateNumber },           //Dictionary<int, Func<ExcelRange, string, bool>>: This declares a dictionary where keys
+                                                                                { 3, ImportService.ValidateText },            //are integers(column indices) and values are functions taking an ExcelRange and a string
+                                                                              //{ 3, ValidateEmailAddress },                 //and returning a bool.
+                                                                              { 4, ImportService.ValidateText  }            //{ 1, ValidateText },: This is an entry in the dictionary where the key is 1(column index)
+                                                                                                                           //and the value is the ValidateText function.This is a comment indicating that it associates
+                                                                                                                          //column index 1 with the ValidateText function.
+                                                                                                                         //Here Your given index of excel column index into int and given validationMethodName: This
+                                                                                                                        // is a comment explaining that the code associates Excel column indices with validation method names.
+                                                                                                                       // Add more mappings as needed
+                                                                            };
+                                        var dropdownItems = new Dictionary<string, string[]>
+                                        {
+                                            { "Type*", new[] { "Terminate", "Resign", "Business", "other" } },
+                                        };
+                                        byte[] invalidRecordsFile = ImportService.SaveInvalidRecordsToExcel(worksheet, invalidRows, validationMethods, dropdownItems,excludedRows);
+
+                                        return Json(new { ErrorByt = invalidRecordsFile, msg2 = "File", msg = "Some records are not inserted", Isture = false });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return Json(new { msg = "No Sheet takings ", Isture = false });
+                            }
+
+
+                        }
+                        #endregion
+
+                    }
+                    DeleteTempFile(tempFileName);
+
+                }
+                catch (Exception ex)
+                {
+                    DeleteTempFile(tempFileName);
+                    // Handle the exception appropriately
+                    // You might want to log the exception or return an error response
+                    return Json(new { msg = "Exception:" + ex.Message, Isture = false });
+                    
+
+                }
+
+
+
+            }
+            DeleteTempFile(tempFileName);
+            //file is not uploaded, show error message
+            return Json(new { msg = "records inserted successfully" , Isture = true });
+           
+
+
+
+        }
+        //Import single Trip Report From Excel end cd:a
+        //Export To Excel Work  Download blank  xl template of single Trip start cd:a
+        #endregion
+
+        //[HttpPost]
+        //public object ImportSingleTripXL()
+        //{
+        //    var singleTripExcel = Request.Files[0];
+        //    MyRequestById res = new MyRequestById();
+        //    List<MyRequestById> singleTripEmpList = new List<MyRequestById>();
+        //    List<MyRequestById> RejectsingleTripEmpList = new List<MyRequestById>();
+        //    try
+        //    {
+        //        if (singleTripExcel.ContentLength > 0)
+        //        {
+        //            using (ExcelPackage package = new ExcelPackage(singleTripExcel.InputStream))
+        //            {
+        //                ExcelWorksheet workSheet = package.Workbook.Worksheets["Single Trip Details"];
+        //                var sheets = package.Workbook.Worksheets.Select(s => s.Name).ToList();
+        //                var sheetName = sheets[0];
+        //                if (sheetName != null)
+        //                {
+        //                    int totalRows = workSheet.Dimension.Rows;
+
+        //                    for (int i = 2; i <= totalRows; i++)
+        //                    {
+        //                        try
+        //                        {
+        //                            var row = new MyRequestById();
+        //                            row.Employee_Code = workSheet.Cells[i, 1].Value.ToString();
+        //                            row.TicketType = workSheet.Cells[i, 2].Value.ToString();
+        //                            row.DepartureDate = workSheet.Cells[i, 3].Value.ToString();
+        //                            row.DepartureTime = Convert.ToDateTime(workSheet.Cells[i, 4].Value.ToString());
+        //                            row.FlightNumber = workSheet.Cells[i, 5].Text.ToString();
+        //                            row.TicketYear = workSheet.Cells[i, 6].Text.ToString();
+        //                            row.Emp_KSAContact = workSheet.Cells[i, 7].Value.ToString();
+        //                            row.Emp_HomeContact = workSheet.Cells[i, 8].Value.ToString();
+        //                            row.Destination = workSheet.Cells[i, 9].Value.ToString();
+        //                            row.Emp_PaasportNo = workSheet.Cells[i, 10].Value.ToString();
+        //                            row.Emp_PaasportExpiry = workSheet.Cells[i, 11].Text.ToString();
+        //                            row.Remarks = workSheet.Cells[i, 12].Value.ToString();
+        //                            if (string.IsNullOrEmpty(row.Employee_Code))
+        //                            {
+        //                                RejectsingleTripEmpList.Add(row);
+        //                            }
+        //                            else
+        //                            {
+        //                                singleTripEmpList.Add(row);
+        //                            }
+        //                        }
+        //                        catch (Exception e)
+        //                        {
+        //                            var reject = new MyRequestById();
+        //                            reject.Employee_Code = workSheet.Cells[i, 1].Value as string;
+        //                            reject.TicketType = workSheet.Cells[i, 2].Value as string;
+        //                            reject.DepartureDate = workSheet.Cells[i, 3].Value as string;
+        //                            reject.DepartureTime = Convert.ToDateTime(workSheet.Cells[i, 4].Value as string);
+        //                            reject.FlightNumber = workSheet.Cells[i, 5].Text as string;
+        //                            reject.TicketYear = workSheet.Cells[i, 6].Text as string;
+        //                            reject.Emp_KSAContact = workSheet.Cells[i, 7].Value as string;
+        //                            reject.Emp_HomeContact = workSheet.Cells[i, 8].Value as string;
+        //                            reject.Destination = workSheet.Cells[i, 9].Value as string;
+        //                            reject.Emp_PaasportNo = workSheet.Cells[i, 10].Value as string;
+        //                            reject.Emp_PaasportExpiry = workSheet.Cells[i, 11].Text as string;
+        //                            reject.Remarks = workSheet.Cells[i, 12].Value as string;
+        //                            RejectsingleTripEmpList.Add(reject);
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    res.isWrongFile = true;
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    catch (Exception exp)
+        //    {
+        //        res.isErrorFile = true;
+        //    }
+
+        //    res.singleTripEmpList = singleTripEmpList;
+        //    res.RejectsingleTripEmpList = RejectsingleTripEmpList;
+        //    return JsonConvert.SerializeObject(res);
+        //}
+
+        [HttpGet]
+        public ActionResult SingleTripTemplate()
+        {
+            var excelExport = new ExcelServices();
+            excelExport.TempFileName = "Single Trip";
+            var headers = new[] { "Emp Code*","EmpName", "Type*", "Reason*" };
+
+            var dropdownItems = new Dictionary<string, string[]>
+                                        {
+                                            { "Type*", new[] { "Terminate", "Resign", "Business", "other" } },
+                                        };
+            // Replace ViewModel with the actual type of your equipment
+            var data = new Dictionary<string, object>
+                        {
+                            {"Emp Code*", 1004 },
+                            {"EmpName"  ,"Ahmer" },
+                            {"Type*","Resign" },
+                            {"Reason*","Given Reason" }
+                        };
+          
+            // passing in columnStyles in ExportToExcel method 
+            var excelBytes = excelExport.ExportToExcel(data,headers,dropdownItems);
+
+
+            string filename = $"SingleTrip_{DateTime.Now:dd-MM-yyy}.xlsx";
+
+            return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+        }
+        // Export To Excel Work Download blank  xl template of travel agency end cd:a
+        #endregion
     }
 }
