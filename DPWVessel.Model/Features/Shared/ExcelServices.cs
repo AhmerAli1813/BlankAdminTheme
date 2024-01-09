@@ -585,6 +585,22 @@ namespace EasyMe.Web.Controllers
 
             return result;
         }
+         public bool CheckExcelHeadersFormat(ExcelWorksheet worksheet, List<string> expectedHeaders)
+         {
+     bool result = false;
+     List<string> actualHeaders = GetColumnHeaders(worksheet);
+
+     for (int i = 0; i < expectedHeaders.Count; i++)
+     {
+         if (i >= actualHeaders.Count || !string.Equals(expectedHeaders[i], actualHeaders[i], StringComparison.OrdinalIgnoreCase))
+         {
+             result = true;
+             break;
+         }
+     }
+
+     return result;
+ }
         private bool ValidateRows(ExcelWorksheet worksheet, int totalRows, int totalCols, Dictionary<int, Func<ExcelRange, string, bool>> validationMethods)
         {
             bool result = true;
