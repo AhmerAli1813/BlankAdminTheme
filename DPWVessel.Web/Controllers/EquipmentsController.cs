@@ -678,6 +678,202 @@ namespace DPWVessel.Web.Controllers
 
             return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
         }
+           public byte[] SaveInvalidRecordsToExcel(ExcelWorksheet worksheet, List<int> invalidRows, Dictionary<int, Func<ExcelRange, string, bool>> validationMethods, Dictionary<string, string[]> dropdownItems, Dictionary<int, string> excludedRows)
+   {
+       string errorMsg = string.Empty;
+       using (var package = new ExcelPackage())
+       {
+           var invalidSheet = package.Workbook.Worksheets.Add(TempFileName);
+           Color colFromHex = ColorTranslator.FromHtml("#013447");
+
+           for (int col = 1; col <= worksheet.Dimension.End.Column + 1; col++)
+           {
+
+               if (col <= worksheet.Dimension.End.Column)
+               {
+                   invalidSheet.Cells[1, col].Value = worksheet.Cells[1, col].Value;
+               }
+               else
+               {
+                   invalidSheet.Cells[1, col].Value = "Remark";
+               }
+
+               invalidSheet.Cells[1, col].Style.Fill.PatternType = ExcelFillStyle.Solid;
+               invalidSheet.Cells[1, col].Style.Fill.BackgroundColor.SetColor(colFromHex);
+               invalidSheet.Cells[1, col].Style.Font.Bold = true;
+               invalidSheet.Cells[1, col].Style.Font.Size = 12;
+               invalidSheet.Cells[1, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+               invalidSheet.Cells[1, col].Style.Font.Color.SetColor(Color.White);
+           }
+           int remarkColumnIndex = worksheet.Dimension.End.Column + 1;
+           // Mark invalid rows with red color and Reamrk Value
+           foreach (int row in invalidRows)
+           {
+               bool rowIsValid = true;
+
+               for (int col = 1; col <= worksheet.Dimension.End.Column + 1; col++)
+               {
+                   var sourceCell = col <= worksheet.Dimension.End.Column ? worksheet.Cells[row, col] : null;
+                   var invalidCell = invalidSheet.Cells[row, col];
+                   //Invalid Cell this your cloumn text  given more styling here validation here
+                   if (IsNumeric(sourceCell.Text))
+                   {
+                       invalidCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                   }
+                   else
+                   {
+                       invalidCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                   }
+                   
+                   if (col <= worksheet.Dimension.End.Column)
+                   {
+                       invalidCell.Value = sourceCell.Value;
+
+                      
+                       //fill.BackgroundColor.SetColor(Color.White);
+                     
+                       
+                       string colName = worksheet.Cells[1, col].Text;
+                       if (colName.Contains("*"))
+                       {
+
+
+                           if (string.IsNullOrWhiteSpace(sourceCell.Text))
+                           {
+                               var fill = invalidCell.Style.Fill;
+                               fill.PatternType = ExcelFillStyle.Solid;
+                               fill.BackgroundColor.SetColor(Color.Red);
+                               if (FunctionErrorMessage == string.Empty || FunctionErrorMessage == null)
+                               {
+                                   FunctionErrorMessage = $"{RemoveAsterisk(worksheet.Cells[1, col].Text)} is empty ";
+                               }
+                               else
+                               {
+                                   FunctionErrorMessage += $",{RemoveAsterisk(worksheet.Cells[1, col].Text)} is empty";
+                               }
+
+
+                               var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+                               invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Value = string.IsNullOrEmpty(currentRemark)
+                                   ? FunctionErrorMessage
+                                   : $"{FunctionErrorMessage}";
+
+                               rowIsValid = false;
+                           }
+                           else
+                           {
+                               // fill.BackgroundColor.SetColor(Color.white);
+                           }
+
+
+                       }
+
+
+
+                       if (validationMethods.TryGetValue(col, out var validationMethod))
+                       {
+                           if (!validationMethod(sourceCell, invalidCell.Text))
+                           {
+                               SetError(invalidCell);
+
+                               var currentRemark = invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Text;
+                               invalidSheet.Cells[row, worksheet.Dimension.End.Column + 1].Value = string.IsNullOrEmpty(currentRemark)
+                                   ? FunctionErrorMessage
+                                   : $"{FunctionErrorMessage}";
+
+                               rowIsValid = false;
+                           }
+                       }
+                   }
+
+               }
+
+               // Handle excluded rows
+               if (excludedRows.ContainsKey(row) && !string.IsNullOrEmpty(excludedRows[row]))
+               {
+                   invalidSheet.Cells[row, remarkColumnIndex].Value = excludedRows[row];
+                   rowIsValid = false;
+               }
+
+               FunctionErrorMessage = string.Empty;
+
+               //// Copy the row only if it is valid
+               //if (rowIsValid)
+               //{
+               //    invalidSheet.Cells[invalidSheet.Dimension.End.Row + 1, 1, invalidSheet.Dimension.End.Row + 1, invalidSheet.Dimension.End.Column].Value
+               //        = invalidSheet.Cells[row, 1, row, invalidSheet.Dimension.End.Column].Value;
+               //}
+           }
+
+           #region dropdown code is not working
+           //foreach (var dropdown in dropdownItems)
+           //{
+           //    // Assuming dropdown.Key represents the column name
+           //    var columnName = dropdown.Key;
+           //    var dropdownValues = dropdown.Value;
+
+           //    // Assuming invalidRows.Count represents the number of invalid rows
+           //    var rowCount = invalidRows.Count;
+
+           //    // Find the column index based on the column name
+           //    var colIndex = worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column]
+           //        .First(c => c.Text == columnName).Start.Column;
+
+           //    // Clear all existing data validations in the specified column
+           //    worksheet.DataValidations.RemoveAll(v => v.Address.Start.Column == colIndex);
+
+           //    // Set the data validation for each cell in the specified column
+           //    for (int row = 2; row <= rowCount + 1; row++)
+           //    {
+           //        var validationCell = worksheet.Cells[row, colIndex];
+
+           //        // Set data validation formula for the cell
+           //        validationCell.Formula = $"{columnName}{row}";
+
+           //        // Set dropdown values for the validation formula
+           //        var validation = validationCell.DataValidation.AddListDataValidation();
+           //        foreach (var item in dropdownValues)
+           //        {
+           //            validation.Formula.Values.Add(item);
+           //        }
+
+           //        // Set error message for invalid entries
+           //        validation.ShowErrorMessage = true;
+           //        validation.ErrorTitle = "Invalid Entry";
+           //        validation.Error = "Please select a value from the dropdown list.";
+           //    }
+           //}
+
+
+           #endregion
+
+           // Delete empty rows
+           for (int row = invalidSheet.Dimension.Start.Row; row <= invalidSheet.Dimension.End.Row; row++)
+           {
+               bool rowIsEmpty = true;
+               for (int col = invalidSheet.Dimension.Start.Column; col <= invalidSheet.Dimension.End.Column; col++)
+               {
+                   var cell = invalidSheet.Cells[row, col];
+                   if (!string.IsNullOrWhiteSpace(cell.Text))
+                   {
+                       rowIsEmpty = false;
+                       break;
+                   }
+               }
+
+               if (rowIsEmpty)
+               {
+                   invalidSheet.DeleteRow(row);
+                   row--; // Adjust the row index after deletion
+               }
+           }
+
+           invalidSheet.Cells.AutoFitColumns();
+           return package.GetAsByteArray();
+       }
+   }
+
+
         // Export To Excel Work Download blank  xl template of travel agency end cd:a
         #endregion
     }
