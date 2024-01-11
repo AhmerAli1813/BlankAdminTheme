@@ -26,7 +26,43 @@ $scope._currentUser = _currentUser;
 	    $scope.responsive = $window.outerWidth < 641
 	}
 
- 
+   //DataTable Js
+    $scope.initDataTable = function (TargetTable, additionalOptions) {
+        // Check if DataTable instance exists
+        var table = $.fn.DataTable.fnIsDataTable($(TargetTable)) && $(TargetTable).DataTable();
+
+        // Destroy existing DataTable instance
+        if (table) {
+            table.destroy();
+        }
+
+        // Default DataTable options
+        var defaultOptions = {
+            "paging": false,
+            "ordering": true,
+            "info": false,
+            "searching": false,
+            "language": {
+                "emptyTable": "No data Found"
+            },
+            "order": [[0, 'desc']],
+            "columnDefs": [
+                { "defaultContent": "", "targets": "_all" }, // Set default content for all columns
+                { "orderable": false, "targets": $(TargetTable).find("th.no-sort").map(function () { return $(this).index(); }).toArray() } // Disable sorting for columns with class "no-sort"
+            ]
+            // Add more default options as needed
+        };
+		//how to call function 
+		//  $timeout(function () {$scope.initDataTable("#Table");}, 1000);
+		//how delete instance if already created code here
+		//    $("#Table").DataTable().clear().destroy();
+        // Merge default options with additional options
+        var options = angular.merge({}, defaultOptions, additionalOptions);
+
+        // Create a new DataTable instance
+        $(TargetTable).DataTable(options);
+    };
+//Datatable  end here
 
     $scope.CheckAccess =function ()
 	{
