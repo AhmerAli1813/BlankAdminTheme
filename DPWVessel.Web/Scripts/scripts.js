@@ -8,7 +8,63 @@ $(function() {
             i.stopPropagation();
         });
 
+        //DatePicker Js  Start here
+//how to use 
+//Create input elements with the class "datepicker-input" that you want to associate with datepickers.
+//
+    //Introduction
+//The data - dateStart and data - dateEnd attributes are custom attributes that can be used to configure the start and end dates for datepicker components in your HTML form.These attributes work in conjunction with the provided initialization code to set specific date ranges for datepickers.
 
+//    data - dateStart Attribute
+//The data - dateStart attribute is used to specify the start date for the datepicker.
+//It accepts the following values:
+//"Current": Sets the start date to the current date.
+//Specific Date(e.g., "01/01/2023"): Sets the start date to the specified date.
+//Empty or Not Present: Defaults to null.
+//    data - dateEnd Attribute
+//The data - dateEnd attribute is used to specify the end date for the datepicker.
+//It accepts the same values as data - dateStart:
+//"Current": Sets the end date to the current date.
+//Specific Date(e.g., "31/12/2023"): Sets the end date to the specified date.
+//Empty or Not Present: Defaults to null.
+$(".datepicker-input").each(function () {
+    var idAttributeValue = $(this).attr("id");
+    var startDateValue = $(this).data("datestart");
+    var endDateValue = $(this).data("dateend");
+
+    // If startDateValue is not specified or is "Current", set it to the current date
+    if (!startDateValue) {
+        startDateValue = null;
+    } else if (startDateValue.toLowerCase() === "current") {
+        startDateValue = new Date();
+    } else {
+        // Parse the date string manually to handle "dd/mm/yyyy" format
+        var StartDateParts = startDateValue.split("/");
+        startDateValue = new Date(StartDateParts[2], StartDateParts[1] - 1, StartDateParts[0]);
+    }
+
+    // end date 
+    if (!endDateValue) {
+        endDateValue = null;
+    } else if (endDateValue.toLowerCase() === "current") {
+        endDateValue = new Date();
+    } else {
+        // Parse the date string manually to handle "dd/mm/yyyy" format
+        var endDateParts = endDateValue.split("/");
+        endDateValue = new Date(endDateParts[2], endDateParts[1] - 1, endDateParts[0]);
+    }
+
+    $("#" + idAttributeValue).datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        todayBtn: "linked",
+        todayHighlight: true,
+        forceParse: true,
+        startDate: startDateValue,
+        endDate: endDateValue,
+    });
+});
+//datepicker End here
     var i = function () {
         (window.innerWidth > 0 ? window.innerWidth : this.screen.width) < 1170 ?
             (
