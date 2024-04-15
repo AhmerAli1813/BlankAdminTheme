@@ -1,0 +1,291 @@
+
+    /*badge start here*/
+    :root{
+        --alpha:0.2;
+    }
+.badge {
+    color: var(--gray-color) !important;
+    font-size: 12px;
+    text-transform: capitalize;
+    width: auto;
+    min-width: 100px; /* Optional: Set a maximum width to prevent extremely long content */
+    overflow: hidden; /* Optional: Hide content that overflows */
+    white-space: nowrap; /* Optional: Prevent text from wrapping to the next line */
+    background: rgba(var(--gray-rgb-color), var(--alpha));
+}
+
+.status {
+ 
+    padding: 1px 15px;
+    border-radius: 25px;
+    text-align: center;
+ 
+}
+
+.badge-xs {
+    font-size: 9px;
+    -webkit-transform: translate(0, -2px);
+    -ms-transform: translate(0, -2px);
+    -o-transform: translate(0, -2px);
+    transform: translate(0, -2px);
+}
+
+.badge-sm {
+    -webkit-transform: translate(0, -2px);
+    -ms-transform: translate(0, -2px);
+    -o-transform: translate(0, -2px);
+    transform: translate(0, -2px);
+}
+
+.badge-secondary, .label-secondary, .status-secondary {
+    background: rgba(var(--gray-rgb-color),var(--alpha)) !important;
+    color: rgba(var(--gray-rgb-color)) !important;
+    border: 1px solid rgb(var(--gray-rgb-color)) !important;
+}
+
+.badge-info, .label-info, .status-info {
+    background: rgba(var(--info-rgb-color),var(--alpha)) !important;
+    color: rgb(var(--info-rgb-color)) !important;
+    border: 1px solid rgb(var(--info-rgb-color)) !important;
+}
+
+.badge-primary, .status-primary, .label-primary {
+    background: rgba(79, 47, 185,var(--alpha)) !important;
+    color: rgba(79, 47, 185) !important;
+    border: 1px solid rgba(79, 47, 185) !important;
+}
+.badge-blue, .status-blue, .label-blue,
+.badge-acknowledge, .status-acknowledge, .label-acknowledge {
+    background: rgba(var(--blue-rgb-color),var(--alpha)) !important;
+    color: rgb(var(--blue-rgb-color)) !important;
+    border: 1px solid rgb(var(--blue-rgb-color)) !important;
+}
+
+
+.badge-warning, .status-warning, .label-warning,
+.badge-inprogress, .status-inprogress, .label-inprogress {
+    background: rgba(var(--warning-rgb-color),var(--alpha)) !important;
+    color: rgb(var(--warning-rgb-color)) !important;
+    border: 1px solid rgb(var(--warning-rgb-color)) !important;
+}
+
+.badge-danger, .status-danger, .label-danger,
+.badge-red, .label-red, .status-red,
+.badge-cancel, .status-cancel, .label-cancel,
+.badge-rejected, .status-rejected, .label-rejected,
+.badge-inactive, .label-inactive, .status-inactive,
+.badge-expired, .label-expired, .status-expired,
+.badge-noncompliant, .label-noncompliant, .status-noncompliant {
+    background: rgba(var(--danger-rgb-color),var(--alpha)) !important;
+    color: rgb(var(--danger-rgb-color)) !important;
+    border: 1px solid rgba(var(--danger-rgb-color)) !important;
+}
+
+.badge-purple, .status-purple, .label-purple {
+    background: rgba(var(--purple-rgb-color),var(--alpha)) !important;
+    color: rgb(var(--purple-rgb-color)) !important;
+    border: 1px solid rgb(var(--purple-rgb-color)) !important;
+}
+
+/*.badge-red {
+    background: rgba(116, 96, 238,var(--alpha));
+    color: rgba(116, 96, 238);
+}*/
+
+.badge-inverse {
+    background: rgba(47, 61, 74,var(--alpha)) !important;
+    color: rgba(47, 61, 74) !important;
+    border: 1px solid rgba(47, 61, 74) !important;
+}
+
+.badge-new, .status-new, .label-new,
+.badge-success, .status-success, .label-success,
+.badge-accepted, .status-accepted, .label-accepted,
+.badge-approved, .status-approved, .label-approved {
+    background: rgba(var(--success-rgb-color),var(--alpha)) !important;
+    color: rgb(var(--success-rgb-color)) !important;
+    border: 1px solid rgb(var(--success-rgb-color)) !important;
+}
+
+.badge-release, .label-release, .status-release {
+    background: rgba(101, 190, 204,var(--alpha)) !important;
+    color: rgba(101, 190, 204) !important;
+    border: 1px solid rgba(101, 190, 204) !important;
+}
+.badge-dark, .label-dark, .status-dark {
+    background: rgba(var(--dark-rgb-color),0.2 ) !important;
+    color: rgb(var(--dark-rgb-color) ) !important;
+    border: 1px solid rgb(var(--dark-rgb-color) ) !important;
+}
+
+/*.badge-accepted {
+    background: rgba(40, 167, 69,var(--alpha));
+    color: rgba(40, 167, 69);
+}*/
+
+.badge-closed, .status-closed, .label-closed {
+    background: rgba(68, 68, 68,var(--alpha)) !important;
+    color: rgba(68, 68, 68) !important;
+    border: 1px solid rgba(68, 68, 68) !important;
+}
+
+/*.badge-inprogress, .status-inprogress, .label-inprogress {
+    background: rgba(255, 193, 7,var(--alpha));
+    color: #ffc107;
+    border: 1px solid #ffc107;
+}
+*/
+.badge-none {
+    background: rgba(46, 41, 37,var(--alpha));
+    color: rgba(46, 41, 37);*/
+    border: 1px solid rgba(46, 41, 37);
+}
+
+.badge-draft {
+    background: rgba(204, 7, 60,var(--alpha)) !important;
+    color: rgba(204, 7, 60) !important;
+    border: 1px solid rgba(204, 7, 60) !important;
+}
+
+.badge-submitted, .label-submitted, .status-submitted {
+    background: rgba(1, 55, 101,var(--alpha)) !important;
+    color: rgba(1, 55, 101) !important;
+    border: 1px solid rgba(1, 55, 101) !important;
+}
+
+.badge-completed, .status-completed, .label-completed {
+    background: rgba(0, 150, 109,var(--alpha)) !important;
+    color: rgba(0, 150, 109) !important;
+    border: 1px solid rgba(0, 150, 109) !important;
+}
+
+.badge-done, .label-done, .status-done {
+    background: rgba(68, 68, 68,var(--alpha)) !important;
+    color: rgba(68, 68, 68) !important;
+    border: 1px solid rgba(68, 68, 68) !important;
+}
+
+.badge-overdue, .label-overdue, .status-overdue {
+    background: rgba(239, 83, 80,var(--alpha)) !important;
+    color: rgba(239, 83, 80) !important;
+    border: 1px solid rgba(239, 83, 80) !important;
+}
+
+.badge-underreview, .label-underreview, .status-underreview {
+    background: rgba(183, 164, 25,var(--alpha)) !important;
+    color: rgba(183, 164, 25) !important;
+    border: 1px solid rgba(183, 164, 25) !important;
+}
+
+.badge-pending, .status-pending, .label-pending {
+    background: rgba(var(--fandom-rgb-color),var(--alpha)) !important;
+    color: rgba(var(--fandom-rgb-color)) !important;
+    border: 1px solid rgba(var(--fandom-rgb-color),var(--alpha)) !important;
+}
+
+/*.badge-approved, .status-approved {*/
+    /*background: #42dcd5;*/
+    /*background: rgba(66, 220, 213,var(--alpha));
+    color: rgba(66, 220, 213);
+}*/
+
+.badge-TechCheckApproved {
+    background: rgba(40, 167, 69,var(--alpha)) !important;
+    color: rgba(40, 167, 69) !important;
+    border: 1px solid rgba(40, 167, 69) !important;
+}
+
+.badge-compliant, .label-compliant, .status-compliant {
+    background: rgba(247, 148, 29,0.5) !important;
+    color: rgba(247, 148, 29) !important;
+    border: 1px solid rgba(247, 148, 29) !important;
+}
+
+
+.badge-active, .label-active, .status-active {
+    background: rgba(40, 167, 69,var(--alpha)) !important;
+    color: rgba(40, 167, 69) !important;
+    border: 1px solid rgba(40, 167, 69) !important;
+}
+
+
+
+
+
+.label {
+    padding: 3px 10px;
+    line-height: 13px;
+
+    font-weight: 400;
+    border-radius: 4px;
+    font-size: 75%;
+}
+
+.label-rounded {
+    border-radius: 60px;
+}
+.label-light-success {
+    background: #e8fdeb;
+    color: var(--success-color);
+}
+
+.label-light-info {
+    background: #cfecfe;
+    color: var(--info-color);
+}
+
+.label-light-warning {
+    background: #fff8ec;
+    color: var(--warning-color);
+}
+
+.label-light-danger {
+    background: #f9e7eb;
+    color: var(--danger-color);
+}
+
+.label-light-megna {
+    background: #e0f2f4;
+    color: #00897b;
+}
+
+.label-light-primary {
+    background: #f1effd;
+    color: var(--info-color);
+}
+
+.label-light-inverse {
+    background: #f6f6f6;
+    color: var(--dark-color);
+}
+.Check-badge {
+    color: #035c14 !important;
+    background-color: #aff1c6;
+    font-weight: bold;
+    margin: 0px 5px;
+    padding: 6px 11px;
+    display: inline-block;
+    border-radius: 5px;
+    font-size: 24px;
+    width: auto !important;
+}
+
+.Cross-badge {
+    color: #db1111 !important;
+    background-color: #f8c8c8;
+    font-weight: bold;
+    margin: 0px 5px;
+    padding: 6px 13px;
+    display: inline-block;
+    border-radius: 5px;
+    font-size: 24px;
+    width: auto !important;
+}
+.badge-Present {
+    color: #50a943 !important;
+    width: 117px !important;
+    font-weight: bold;
+    background: #e2edfa;
+    padding: 10px !important;
+    margin-top: 6px;
+}

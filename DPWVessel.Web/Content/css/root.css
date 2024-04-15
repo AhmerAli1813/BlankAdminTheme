@@ -1,0 +1,108 @@
+
+/* CSS Variables */
+
+:root {
+    /* font family variables. */
+    /*========== Colors ==========*/
+    /* Change favorite color */
+    /* HSL color mode */
+    --random-number: 1001144;
+    --font-family: var(--font-family-regular);
+    --font-family-light: 'Pilat Wide Light';
+    --font-family-bold: 'Pilat Wide Bold';
+    --font-family-regular: 'Pilat Wide';
+    --font-family-thin: 'Pilat Wide Thin';
+    --font-family-light: 'Pilat Wide Light';
+    --font-family-book: 'Pilat Wide Book';
+    --font-family-heavy: 'Pilat Wide Heavy';
+    /*   --primary-color: #3F1DB7;
+    --primary-hover-color: #4F2FB9; */
+    --primary-color: var(--warning-color);
+    --primary-hover-color: var(--warning-hover-color);
+    --primary-rgb-color: var(--warning-rgb-color);
+    --primary-disable-color: #1F0738;
+    --purple-color: #5E16AA;
+    --purple-hover-color: #3E0E71;
+    --purple-rgb-color: 94, 22, 170;
+    --danger-color: #cf3645;
+    --danger-hover-color: #92232E;
+    --danger-rgb-color: 220, 53, 69;
+    --success-color: var(--bs-success);
+    --success-hover-color: #105A38;
+    --success-rgb-color: 25, 135, 84;
+    --info-color: #373283;
+    --info-hover-color: #242157;
+    --info-rgb-color: 55, 50, 131;
+    --white-color: white;
+    --warning-color: #FF7F00;
+    --warning-hover-color: #ff8200e6;
+    --warning-rgb-color: 255, 127, 0;
+    --megna-color: #09A0A5;
+    --megna-hover-color: #066A6E;
+    --megna-rgb-color: 6, 106, 110;
+    --pink-hover-color: 153, 107, 161;
+    --pink-color: #E6A1F2;
+    --pink-rbg-color: 153, 107, 161;
+    --blue-color: #1eaaed;
+    --blue-rgb-color: 30, 170, 237;
+    --blue-hover-color: #0052AA;
+    --base-color: var(--gradient-color);
+    --base-hover-color: var(--gradient-same-color);
+    --gray-color: #6c757d;
+    --gray-hover-color: #484E53;
+    --gray-rgb-color: 72, 78, 83;
+    --dark-color: var(--bs-dark);
+    --dark-hover-color: #343a40;
+    --dark-rgb-color: 35, 38, 42;
+    --fandom-color: #DCFF00;
+    --fandom-hover-color: #92AA00;
+    --fandom-rgb-color: 146, 170, 0;
+    --body-color: rgb(239, 241, 247);
+    --container-color: #fff;
+    --input-color: #f8f8f8;
+    --scroll-bar-color: hsl(var(--hue-color), 12%, 90%);
+    --scroll-thumb-color: hsl(var(--hue-color), 12%, 80%);
+    --border-color: #201f1f17;
+    --gradient-color: linear-gradient(96deg, #221b62, #431dc1);
+    --gradient-inveres-color: linear-gradient(96deg, #431dc1, #221b62);
+    --gradient-same-color: linear-gradient(96deg, #221b62, #221b62);
+    /*--shadow-color: 0px 10px 30px rgba(118, 85, 225, 0.3);*/
+    --shadow-color: 0 .5rem 1rem rgba(0,0,0,.15);
+    --shadow-color-light: 0px 10px 30px rgba(118, 85, 225, 0.3);
+    --box-shadow: 0px 10px 30px rgba(57, 56, 61, 0.205);
+    --btn-box-shadow: 3px 4px 5px -1px;
+    --box-shadow-hover: 0px 0px 0px rgba(57, 56, 61, 0.205);
+    /*--box-shadow-light: 6px 7px 15px rgb(0 0 0 / 26%);*/
+    --box-shadow-light: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2);
+    --box-shadow-insert: 0 0 0 62.5rem rgba(0,0,0,.075) inset;
+    /*========== Font and typography ==========*/
+    --body-font: var(--font-family), sans-serif;
+    /* .5rem = 8px, 1rem = 16px, 1.5rem = 24px ... */
+    --big-font-size: 2rem;
+    --h1-font-size: 1.5rem;
+    --h2-font-size: 1.25rem;
+    --h3-font-size: 1.125rem;
+    --table-font-size: .8125rem;
+    --normal-font-size: .938rem;
+    --small-font-size: .813rem;
+    --smaller-font-size: .75rem;
+    /*========== Font weight ==========*/
+    --font-medium: 500;
+    --font-semi-bold: 600;
+    /*========== Margenes Bottom ==========*/
+    /* .25rem = 4px, .5rem = 8px, .75rem = 12px ... */
+    --mb-0-25: .25rem;
+    --mb-0-5: .5rem;
+    --mb-0-75: .75rem;
+    --mb-1: 1rem;
+    --mb-1-5: 1.5rem;
+    --mb-2: 2rem;
+    --mb-2-5: 2.5rem;
+    --mb-3: 3rem;
+    /*========== z index ==========*/
+    --z-tooltip: 10;
+    --z-fixed: 100;
+    --z-modal: 1000;
+    --border-rounder: 1em;
+}
+

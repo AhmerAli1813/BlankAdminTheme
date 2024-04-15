@@ -1,0 +1,866 @@
+.noCss {
+    background: var(--body-color) !important;
+    box-shadow: 0 0 0!important;
+    width:inherit !important;
+    color:var(--info-color) !important;
+}
+i{
+    cursor:pointer
+}
+.fa-check-circle, .fa-circle{
+    color: var(--success-color);
+}.fa-times-circle, .fa-times{
+    color: var(--bs-danger);
+}
+ textarea{
+     resize:none;
+ }
+table .fa-list {
+    color: rgb(var(--primary-rgb-color));
+}
+.hide {
+    display: none;
+}
+.checked-count 
+{
+    padding: 2px 8px;
+    margin-left: 0.25rem !important;
+    background: white;
+    color: var(--dark-color);
+    border-radius: 5px;
+}
+.userImgContainer{
+    width:150px;
+}
+    .userImgContainer img{
+        width:100%;
+       border-radius:50%;
+    }
+    .rounded-1-25 {
+        border-radius: 1.25rem !important;
+    }
+.text-primary {
+    color: var(--info-color) !important;
+}
+.box-shadow-none{
+    box-shadow:var(--box-shadow-hover) !important;
+}
+.form-inline label {
+    text-align: left !important;
+    justify-content: left;
+}
+.form-check-input:checked {
+    background:var(--info-color);
+    border-color: var(--info-color);
+    cursor:pointer;
+}
+.form-check-input:focus {
+    border-color: var(--info-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(var(--info-rgb-color),.25);
+}
+.input-group > .form-control, .form-control, .form-select {
+    background: var(--input-color);
+}
+    .select2-selection:focus,
+    select:focus,
+    input:focus,
+    .input-group > .form-control:focus,
+    .form-control:focus,
+    .form-select:focus {
+        box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb-color),.25) !important;
+    }
+.select2-container input:focus{
+    box-shadow: none !important;
+}
+/*.nav-link:hover {
+    box-shadow: var(--box-shadow-hover) !important;
+    background: rgba(var(--info-rgb-color),0.09) !important;
+}*/
+/*list of icons*/
+.list-icons {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+/*bootstrape table css start here */
+.table , table {
+    overflow-x: scroll !important;
+    background: var(--white-color);
+    margin: 10px;
+    margin-bottom:0;
+    width:100%;
+}
+.tabletitle {
+    padding: 5px;
+    background: #e7e7e7;
+}
+thead tr th {
+    color: #fff;
+    font-weight: 500;
+}
+
+ tr th {
+    color: inherit;
+  /*  font-family: var(--font-family);*/
+    font-weight: normal;
+}
+
+tbody tr td {
+    /*  font-family: var(--font-family);*/
+    font-size: var(--table-font-size);
+    font-weight: bolder;
+    padding-left:1em !important;    
+
+}
+
+.table > tbody > tr > td, table > tbody > tr > td,
+.table > tbody > tr > th, table > tbody > tr > th,
+.table > tfoot > tr > td, table > tfoot > tr > td,
+.table > tfoot > tr > th, table > tfoot > tr > th,
+.table > thead > tr > td, table > thead > tr > td,
+.table > thead > tr > th, table > thead > tr > th {
+/*    line-height: 32px;*/
+    vertical-align: top;
+}
+
+
+
+.table .badge, table .badge {
+    text-transform: uppercase;
+}
+
+/*.table > tbody > tr > td:first-child, table > tbody > tr > td:first-child {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+}
+.table > tbody > tr > td:last-child, table > tbody > tr > td:last-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}*/
+
+.table > thead > tr > th, table > thead > tr > th {
+    color: white !important;
+    padding: 10px 5px 10px 5px;
+    font-weight: 700;
+    font-size: var(--table-font-size) !important;
+}
+
+.table > tbody > tr > td,
+.table, .table > tbody > tr,
+table > tbody > tr > td,
+table, table > tbody > tr {
+    border: 0px solid;
+    color: black;
+    padding: 10px 5px 10px 5px;
+}
+
+  /*  .table > tbody > tr > td, table > tbody > tr > td,
+    .table > tbody > tr > th, table > tbody > tr > th,
+    .table > tfoot > tr > td, table > tfoot > tr > td,
+    .table > tfoot > tr > th, table > tfoot > tr > th,
+    .table > thead > tr > td, table > thead > tr > td,
+    .table > thead > tr > th, table > thead > tr > th {
+        line-height: 32px !important;
+    }*/
+      /*  .table tr th:first-child {
+            border-top-left-radius: var(--border-rounder) !important;
+        }
+        .table tr th:last-child {
+            border-top-right-radius: var(--border-rounder) !important;
+        }*/
+       
+
+
+        /*Table Css Start Here */
+
+        table .dataTable {
+        border-collapse: collapse !important;
+    }
+        .table .round-img img {
+        width: 38px;
+    }
+
+.table-responsive {
+    overflow: scroll;
+    white-space: nowrap;
+}
+
+.table tr, th, td, table tr, th, td {
+    font-size: var(--table-font-size);
+    text-align: left;
+    /*word-break:break-all;*/
+}
+
+tr.tr-title {
+    color: white !important;
+    background: var(--primary-color) !important;
+}
+
+    tr.tr-title td, tr.tr-title th {
+        color: var(--white-color) !important;
+    }
+tfoot tr td{text-align:center;}
+.bleveltton {
+    display: block;
+    width: 78px;
+    height: 25px;
+    background: var(--primary-color);
+    padding: 0px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    line-height: 25px;
+}
+
+
+.td-heading {
+    background: var(--primary-color) !important;
+    color: var(--white-color) !important;
+}
+
+.heading th {
+    text-align: center;
+    background: var(--primary-color);
+}
+
+table tr th h5 {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--dark-color);
+}
+
+.CounterCard {
+    width: auto;
+    background: var(--white-color);
+    float: right !important;
+    padding: 0.5rem;
+    box-shadow: var(--btn-box-shadow) rgba(var(--dark-rgb-color),0.5);
+    border-radius: 7px;
+    margin: 1em 0 1em 0;
+}
+
+    .CounterCard span {
+        font-weight: 600;
+    }
+table tbody tr td:first-child,
+table.table tbody tr td:first-child {
+  
+    text-align: center;
+}
+/*Table Css Start Here */
+/*Border Table Css*/
+.table.border td, table.border td {
+    border: 1px solid !important;
+}
+
+.table.border > tbody > tr, table.border > tbody > tr {
+    border: 1px solid !important;
+}
+
+.table.border > tbody > tr > td,
+.table.border,
+.table.border > tbody > tr,
+table.border > tbody > tr > td,
+table.border,
+table.border > tbody > tr {
+    width: auto;
+    border: 1px solid !important;
+}
+
+    .table.border thead tr th,
+    table.border thead tr th {
+        border: 1px solid !important;
+        border-color: white !important;
+    }
+
+    .border-left,
+    .table tr.border-left th,
+    table tr.border-left th,
+    .table tr.border-left td,
+    table tr.border-left td,
+    .border-left,
+    .table.border tr.border-left th,
+    table.border tr.border-left th,
+    .table.border tr.border-left td,
+    table.border tr.border-left td,
+    .border-start,
+    .table tr.border-start th,
+    table tr.border-start th,
+    .table tr.border-start td,
+    table tr.border-start td,
+    .border-start,
+    .table.border tr.border-start th,
+    table.border tr.border-start th,
+    .table.border tr.border-start td,
+    table.border tr.border-start td {
+        border: 0 solid !important;
+        border-left: 1px solid !important;
+      /*  border-left-color: inherit !important;*/
+    }
+    .border-right,
+    .table tr.border-right th,
+    table tr.border-right th,
+    .table tr.border-right td,
+    table tr.border-right td,
+    .table.border tr.border-right th,
+    table.border tr.border-right th,
+    .table.border tr.border-right td,
+    table.border tr.border-right td,
+    .border-end,
+    .table tr.border-end th,
+    table tr.border-end th,
+    .table tr.border-end td,
+    table tr.border-end td,
+    .table.border tr.border-end th,
+    table.border tr.border-end th,
+    .table.border tr.border-end td,
+    table.border tr.border-end td
+    {
+        border: 0 solid !important;
+        border-right: 1px solid !important;
+     /*   border-right-color: inherit !important;*/
+    }
+    .border-top,
+    .table tr.border-top th,
+    table tr.border-top th,
+    .table tr.border-top td,
+    table tr.border-top td,
+    .table.border tr.border-top th,
+    table.border tr.border-top th,
+    .table.border tr.border-top td,
+    table.border tr.border-top td 
+    {
+        border: 0 solid !important;
+        border-top: 1px solid !important;
+        /*border-top-color: inherit !important;*/
+    }
+    .border-bottom,
+    .table tr.border-bottom th,
+    table tr.border-bottom th,
+    .table tr.border-bottom td,
+    table tr.border-bottom td,
+    .table.border tr.border-bottom th,
+    table.border tr.border-bottom th,
+    .table.border tr.border-bottom td,
+    table.border tr.border-bottom td {
+        border: 0 solid !important;
+        border-bottom: 1px solid !important;
+     /*   border-bottom-color: inherit !important;*/
+    }
+
+
+    .table.border tr td:first-child , table.border tr td:first-child ,
+    .table.border tr th:first-child , table.border tr th:first-child 
+    {
+        border-left: 0px solid !important;
+    }
+
+    .table.border tr th:last-child, table.border tr th:last-child ,
+    .table.border tr th:last-child, table.border tr th:last-child 
+    {
+        border-right: 0px solid !important;
+    }
+/*Border Table Css*/
+.table-user-information {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+    .table-user-information tr, .table-user-information th, .table-user-information td {
+        background: transparent !important;
+        border: 0 !important;
+        padding: 6px !important;
+        font-size: 15px;
+        text-align: left;
+      
+    }
+    .table-user-information > tbody > tr > td:first-child,
+    .table-user-information > tbody > tr > td:last-child {
+        display: table-cell !important;
+    }
+.Scrollbar table .form-check-input{
+    margin-right:0.4em;
+}
+/*datatable*/
+/*  table.dataTable > thead .sorting:after, table.dataTable > thead .sorting_asc:after, table.dataTable > thead .sorting_desc:after, table.dataTable > thead .sorting_asc_disabled:after, table.dataTable > thead .sorting_desc_disabled:after {
+        right: 0.3em;
+        top: 1rem;
+    }*/
+/*table.dataTable > thead .sorting:before, table.dataTable > thead .sorting:after, table.dataTable > thead .sorting_asc:before, table.dataTable > thead .sorting_asc:after, table.dataTable > thead .sorting_desc:before, table.dataTable > thead .sorting_desc:after, table.dataTable > thead .sorting_asc_disabled:before, table.dataTable > thead .sorting_asc_disabled:after, table.dataTable > thead .sorting_desc_disabled:before, table.dataTable > thead .sorting_desc_disabled:after {
+    top: 0.5em;
+}*/
+table.dataTable th {
+    /*min-width: 100px !important;*/
+    padding: 10px 0 10px 5px;
+}
+table.dataTable > thead .sorting:after, table.dataTable > thead .sorting_asc:after, table.dataTable > thead .sorting_desc:after, table.dataTable > thead .sorting_asc_disabled:after, table.dataTable > thead .sorting_desc_disabled:after {
+    content: "\f062"; /* Use the correct Unicode value with a backslash escape */
+    font-family: 'Font Awesome 5 Free'; /* Specify the Font Awesome font family */
+    font-weight: 900;
+}
+table.dataTable > thead .sorting:before, table.dataTable > thead .sorting_asc:before, table.dataTable > thead .sorting_desc:before, table.dataTable > thead .sorting_asc_disabled:before, table.dataTable > thead .sorting_desc_disabled:before {
+    content: "\f063"; /* Unicode value for the arrow-down icon */
+    font-family: 'Font Awesome 5 Free'; /* Specify the Font Awesome font family */
+    font-weight: 900; /* Specify the font weight if necessary */
+}
+table.dataTable {
+    border-collapse: collapse !important;
+}
+.dataTables_length, .dataTables_filter {
+    display: none !important;
+}
+.dataTables_empty{
+    display:none;
+}
+/*bootstrape table css end here */
+.row.collapse .card {
+    --bs-card-bg: transparent;
+    --bs-card-border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+.btnradio.yesBtn {
+    background: var(--success-hover -color);
+    color: white;
+}.btnradio.noBtn {
+    background: var(--danger-hover-color);
+    color: white;
+}
+.ss-single-selected .placeholder {
+    background-color:transparent !important;
+    cursor:pointer !important;
+}
+.ss-single-selected {
+    height: 37px !important;
+}
+
+/*//angular grid css start here*/   
+
+.ui-grid {
+    border: 0 none !important;
+    font-size:var(--table-font-size) !important;
+}
+.ui-grid-header-cell {
+    border: 0 none !important;
+}
+
+.ui-grid-header-cell-row {
+    border: 0 none !important;
+    color: #fff;
+}
+
+.ui-grid-cell-contents {
+    text-align: center;
+}
+
+.ui-grid-invisible {
+    display: none;
+}
+
+.ui-grid-menu-button{display:none;}
+.ui-grid-render-container-body .ui-grid-viewport {
+    overflow: auto !important;
+}
+
+
+
+.ui-grid-top-panel, table thead {
+    /* box-shadow: var(--btn-box-shadow) rgba(var(--primary-rgb-color),0.5) !important;
+    border-top-left-radius: var(--border-rounder);
+    border-top-right-radius: var(--border-rounder);*/
+    background: var(--base-color);
+    font-weight: 200 !important;
+    --bs-table-bg: var(--primary-color);
+    --bs-table-color: var(--white-color);
+}
+
+.ui-grid-header-cell-wrapper {
+    background: var(--base-color);
+}
+.general .data-tables .grid .ui-grid-header {
+    text-align: center;
+}
+
+.general .data-tables .grid .ui-grid-viewport .ui-grid-canvas .ui-grid-row .ui-grid-cell:last-child {
+    text-align: center;
+}
+.ui-grid-row, .grid1702298503137 .ui-grid-cell, .grid1702298503137 .ui-grid-cell .ui-grid-vertical-bar {
+    border : 0 none !important;
+    background:transparent !important;
+}
+.ui-grid-row:nth-child(even) .ui-grid-cell {
+background: transparent !important;
+}
+
+.ui-grid-cell {
+    border: 0 none !important;
+    border-right : 0 none !important;
+    border-color:transparent !important;
+}
+.ui-grid-row .ui-grid-cell:last-child {
+    border: 0 none;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+.ui-grid-row .ui-grid-cell:first-child {
+    border: 0 none;
+    display: flex;
+    align-content: start;
+    justify-content: start;
+    align-items: start;
+}
+.ui-grid-menu-item {
+    background: var(--gray-color);
+    color: white;
+    border-radius: 0;
+    border-radius: 5px;
+    box-shadow: none;
+}
+.ui-grid-menu-item:hover{
+    background:var(--gray-hover-color);
+}
+.ui-grid-menu .ui-grid-menu-inner ul li:hover {
+    box-shadow:var(--box-shadow-hover) !important;
+}
+    /*//angular grid css end here   */
+/*backgroud color and text color of bootstrape updated by custom color start here*/
+
+.text-white {
+    color: var(--white-color) !important;
+}
+
+.text-danger {
+    color: var(--danger-color) !important;
+}
+
+.text-muted {
+    /*color: #99abb4 !important;*/
+    color: var(--gray-color) !important;
+    font-weight: bold;
+}
+
+.text-warning {
+    color: var(--warning-hover-color) !important;
+}
+
+.text-success {
+    color: var(--success-color) !important;
+}
+
+.text-info {
+    color: var(--info-color) !important;
+}
+
+.text-inverse {
+    color: var(--dark-color) !important;
+}
+
+.text-blue {
+    color: var(--blue-color);
+}
+
+.text-purple {
+    color: var(--purple-color);
+}
+
+.text-primary {
+    color: rgb(var(--primary-rgb-color)) !important;
+}
+
+.text-megna {
+    color: var(--megna-color);
+}
+
+.text-dark {
+    color: var(--dark-color);
+}
+
+.text-themecolor {
+    color: var(--base-color);
+}
+
+.bg-primary {
+    background: var(--base-color) !important;
+    color: var(--white-color);
+}
+
+.bg-pink {
+    background: var(--pink-hover-color) !important;
+    color: var(--white-color);
+    fill: var(--pink-hover-color);
+}
+
+.bg-success {
+    background: var(--success-hover-color) !important;
+    color: var(--white-color);
+}
+
+.bg-info {
+    background: var(--info-hover-color) !important;
+    color: var(--white-color);
+}
+
+.bg-warning {
+    background: var(--warning-hover-color) !important;
+    color: var(--white-color);
+}
+
+.bg-danger {
+    background: var(--danger-hover-color) !important;
+    color: var(--white-color);
+}
+
+.bg-megna {
+    background: var(--megna-hover-color);
+    color: var(--white-color);
+}
+
+.bg-theme {
+    background: var(--primary-color);
+    color: var(--white-color);
+}
+
+.bg-inverse {
+    background: var(--dark-color);
+}
+
+.bg-purple {
+    background: var(--purple);
+    color: var(--white-color);
+}
+
+.bg-light-part {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.bg-light-primary {
+    background: rgba(var(--primary-rgb-color),0.5);
+}
+
+.bg-light-success {
+    background: rgba(var(--success-rgb-color),0.5);
+    color: var(--white-color);
+}
+
+.bg-light-info {
+    background: rgba(var(--info-color),0.5);
+    color: var(--white-color);
+}
+
+.bg-light-extra {
+    background: #ebf3f5;
+    color: var(--white-color);
+}
+
+.bg-light-warning {
+    background: rgba(var(--warning-rgb-color),0.5);
+    color: var(--white-color);
+}
+
+.bg-light-danger {
+    background: rgba(var(--danger-rgb-color),0.5);
+    color: var(--white-color);
+}
+
+.bg-light-inverse {
+    background: #f6f6f6;
+}
+
+.bg-light {
+    background: var(--gray-color);
+    color: var(--dark-color);
+}
+
+.bg-white {
+    background: var(--white-color);
+    color: var(--dark-color);
+}
+/*backgroud color and text color of bootstrape updated by custom color start here*/
+/*Modal css Start Here*/
+.modal{
+    box-shadow:var(--box-shadow-hover);
+   
+
+} 
+/*Modal css end Here*/
+
+/*Date picker Css Start Here*/
+span .input-group-addon, span.select-group-addon, .input-group-addon {
+    position: absolute;
+    background: var(--info-color) !important;
+    height: 33px;
+    border: 1px #dddddd solid;
+    color: white !important;
+    padding-inline: 10px;
+    text-align: center;
+    /* z-index: 10;*/
+    border-radius: 7px !important;
+    padding: 7px;
+    display: grid;
+    align-items: center;
+    pointer-events: none;
+}
+
+    span.input-group-addon i, span.select-group-addon i {
+        font-size: 17px;
+    }
+
+span.input-group-addon {
+    top: 13%;
+    right: 2%;
+}
+
+
+.form-group span.select-group-addon {
+    bottom: 3%;
+    right: 1%;
+}
+
+.prev, .next, .dow {
+    background: var(--info-color) !important;
+    color: var(--white-color) !important;
+}
+
+.datepicker table tr td.today {
+    background: var(--info-color) !important;
+    color: var(--white-color) !important;
+    color: var(--white-color);
+}
+
+.datepicker-switch {
+    color: var(--white-color) !important;
+    background: var(--info-color) !important;
+}
+
+    .datepicker-switch:hover, .datepicker table tr td.active {
+        background: var(--info-hover-color) !important;
+        color: var(--white-color) !important;
+    }
+
+.datepicker .today {
+    background: var(--info-color) !important;
+}
+
+.dtp-buttons {
+    position: absolute;
+    bottom: 0px;
+    right: 2% !important;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.dtp-btn-now {
+    background: var(--info-color);
+    margin-left: 1em;
+}
+
+    .dtp-btn-now:hover,
+    .dtp-btn-now:active,
+    .dtp-btn-now:active:hover,
+    .dtp-btn-now.active,
+    .dtp-btn-now.active:hover,
+    .dtp-btn-now:disabled,
+    .dtp-btn-now:disabled:hover,
+    .dtp-btn-now.disabled,
+    .dtp-btn-now.disabled:hover {
+        background: var(--info-hover-color);
+        color: var(--white-color);
+    }
+
+.dtp-btn-cancel {
+    background: var(--danger-color);
+    margin-left: 1em;
+}
+
+    .dtp-btn-cancel:hover,
+    .dtp-btn-cancel:active,
+    .dtp-btn-cancel:active:hover,
+    .dtp-btn-cancel.active,
+    .dtp-btn-cancel.active:hover,
+    .dtp-btn-cancel:disabled,
+    .dtp-btn-cancel:disabled:hover,
+    .dtp-btn-cancel.disabled,
+    .dtp-btn-cancel.disabled:hover {
+        background: var(--danger-hover-color);
+        color: var(--white-color);
+        margin-left: 1em;
+    }
+
+.dtp-btn-ok {
+    background: var(--success-color);
+    margin-left: 1em;
+}
+
+    .dtp-btn-ok:hover,
+    .dtp-btn-ok:active,
+    .dtp-btn-ok:active:hover,
+    .dtp-btn-ok.active,
+    .dtp-btn-ok.active:hover,
+    .dtp-btn-ok:disabled,
+    .dtp-btn-ok:disabled:hover,
+    .dtp-btn-ok.disabled,
+    .dtp-btn-ok.disabled:hover {
+        background: var(--success-hover-color);
+        color: var(--white-color);
+        margin-left: 1em;
+    }
+
+.dtp-btn-clear {
+    background: var(--gray-color);
+    margin-left: 1em;
+}
+
+    .dtp-btn-clear:hover,
+    .dtp-btn-clear:active,
+    .dtp-btn-clear:active:hover,
+    .dtp-btn-clear.active,
+    .dtp-btn-clear.active:hover,
+    .dtp-btn-clear:disabled,
+    .dtp-btn-clear:disabled:hover,
+    .dtp-btn-clear.disabled,
+    .dtp-btn-clear.disabled:hover {
+        background: var(--gray-color);
+        color: var(--white-color);
+        margin-left: 1em;
+    }
+
+.datepicker th {
+    border-radius: 0 !important;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+}
+
+.prev {
+    border-top-left-radius: 4px !important;
+}
+
+.next {
+    border-top-right-radius: 4px !important;
+}
+
+.datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+    color: #999 !important;
+    cursor: not-allowed;
+}
+
+.datepicker .prev.disabled, .datepicker .next.disabled {
+    background: rgba(var(--info-rgb-color)) !important;
+    cursor: not-allowed;
+    visibility: visible !important;
+}
+.datepicker table tr td{
+    padding-left:4px !important;
+}
+.input-group > .form-control:focus, .input-group > .form-select:focus {
+    z-index:0!important;
+}
+    /*Date picker Css end Here*/
