@@ -16,10 +16,11 @@
     --font-family-book: 'Pilat Wide Book';
     --font-family-heavy: 'Pilat Wide Heavy';
     /*   --primary-color: #3F1DB7;
-    --primary-hover-color: #4F2FB9; */
-    --primary-color: var(--warning-color);
-    --primary-hover-color: var(--warning-hover-color);
-    --primary-rgb-color: var(--warning-rgb-color);
+    --primary-hover-color: #4F2FB9; 
+    --primary-rgb-color: 63, 29, 183;*/
+    --primary-color: #005474;
+    --primary-hover-color: #103350;
+    --primary-rgb-color: 0, 84, 116;
     --primary-disable-color: #1F0738;
     --purple-color: #5E16AA;
     --purple-hover-color: #3E0E71;
